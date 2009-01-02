@@ -20,7 +20,7 @@
 //********************************************************************************************
 
 #include "egoboo_typedef.h"
-#include <SDL_endian.h>
+#include <SDL/SDL_endian.h>
 
 #define ENDIAN_INT08(X) SDL_SwapLE8(X)
 #define ENDIAN_INT16(X) SDL_SwapLE16(X)

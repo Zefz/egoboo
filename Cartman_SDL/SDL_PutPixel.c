@@ -22,11 +22,11 @@
 */
 
 
-#include <SDL.h>
+#include <SDL/SDL.h>
 #include "SDL_Pixel.h"
 #include <string.h>
 
-/* 
+/*
  * This function sets the specified pixel on a surface. Sanity checks are
  * performed on the co-ordinates and the surface is locked for you.
  * Safe, but slow. For more speed, try the lower level access function.
@@ -37,16 +37,16 @@ int SDL_PutPixel(SDL_Surface *dst, Sint16 x, Sint16 y, Uint32 rgb)
   if(NULL == dst) return -1;
 
   if (
-    (x < dst->clip_rect.x) || 
-    (y < dst->clip_rect.y) || 
-    (x >= dst->clip_rect.x + dst->clip_rect.w) || 
+    (x < dst->clip_rect.x) ||
+    (y < dst->clip_rect.y) ||
+    (x >= dst->clip_rect.x + dst->clip_rect.w) ||
     (y >= dst->clip_rect.y + dst->clip_rect.h) )
   {
 		return -1;
 	}
 
 	/* Perform software fill */
-	if (SDL_LockSurface(dst) < 0) 
+	if (SDL_LockSurface(dst) < 0)
   {
 		return -1;
 	}
@@ -61,8 +61,8 @@ int SDL_PutPixel(SDL_Surface *dst, Sint16 x, Sint16 y, Uint32 rgb)
 
 
 
-/* 
- * This function performs a 'low-level' pixel put, on a previously locked 
+/*
+ * This function performs a 'low-level' pixel put, on a previously locked
  * surface. It is assumed that the pixel is within the bounds of the surface.
  * i.e. there are no sanity checks here to save you!
  */
@@ -71,11 +71,11 @@ void SDL_LowerPutPixel(SDL_Surface *dst, Sint16 x, Sint16 y, Uint32 rgb)
 	Uint8	bpp = dst->format->BytesPerPixel;
 	Uint16	pitch = dst->pitch/bpp;
 
-	switch (bpp) 
+	switch (bpp)
   {
 		default:
 		case 1:
-			switch (pitch) 
+			switch (pitch)
       {
 				case 16:
 					SDL_PutPixel_16x8bpp(dst, x, y, rgb);
@@ -116,7 +116,7 @@ void SDL_LowerPutPixel(SDL_Surface *dst, Sint16 x, Sint16 y, Uint32 rgb)
 			}
 
 		case 2:
-			switch (pitch) 
+			switch (pitch)
       {
 				case 16:
 					SDL_PutPixel_16x16bpp(dst, x, y, rgb);
@@ -157,7 +157,7 @@ void SDL_LowerPutPixel(SDL_Surface *dst, Sint16 x, Sint16 y, Uint32 rgb)
 			}
 
 		case 3:
-			switch (pitch) 
+			switch (pitch)
       {
 				case 16:
 					SDL_PutPixel_16x24bpp(dst, x, y, rgb);
@@ -198,7 +198,7 @@ void SDL_LowerPutPixel(SDL_Surface *dst, Sint16 x, Sint16 y, Uint32 rgb)
 			}
 
 		case 4:
-			switch (pitch) 
+			switch (pitch)
       {
 				case 16:
 					SDL_PutPixel_16x32bpp(dst, x, y, rgb);

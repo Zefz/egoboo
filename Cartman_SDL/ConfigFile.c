@@ -62,7 +62,8 @@
 //    -  Added GetConfigBooleanValue, GetConfigIntValue and GetConfigFloatValue.
 //---------------------------------------------------------------------
 
-#include "configfile.h"
+#include "ConfigFile.h"
+#include "Log.h"
 
 // Change any non alphanumeric character or space or underscore to an underscore
 // It is use for the section and key name

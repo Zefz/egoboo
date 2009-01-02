@@ -2,9 +2,9 @@
 #include <fcntl.h>			// For fast file i/o
 #include <math.h>
 #include <assert.h>
-#include <SDL.h>			  // SDL header
-#include <SDL_image.h>
-#include <SDL_opengl.h>
+#include <SDL/SDL.h>			  // SDL header
+#include <SDL/SDL_image.h>
+#include <SDL/SDL_opengl.h>
 
 #include "Log.h"
 #include "ConfigFile.h"
@@ -21,15 +21,14 @@
 #define TOTALMAXPRT             2048                // True max number of particles
 
 
-typedef enum e_bool bool_t;
-
 TTF_Font * gFont = NULL;
 
 bool_t                  keyon = btrue;                // Is the keyboard alive?
 int                     keycount = 0;
 Uint8  *                keysdlbuffer = NULL;
 Uint8                   keystate = 0;
-#define SDLKEYDOWN(k)         ( ((k >= keycount) || (NULL == keysdlbuffer)) ? bfalse : (0 != keysdlbuffer[k]))     // Helper for gettin' em
+#define SDLKEYDOWN(k)  ( ((k >= keycount) || (NULL == keysdlbuffer)) ? bfalse : (0 != keysdlbuffer[k]))     // Helper for gettin' em
+#define SDLKEYMOD(m)   ( (NULL != keysdlbuffer) && (0 != (keystate & (m))) )
 #define SDLKEYDOWN_MOD(k,m) ( SDLKEYDOWN(k) && (0 != (keystate & (m))) )
 
 STRING egoboo_path;
@@ -48,7 +47,7 @@ struct s_screen_info
 
   Uint8  alpha;
 
-  // selected SDL bitfields
+  // select_vertsed SDL bitfields
   unsigned hw_available:1;
   unsigned wm_available:1;
   unsigned blit_hw:1;
@@ -58,21 +57,21 @@ struct s_screen_info
   unsigned blit_sw_CC:1;
   unsigned blit_sw_A:1;
 
-  unsigned is_sw:1;           // SDL_SWSURFACE Surface is stored in system memory 
-  unsigned is_hw:1;           // SDL_HWSURFACE Surface is stored in video memory 
-  unsigned use_asynch_blit:1; // SDL_ASYNCBLIT Surface uses asynchronous blits if possible 
-  unsigned use_anyformat:1;   // SDL_ANYFORMAT Allows any pixel-format (Display surface) 
-  unsigned use_hwpalette:1;     // SDL_HWPALETTE Surface has exclusive palette 
-  unsigned is_doublebuf:1;     // SDL_DOUBLEBUF Surface is double buffered (Display surface) 
-  unsigned is_fullscreen:1;    // SDL_FULLSCREEN Surface is full screen (Display Surface) 
-  unsigned use_opengl:1;        // SDL_OPENGL Surface has an OpenGL context (Display Surface) 
-  unsigned use_openglblit:1;    // SDL_OPENGLBLIT Surface supports OpenGL blitting (Display Surface) 
-  unsigned sdl_resizable:1;     // SDL_RESIZABLE Surface is resizable (Display Surface) 
-  unsigned use_hwaccel:1;       // SDL_HWACCEL Surface blit uses hardware acceleration 
-  unsigned has_srccolorkey:1;   // SDL_SRCCOLORKEY Surface use colorkey blitting 
-  unsigned use_rleaccel:1;      // SDL_RLEACCEL Colorkey blitting is accelerated with RLE 
-  unsigned use_srcalpha:1;      // SDL_SRCALPHA Surface blit uses alpha blending 
-  unsigned is_prealloc:1;      // SDL_PREALLOC Surface uses preallocated memory 
+  unsigned is_sw:1;           // SDL_SWSURFACE Surface is stored in system memory
+  unsigned is_hw:1;           // SDL_HWSURFACE Surface is stored in video memory
+  unsigned use_asynch_blit:1; // SDL_ASYNCBLIT Surface uses asynchronous blits if possible
+  unsigned use_anyformat:1;   // SDL_ANYFORMAT Allows any pixel-format (Display surface)
+  unsigned use_hwpalette:1;     // SDL_HWPALETTE Surface has exclusive palette
+  unsigned is_doublebuf:1;     // SDL_DOUBLEBUF Surface is double buffered (Display surface)
+  unsigned is_fullscreen:1;    // SDL_FULLSCREEN Surface is full screen (Display Surface)
+  unsigned use_opengl:1;        // SDL_OPENGL Surface has an OpenGL context (Display Surface)
+  unsigned use_openglblit:1;    // SDL_OPENGLBLIT Surface supports OpenGL blitting (Display Surface)
+  unsigned sdl_resizable:1;     // SDL_RESIZABLE Surface is resizable (Display Surface)
+  unsigned use_hwaccel:1;       // SDL_HWACCEL Surface blit uses hardware acceleration
+  unsigned has_srccolorkey:1;   // SDL_SRCCOLORKEY Surface use colorkey blitting
+  unsigned use_rleaccel:1;      // SDL_RLEACCEL Colorkey blitting is accelerated with RLE
+  unsigned use_srcalpha:1;      // SDL_SRCALPHA Surface blit uses alpha blending
+  unsigned is_prealloc:1;      // SDL_PREALLOC Surface uses preallocated memory
 };
 typedef struct s_screen_info screen_info_t;
 
@@ -135,7 +134,7 @@ struct s_config_data
 
   int      lag;                              // Lag tolerance
   size_t   mesh_vert_count;
-  
+
   screen_info_t    scr;       // Requested screen parameters
 
   int    maxlights;	          // Max number of lights to draw
@@ -168,7 +167,7 @@ struct s_mouse
 
 typedef struct s_mouse mouse_t;
 
-mouse_t mos = 
+mouse_t mos =
 {
   0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0,
@@ -234,7 +233,7 @@ int direct = 16;
 #define BIGX 64				// Big tiles
 #define BIGY 64				//
 #define CAMRATE 8			// Arrow key movement rate
-#define MAXSELECT 2560			// Max points that can be selected
+#define MAXSELECT 2560			// Max points that can be select_vertsed
 #define FOURNUM 4.137			// Magic number
 #define FIXNUM  4.125 // 4.150		// Magic number
 #define MAPID 0x4470614d		// The string... MapD
@@ -291,7 +290,7 @@ int		brushamount = 50;	// Amount of raise/lower
 SDL_Surface	*theSurface = NULL;
 SDL_Surface	*imgcursor;		// Cursor image
 SDL_Surface	*imgpoint[MAXPOINTSIZE];		// Vertex image
-SDL_Surface	*imgpointon[MAXPOINTSIZE];	// Vertex image ( Selected )
+SDL_Surface	*imgpointon[MAXPOINTSIZE];	// Vertex image ( select_vertsed )
 SDL_Surface	*imgref;		// Meshfx images
 SDL_Surface	*imgdrawref;		//
 SDL_Surface	*imganim;		//
@@ -313,8 +312,8 @@ int		numbigtile = 0;		//
 int		numpointsonscreen = 0;
 Uint32	pointsonscreen[MAXPOINTS];
 
-int		numselect = 0;
-Uint32	select[MAXSELECT];
+int		numselect_verts = 0;
+Uint32	select_verts[MAXSELECT];
 
 float		debugx = -1;		// Blargh
 float		debugy = -1;		//
@@ -982,16 +981,16 @@ void weld_select()
   int cnt, x, y, z, a;
   Uint32 vert;
 
-  if(numselect > 1)
+  if(numselect_verts > 1)
   {
     x = 0;
     y = 0;
     z = 0;
     a = 0;
     cnt = 0;
-    while(cnt < numselect)
+    while(cnt < numselect_verts)
     {
-      vert = select[cnt];
+      vert = select_verts[cnt];
       x+=mesh.vrtx[vert];
       y+=mesh.vrty[vert];
       z+=mesh.vrtz[vert];
@@ -999,14 +998,14 @@ void weld_select()
       cnt++;
     }
     x+=cnt>>1;  y+=cnt>>1;
-    x=x/numselect;
-    y=y/numselect;
-    z=z/numselect;
-    a=a/numselect;
+    x=x/numselect_verts;
+    y=y/numselect_verts;
+    z=z/numselect_verts;
+    a=a/numselect_verts;
     cnt = 0;
-    while(cnt < numselect)
+    while(cnt < numselect_verts)
     {
-      vert = select[cnt];
+      vert = select_verts[cnt];
       mesh.vrtx[vert]=x;
       mesh.vrty[vert]=y;
       mesh.vrtz[vert]=z;
@@ -1022,13 +1021,13 @@ void add_select(int vert)
   // ZZ> This function highlights a vertex
   int cnt, found;
 
-  if(numselect < MAXSELECT && vert >= 0)
+  if(numselect_verts < MAXSELECT && vert >= 0)
   {
     found = bfalse;
     cnt = 0;
-    while(cnt < numselect && !found)
+    while(cnt < numselect_verts && !found)
     {
-      if(select[cnt]==vert)
+      if(select_verts[cnt]==vert)
       {
         found=btrue;
       }
@@ -1036,8 +1035,8 @@ void add_select(int vert)
     }
     if(!found)
     {
-      select[numselect] = vert;
-      numselect++;
+      select_verts[numselect_verts] = vert;
+      numselect_verts++;
     }
   }
 }
@@ -1046,7 +1045,7 @@ void add_select(int vert)
 void clear_select(void)
 {
   // ZZ> This function unselects all vertices
-  numselect = 0;
+  numselect_verts = 0;
 }
 
 //------------------------------------------------------------------------------
@@ -1056,9 +1055,9 @@ int vert_selected(int vert)
   int cnt;
 
   cnt = 0;
-  while(cnt < numselect)
+  while(cnt < numselect_verts)
   {
-    if(vert==select[cnt])
+    if(vert==select_verts[cnt])
     {
       return btrue;
     }
@@ -1076,9 +1075,9 @@ void remove_select(int vert)
 
   cnt = 0;
   stillgoing = btrue;
-  while(cnt < numselect && stillgoing)
+  while(cnt < numselect_verts && stillgoing)
   {
-    if(vert==select[cnt])
+    if(vert==select_verts[cnt])
     {
       stillgoing = bfalse;
     }
@@ -1086,12 +1085,12 @@ void remove_select(int vert)
   }
   if(stillgoing == bfalse)
   {
-    while(cnt < numselect)
+    while(cnt < numselect_verts)
     {
-      select[cnt-1] = select[cnt];
+      select_verts[cnt-1] = select_verts[cnt];
       cnt++;
     }
-    numselect--;
+    numselect_verts--;
   }
 }
 
@@ -2247,7 +2246,7 @@ void load_basic_textures(char *modname)
   get_tiles(bmptemp);
   SDL_FreeSurface(bmptemp);
 
-  bmpfanoff = cartman_CreateSurface(SMALLX, SMALLY);  
+  bmpfanoff = cartman_CreateSurface(SMALLX, SMALLY);
   SDL_FillRect(bmpfanoff, NULL, MAKE_BGR(bmpfanoff, 0, 0, 0));
 }
 
@@ -2336,7 +2335,7 @@ void save_mesh(char *modname)
   //  }
   make_twist();
 
-  sprintf( newloadname, "%s" SLASH_STR "modules" SLASH_STR "%s" SLASH_STR "gamedat" SLASH_STR "level.mpd", egoboo_path, modname ); 
+  sprintf( newloadname, "%s" SLASH_STR "modules" SLASH_STR "%s" SLASH_STR "gamedat" SLASH_STR "level.mpd", egoboo_path, modname );
 
   show_name(newloadname);
   filewrite = fopen(newloadname, "wb");
@@ -2501,7 +2500,7 @@ int load_mesh(char *modname)
   Uint32 vert;
   int x, y;
 
-  sprintf( newloadname, "%s" SLASH_STR "gamedat" SLASH_STR "level.mpd", modname ); 
+  sprintf( newloadname, "%s" SLASH_STR "gamedat" SLASH_STR "level.mpd", modname );
 
   fileread = fopen(newloadname, "rb");
   if(NULL == fileread)
@@ -2630,9 +2629,9 @@ void move_select(int x, int y, int z)
   int vert, cnt, newx, newy, newz;
 
   cnt = 0;
-  while(cnt < numselect)
+  while(cnt < numselect_verts)
   {
-    vert = select[cnt];
+    vert = select_verts[cnt];
     newx = mesh.vrtx[vert]+x;
     newy = mesh.vrty[vert]+y;
     newz = mesh.vrtz[vert]+z;
@@ -2646,9 +2645,9 @@ void move_select(int x, int y, int z)
   }
 
   cnt = 0;
-  while(cnt < numselect)
+  while(cnt < numselect_verts)
   {
-    vert = select[cnt];
+    vert = select_verts[cnt];
     newx = mesh.vrtx[vert]+x;
     newy = mesh.vrty[vert]+y;
     newz = mesh.vrtz[vert]+z;
@@ -2673,9 +2672,9 @@ void set_select_no_bound_z(int z)
   int vert, cnt;
 
   cnt = 0;
-  while(cnt < numselect)
+  while(cnt < numselect_verts)
   {
-    vert = select[cnt];
+    vert = select_verts[cnt];
     mesh.vrtz[vert]=z;
     cnt++;
   }
@@ -2925,7 +2924,7 @@ void render_vertex_window(int window, SDL_Surface *window_surface)
     SDL_FillRect(window_surface, &rtmp, MAKE_ABGR(window_surface,0x3F, 16+(timclock&15), 16+(timclock&15), 0));
   }
 
-  if((SDLKEYDOWN(SDLK_p) || ((mos.b&2) && numselect == 0)) && mdata.mode==WINMODE_VERTEX)
+  if((SDLKEYDOWN(SDLK_p) || ((mos.b&2) && numselect_verts == 0)) && mdata.mode==WINMODE_VERTEX)
   {
     raise_mesh(mdata.x, mdata.y, brushamount, brushsize);
   }
@@ -3056,7 +3055,7 @@ void load_window(int window, char *loadname, int x, int y, int bx, int by,
 void render_all_windows(void)
 {
   int cnt;
-  
+
   for(cnt = 0; cnt < MAXWIN; cnt++)
   {
     render_window(cnt);
@@ -3148,7 +3147,7 @@ void bound_mouse()
 //------------------------------------------------------------------------------
 void rect_select(void)
 {
-  // ZZ> This function checks the rectangular selection
+  // ZZ> This function checks the rectangular select_vertsion
   int cnt;
   Uint32 vert;
   int tlx, tly, brx, bry;
@@ -3165,7 +3164,7 @@ void rect_select(void)
     if(tly>bry)  { cnt = tly;  tly=bry;  bry=cnt; }
 
     cnt = 0;
-    while(cnt < numpointsonscreen && numselect<MAXSELECT)
+    while(cnt < numpointsonscreen && numselect_verts<MAXSELECT)
     {
       vert = pointsonscreen[cnt];
       if(mesh.vrtx[vert]>=tlx &&
@@ -3191,7 +3190,7 @@ void rect_select(void)
     if(tly>bry)  { cnt = tly;  tly=bry;  bry=cnt; }
 
     cnt = 0;
-    while(cnt < numpointsonscreen && numselect<MAXSELECT)
+    while(cnt < numpointsonscreen && numselect_verts<MAXSELECT)
     {
       vert = pointsonscreen[cnt];
       if(mesh.vrtx[vert]>=tlx &&
@@ -3209,8 +3208,8 @@ void rect_select(void)
 //------------------------------------------------------------------------------
 void rect_unselect(void)
 {
-  // ZZ> This function checks the rectangular selection, and removes any fans
-  //     in the selection area
+  // ZZ> This function checks the rectangular select_vertsion, and removes any fans
+  //     in the select_vertsion area
   int cnt;
   Uint32 vert;
   int tlx, tly, brx, bry;
@@ -3227,7 +3226,7 @@ void rect_unselect(void)
     if(tly>bry)  { cnt = tly;  tly=bry;  bry=cnt; }
 
     cnt = 0;
-    while(cnt < numpointsonscreen && numselect<MAXSELECT)
+    while(cnt < numpointsonscreen && numselect_verts<MAXSELECT)
     {
       vert = pointsonscreen[cnt];
       if(mesh.vrtx[vert]>=tlx &&
@@ -3253,7 +3252,7 @@ void rect_unselect(void)
     if(tly>bry)  { cnt = tly;  tly=bry;  bry=cnt; }
 
     cnt = 0;
-    while(cnt < numpointsonscreen && numselect<MAXSELECT)
+    while(cnt < numpointsonscreen && numselect_verts<MAXSELECT)
     {
       vert = pointsonscreen[cnt];
       if(mesh.vrtx[vert]>=tlx &&
@@ -3394,9 +3393,9 @@ void jitter_select()
   Uint32 vert;
 
   cnt = 0;
-  while(cnt < numselect)
+  while(cnt < numselect_verts)
   {
-    vert = select[cnt];
+    vert = select_verts[cnt];
     move_vert(vert, (rand()%3)-1, (rand()%3)-1, 0);
     cnt++;
   }
@@ -3512,12 +3511,12 @@ void mouse_side(int cnt)
   {
     if(mdata.rect==btrue)
     {
-      if(numselect!=0 && !(0 != keystate&KMOD_ALT) && !SDLKEYDOWN(SDLK_MODE) &&
-        !(0 != keystate&KMOD_LCTRL) && !(0 != keystate&KMOD_RCTRL))
+      if(numselect_verts!=0 && !SDLKEYMOD(KMOD_ALT) && !SDLKEYDOWN(SDLK_MODE) &&
+        !SDLKEYMOD(KMOD_LCTRL) && !SDLKEYMOD(KMOD_RCTRL))
       {
         clear_select();
       }
-      if((0 != keystate&KMOD_ALT) || SDLKEYDOWN(SDLK_MODE))
+      if( SDLKEYMOD(KMOD_ALT) || SDLKEYDOWN(SDLK_MODE))
       {
         rect_unselect();
       }
@@ -3766,12 +3765,12 @@ void mouse_vertex(int cnt)
   {
     if(mdata.rect==btrue)
     {
-      if(numselect!=0 && !(0 != keystate&KMOD_ALT) && !SDLKEYDOWN(SDLK_MODE) &&
-        !(0 != keystate&KMOD_LCTRL) && !(0 != keystate&KMOD_RCTRL))
+      if(numselect_verts!=0 && !SDLKEYMOD(KMOD_ALT) && !SDLKEYDOWN(SDLK_MODE) &&
+        !SDLKEYMOD(KMOD_LCTRL) && !SDLKEYMOD(KMOD_RCTRL))
       {
         clear_select();
       }
-      if((0 != keystate&KMOD_ALT) || SDLKEYDOWN(SDLK_MODE))
+      if( SDLKEYMOD(KMOD_ALT) || SDLKEYDOWN(SDLK_MODE))
       {
         rect_unselect();
       }
@@ -3962,11 +3961,11 @@ void ease_up_mesh()
 }
 
 //------------------------------------------------------------------------------
-void select_connected()
+void select_verts_connected()
 {
   int vert, cnt, tnc, x, y, totalvert = 0;
   int fan;
-  Uint8 found, selectfan;
+  Uint8 found, select_vertsfan;
 
   y = 0;
   while(y < mesh.sizey)
@@ -3975,7 +3974,7 @@ void select_connected()
     while(x < mesh.sizex)
     {
       fan = get_fan(x,y);
-      selectfan = bfalse;
+      select_vertsfan = bfalse;
       if(fan != -1)
       {
         totalvert = mesh.command[mesh.type[fan]].numvertices;
@@ -3986,21 +3985,21 @@ void select_connected()
 
           found = bfalse;
           tnc = 0;
-          while(tnc < numselect && !found)
+          while(tnc < numselect_verts && !found)
           {
-            if(select[tnc]==vert)
+            if(select_verts[tnc]==vert)
             {
               found=btrue;
             }
             tnc++;
           }
-          if(found) selectfan = btrue;
+          if(found) select_vertsfan = btrue;
           vert = mesh.vrtnext[vert];
           cnt++;
         }
       }
 
-      if(selectfan)
+      if(select_vertsfan)
       {
         cnt = 0;
         vert = mesh.vrtstart[fan];
@@ -4119,7 +4118,7 @@ void check_keys(char *modname)
     }
     if(SDLKEYDOWN(SDLK_LEFTBRACKET) || SDLKEYDOWN(SDLK_RIGHTBRACKET))
     {
-      select_connected();
+      select_verts_connected();
     }
     if(SDLKEYDOWN(SDLK_8))
     {
@@ -4128,7 +4127,7 @@ void check_keys(char *modname)
     }
     if(SDLKEYDOWN(SDLK_j))
     {
-      if(numselect == 0) { jitter_mesh(); }
+      if(numselect_verts == 0) { jitter_mesh(); }
       else { jitter_select(); }
       keydelay=KEYDELAY;
     }
@@ -4440,7 +4439,7 @@ void draw_lotsa_stuff(void)
     draw_schematic(theSurface, mdata.type, 0, 64);
   }
 
-  // FX selection
+  // FX select_vertsion
   if(!(mdata.fx&MPDFX_SHA))
     draw_sprite(theSurface, imgref, 0, 200);
   if(mdata.fx&MPDFX_DRAWREF)
@@ -4463,7 +4462,7 @@ void draw_lotsa_stuff(void)
     "numwritten %d/%d", numwritten, numattempt);
 
   fnt_printf(theSurface, gFont, 0, 0, MAKE_SDLCOLOR(31,31,31),
-    "<%f, %f>", mos.x, mos.y ); 
+    "<%f, %f>", mos.x, mos.y );
 }
 
 //------------------------------------------------------------------------------
@@ -4558,7 +4557,7 @@ int main(int argcnt, char* argtext[])
     sprintf(modulename, "%s.mod", argtext[2]);
   }
 
-  sprintf(fname, "%s" SLASH_STR "setup.txt", egoboo_path ); 
+  sprintf(fname, "%s" SLASH_STR "setup.txt", egoboo_path );
   read_setup( &cfg, fname );
 
   // initialize the SDL elements
@@ -4575,7 +4574,7 @@ int main(int argcnt, char* argtext[])
   load_module(modulename);		// Load the module
 
   dunframe   = 0;						  // Timer resets
-  worldclock = 0;	
+  worldclock = 0;
   timclock   = 0;
   while(!SDLKEYDOWN(SDLK_ESCAPE) && !SDLKEYDOWN(SDLK_F1))			// Main loop
   {
@@ -5184,20 +5183,20 @@ void line(SDL_Surface * surf, int x0, int y0, int x1, int y1, Uint32 c)
     t += y0;
     dx = (dx < 0) ? -1 : 1;
     m *= dx;
-    while (x0 != x1) 
+    while (x0 != x1)
     {
       x0 += dx;                           // step to next x value
       t += m;                             // add slope to y value
       SDL_PutPixel(surf, x0, (int) t, pix);
     }
-  } 
-  else 
+  }
+  else
   {                                         // slope >= 1
     float m = (float) dx / (float) dy;      // compute slope
     t += x0;
     dy = (dy < 0) ? -1 : 1;
     m *= dy;
-    while (y0 != y1) 
+    while (y0 != y1)
     {
       y0 += dy;                           // step to next y value
       t += m;                             // add slope to x value
@@ -5291,7 +5290,7 @@ SDL_Surface * cartman_LoadIMG(const char * szName)
 {
   SDL_PixelFormat tmpformat;
   SDL_Surface * bmptemp, * bmpconvert;
-  
+
   // load the bitmap
   bmptemp = IMG_Load(szName);
 
@@ -5299,7 +5298,7 @@ SDL_Surface * cartman_LoadIMG(const char * szName)
   memcpy( &tmpformat, theSurface->format, sizeof( SDL_PixelFormat ) );   // make a copy of the format
   cartman_ExpandFormat(&tmpformat);
 
-  // convert it to the same pixel format as the screen surface 
+  // convert it to the same pixel format as the screen surface
   bmpconvert = SDL_ConvertSurface( bmptemp, &tmpformat, SDL_SWSURFACE );
   SDL_FreeSurface(bmptemp);
 

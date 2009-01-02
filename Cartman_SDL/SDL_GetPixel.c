@@ -22,13 +22,13 @@
 */
 
 
-#include <SDL.h>
+#include <SDL/SDL.h>
 
 #include "SDL_Pixel.h"
 
 #include <string.h>
 
-/* 
+/*
  * This function sets the specified pixel on a surface. Sanity checks are
  * performed on the co-ordinates and the surface is locked for you.
  * Safe, but slow. For more speed, try the lower level access function.
@@ -54,8 +54,8 @@ int SDL_GetPixel(SDL_Surface *dst, Sint16 x, Sint16 y, Uint32 * rgb)
 }
 
 
-/* 
- * This function performs a 'low-level' pixel put, on a previously locked 
+/*
+ * This function performs a 'low-level' pixel put, on a previously locked
  * surface. It is assumed that the pixel is within the bounds of the surface.
  * i.e. there are no sanity checks here to save you!
  */
