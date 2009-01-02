@@ -1,0 +1,75 @@
+# depslib dependency file v1.0
+1230933112 source:/home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/ConfigFile.c
+	"ConfigFile.h"
+	"Log.h"
+
+1230869247 /home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/ConfigFile.h
+	"egoboo_typedef.h"
+	<stdio.h>
+	<stdlib.h>
+
+1230932107 /home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/egoboo_typedef.h
+	"egoboo_config.h"
+	<SDL/SDL_types.h>
+
+1230869247 /home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/egoboo_config.h
+	<unistd.h>
+
+1230869972 source:/home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/Font.c
+	"Font.h"
+	"egoboo_config.h"
+	<stdlib.h>
+	<stddef.h>
+	<string.h>
+	<SDL/SDL.h>
+	<SDL/SDL_ttf.h>
+
+1230869957 /home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/Font.h
+	<SDL/SDL.h>
+	<SDL/SDL_ttf.h>
+
+1230869247 source:/home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/Log.c
+	"Log.h"
+	<stdlib.h>
+	<stdio.h>
+	<stdarg.h>
+
+1230869247 /home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/Log.h
+
+1230869982 source:/home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/SDL_GetPixel.c
+	<SDL/SDL.h>
+	"SDL_Pixel.h"
+	<string.h>
+
+1230870633 /home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/SDL_Pixel.h
+
+1230869989 source:/home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/SDL_PutPixel.c
+	<SDL/SDL.h>
+	"SDL_Pixel.h"
+	<string.h>
+
+1230869247 source:/home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/egoboo_endian.c
+	"egoboo_endian.h"
+
+1230870038 /home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/egoboo_endian.h
+	"egoboo_typedef.h"
+	<SDL/SDL_endian.h>
+
+1230933028 source:/home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/cartman.c
+	<stdio.h>
+	<fcntl.h>
+	<math.h>
+	<assert.h>
+	<SDL/SDL.h>
+	<SDL/SDL_image.h>
+	<SDL/SDL_opengl.h>
+	"Log.h"
+	"ConfigFile.h"
+	"Font.h"
+	"SDL_Pixel.h"
+	"egoboo_endian.h"
+	"standard.c"
+
+1230869247 /home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/standard.c
+	<time.h>
+

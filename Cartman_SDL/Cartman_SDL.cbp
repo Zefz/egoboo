@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Cartman_SDL" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug blah_nix">
+				<Option output="bin/Cartman_SDL" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug_nix/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release blah_nix">
+				<Option output="bin/Cartman_SDL" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release_nix/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add directory="/usr/include/SDL" />
+		</Compiler>
+		<Linker>
+			<Add library="libSDL" />
+			<Add library="libSDL_ttf" />
+			<Add library="libSDL_image" />
+		</Linker>
+		<Unit filename="ConfigFile.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ConfigFile.h" />
+		<Unit filename="Font.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Font.h" />
+		<Unit filename="Log.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Log.h" />
+		<Unit filename="SDL_GetPixel.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SDL_Pixel.h" />
+		<Unit filename="SDL_PutPixel.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="anim.pcx" />
+		<Unit filename="backdrop.pcx" />
+		<Unit filename="bestpal.pcx" />
+		<Unit filename="cartman.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="damage.pcx" />
+		<Unit filename="drawref.pcx" />
+		<Unit filename="egoboo_config.h" />
+		<Unit filename="egoboo_endian.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="egoboo_endian.h" />
+		<Unit filename="egoboo_typedef.h" />
+		<Unit filename="impass.pcx" />
+		<Unit filename="pc8x8.fon" />
+		<Unit filename="point.pcx" />
+		<Unit filename="pointon.pcx" />
+		<Unit filename="ref.pcx" />
+		<Unit filename="slippy.pcx" />
+		<Unit filename="slit.pcx" />
+		<Unit filename="standard.c">
+			<Option compilerVar="CC" />
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="water.pcx" />
+		<Unit filename="window.pcx" />
+		<Extensions>
+			<envvars />
+			<code_completion />
+			<lib_finder disable_auto="1" />
+			<debugger>
+				<remote_debugging target="Debug blah_nix">
+					<options conn_type="0" serial_baud="115200" additional_cmds_before="~/egoboo advent" />
+				</remote_debugging>
+			</debugger>
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

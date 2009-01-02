@@ -22,7 +22,7 @@
 */
 
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 #include "SDL_Pixel.h"
 #include <string.h>
 

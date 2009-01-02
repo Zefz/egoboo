@@ -27,8 +27,8 @@
 #include <stddef.h>
 #include <string.h>
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_ttf.h>
+#include <SDL.h>
+#include <SDL_ttf.h>
 
 #define MAX_FNT_MESSAGE 1024
 

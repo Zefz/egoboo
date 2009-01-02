@@ -23,7 +23,7 @@
 
 #include "egoboo_config.h"
 
-#include <SDL/SDL_types.h>
+#include <SDL_types.h>
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
@@ -43,6 +43,8 @@
 //#    else
 //#        define EGOBOO_NEW( TYPE ) (TYPE *)malloc( sizeof(TYPE) )
 //#        define EGOBOO_NEW_ARY( TYPE, COUNT ) (TYPE *)malloc(COUNT * sizeof(TYPE))
+//#        define EGOBOO_DELETE(PTR) if(NULL != PTR) { free(PTR); PTR = NULL; }
+//#        define EGOBOO_DELETE_ARY(PTR) if(NULL != PTR) { free(PTR); PTR = NULL; }
 //#    endif
 #endif
 
@@ -64,7 +66,7 @@ typedef int bool_t;
 enum
 {
   btrue = ( 1 == 1 ),
-  bfalse = ( !btrue )
+  bfalse = !btrue
 };
 
 // IDSZ

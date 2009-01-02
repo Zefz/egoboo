@@ -2,9 +2,9 @@
 #include <fcntl.h>			// For fast file i/o
 #include <math.h>
 #include <assert.h>
-#include <SDL/SDL.h>			  // SDL header
-#include <SDL/SDL_image.h>
-#include <SDL/SDL_opengl.h>
+#include <SDL.h>			  // SDL header
+#include <SDL_image.h>
+#include <SDL_opengl.h>
 
 #include "Log.h"
 #include "ConfigFile.h"
@@ -4528,6 +4528,14 @@ int main(int argcnt, char* argtext[])
 {
   char modulename[100];
   STRING fname;
+  char *blah[3];
+
+  blah[0] = malloc(256); strcpy(blah[0], "");
+  blah[1] = malloc(256); strcpy(blah[1], "/home/bgbirdsey/egoboo");
+  blah[2] = malloc(256); strcpy(blah[2], "advent" );
+
+  argcnt = 3;
+  argtext = blah;
 
   // register the logging code
   log_init();

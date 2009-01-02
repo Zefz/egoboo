@@ -22,8 +22,8 @@
     along with Egoboo.  If not, see <http:// www.gnu.org/licenses/>.
 */
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_ttf.h>
+#include <SDL.h>
+#include <SDL_ttf.h>
 
 #define FNT_NUM_FONT_CHARACTERS 94
 #define FNT_SMALL_FONT_SIZE 12

@@ -325,7 +325,7 @@ ConfigFilePtr OpenConfigFile( const char *pPath )
   Sint32            lState = 0;
   char          lc;
 
-  lTempFile = fopen( pPath, "rt+" );
+  lTempFile = fopen( pPath, "r+t" );
   if(NULL == lTempFile)
   {
     log_warning("OpenConfigFile() - Cannot find configuration file \"%s\"\n", pPath);
