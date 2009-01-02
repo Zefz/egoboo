@@ -12,8 +12,25 @@
 #include "SDL_Pixel.h"
 #include "egoboo_endian.h"
 
-#define MAX(a,b)    (((a) > (b)) ? (a) : (b))
-#define MIN(a,b)    (((a) < (b)) ? (a) : (b))
+#ifndef ABS
+#    define ABS(X)  (((X) > 0) ? (X) : -(X))
+#endif
+
+#ifndef SGN
+#    define SGN(X)  (((X) >= 0) ? 1 : -1)
+#endif
+
+#ifndef MIN
+#    define MIN(x, y)  (((x) > (y)) ? (y) : (x))
+#endif
+
+#ifndef MAX
+#    define MAX(x, y)  (((x) > (y)) ? (x) : (y))
+#endif
+
+#ifndef CLIP
+#    define CLIP(A,B,C) MIN(MAX(A,B),C)
+#endif
 
 
 #define MAXMESSAGE          6                       // Number of messages
@@ -38,6 +55,67 @@ STRING egoboo_path;
 #define BOOL_TO_BIT(X) (X ? 1 : 0 )
 #define BIT_TO_BOOL(X) ((X==1) ? btrue : bfalse )
 
+// OpenGL Texture filtering
+typedef enum e_tx_filters
+{
+  TX_UNFILTERED,
+  TX_LINEAR,
+  TX_MIPMAP,
+  TX_BILINEAR,
+  TX_TRILINEAR_1,
+  TX_TRILINEAR_2,
+  TX_ANISOTROPIC
+} TX_FILTERS;
+
+// OpenGL graphics info
+struct s_glInfo
+{
+  // stack depths
+  GLint max_modelview_stack_depth;     // Maximum modelview-matrix stack depth
+  GLint max_projection_stack_depth;    // Maximum projection-matrix stack depth
+  GLint max_texture_stack_depth;       // Maximum depth of texture matrix stack
+  GLint max_name_stack_depth;          // Maximum selection-name stack depth
+  GLint max_attrib_stack_depth;        // Maximum depth of the attribute stack
+  GLint max_client_attrib_stack_depth; // Maximum depth of the client attribute stack
+
+  // Antialiasing settings
+  GLint   subpixel_bits;           // Number of bits of subpixel precision in x and y
+  GLfloat point_size_range[2];     // Range (low to high) of antialiased point sizes
+  GLfloat point_size_granularity;  // Antialiased point-size granularity
+  GLfloat line_width_range[2];     // Range (low to high) of antialiased line widths
+  GLfloat line_width_granularity;  // Antialiased line-width granularity
+
+  // display settings
+  GLint     max_viewport_dims[2];  // Maximum viewport dimensions
+  GLboolean aux_buffers;           // Number of auxiliary buffers
+  GLboolean rgba_mode;             // True if color buffers store RGBA
+  GLboolean index_mode;            // True if color buffers store indices
+  GLboolean doublebuffer;          // True if front and back buffers exist
+  GLboolean stereo;                // True if left and right buffers exist
+  GLint     red_bits;              // Number of bits per red component in color buffers
+  GLint     green_bits;            // Number of bits per green component in color buffers
+  GLint     blue_bits;             // Number of bits per blue component in color buffers
+  GLint     alpha_bits;            // Number of bits per alpha component in color buffers
+  GLint     index_bits;            // Number of bits per index in color buffers
+  GLint     depth_bits;            // Number of depth-buffer bitplanes
+  GLint     stencil_bits;          // Number of stencil bitplanes
+  GLint     accum_red_bits;        // umber of bits per red component in the accumulation buffer
+  GLint     accum_green_bits;      // umber of bits per green component in the accumulation buffer
+  GLint     accum_blue_bits;       // umber of bits per blue component in the accumulation buffer
+  GLint     accum_alpha_bits;      // umber of bits per blue component in the accumulation buffer
+
+  // Misc
+  GLint max_lights;                    // Maximum number of lights
+  GLint max_clip_planes;               // Maximum number of user clipping planes
+  GLint max_texture_size;              // See discussion in "Texture Proxy" in Chapter 9
+
+  GLint max_pixel_map_table;           // Maximum size of a glPixelMap() translation table
+  GLint max_list_nesting;              // Maximum display-list call nesting
+  GLint max_eval_order;                // Maximum evaluator polynomial order
+};
+typedef struct s_glInfo glInfo_t;
+
+// SDL graphics info
 struct s_screen_info
 {
   int    d;               // Screen bit depth
@@ -47,7 +125,24 @@ struct s_screen_info
 
   Uint8  alpha;
 
-  // select_vertsed SDL bitfields
+  glInfo_t gl_info;
+
+  // SDL OpenGL attributes
+  int red_d;  // SDL_GL_RED_SIZE Size of the framebuffer red component, in bits 
+  int grn_d;  // SDL_GL_GREEN_SIZE Size of the framebuffer green component, in bits 
+  int blu_d;  // SDL_GL_BLUE_SIZE Size of the framebuffer blue component, in bits 
+  int alp_d;  // SDL_GL_ALPHA_SIZE Size of the framebuffer alpha component, in bits 
+  int dbuff;  // SDL_GL_DOUBLEBUFFER 0 or 1, enable or disable double buffering 
+  int buf_d;  // SDL_GL_BUFFER_SIZE Size of the framebuffer, in bits 
+  int zbf_d;  // SDL_GL_DEPTH_SIZE Size of the depth buffer, in bits 
+  int stn_d;  // SDL_GL_STENCIL_SIZE Size of the stencil buffer, in bits 
+  int acr_d;  // SDL_GL_ACCUM_RED_SIZE Size of the accumulation buffer red component, in bits 
+  int acg_d;  // SDL_GL_ACCUM_GREEN_SIZE Size of the accumulation buffer green component, in bits 
+  int acb_d;  // SDL_GL_ACCUM_BLUE_SIZE Size of the accumulation buffer blue component, in bits 
+  int aca_d;  // SDL_GL_ACCUM_ALPHA_SIZE Size of the accumulation buffer alpha component, in bits 
+
+
+  // selected SDL bitfields
   unsigned hw_available:1;
   unsigned wm_available:1;
   unsigned blit_hw:1;
@@ -57,21 +152,21 @@ struct s_screen_info
   unsigned blit_sw_CC:1;
   unsigned blit_sw_A:1;
 
-  unsigned is_sw:1;           // SDL_SWSURFACE Surface is stored in system memory
-  unsigned is_hw:1;           // SDL_HWSURFACE Surface is stored in video memory
-  unsigned use_asynch_blit:1; // SDL_ASYNCBLIT Surface uses asynchronous blits if possible
-  unsigned use_anyformat:1;   // SDL_ANYFORMAT Allows any pixel-format (Display surface)
-  unsigned use_hwpalette:1;     // SDL_HWPALETTE Surface has exclusive palette
-  unsigned is_doublebuf:1;     // SDL_DOUBLEBUF Surface is double buffered (Display surface)
-  unsigned is_fullscreen:1;    // SDL_FULLSCREEN Surface is full screen (Display Surface)
-  unsigned use_opengl:1;        // SDL_OPENGL Surface has an OpenGL context (Display Surface)
-  unsigned use_openglblit:1;    // SDL_OPENGLBLIT Surface supports OpenGL blitting (Display Surface)
-  unsigned sdl_resizable:1;     // SDL_RESIZABLE Surface is resizable (Display Surface)
-  unsigned use_hwaccel:1;       // SDL_HWACCEL Surface blit uses hardware acceleration
-  unsigned has_srccolorkey:1;   // SDL_SRCCOLORKEY Surface use colorkey blitting
-  unsigned use_rleaccel:1;      // SDL_RLEACCEL Colorkey blitting is accelerated with RLE
-  unsigned use_srcalpha:1;      // SDL_SRCALPHA Surface blit uses alpha blending
-  unsigned is_prealloc:1;      // SDL_PREALLOC Surface uses preallocated memory
+  unsigned is_sw:1;           // SDL_SWSURFACE Surface is stored in system memory 
+  unsigned is_hw:1;           // SDL_HWSURFACE Surface is stored in video memory 
+  unsigned use_asynch_blit:1; // SDL_ASYNCBLIT Surface uses asynchronous blits if possible 
+  unsigned use_anyformat:1;   // SDL_ANYFORMAT Allows any pixel-format (Display surface) 
+  unsigned use_hwpalette:1;     // SDL_HWPALETTE Surface has exclusive palette 
+  unsigned is_doublebuf:1;     // SDL_DOUBLEBUF Surface is double buffered (Display surface) 
+  unsigned is_fullscreen:1;    // SDL_FULLSCREEN Surface is full screen (Display Surface) 
+  unsigned use_opengl:1;        // SDL_OPENGL Surface has an OpenGL context (Display Surface) 
+  unsigned use_openglblit:1;    // SDL_OPENGLBLIT Surface supports OpenGL blitting (Display Surface) 
+  unsigned sdl_resizable:1;     // SDL_RESIZABLE Surface is resizable (Display Surface) 
+  unsigned use_hwaccel:1;       // SDL_HWACCEL Surface blit uses hardware acceleration 
+  unsigned has_srccolorkey:1;   // SDL_SRCCOLORKEY Surface use colorkey blitting 
+  unsigned use_rleaccel:1;      // SDL_RLEACCEL Colorkey blitting is accelerated with RLE 
+  unsigned use_srcalpha:1;      // SDL_SRCALPHA Surface blit uses alpha blending 
+  unsigned is_prealloc:1;      // SDL_PREALLOC Surface uses preallocated memory 
 };
 typedef struct s_screen_info screen_info_t;
 
@@ -95,6 +190,9 @@ ui_state_t ui;
 struct s_config_data
 {
   Uint8    reffadeor;        // 255 = Don't fade reflections
+
+  Uint16   messagetime;
+  int      maxtotalmeshvertices;  // max number of kilobytes of vertices
 
   bool_t   messageon;        // Messages?
   int      maxmessage;       //
@@ -130,11 +228,11 @@ struct s_config_data
 
   bool_t   backgroundvalid;      // Allow large background?
   bool_t   overlayvalid;         // Allow large overlay?
-  bool_t   DevMode;
 
-  int      lag;                              // Lag tolerance
+  int      lag;                  // Lag tolerance
+  int      orderlag;             // Lag tolerance for RTS games
   size_t   mesh_vert_count;
-
+  
   screen_info_t    scr;       // Requested screen parameters
 
   int    maxlights;	          // Max number of lights to draw
@@ -144,14 +242,16 @@ struct s_config_data
   Sint32 soundvolume;         // The sound volume
 
   bool_t musicvalid;          // Allow music and loops?
-  Sint32 musicvolume;        // The sound volume of music
+  Sint32 musicvolume;         // The sound volume of music
 
   char   nethostname[64];                            // Name for hosting session
   char   netmessagename[64];                         // Name for messages
 
   int    wraptolerance;        // Status bar
 
-
+  bool_t GrabMouse;
+  bool_t HideMouse;
+  bool_t DevMode;
 };
 typedef struct s_config_data config_data_t;
 config_data_t cfg;
@@ -4534,8 +4634,8 @@ int main(int argcnt, char* argtext[])
   blah[1] = malloc(256); strcpy(blah[1], "/home/bgbirdsey/egoboo");
   blah[2] = malloc(256); strcpy(blah[2], "advent" );
 
-  argcnt = 3;
-  argtext = blah;
+  //argcnt = 3;
+  //argtext = blah;
 
   // register the logging code
   log_init();
@@ -4602,6 +4702,25 @@ int main(int argcnt, char* argtext[])
 void GetScreen_Info( screen_info_t * psi, SDL_Surface * ps )
 {
   const SDL_VideoInfo * pvi = SDL_GetVideoInfo();
+  glInfo_t * gl_info = &(psi->gl_info);
+
+  memset(psi, 0, sizeof(screen_info_t));
+
+  psi->is_sw           = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_SWSURFACE ) );
+  psi->is_hw           = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_HWSURFACE) );
+  psi->use_asynch_blit = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_ASYNCBLIT) );
+  psi->use_anyformat   = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_ANYFORMAT) );
+  psi->use_hwpalette   = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_HWPALETTE) );
+  psi->is_doublebuf    = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_DOUBLEBUF) );
+  psi->is_fullscreen   = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_FULLSCREEN) );
+  psi->use_opengl      = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_OPENGL) );
+  psi->use_openglblit  = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_OPENGLBLIT) );
+  psi->sdl_resizable   = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_RESIZABLE) );
+  psi->use_hwaccel     = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_HWACCEL) );
+  psi->has_srccolorkey = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_SRCCOLORKEY) );
+  psi->use_rleaccel    = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_RLEACCEL) );
+  psi->use_srcalpha    = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_SRCALPHA) );
+  psi->is_prealloc     = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_PREALLOC) );
 
   psi->hw_available = pvi->hw_available;
   psi->wm_available = pvi->wm_available;
@@ -4612,28 +4731,71 @@ void GetScreen_Info( screen_info_t * psi, SDL_Surface * ps )
   psi->blit_sw_CC   = pvi->blit_sw_CC;
   psi->blit_sw_A    = pvi->blit_sw_A;
 
-  psi->is_sw           = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_SWSURFACE ) );
-  psi->is_hw           = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_HWSURFACE));
-  psi->use_asynch_blit = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_ASYNCBLIT));
-  psi->use_anyformat   = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_ANYFORMAT));
-  psi->use_hwpalette   = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_HWPALETTE));
-  psi->is_doublebuf    = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_DOUBLEBUF));
-  psi->is_fullscreen   = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_FULLSCREEN));
-  psi->use_opengl      = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_OPENGL));
-  psi->use_openglblit  = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_OPENGLBLIT));
-  psi->sdl_resizable   = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_RESIZABLE));
-  psi->use_hwaccel     = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_HWACCEL));
-  psi->has_srccolorkey = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_SRCCOLORKEY));
-  psi->use_rleaccel    = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_RLEACCEL));
-  psi->use_srcalpha    = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_SRCALPHA));
-  psi->is_prealloc     = BOOL_TO_BIT( HAS_BITS(ps->flags, SDL_PREALLOC));
+  // get any SDL-OpenGL info
+  if( 1 != psi->use_opengl)
+  {
+    SDL_GL_GetAttribute(SDL_GL_RED_SIZE,         &psi->red_d);
+    SDL_GL_GetAttribute(SDL_GL_GREEN_SIZE,       &psi->grn_d);
+    SDL_GL_GetAttribute(SDL_GL_BLUE_SIZE,        &psi->blu_d);
+    SDL_GL_GetAttribute(SDL_GL_ALPHA_SIZE,       &psi->alp_d);
+    SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER,     &psi->dbuff);
+    SDL_GL_GetAttribute(SDL_GL_BUFFER_SIZE,      &psi->buf_d);
+    SDL_GL_GetAttribute(SDL_GL_DEPTH_SIZE,       &psi->zbf_d);
+    SDL_GL_GetAttribute(SDL_GL_STENCIL_SIZE,     &psi->stn_d);
+    SDL_GL_GetAttribute(SDL_GL_ACCUM_RED_SIZE,   &psi->acr_d);
+    SDL_GL_GetAttribute(SDL_GL_ACCUM_GREEN_SIZE, &psi->acg_d);
+    SDL_GL_GetAttribute(SDL_GL_ACCUM_BLUE_SIZE,  &psi->acb_d);
+    SDL_GL_GetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, &psi->aca_d);
+  }
 
   psi->d = ps->format->BitsPerPixel;
   psi->x = ps->w;
   psi->y = ps->h;
-  SDL_GL_GetAttribute(SDL_GL_DEPTH_SIZE, &(psi->z));
-}
+  psi->z = psi->zbf_d;
 
+  // get any pure OpenGL device caps
+  if( 1 != psi->use_opengl)
+  {
+    glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH,     &gl_info->max_modelview_stack_depth);
+    glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH,    &gl_info->max_projection_stack_depth);
+    glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH,       &gl_info->max_texture_stack_depth);
+    glGetIntegerv(GL_MAX_NAME_STACK_DEPTH,          &gl_info->max_name_stack_depth);
+    glGetIntegerv(GL_MAX_ATTRIB_STACK_DEPTH,        &gl_info->max_attrib_stack_depth);
+    glGetIntegerv(GL_MAX_CLIENT_ATTRIB_STACK_DEPTH, &gl_info->max_client_attrib_stack_depth);
+
+    glGetIntegerv(GL_SUBPIXEL_BITS,        &gl_info->subpixel_bits);
+    glGetFloatv(GL_POINT_SIZE_RANGE,        gl_info->point_size_range);
+    glGetFloatv(GL_POINT_SIZE_GRANULARITY, &gl_info->point_size_granularity);
+    glGetFloatv(GL_LINE_WIDTH_RANGE,        gl_info->line_width_range);
+    glGetFloatv(GL_LINE_WIDTH_GRANULARITY, &gl_info->line_width_granularity);
+
+    glGetIntegerv(GL_MAX_VIEWPORT_DIMS, gl_info->max_viewport_dims);
+    glGetBooleanv(GL_AUX_BUFFERS,      &gl_info->aux_buffers);
+    glGetBooleanv(GL_RGBA_MODE,        &gl_info->rgba_mode);
+    glGetBooleanv(GL_INDEX_MODE,       &gl_info->index_mode);
+    glGetBooleanv(GL_DOUBLEBUFFER,     &gl_info->doublebuffer);
+    glGetBooleanv(GL_STEREO,           &gl_info->stereo);
+    glGetIntegerv(GL_RED_BITS,         &gl_info->red_bits);
+    glGetIntegerv(GL_GREEN_BITS,       &gl_info->green_bits);
+    glGetIntegerv(GL_BLUE_BITS,        &gl_info->blue_bits);
+    glGetIntegerv(GL_ALPHA_BITS,       &gl_info->alpha_bits);
+    glGetIntegerv(GL_INDEX_BITS,       &gl_info->index_bits);
+    glGetIntegerv(GL_DEPTH_BITS,       &gl_info->depth_bits);
+    glGetIntegerv(GL_STENCIL_BITS,     &gl_info->stencil_bits);
+    glGetIntegerv(GL_ACCUM_RED_BITS,   &gl_info->accum_red_bits);
+    glGetIntegerv(GL_ACCUM_GREEN_BITS, &gl_info->accum_green_bits);
+    glGetIntegerv(GL_ACCUM_BLUE_BITS,  &gl_info->accum_blue_bits);
+    glGetIntegerv(GL_ACCUM_ALPHA_BITS, &gl_info->accum_alpha_bits);
+
+    glGetIntegerv(GL_MAX_LIGHTS,       &gl_info->max_lights);
+    glGetIntegerv(GL_MAX_CLIP_PLANES,  &gl_info->max_clip_planes);
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &gl_info->max_texture_size);
+
+    glGetIntegerv(GL_MAX_PIXEL_MAP_TABLE, &gl_info->max_pixel_map_table);
+    glGetIntegerv(GL_MAX_LIST_NESTING,    &gl_info->max_list_nesting);
+    glGetIntegerv(GL_MAX_EVAL_ORDER,      &gl_info->max_eval_order);
+  }
+}
 
 //------------------------------------------------------------------------------
 void sdlinit( int argc, char **argv )
@@ -4705,23 +4867,54 @@ void sdlinit( int argc, char **argv )
   }
 }
 
+//--------------------------------------------------------------------------------------------
+//Macros for reading values from a file
+#define GetBoolean(label, var, default) \
+{ \
+  if ( GetConfigBooleanValue( lpConfigFile, lszCurrentSection, (label), &lTempBool ) == 0 ) \
+  { \
+    lTempBool = (default); \
+  } \
+  (var) = lTempBool; \
+}
+
+#define GetInt(label, var, default) \
+{ \
+  if ( GetConfigIntValue( lpConfigFile, lszCurrentSection, (label), &lTempInt ) == 0 ) \
+  { \
+    lTempInt = (default); \
+  } \
+  (var) = lTempInt; \
+}
+
+// Don't make len larger than 64
+#define GetString(label, var, len, default) \
+{ \
+  if ( GetConfigValue( lpConfigFile, lszCurrentSection, (label), lTempStr, sizeof( lTempStr ) / sizeof( *lTempStr ) ) == 0 ) \
+  { \
+    strncpy( lTempStr, (default), sizeof( lTempStr ) / sizeof( *lTempStr ) ); \
+  } \
+  strncpy( (var), lTempStr, (len) ); \
+  (var)[(len) - 1] = '\0'; \
+}
 
 //--------------------------------------------------------------------------------------------
 void read_setup( config_data_t * pc, char* filename )
 {
   // ZZ> This function loads the setup file
 
-  ConfigFilePtr lConfigSetup;
-  char lCurSectionName[64];
+  ConfigFilePtr lpConfigFile;
+  STRING lszCurrentSection;
   bool_t lTempBool;
-  Sint32 lTmpInt;
-  char lTmpStr[24];
+  Sint32 lTempInt;
+  STRING lTempStr;
 
-  lConfigSetup = OpenConfigFile( filename );
-  if ( lConfigSetup == NULL )
+
+  lpConfigFile = OpenConfigFile( filename );
+  if ( lpConfigFile == NULL )
   {
     // Major Error
-    log_error( "Could not find Setup.txt\n" );
+    log_error( "Could not find setup file \"%s\"\n", filename );
   }
   else
   {
@@ -4731,91 +4924,49 @@ void read_setup( config_data_t * pc, char* filename )
 
     *********************************************/
 
-    strcpy( lCurSectionName, "GRAPHIC" );
+    strcpy( lszCurrentSection, "GRAPHIC" );
 
     // Draw z reflection?
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "Z_REFLECTION", &pc->zreflect ) == 0 )
-    {
-      pc->zreflect = bfalse; // default
-    }
+    GetBoolean( "Z_REFLECTION", pc->zreflect, bfalse );
 
     // Max number of vertrices (Should always be 100!)
-    if ( GetConfigIntValue( lConfigSetup, lCurSectionName, "MAX_NUMBER_VERTICES", &lTmpInt ) == 0 )
-    {
-      lTmpInt = 100; // default
-    }
-    pc->mesh_vert_count = lTmpInt * 1024;
+    GetInt( "MAX_NUMBER_VERTICES", pc->maxtotalmeshvertices, 100 );
+    pc->maxtotalmeshvertices *= 1024;
 
-    // Do pc->fullscreen?
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "FULLSCREEN", &pc->fullscreen ) == 0 )
-    {
-      pc->fullscreen = bfalse; // default
-    }
+    // Do fullscreen?
+    GetBoolean( "FULLSCREEN", pc->fullscreen, bfalse );
 
     // Screen Size
-    if ( GetConfigIntValue( lConfigSetup, lCurSectionName, "SCREENSIZE_X", &lTmpInt ) == 0 )
-    {
-      lTmpInt = 640; // default
-    }
-    pc->scr.x = lTmpInt;
-    if ( GetConfigIntValue( lConfigSetup, lCurSectionName, "SCREENSIZE_Y", &lTmpInt ) == 0 )
-    {
-      lTmpInt = 480; // default
-    }
-    pc->scr.y = lTmpInt;
+    GetInt( "SCREENSIZE_X", pc->scr.x, 640 );
+    GetInt( "SCREENSIZE_Y", pc->scr.y, 480 );
 
     // Color depth
-    if ( GetConfigIntValue( lConfigSetup, lCurSectionName, "COLOR_DEPTH", &lTmpInt ) == 0 )
-    {
-      lTmpInt = 16; // default
-    }
-    pc->scr.d = lTmpInt;
+    GetInt( "COLOR_DEPTH", pc->scr.d, 32 );
 
     // The z depth
-    if ( GetConfigIntValue( lConfigSetup, lCurSectionName, "Z_DEPTH", &lTmpInt ) == 0 )
-    {
-      lTmpInt = 16; // default
-    }
-    pc->scr.z = lTmpInt;
+    GetInt( "Z_DEPTH", pc->scr.z, 8 );
 
     // Max number of messages displayed
-    if ( GetConfigIntValue( lConfigSetup, lCurSectionName, "MAX_TEXT_MESSAGE", &lTmpInt ) == 0 )
-    {
-      lTmpInt = 1; // default
-    }
+    GetInt( "MAX_TEXT_MESSAGE", pc->maxmessage, 6 );
     pc->messageon = btrue;
-    pc->maxmessage = lTmpInt;
     if ( pc->maxmessage < 1 )  { pc->maxmessage = 1;  pc->messageon = bfalse; }
     if ( pc->maxmessage > MAXMESSAGE )  { pc->maxmessage = MAXMESSAGE; }
 
+    // Max number of messages displayed
+    GetInt( "MESSAGE_DURATION", pc->messagetime, 50 );
+
     // Show status bars? (Life, mana, character icons, etc.)
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "STATUS_BAR", &pc->staton ) == 0 )
-    {
-      pc->staton = btrue; // default
-    }
-    pc->wraptolerance = 32;
-    if ( pc->staton )
-    {
-      pc->wraptolerance = 90;
-    }
+    GetBoolean( "STATUS_BAR", pc->staton, btrue );
+    pc->wraptolerance = pc->staton ? 90 : 32;
 
     // Perspective correction
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "PERSPECTIVE_CORRECT", &pc->perspective ) == 0 )
-    {
-      pc->perspective = bfalse; // default
-    }
+    GetBoolean( "PERSPECTIVE_CORRECT", pc->perspective, bfalse );
 
     // Enable dithering? (Reduces quality but increases preformance)
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "DITHERING", &pc->dither ) == 0 )
-    {
-      pc->dither = bfalse; // default
-    }
+    GetBoolean( "DITHERING", pc->dither, bfalse );
 
     // Reflection fadeout
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "FLOOR_REFLECTION_FADEOUT", &lTempBool ) == 0 )
-    {
-      lTempBool = bfalse; // default
-    }
+    GetBoolean( "FLOOR_REFLECTION_FADEOUT", lTempBool, bfalse );
     if ( lTempBool )
     {
       pc->reffadeor = 0;
@@ -4826,103 +4977,57 @@ void read_setup( config_data_t * pc, char* filename )
     }
 
     // Draw Reflection?
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "REFLECTION", &pc->refon ) == 0 )
-    {
-      pc->refon = bfalse; // default
-    }
+    GetBoolean( "REFLECTION", pc->refon, bfalse );
 
     // Draw shadows?
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "SHADOWS", &pc->shaon ) == 0 )
-    {
-      pc->shaon = bfalse; // default
-    }
+    GetBoolean( "SHADOWS", pc->shaon, bfalse );
 
-    // Draw good shadows (BAD! Not working yet)
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "SHADOW_AS_SPRITE", &pc->shasprite ) == 0 )
-    {
-      pc->shasprite = btrue; // default
-    }
+    // Draw good shadows?
+    GetBoolean( "SHADOW_AS_SPRITE", pc->shasprite, btrue );
 
     // Draw phong mapping?
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "PHONG", &pc->phongon ) == 0 )
-    {
-      pc->phongon = btrue; // default
-    }
+    GetBoolean( "PHONG", pc->phongon, btrue );
 
     // Draw water with more layers?
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "MULTI_LAYER_WATER", &pc->twolayerwateron ) == 0 )
-    {
-      pc->twolayerwateron = bfalse; // default
-    }
+    GetBoolean( "MULTI_LAYER_WATER", pc->twolayerwateron, bfalse );
 
     // TODO: This is not implemented
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "OVERLAY", &pc->overlayvalid ) == 0 )
-    {
-      pc->overlayvalid = bfalse; // default
-    }
+    GetBoolean( "OVERLAY", pc->overlayvalid, bfalse );
 
     // Allow backgrounds?
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "BACKGROUND", &pc->backgroundvalid ) == 0 )
-    {
-      pc->backgroundvalid = bfalse; // default
-    }
+    GetBoolean( "BACKGROUND", pc->backgroundvalid, bfalse );
 
     // Enable fog?
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "FOG", &pc->fogallowed ) == 0 )
-    {
-      pc->fogallowed = bfalse; // default
-    }
+    GetBoolean( "FOG", pc->fogallowed, bfalse );
 
-    // Do gourad pc->shading?
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "GOURAUD_SHADING", &lTempBool ) == 0 )
-    {
-      pc->shading = GL_SMOOTH; // default
-    }
-    else
-    {
-      pc->shading = lTempBool ? GL_SMOOTH : GL_FLAT;
-    }
+    // Do gourad shading?
+    GetBoolean( "GOURAUD_SHADING", lTempBool, btrue );
+    pc->shading = lTempBool ? GL_SMOOTH : GL_FLAT;
 
-    // Enable pc->antialiasing?
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "ANTIALIASING", &pc->antialiasing ) == 0 )
-    {
-      pc->antialiasing = bfalse; // default
-    }
+    // Enable antialiasing?
+    GetBoolean( "ANTIALIASING", pc->antialiasing, bfalse );
 
     // Do we do texture filtering?
-    if ( GetConfigValue( lConfigSetup, lCurSectionName, "TEXTURE_FILTERING", lTmpStr, 24 ) == 0 )
-    {
-      strcpy( lTmpStr, "LINEAR" ); // default
-    }
+    GetString( "TEXTURE_FILTERING", lTempStr, sizeof(STRING), "LINEAR" );
 
-    if ( lTmpStr[0] == 'L' || lTmpStr[0] == 'l' )  pc->texturefilter = 1;
-    if ( lTmpStr[0] == 'B' || lTmpStr[0] == 'b' )  pc->texturefilter = 2;
-    if ( lTmpStr[0] == 'T' || lTmpStr[0] == 't' )  pc->texturefilter = 3;
-    if ( lTmpStr[0] == 'A' || lTmpStr[0] == 'a' )  pc->texturefilter = 4;
+    if ( lTempStr[0] == 'L' || lTempStr[0] == 'l' )  pc->texturefilter = TX_UNFILTERED;
+    if ( lTempStr[0] == 'L' || lTempStr[0] == 'l' )  pc->texturefilter = TX_LINEAR;
+	  if ( lTempStr[0] == 'M' || lTempStr[0] == 'm' )  pc->texturefilter = TX_MIPMAP;
+    if ( lTempStr[0] == 'B' || lTempStr[0] == 'b' )  pc->texturefilter = TX_BILINEAR;
+    if ( lTempStr[0] == 'T' || lTempStr[0] == 't' )  pc->texturefilter = TX_TRILINEAR_1;
+    if ( lTempStr[0] == '2'                       )  pc->texturefilter = TX_TRILINEAR_2;
+    if ( lTempStr[0] == 'A' || lTempStr[0] == 'a' )  pc->texturefilter = TX_ANISOTROPIC;
 
     // Max number of lights
-    if ( GetConfigIntValue( lConfigSetup, lCurSectionName, "MAX_DYNAMIC_LIGHTS", &pc->maxlights ) == 0 )
-    {
-      pc->maxlights = 8; // default
-    }
-    if ( pc->maxlights > TOTALMAXDYNA ) pc->maxlights = TOTALMAXDYNA;
+	GetInt( "MAX_DYNAMIC_LIGHTS", pc->maxlights, 12 );
+	if ( pc->maxlights > TOTALMAXDYNA ) pc->maxlights = TOTALMAXDYNA;
 
     // Get the FPS limit
-    if ( GetConfigIntValue( lConfigSetup, lCurSectionName, "MAX_FPS_LIMIT", &pc->frame_limit ) == 0 )
-    {
-      pc->frame_limit = 30; // default
-    }
+	GetInt( "MAX_FPS_LIMIT", pc->frame_limit, 30 );
 
     // Get the particle limit
-    if ( GetConfigIntValue( lConfigSetup, lCurSectionName, "MAX_PARTICLES", &lTmpInt ) == 0 )
-    {
-      pc->maxparticles = 256; // default
-    }
-    else
-    {
-      pc->maxparticles = lTmpInt;
-    };
-    if(pc->maxparticles > TOTALMAXPRT) pc->maxparticles = TOTALMAXPRT;
+	GetInt( "MAX_PARTICLES", pc->maxparticles, 256 );
+	if(pc->maxparticles > TOTALMAXPRT) pc->maxparticles = TOTALMAXPRT;
 
     /*********************************************
 
@@ -4930,47 +5035,28 @@ void read_setup( config_data_t * pc, char* filename )
 
     *********************************************/
 
-    strcpy( lCurSectionName, "SOUND" );
+    strcpy( lszCurrentSection, "SOUND" );
 
     // Enable sound
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "SOUND", &pc->soundvalid ) == 0 )
-    {
-      pc->soundvalid = bfalse; // default
-    }
+    GetBoolean( "SOUND", pc->soundvalid, bfalse );
 
     // Enable music
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "MUSIC", &pc->musicvalid ) == 0 )
-    {
-      pc->musicvalid = bfalse; // default
-    }
+    GetBoolean( "MUSIC", pc->musicvalid, bfalse );
 
     // Music volume
-    if ( GetConfigIntValue( lConfigSetup, lCurSectionName, "MUSIC_VOLUME", &pc->musicvolume ) == 0 )
-    {
-      pc->musicvolume = 50; // default
-    }
+    GetInt( "MUSIC_VOLUME", pc->musicvolume, 50 );
 
     // Sound volume
-    if ( GetConfigIntValue( lConfigSetup, lCurSectionName, "SOUND_VOLUME", &pc->soundvolume ) == 0 )
-    {
-      pc->soundvolume = 75; // default
-    }
+    GetInt( "SOUND_VOLUME", pc->soundvolume, 75 );
 
     // Max number of sound channels playing at the same time
-    if ( GetConfigIntValue( lConfigSetup, lCurSectionName, "MAX_SOUND_CHANNEL", &pc->maxsoundchannel ) == 0 )
-    {
-      pc->maxsoundchannel = 16; // default
-    }
-    if ( pc->maxsoundchannel < 8 ) pc->maxsoundchannel = 8;
-    if ( pc->maxsoundchannel > 32 ) pc->maxsoundchannel = 32;
+    GetInt( "MAX_SOUND_CHANNEL", pc->maxsoundchannel, 16 );
+    pc->maxsoundchannel = CLIP(pc->maxsoundchannel, 8, 128);
 
     // The output buffer size
-    if ( GetConfigIntValue( lConfigSetup, lCurSectionName, "OUPUT_BUFFER_SIZE", &pc->buffersize ) == 0 )
-    {
-      pc->buffersize = 2048; // default
-    }
-    if ( pc->buffersize < 512 ) pc->buffersize = 512;
-    if ( pc->buffersize > 8196 ) pc->buffersize = 8196;
+    GetInt( "OUTPUT_BUFFER_SIZE", pc->buffersize, 2048 );
+    pc->buffersize = CLIP(pc->buffersize, 512, 8196);
+
 
     /*********************************************
 
@@ -4978,20 +5064,15 @@ void read_setup( config_data_t * pc, char* filename )
 
     *********************************************/
 
-    strcpy( lCurSectionName, "CONTROL" );
+    strcpy( lszCurrentSection, "CONTROL" );
 
     // Camera control mode
-    if ( GetConfigValue( lConfigSetup, lCurSectionName, "AUTOTURN_CAMERA", lTmpStr, 24 ) == 0 )
-    {
-      strcpy( lTmpStr, "GOOD" ); // default
-    }
+    GetString( "AUTOTURN_CAMERA", lTempStr, sizeof(STRING), "GOOD" );
 
-    if ( lTmpStr[0] == 'G' || lTmpStr[0] == 'g' )  pc->camautoturn = 255;
-    if ( lTmpStr[0] == 'T' || lTmpStr[0] == 't' )  pc->camautoturn = btrue;
-    if ( lTmpStr[0] == 'F' || lTmpStr[0] == 'f' )  pc->camautoturn = bfalse;
+    if ( lTempStr[0] == 'G' || lTempStr[0] == 'g' )  pc->camautoturn = 255;
+    if ( lTempStr[0] == 'T' || lTempStr[0] == 't' )  pc->camautoturn = btrue;
+    if ( lTempStr[0] == 'F' || lTempStr[0] == 'f' )  pc->camautoturn = bfalse;
 
-    //[claforte] Force pc->camautoturn to bfalse, or else it doesn't move right.
-    // pc->camautoturn = bfalse;
 
     /*********************************************
 
@@ -4999,42 +5080,21 @@ void read_setup( config_data_t * pc, char* filename )
 
     *********************************************/
 
-    strcpy( lCurSectionName, "NETWORK" );
+    strcpy( lszCurrentSection, "NETWORK" );
 
     // Enable networking systems?
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "NETWORK_ON", &pc->networkon ) == 0 )
-    {
-      pc->networkon = bfalse; // default
-    }
+    GetBoolean( "NETWORK_ON", pc->networkon, bfalse );
 
     // Max lag
-    if ( GetConfigIntValue( lConfigSetup, lCurSectionName, "LAG_TOLERANCE", &lTmpInt ) == 0 )
-    {
-      lTmpInt = 2; // default
-    }
-    pc->lag = lTmpInt;
-
-    /*
-    goto_colon(fileread); fscanf(fileread, "%d", &orderlag);
-
-    if ( GetConfigIntValue( lConfigSetup, lCurSectionName, "RTS_LAG_TOLERANCE", &lTmpInt ) == 0 )
-      {
-      lTmpInt = 25; // default
-      }
-    orderlag = lTmpInt;
-    */
+    GetInt( "LAG_TOLERANCE", pc->lag, 2 );
+    GetInt( "RTS_LAG_TOLERANCE", pc->orderlag, 25 );
 
     // Name or IP of the host or the target to join
-    if ( GetConfigValue( lConfigSetup, lCurSectionName, "HOST_NAME", pc->nethostname, 64 ) == 0 )
-    {
-      strcpy( pc->nethostname, "no host" ); // default
-    }
+    GetString( "HOST_NAME", pc->nethostname, sizeof(STRING), "no host" );
 
     // Multiplayer name
-    if ( GetConfigValue( lConfigSetup, lCurSectionName, "MULTIPLAYER_NAME", pc->netmessagename, 64 ) == 0 )
-    {
-      strcpy( pc->netmessagename, "little Raoul" ); // default
-    }
+    GetString( "MULTIPLAYER_NAME", pc->netmessagename, sizeof(STRING), "little Raoul" );
+
 
     /*********************************************
 
@@ -5042,31 +5102,15 @@ void read_setup( config_data_t * pc, char* filename )
 
     *********************************************/
 
-    strcpy( lCurSectionName, "DEBUG" );
+    strcpy( lszCurrentSection, "DEBUG" );
 
     // Show the FPS counter?
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "DISPLAY_FPS", &lTempBool ) == 0 )
-    {
-      lTempBool = btrue; // default
-    }
-    pc->fpson = lTempBool;
+    GetBoolean( "DISPLAY_FPS", pc->fpson, btrue );
+    GetBoolean( "HIDE_MOUSE", pc->HideMouse, btrue );
+    GetBoolean( "GRAB_MOUSE", pc->GrabMouse, btrue );
+    GetBoolean( "DEV_MODE", pc->DevMode, btrue );
 
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "HIDE_MOUSE", &ui.HideMouse ) == 0 )
-    {
-      ui.HideMouse = btrue; // default
-    }
-
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "GRAB_MOUSE", &ui.GrabMouse ) == 0 )
-    {
-      ui.GrabMouse = btrue; // default
-    }
-
-    if ( GetConfigBooleanValue( lConfigSetup, lCurSectionName, "DEV_MODE", &pc->DevMode ) == 0 )
-    {
-      pc->DevMode = btrue; // default
-    }
-
-    CloseConfigFile( lConfigSetup );
+    CloseConfigFile( lpConfigFile );
 
   }
 }
