@@ -36,6 +36,7 @@
 			<Add library="libSDL" />
 			<Add library="libSDL_ttf" />
 			<Add library="libSDL_image" />
+			<Add library="libgl" />
 		</Linker>
 		<Unit filename="ConfigFile.c">
 			<Option compilerVar="CC" />

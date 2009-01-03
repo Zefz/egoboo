@@ -8,25 +8,25 @@
 	<stdio.h>
 	<stdlib.h>
 
-1230932107 /home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/egoboo_typedef.h
+1230933571 /home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/egoboo_typedef.h
 	"egoboo_config.h"
-	<SDL/SDL_types.h>
+	<SDL_types.h>
 
 1230869247 /home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/egoboo_config.h
 	<unistd.h>
 
-1230869972 source:/home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/Font.c
+1230933572 source:/home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/Font.c
 	"Font.h"
 	"egoboo_config.h"
 	<stdlib.h>
 	<stddef.h>
 	<string.h>
-	<SDL/SDL.h>
-	<SDL/SDL_ttf.h>
+	<SDL.h>
+	<SDL_ttf.h>
 
-1230869957 /home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/Font.h
-	<SDL/SDL.h>
-	<SDL/SDL_ttf.h>
+1230933572 /home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/Font.h
+	<SDL.h>
+	<SDL_ttf.h>
 
 1230869247 source:/home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/Log.c
 	"Log.h"
@@ -36,33 +36,33 @@
 
 1230869247 /home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/Log.h
 
-1230869982 source:/home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/SDL_GetPixel.c
-	<SDL/SDL.h>
+1230933572 source:/home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/SDL_GetPixel.c
+	<SDL.h>
 	"SDL_Pixel.h"
 	<string.h>
 
 1230870633 /home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/SDL_Pixel.h
 
-1230869989 source:/home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/SDL_PutPixel.c
-	<SDL/SDL.h>
+1230933572 source:/home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/SDL_PutPixel.c
+	<SDL.h>
 	"SDL_Pixel.h"
 	<string.h>
 
 1230869247 source:/home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/egoboo_endian.c
 	"egoboo_endian.h"
 
-1230870038 /home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/egoboo_endian.h
+1230933572 /home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/egoboo_endian.h
 	"egoboo_typedef.h"
-	<SDL/SDL_endian.h>
+	<SDL_endian.h>
 
-1230933028 source:/home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/cartman.c
+1230941608 source:/home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/cartman.c
 	<stdio.h>
 	<fcntl.h>
 	<math.h>
 	<assert.h>
-	<SDL/SDL.h>
-	<SDL/SDL_image.h>
-	<SDL/SDL_opengl.h>
+	<SDL.h>
+	<SDL_opengl.h>
+	<SDL_image.h>
 	"Log.h"
 	"ConfigFile.h"
 	"Font.h"
@@ -72,4 +72,209 @@
 
 1230869247 /home/bgbirdsey/svn/sf_egoboo/branches/bgbirdsey/Cartman_SDL/standard.c
 	<time.h>
+
+1210237441 /usr/include/SDL/SDL_types.h
+	"SDL_stdinc.h"
+
+1210237441 /usr/include/SDL/SDL_stdinc.h
+	"SDL_config.h"
+	<sys/types.h>
+	<stdio.h>
+	<stdlib.h>
+	<stddef.h>
+	<stdarg.h>
+	<stdlib.h>
+	<malloc.h>
+	<stddef.h>
+	<stdarg.h>
+	<memory.h>
+	<string.h>
+	<strings.h>
+	<inttypes.h>
+	<stdint.h>
+	<ctype.h>
+	<iconv.h>
+	"begin_code.h"
+	<alloca.h>
+	<malloc.h>
+	<malloc.h>
+	<stdlib.h>
+	"close_code.h"
+
+1210237441 /usr/include/SDL/SDL_config.h
+	"SDL_platform.h"
+	<stdarg.h>
+
+1210237441 /usr/include/SDL/SDL_platform.h
+
+1210237441 /usr/include/SDL/begin_code.h
+
+1210237441 /usr/include/SDL/close_code.h
+
+1210237441 /usr/include/SDL/SDL_endian.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1210237441 /usr/include/SDL/SDL.h
+	"SDL_main.h"
+	"SDL_stdinc.h"
+	"SDL_audio.h"
+	"SDL_cdrom.h"
+	"SDL_cpuinfo.h"
+	"SDL_endian.h"
+	"SDL_error.h"
+	"SDL_events.h"
+	"SDL_loadso.h"
+	"SDL_mutex.h"
+	"SDL_rwops.h"
+	"SDL_thread.h"
+	"SDL_timer.h"
+	"SDL_video.h"
+	"SDL_version.h"
+	"begin_code.h"
+	"close_code.h"
+
+1210237441 /usr/include/SDL/SDL_main.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+	"begin_code.h"
+	"close_code.h"
+
+1210237441 /usr/include/SDL/SDL_audio.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_endian.h"
+	"SDL_mutex.h"
+	"SDL_thread.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1210237441 /usr/include/SDL/SDL_error.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1210237441 /usr/include/SDL/SDL_mutex.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1210237441 /usr/include/SDL/SDL_thread.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_mutex.h"
+	"begin_code.h"
+	<process.h>
+	"close_code.h"
+
+1210237441 /usr/include/SDL/SDL_rwops.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1210237441 /usr/include/SDL/SDL_cdrom.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1210237441 /usr/include/SDL/SDL_cpuinfo.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1210237441 /usr/include/SDL/SDL_events.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_active.h"
+	"SDL_keyboard.h"
+	"SDL_mouse.h"
+	"SDL_joystick.h"
+	"SDL_quit.h"
+	"begin_code.h"
+	"close_code.h"
+
+1210237441 /usr/include/SDL/SDL_active.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1210237441 /usr/include/SDL/SDL_keyboard.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_keysym.h"
+	"begin_code.h"
+	"close_code.h"
+
+1210237441 /usr/include/SDL/SDL_keysym.h
+
+1210237441 /usr/include/SDL/SDL_mouse.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1210237441 /usr/include/SDL/SDL_video.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1210237441 /usr/include/SDL/SDL_joystick.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1210237441 /usr/include/SDL/SDL_quit.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+
+1210237441 /usr/include/SDL/SDL_loadso.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1210237441 /usr/include/SDL/SDL_timer.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1210237441 /usr/include/SDL/SDL_version.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1186441190 /usr/include/SDL/SDL_ttf.h
+	"SDL.h"
+	"begin_code.h"
+	"close_code.h"
+
+1210237441 /usr/include/SDL/SDL_opengl.h
+	"SDL_config.h"
+	<windows.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<gl.h>
+	<glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<windows.h>
+	<stddef.h>
+
+1202785916 /usr/include/SDL/SDL_image.h
+	"SDL.h"
+	"SDL_version.h"
+	"begin_code.h"
+	"close_code.h"
 
