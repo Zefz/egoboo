@@ -342,8 +342,8 @@ void draw_light( int number, window_t * pwin )
     int xdraw, ydraw, radius;
     Uint8 color;
 
-    xdraw = (light_lst[number].x / FOURNUM) - cam.x + (pwin->surfacex >> 1) - SMALLX;
-    ydraw = (light_lst[number].y / FOURNUM) - cam.y + (pwin->surfacey >> 1) - SMALLY;
+    xdraw = (light_lst[number].x / FOURNUM) - cam.x + (pwin->surfacex >> 1) - SMALLXY;
+    ydraw = (light_lst[number].y / FOURNUM) - cam.y + (pwin->surfacey >> 1) - SMALLXY;
     radius = abs(light_lst[number].radius) / FOURNUM;
     color = light_lst[number].level >> 3;
 
@@ -706,7 +706,7 @@ void make_planmap(void)
     //if(NULL != bmptemp)  return;
 
     if (NULL == bmphitemap) SDL_FreeSurface(bmphitemap);
-    bmphitemap = cartman_CreateSurface(mesh.sizex * TINYX, mesh.sizey * TINYY);
+    bmphitemap = cartman_CreateSurface(mesh.sizex * TINYXY, mesh.sizey * TINYXY);
     if (NULL == bmphitemap) return;
 
     SDL_FillRect(bmphitemap, NULL, MAKE_BGR(bmphitemap, 0, 0, 0));
@@ -720,12 +720,12 @@ void make_planmap(void)
             glTexture * tx_tile;
             tx_tile = tiny_tile_at(x, y);
             {
-                SDL_Rect dst = {putx, puty, TINYX, TINYY};
+                SDL_Rect dst = {putx, puty, TINYXY, TINYXY};
                 cartman_BlitSurface( tx_tile->surface, NULL, bmphitemap, &dst);
             }
-            putx += TINYX;
+            putx += TINYXY;
         }
-        puty += TINYY;
+        puty += TINYXY;
     }
 
     //SDL_SoftStretch(bmphitemap, NULL, bmptemp, NULL);
@@ -972,12 +972,12 @@ void make_onscreen(void)
     int fan;
 
     numpointsonscreen = 0;
-    mapxstt = (cam.x - (ONSIZE >> 1)) / 31;
-    mapystt = (cam.y - (ONSIZE >> 1)) / 31;
-    numx = (ONSIZE / SMALLX) + 3;
-    numy = (ONSIZE / SMALLY) + 3;
-    x = -cam.x + (ONSIZE >> 1) - SMALLX;
-    y = -cam.y + (ONSIZE >> 1) - SMALLY;
+    mapxstt = (cam.x - (ONSIZE >> 1)) / (SMALLXY - 1);
+    mapystt = (cam.y - (ONSIZE >> 1)) / (SMALLXY - 1);
+    numx = (ONSIZE / (SMALLXY - 1)) + 3;
+    numy = (ONSIZE / (SMALLXY - 1)) + 3;
+    x = -cam.x + (ONSIZE >> 1) - (SMALLXY - 1);
+    y = -cam.y + (ONSIZE >> 1) - (SMALLXY - 1);
 
     mapy = mapystt;
     cnty = 0;
@@ -1976,8 +1976,8 @@ void create_mesh(void)
     printf("Number of tiles in Y direction ( 32-512 ):  ");
     scanf("%d", &mesh.sizey);
 
-    mesh.edgex = (mesh.sizex * SMALLX) - 1;
-    mesh.edgey = (mesh.sizey * SMALLY) - 1;
+    mesh.edgex = (mesh.sizex * (SMALLXY - 1)) - 1;
+    mesh.edgey = (mesh.sizey * (SMALLXY - 1)) - 1;
     mesh.edgez = 180 << 4;
 
     fan = 0;
@@ -1991,7 +1991,7 @@ void create_mesh(void)
             mesh.type[fan] = 2 + 0;
             mesh.tile[fan] = (((x & 1) + (y & 1)) & 1) + DEFAULT_TILE;
 
-            if ( !add_fan(fan, x*31, y*31) )
+            if ( !add_fan(fan, x*(SMALLXY - 1), y*(SMALLXY - 1)) )
             {
                 printf("NOT ENOUGH VERTICES!!!\n\n");
                 exit(-1);
@@ -2032,7 +2032,7 @@ void get_small_tiles(SDL_Surface* bmpload)
 
             glTexture_new( tx_smalltile + numsmalltile );
 
-            image = cartman_CreateSurface(SMALLX, SMALLY);
+            image = cartman_CreateSurface((SMALLXY - 1), (SMALLXY - 1));
             SDL_FillRect(image, NULL, MAKE_BGR(image, 0, 0, 0));
             SDL_SoftStretch(bmpload, &src1, image, NULL);
 
@@ -2086,7 +2086,7 @@ void get_big_tiles(SDL_Surface* bmpload)
 
             glTexture_new( tx_bigtile + numbigtile );
 
-            image = cartman_CreateSurface(SMALLX, SMALLY);
+            image = cartman_CreateSurface((SMALLXY - 1), (SMALLXY - 1));
             SDL_FillRect(image, NULL, MAKE_BGR(image, 0, 0, 0));
 
             SDL_SoftStretch(bmpload, &src1, image, NULL);
@@ -2404,8 +2404,8 @@ int load_mesh(char *modname)
         fread( &iTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32(iTmp32); mesh.sizey = iTmp32;
 
         numfan = mesh.sizex * mesh.sizey;
-        mesh.edgex = (mesh.sizex * SMALLX) - 1;
-        mesh.edgey = (mesh.sizey * SMALLY) - 1;
+        mesh.edgex = (mesh.sizex * (SMALLXY - 1)) - 1;
+        mesh.edgey = (mesh.sizey * (SMALLXY - 1)) - 1;
         mesh.edgez = 180 << 4;
         numfreevertices = MAXTOTALMESHVERTICES - numvert;
 
@@ -2681,14 +2681,14 @@ void render_tile_window( window_t * pwin )
         glEnable( GL_SCISSOR_TEST );
         glScissor( pwin->x, sdl_scr.y - (pwin->y + pwin->surfacey), pwin->surfacex, pwin->surfacey );
 
-        mapxstt = (cam.x - (pwin->surfacex / 2)) / SMALLX;
-        mapystt = (cam.y - (pwin->surfacey / 2)) / SMALLY;
+        mapxstt = (cam.x - (pwin->surfacex / 2)) / (SMALLXY - 1) - 1;
+        mapystt = (cam.y - (pwin->surfacey / 2)) / (SMALLXY - 1) - 1;
 
-        mapxend = (cam.x + (pwin->surfacex / 2)) / SMALLX + 1;
-        mapyend = (cam.y + (pwin->surfacey / 2)) / SMALLY + 1;
+        mapxend = (cam.x + (pwin->surfacex / 2)) / (SMALLXY - 1) + 1;
+        mapyend = (cam.y + (pwin->surfacey / 2)) / (SMALLXY - 1) + 1;
 
-        xstt = pwin->x -((cam.x - (pwin->surfacex >> 1)) % SMALLX) - (SMALLX);
-        ystt = pwin->y -((cam.y - (pwin->surfacey >> 1)) % SMALLY) - (SMALLY);
+        xstt = pwin->x - ((cam.x - (pwin->surfacex >> 1)) % (SMALLXY - 1)) - (SMALLXY-1);
+        ystt = pwin->y - ((cam.y - (pwin->surfacey >> 1)) % (SMALLXY - 1)) - (SMALLXY-1);
 
         y = ystt;
         for ( mapy = mapystt; mapy <= mapyend; mapy++ )
@@ -2698,10 +2698,10 @@ void render_tile_window( window_t * pwin )
             {
                 tx_tile = tile_at(mapx, mapy);
 
-                ogl_draw_sprite( tx_tile, x, y, SMALLX, SMALLY );
-                x += SMALLX;
+                ogl_draw_sprite( tx_tile, x, y, (SMALLXY - 1), (SMALLXY - 1) );
+                x += SMALLXY - 1;
             }
-            y += SMALLY;
+            y += SMALLXY - 1;
         }
 
         //cnt = 0;
@@ -2729,14 +2729,14 @@ void render_fx_window( window_t * pwin )
         glEnable( GL_SCISSOR_TEST );
         glScissor( pwin->x, sdl_scr.y - (pwin->y + pwin->surfacey), pwin->surfacex, pwin->surfacey );
 
-        mapxstt = (cam.x - (pwin->surfacex / 2)) / SMALLX;
-        mapystt = (cam.y - (pwin->surfacey / 2)) / SMALLY;
+        mapxstt = (cam.x - (pwin->surfacex / 2)) / (SMALLXY - 1) - 1;
+        mapystt = (cam.y - (pwin->surfacey / 2)) / (SMALLXY - 1) - 1;
 
-        mapxend = (cam.x + (pwin->surfacex / 2)) / SMALLX + 1;
-        mapyend = (cam.y + (pwin->surfacey / 2)) / SMALLY + 1;
+        mapxend = (cam.x + (pwin->surfacex / 2)) / (SMALLXY - 1) + 1;
+        mapyend = (cam.y + (pwin->surfacey / 2)) / (SMALLXY - 1) + 1;
 
-        xstt = pwin->x -((cam.x - (pwin->surfacex >> 1)) % SMALLX) - (SMALLX);
-        ystt = pwin->y -((cam.y - (pwin->surfacey >> 1)) % SMALLY) - (SMALLY);
+        xstt = pwin->x - ((cam.x - (pwin->surfacex >> 1)) % (SMALLXY - 1)) - (SMALLXY-1);
+        ystt = pwin->y - ((cam.y - (pwin->surfacey >> 1)) % (SMALLXY - 1)) - (SMALLXY-1);
 
         y = ystt;
         for ( mapy = mapystt; mapy <= mapyend; mapy++ )
@@ -2746,7 +2746,7 @@ void render_fx_window( window_t * pwin )
             {
                 tx_tile = tile_at(mapx, mapy);
 
-                ogl_draw_sprite( tx_tile, x, y, SMALLX, SMALLY );
+                ogl_draw_sprite( tx_tile, x, y, (SMALLXY - 1), (SMALLXY - 1) );
 
                 fan = fan_at(mapx, mapy);
                 if (fan != -1)
@@ -2775,9 +2775,9 @@ void render_fx_window( window_t * pwin )
                     if (mesh.fx[fan]&MPDFX_SLIPPY)
                         ogl_draw_sprite( &tx_slippy, x + 15 + 8, y + 15 + 8, 0, 0);
                 }
-                x += SMALLX;
+                x += SMALLXY - 1;
             }
-            y += SMALLY;
+            y += SMALLXY - 1;
         }
     }
     glPopAttrib();
@@ -2796,14 +2796,14 @@ void render_vertex_window( window_t * pwin )
         glEnable( GL_SCISSOR_TEST );
         glScissor( pwin->x, sdl_scr.y - (pwin->y + pwin->surfacey), pwin->surfacex, pwin->surfacey );
 
-        mapxstt = (cam.x - (pwin->surfacex / 2)) / SMALLX;
-        mapystt = (cam.y - (pwin->surfacey / 2)) / SMALLY;
+        mapxstt = (cam.x - (pwin->surfacex / 2)) / (SMALLXY - 1);
+        mapystt = (cam.y - (pwin->surfacey / 2)) / (SMALLXY - 1);
 
-        mapxend = (cam.x + (pwin->surfacex / 2)) / SMALLX + 1;
-        mapyend = (cam.y + (pwin->surfacey / 2)) / SMALLY + 1;
+        mapxend = (cam.x + (pwin->surfacex / 2)) / (SMALLXY - 1) + 1;
+        mapyend = (cam.y + (pwin->surfacey / 2)) / (SMALLXY - 1) + 1;
 
-        x = pwin->x + ( pwin->surfacex / 2 - cam.x);
-        y = pwin->y + ( pwin->surfacey / 2 - cam.y);
+        x = pwin->x + ( pwin->surfacex / 2 - cam.x );
+        y = pwin->y + ( pwin->surfacey / 2 - cam.y );
 
         for ( mapy = mapystt; mapy <= mapyend; mapy++ )
         {
@@ -2851,11 +2851,11 @@ void render_side_window( window_t * pwin )
         glEnable( GL_SCISSOR_TEST );
         glScissor( pwin->x, sdl_scr.y - (pwin->y + pwin->surfacey), pwin->surfacex, pwin->surfacey );
 
-        mapxstt = (cam.x - (pwin->surfacex / 2)) / SMALLX;
-        mapystt = (cam.y - (pwin->surfacey / 2)) / SMALLY;
+        mapxstt = (cam.x - (pwin->surfacex / 2)) / (SMALLXY - 1);
+        mapystt = (cam.y - (pwin->surfacey / 2)) / (SMALLXY - 1);
 
-        mapxend = (cam.x + (pwin->surfacex / 2)) / SMALLX + 1;
-        mapyend = (cam.y + (pwin->surfacey / 2)) / SMALLY + 1;
+        mapxend = (cam.x + (pwin->surfacex / 2)) / (SMALLXY - 1) + 1;
+        mapyend = (cam.y + (pwin->surfacey / 2)) / (SMALLXY - 1) + 1;
 
         x = pwin->x + ( pwin->surfacex / 2 - cam.x);
         y = pwin->y + pwin->surfacey - 10;
@@ -3006,13 +3006,13 @@ void bound_camera(void)
     {
         cam.y = 0;
     }
-    if (cam.x > mesh.sizex*SMALLX)
+    if (cam.x > mesh.sizex * (SMALLXY - 1))
     {
-        cam.x = mesh.sizex * SMALLX;
+        cam.x = mesh.sizex * (SMALLXY - 1);
     }
-    if (cam.y > mesh.sizey*SMALLY)
+    if (cam.y > mesh.sizey * (SMALLXY - 1))
     {
-        cam.y = mesh.sizey * SMALLY;
+        cam.y = mesh.sizey * (SMALLXY - 1);
     }
 }
 
@@ -3485,9 +3485,9 @@ void mouse_tile( window_t * pwin )
     mdata.y = (mos.y - pwin->y - pwin->bordery) + cam.y - 69;
 
     if ( mdata.x < 0 ||
-        mdata.x >= SMALLX*mesh.sizex ||
+        mdata.x >= (SMALLXY - 1) * mesh.sizex ||
         mdata.y < 0 ||
-        mdata.y >= SMALLY*mesh.sizey)
+        mdata.y >= (SMALLXY - 1) * mesh.sizey)
     {
         mdata.x = mdata.x * FOURNUM;
         mdata.y = mdata.y * FOURNUM;
@@ -3561,7 +3561,7 @@ void mouse_tile( window_t * pwin )
             if (!keyt)
             {
                 mesh.type[mdata.onfan] = mdata.type;
-                add_fan(mdata.onfan, (mdata.x >> 7)*31, (mdata.y >> 7)*31);
+                add_fan(mdata.onfan, (mdata.x >> 7)*(SMALLXY - 1), (mdata.y >> 7)*(SMALLXY - 1));
                 mesh.fx[mdata.onfan] = mdata.fx;
                 if (!keyv)
                 {
@@ -3593,9 +3593,9 @@ void mouse_fx( window_t * pwin )
     mdata.x = mos.x - pwin->x - pwin->borderx + cam.x - 69;
     mdata.y = mos.y - pwin->y - pwin->bordery + cam.y - 69;
     if (mdata.x < 0 ||
-        mdata.x >= SMALLX*mesh.sizex ||
+        mdata.x >= (SMALLXY - 1) * mesh.sizex ||
         mdata.y < 0 ||
-        mdata.y >= SMALLY*mesh.sizey)
+        mdata.y >= (SMALLXY - 1) * mesh.sizey)
     {
     }
     else
@@ -3773,7 +3773,7 @@ void clear_mesh()
                     if (mdata.type <= 1) mesh.type[fan] = rand() & 1;
                     if (mdata.type == 32 || mdata.type == 33)
                         mesh.type[fan] = 32 + (rand() & 1);
-                    add_fan(fan, x*31, y*31);
+                    add_fan(fan, x * (SMALLXY - 1), y * (SMALLXY - 1));
                 }
                 x++;
             }
@@ -4337,26 +4337,18 @@ void draw_lotsa_stuff(void)
         x = 0;
         for (cnt = 0; cnt < todo; cnt++)
         {
-            //if (mdata.type >= MAXMESHTYPE / 2)
-            //{
-            //    ogl_draw_sprite( &tx_pointon, mos.x-SMALLX/2, mos.y-SMALLX/2, SMALLX, SMALLY );
-            //}
-            //else
-            //{
-            //    ogl_draw_sprite( &tx_pointon, mos.x-SMALLX/2, mos.y-SMALLX/2, SMALLX, SMALLY );
-            //}
-
             if (mdata.type >= MAXMESHTYPE / 2)
             {
-                ogl_draw_sprite( tx_bigtile + tile, x, 0, SMALLX, SMALLY );
+                ogl_draw_sprite( tx_bigtile + tile, x, 0, (SMALLXY - 1), (SMALLXY - 1) );
             }
             else
             {
-                ogl_draw_sprite( tx_smalltile + tile, x, 0, SMALLX, SMALLY );
+                ogl_draw_sprite( tx_smalltile + tile, x, 0, (SMALLXY - 1), (SMALLXY - 1) );
             }
-            x += SMALLX;
+            x += (SMALLXY - 1);
             tile += add;
         }
+
         fnt_printf_OGL( gFont, 0, 32, 
             "Tile 0x%02x", mdata.tile);
         fnt_printf_OGL( gFont, 0, 40, 
@@ -4529,11 +4521,11 @@ int main(int argcnt, char* argtext[])
 
     load_all_windows();                 // Load windows
     create_imgcursor();                 // Make cursor image
-    load_img();                           // Load other images
-    load_mesh_fans();                     // Get fan data
-    load_module(modulename);        // Load the module
+    load_img();                         // Load other images
+    load_mesh_fans();                   // Get fan data
+    load_module(modulename);            // Load the module
 
-    dunframe   = 0;                       // Timer resets
+    dunframe   = 0;                     // Timer resets
     worldclock = 0;
     timclock   = 0;
     while (!SDLKEYDOWN(SDLK_ESCAPE) && !SDLKEYDOWN(SDLK_F1))        // Main loop

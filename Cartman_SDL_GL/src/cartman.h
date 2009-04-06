@@ -40,18 +40,15 @@ typedef struct s_ogl_surface ogl_surface;
 #define MAXLEVEL 255
 #define MINLEVEL 50
 
-#define VERSION 005         // Version number
-#define YEAR 1999           // Year
+#define VERSION 005             // Version number
+#define YEAR 1999               // Year
 #define NAME "Cartman"          // Program name
-#define KEYDELAY 12         // Delay for keyboard
-#define MAXTILE 256         //
-#define TINYX 4 //8             // Plan tiles
-#define TINYY 4 //8             //
-#define SMALLX 32           // Small tiles
-#define SMALLY 32           //
-#define BIGX 64             // Big tiles
-#define BIGY 64             //
-#define CAMRATE 8           // Arrow key movement rate
+#define KEYDELAY 12             // Delay for keyboard
+#define MAXTILE 256             //
+#define TINYXY   4              // Plan tiles
+#define SMALLXY 32              // Small tiles
+#define BIGXY   64              // Big tiles
+#define CAMRATE 8               // Arrow key movement rate
 #define MAXSELECT 2560          // Max points that can be select_vertsed
 #define FOURNUM 4.137           // Magic number
 #define FIXNUM  4.125 // 4.150      // Magic number
