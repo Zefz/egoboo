@@ -19,26 +19,31 @@
 //*
 //********************************************************************************************
 
-#define NET_SLASH_STRING "/"
-#define NET_SLASH_CHAR   '/'
+#if defined(_MSC_VER)
+// Microsoft Visual C compiler
 
-// end-of-string character. assume standard null terminated string
-#define EOS '\0'
-#define NULL_STRING { EOS }
+// snprintf and vsnprintf are not considered native functions in MSVC
+// they are defined with an underscore to indicate this
+#    define snprintf  _snprintf
+#    define vsnprintf _vsnprintf
 
-#define EMPTY_CSTR(PSTR) ((NULL!=PSTR) && (EOS == PSTR[0]))
-#define VALID_CSTR(PSTR) ((NULL!=PSTR) && (EOS != PSTR[0]))
+// sets the packing of a data structure at declaration
+//#    define SET_PACKING(NAME,PACKING) __declspec( align( PACKING ) ) NAME
 
-#ifdef _MSC_VER
 // Turn off warnings that we don't care about.
 #    pragma warning(disable : 4305) // truncation from 'double' to 'float'
 #    pragma warning(disable : 4244) // conversion from 'double' to 'float'
-#    pragma warning(disable : 4554) // possibly operator precendence error
 #    pragma warning(disable : 4201) // nonstandard extension used : nameless struct/union
+//#    pragma warning(disable : 4554) // possibly operator precendence error
+//#    pragma warning(disable : 4761)
+//#    pragma warning(disable : 4244) // truncation from 'type' to 'type'
+#endif
 
-     // the VisualC runtimes define snprintf as _snprintf; that's kind of a pain, so redefine it here
-#    define snprintf  _snprintf
-#    define vsnprintf _vsnprintf
+#if defined(__GNUC__)
+// the gcc C compiler
+
+// sets the packing of a data structure at declaration
+//#    define SET_PACKING(NAME,PACKING) NAME __attribute__ ((aligned (PACKING)))
 
 #endif
 
@@ -46,15 +51,21 @@
 #    include <unistd.h>
 #endif
 
-#ifdef WIN32
 // Speeds up compile times a bit.  We don't need everything in windows.h
+#ifdef WIN32
 #    define WIN32_LEAN_AND_MEAN
 #endif
 
+// Define the filesystem appropriate slash characters
 #ifdef WIN32
 #    define SLASH_STR "\\"
 #    define SLASH_CHR '\\'
 #else
 #    define SLASH_STR "/"
 #    define SLASH_CHR '/'
+#endif
+
+
+#if !defined(SET_PACKING)
+#define SET_PACKING(NAME,PACKING) NAME
 #endif

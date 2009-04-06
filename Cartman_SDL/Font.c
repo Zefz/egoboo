@@ -34,11 +34,11 @@
 
 static char * writeFont( const char *format, va_list args )
 {
-  static char fntBuffer[MAX_FNT_MESSAGE];
+    static char fntBuffer[MAX_FNT_MESSAGE];
 
-  vsnprintf( fntBuffer, MAX_FNT_MESSAGE - 1, format, args );
+    vsnprintf( fntBuffer, MAX_FNT_MESSAGE - 1, format, args );
 
-  return fntBuffer;
+    return fntBuffer;
 }
 
 //struct Font
@@ -290,46 +290,46 @@ static char * writeFont( const char *format, va_list args )
 
 void fnt_printf(SDL_Surface * surface, TTF_Font * font, int x, int y, SDL_Color color, char * format, ...)
 {
-  char * text;
-  va_list args;
-  size_t len;
-  char *buffer, *line;
-  SDL_Surface * ptmp;
-  Uint16 spacing;
+    char * text;
+    va_list args;
+    size_t len;
+    char *buffer, *line;
+    SDL_Surface * ptmp;
+    Uint16 spacing;
 
-  va_start( args, format );
-  text = writeFont( format, args );
-  va_end( args );
+    va_start( args, format );
+    text = writeFont( format, args );
+    va_end( args );
 
-  if ( !font ) return;
-  spacing = TTF_FontHeight(font);
+    if ( !font ) return;
+    spacing = TTF_FontHeight(font);
 
-  // If text is empty, there's nothing to draw
-  if ( !text || !text[0] ) return;
+    // If text is empty, there's nothing to draw
+    if ( !text || !text[0] ) return;
 
-  // Split the passed in text into separate lines
-  len = strlen( text );
-  buffer = calloc( 1, len + 1 );
-  strncpy( buffer, text, len );
+    // Split the passed in text into separate lines
+    len = strlen( text );
+    buffer = calloc( 1, len + 1 );
+    strncpy( buffer, text, len );
 
-  line = strtok( buffer, "\n" );
-  while ( line != NULL )
-  {
-    SDL_Rect rtmp;
-
-    ptmp = TTF_RenderText_Blended( font, line, color );
-    if(NULL != ptmp)
+    line = strtok( buffer, "\n" );
+    while ( line != NULL )
     {
-      rtmp.x = x;
-      rtmp.y = y;
-      rtmp.w = ptmp->w;
-      rtmp.h = ptmp->h;
+        SDL_Rect rtmp;
 
-      SDL_BlitSurface(ptmp, NULL, surface, &rtmp);
-      SDL_FreeSurface(ptmp);
-    };
-    y += spacing;
-    line = strtok( NULL, "\n" );
-  }
-  free( buffer );
+        ptmp = TTF_RenderText_Blended( font, line, color );
+        if (NULL != ptmp)
+        {
+            rtmp.x = x;
+            rtmp.y = y;
+            rtmp.w = ptmp->w;
+            rtmp.h = ptmp->h;
+
+            SDL_BlitSurface(ptmp, NULL, surface, &rtmp);
+            SDL_FreeSurface(ptmp);
+        };
+        y += spacing;
+        line = strtok( NULL, "\n" );
+    }
+    free( buffer );
 };

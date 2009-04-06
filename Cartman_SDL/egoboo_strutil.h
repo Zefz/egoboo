@@ -1,3 +1,5 @@
+#pragma once
+
 //********************************************************************************************
 //*
 //*    This file is part of Egoboo.
@@ -17,27 +19,19 @@
 //*
 //********************************************************************************************
 
-#include "egoboo_endian.h"
+/* Egoboo - egoboostrutil.h
+ * String manipulation functions.  Not currently in use.
+ */
 
-//---------------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------
+#include "egoboo_typedef.h"
+#include <string.h>
+#include <ctype.h>
 
-#if SDL_BYTEORDER != SDL_LIL_ENDIAN
+extern void TrimStr( char *pStr );
 
-union u_convert {float f; Uint32 i;};
+void   make_newloadname( char *modname, char *appendname, char *newloadname );
 
-typedef union u_convert convert_t;
+char * str_decode( char *strout, size_t insize, char * strin );
+char * str_encode( char *strout, size_t insize, char * strin );
 
-//--------------------------------------------------------------------------------------------
-float ENDIAN_FLOAT(float X)
-{
-    convert_t utmp;
-
-    utmp.f = X;
-
-    utmp.i = SDL_SwapLE32(utmp.i);
-
-    return utmp.f;
-}
-
-#endif
+#define _EGOBOOSTRUTIL_H_

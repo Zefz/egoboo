@@ -7,41 +7,109 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug blah_nix">
-				<Option output="bin/Cartman_SDL" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Debug_nix/" />
+				<Option platforms="Unix;" />
+				<Option output="bin\Cartman_SDL" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug_nix\" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-Wall" />
 					<Add option="-g" />
+					<Add option="-O0" />
+					<Add option="-D_DEBUG" />
 				</Compiler>
 			</Target>
 			<Target title="Release blah_nix">
-				<Option output="bin/Cartman_SDL" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Release_nix/" />
+				<Option platforms="Unix;" />
+				<Option output="bin\Cartman_SDL" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release_nix\" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-DNDEBUG" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
 				</Linker>
 			</Target>
+			<Target title="Debug Win32-gcc">
+				<Option platforms="Windows;" />
+				<Option output="bin\Cartman_SDL" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug_win32_gcc\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-g" />
+					<Add option="-O0" />
+					<Add option="-D_DEBUG" />
+					<Add option="-DWIN32" />
+					<Add option="-D_WINDOWS" />
+					<Add directory="C:\SDKs\SDL\include" />
+					<Add directory="C:\SDKs\SDL_image" />
+					<Add directory="C:\SDKs\SDL_ttf" />
+				</Compiler>
+				<Linker>
+					<Add option="-pg" />
+					<Add library="SDLmain" />
+					<Add library="SDL" />
+					<Add library="SDL_image" />
+					<Add library="SDL_ttf" />
+					<Add library="SDL_mixer" />
+					<Add library="shlwapi" />
+					<Add library="Winmm" />
+					<Add directory="C:\SDKs\SDL\lib" />
+					<Add directory="C:\SDKs\SDL_image\lib" />
+					<Add directory="C:\SDKs\SDL_ttf\lib" />
+				</Linker>
+			</Target>
+			<Target title="Release Win32-gcc">
+				<Option platforms="Windows;" />
+				<Option output="bin\Cartman_SDL" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release_win32_gcc\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-DNDEBUG" />
+					<Add option="-DWIN32" />
+					<Add option="-D_WINDOWS" />
+					<Add directory="C:\SDKs\SDL\include" />
+					<Add directory="C:\SDKs\SDL_image" />
+					<Add directory="C:\SDKs\SDL_ttf" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-pg" />
+					<Add library="SDLmain" />
+					<Add library="SDL" />
+					<Add library="SDL_image" />
+					<Add library="SDL_ttf" />
+					<Add library="SDL_mixer" />
+					<Add library="shlwapi" />
+					<Add library="Winmm" />
+					<Add directory="C:\SDKs\SDL\lib" />
+					<Add directory="C:\SDKs\SDL_image\lib" />
+					<Add directory="C:\SDKs\SDL_ttf\lib" />
+				</Linker>
+			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-Wall" />
-			<Add directory="/usr/include/SDL" />
+			<Add option="-D_CONSOLE" />
+			<Add option="-DMT" />
+			<Add directory="\usr\include" />
+			<Add directory="\usr\include\SDL" />
+			<Add directory="\include\SDL" />
 		</Compiler>
 		<Linker>
+			<Add option="-pg" />
+			<Add library="libSDLmain" />
 			<Add library="libSDL" />
 			<Add library="libSDL_ttf" />
 			<Add library="libSDL_image" />
-			<Add library="libgl" />
+			<Add directory="\usr\lib" />
 		</Linker>
-		<Unit filename="ConfigFile.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="ConfigFile.h" />
 		<Unit filename="Font.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -57,12 +125,20 @@
 		<Unit filename="SDL_PutPixel.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="SDL_extensions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SDL_extensions.h" />
 		<Unit filename="anim.pcx" />
 		<Unit filename="backdrop.pcx" />
 		<Unit filename="bestpal.pcx" />
 		<Unit filename="cartman.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="configfile.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="configfile.h" />
 		<Unit filename="damage.pcx" />
 		<Unit filename="drawref.pcx" />
 		<Unit filename="egoboo_config.h" />
@@ -70,9 +146,16 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="egoboo_endian.h" />
+		<Unit filename="egoboo_setup.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="egoboo_setup.h" />
+		<Unit filename="egoboo_strutil.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="egoboo_strutil.h" />
 		<Unit filename="egoboo_typedef.h" />
 		<Unit filename="impass.pcx" />
-		<Unit filename="pc8x8.fon" />
 		<Unit filename="point.pcx" />
 		<Unit filename="pointon.pcx" />
 		<Unit filename="ref.pcx" />
@@ -82,6 +165,7 @@
 			<Option compilerVar="CC" />
 			<Option compile="0" />
 			<Option link="0" />
+			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="water.pcx" />
 		<Unit filename="window.pcx" />

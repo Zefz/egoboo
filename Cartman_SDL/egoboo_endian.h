@@ -22,9 +22,18 @@
 #include "egoboo_typedef.h"
 #include <SDL_endian.h>
 
+#if defined(_APPLE_)
+#    include <Endian.h>
+#endif
+
+// define a ENDIAN_FLOAT() "function" to work on both big and little endian systems
+#if SDL_BYTEORDER != SDL_LIL_ENDIAN
+extern float ENDIAN_FLOAT(float X);
+#else
+#    define ENDIAN_FLOAT( X ) ( X )
+#endif
+
 #define ENDIAN_INT08(X) SDL_SwapLE8(X)
 #define ENDIAN_INT16(X) SDL_SwapLE16(X)
 #define ENDIAN_INT32(X) SDL_SwapLE32(X)
 #define ENDIAN_INT64(X) SDL_SwapLE64(X)
-
-float ENDIAN_FLOAT(float X);
