@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug Win32-gcc" />
+	<File name="Font.c" open="1" top="0" tabpos="2">
+		<Cursor position="1204" topLine="16" />
+	</File>
+	<File name="Font.h" open="1" top="0" tabpos="1">
+		<Cursor position="1687" topLine="26" />
+	</File>
+	<File name="Log.c" open="1" top="0" tabpos="3">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="cartman.c" open="1" top="1" tabpos="4">
+		<Cursor position="134289" topLine="4642" />
+	</File>
+	<File name="egoboo_setup.h" open="1" top="0" tabpos="5">
+		<Cursor position="3920" topLine="50" />
+	</File>
+</CodeBlocks_layout_file>
