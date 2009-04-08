@@ -7,6 +7,8 @@
 #include "egoboo_endian.h"
 #include "SDL_GL_extensions.h"
 #include "egoboo_setup.h"
+#include "egoboo_graphic.h"
+#include "egoboo_fileutil.h"
 
 #include <SDL.h>              // SDL header
 #include <SDL_opengl.h>
@@ -23,6 +25,14 @@ bool_t                  keyon = btrue;                // Is the keyboard alive?
 int                     keycount = 0;
 Uint8  *                keysdlbuffer = NULL;
 Uint8                   keystate = 0;
+
+Sint16          damagetileparttype;
+short           damagetilepartand;
+short           damagetilesound;
+short           damagetilesoundtime;
+Uint16          damagetilemindistance;
+int             damagetileamount = 256;                           // Amount of damage
+Uint8           damagetiletype  = DAMAGE_FIRE;                      // Type of damage
 
 SDLX_video_parameters_t sdl_vparam;
 oglx_video_parameters_t ogl_vparam;
@@ -71,8 +81,8 @@ typedef struct s_mouse mouse_t;
 mouse_t mos =
 {
     0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0,
-        2
+    0, 0, 0, 0,
+    2
 };
 
 #define NEARLOW  0.0 //16.0     // For autoweld
@@ -118,11 +128,12 @@ int direct = 16;
 
 #define POINT_SIZE(X) ( ( (X) >> 1 ) + 4 )
 
-Uint16 animtileframeand    = 3;                                // Only 4 frames
-Uint16 animtilebaseand     = (Uint16)(~3);      //
-Uint16 biganimtileframeand = 7;                                // For big tiles
-Uint16 biganimtilebaseand  = (Uint16)(~7);   //
-Uint16 animtileframeadd    = 0;                                // Current frame
+int    animtileupdateand   = 7;
+Uint16 animtileframeand    = 3;
+Uint16 animtilebaseand     = (Uint16)(~3);
+Uint16 biganimtileframeand = 7;
+Uint16 biganimtilebaseand  = (Uint16)(~7);
+Uint16 animtileframeadd    = 0;
 
 char  loadname[256];        // Text
 
@@ -183,17 +194,17 @@ typedef struct s_mouse_data mouse_data_t;
 mouse_data_t mdata =
 {
     -1,         // which_win
-        -1,         // x
-        -1,         // y
-        0,          // mode
-        0,          // onfan
-        0,          // tile
-        0,          // presser
-        0,          // type
-        MPDFX_SHA, // fx
-        0,          // rect
-        0,          // rectx
-        0           // recty
+    -1,         // x
+    -1,         // y
+    0,          // mode
+    0,          // onfan
+    0,          // tile
+    0,          // presser
+    0,          // type
+    MPDFX_SHA, // fx
+    0,          // rect
+    0,          // rectx
+    0           // recty
 };
 
 struct s_window
@@ -215,63 +226,9 @@ static window_t window_lst[MAXWIN];
 
 int     keydelay = 0;       //
 
-struct s_camera
-{
-    float x;       // the position of the center of the window
-    float y;       //
-
-    float w;       // the size of the window
-    float h;       //
-};
-typedef struct s_camera camera_t;
-camera_t cam = {0, 0};
 
 Uint32  atvertex = 0;           // Current vertex check for new
 Uint32  numfreevertices = 0;        // Number of free vertices
-
-struct s_command
-{
-    Uint8   numvertices;                // Number of vertices
-    Uint8   ref[MAXMESHVERTICES];       // Lighting references
-    int     x[MAXMESHVERTICES];         // Vertex texture posi
-    int     y[MAXMESHVERTICES];         //
-};
-typedef struct s_command command_t;
-
-struct s_line_data
-{
-    Uint8     start[MAXMESHTYPE];
-    Uint8     end[MAXMESHTYPE];
-};
-typedef struct s_line_data line_data_t;
-
-struct s_mesh
-{
-    int               sizex;            // Size of mesh
-    int               sizey;            //
-    int               edgex;            // Borders of mesh
-    int               edgey;            //
-    int               edgez;            //
-
-    Uint32  fanstart[MAXMESHSIZEY];   // Y to fan number
-    Uint8   type[MAXMESHFAN];         // Command type
-    Uint8   fx[MAXMESHFAN];           // Special effects flags
-    Uint16  tile[MAXMESHFAN];         // Get texture from this
-    Uint8   twist[MAXMESHFAN];        // Surface normal
-
-    Uint32  vrtstart[MAXMESHFAN];     // Which vertex to start at
-
-    Uint16  vrtx[MAXTOTALMESHVERTICES];      // Vertex position
-    Uint16  vrty[MAXTOTALMESHVERTICES];      //
-    Sint16  vrtz[MAXTOTALMESHVERTICES];      // Vertex elevation
-    Uint8   vrta[MAXTOTALMESHVERTICES];      // Vertex base light, 0=unused
-    Uint32  vrtnext[MAXTOTALMESHVERTICES];   // Next vertex in fan
-
-    Uint32       numline[MAXMESHTYPE];       // Number of lines to draw
-    line_data_t  line[MAXMESHLINE];
-    command_t    command[MAXMESHTYPE];
-};
-typedef struct s_mesh mesh_t;
 
 mesh_t mesh;
 
@@ -376,10 +333,10 @@ int dist_from_border(int x, int y)
 //------------------------------------------------------------------------------
 int dist_from_edge(int x, int y)
 {
-    if (x > (mesh.sizex >> 1))
-        x = mesh.sizex - x - 1;
-    if (y > (mesh.sizey >> 1))
-        y = mesh.sizey - y - 1;
+    if (x > (mesh.tilesx >> 1))
+        x = mesh.tilesx - x - 1;
+    if (y > (mesh.tilesy >> 1))
+        y = mesh.tilesy - y - 1;
     if (x < y)
         return x;
     return y;
@@ -389,9 +346,9 @@ int dist_from_edge(int x, int y)
 int get_fan(int x, int y)
 {
     int fan = -1;
-    if (y >= 0 && y < MAXMESHSIZEY && y < mesh.sizey)
+    if (y >= 0 && y < MAXMESHTILEY && y < mesh.tilesy)
     {
-        if (x >= 0 && x < MAXMESHSIZEY && x < mesh.sizex)
+        if (x >= 0 && x < MAXMESHTILEY && x < mesh.tilesx)
         {
             fan = mesh.fanstart[y] + x;
         }
@@ -508,10 +465,10 @@ void fix_walls()
     int x, y;
 
     y = 0;
-    while (y < mesh.sizey)
+    while (y < mesh.tilesy)
     {
         x = 0;
-        while (x < mesh.sizex)
+        while (x < mesh.tilesx)
         {
             set_barrier_height(x, y);
             x++;
@@ -527,10 +484,10 @@ void impass_edges(int amount)
     int fan;
 
     y = 0;
-    while (y < mesh.sizey)
+    while (y < mesh.tilesy)
     {
         x = 0;
-        while (x < mesh.sizex)
+        while (x < mesh.tilesx)
         {
             if (dist_from_edge(x, y) < amount)
             {
@@ -618,16 +575,16 @@ void make_hitemap(void)
 
     if (bmphitemap) SDL_FreeSurface(bmphitemap);
 
-    bmphitemap = cartman_CreateSurface(mesh.sizex << 2, mesh.sizey << 2);
+    bmphitemap = cartman_CreateSurface(mesh.tilesx << 2, mesh.tilesy << 2);
     if (NULL == bmphitemap) return;
 
     y = 16;
     pixy = 0;
-    while (pixy < (mesh.sizey << 2))
+    while (pixy < (mesh.tilesy << 2))
     {
         x = 16;
         pixx = 0;
-        while (pixx < (mesh.sizex << 2))
+        while (pixx < (mesh.tilesx << 2))
         {
             level = (get_level(x, y) * 255 / mesh.edgez);  // level is 0 to 255
             if (level > 252) level = 252;
@@ -655,7 +612,7 @@ glTexture * tiny_tile_at(int x, int y)
     Uint8 type, fx;
     int fan;
 
-    if (x < 0 || x >= mesh.sizex || y < 0 || y >= mesh.sizey)
+    if (x < 0 || x >= mesh.tilesx || y < 0 || y >= mesh.tilesy)
     {
         return NULL;
     }
@@ -714,16 +671,16 @@ void make_planmap(void)
     //if(NULL != bmptemp)  return;
 
     if (NULL == bmphitemap) SDL_FreeSurface(bmphitemap);
-    bmphitemap = cartman_CreateSurface(mesh.sizex * TINYXY, mesh.sizey * TINYXY);
+    bmphitemap = cartman_CreateSurface(mesh.tilesx * TINYXY, mesh.tilesy * TINYXY);
     if (NULL == bmphitemap) return;
 
     SDL_FillRect(bmphitemap, NULL, MAKE_BGR(bmphitemap, 0, 0, 0));
 
     puty = 0;
-    for ( y = 0; y < mesh.sizey; y++ )
+    for ( y = 0; y < mesh.tilesy; y++ )
     {
         putx = 0;
-        for (x = 0; x < mesh.sizex; x++)
+        for (x = 0; x < mesh.tilesx; x++)
         {
             glTexture * tx_tile;
             tx_tile = tiny_tile_at(x, y);
@@ -753,12 +710,12 @@ void draw_cursor_in_window( window_t * pwin )
     {
         //if ( (window_lst[mdata.which_win].mode & WINMODE_SIDE) == (pwin->mode & WINMODE_SIDE) )
         //{
-            int size = POINT_SIZE(10);
+        int size = POINT_SIZE(10);
 
-            x = pwin->x + (mos.x - window_lst[mdata.which_win].x);
-            y = pwin->y + (mos.y - window_lst[mdata.which_win].y);
+        x = pwin->x + (mos.x - window_lst[mdata.which_win].x);
+        y = pwin->y + (mos.y - window_lst[mdata.which_win].y);
 
-            ogl_draw_sprite( &tx_pointon, x - size/2, y - size/2, size, size );
+        ogl_draw_sprite( &tx_pointon, x - size / 2, y - size / 2, size, size );
         //}
     }
 
@@ -991,7 +948,7 @@ void make_onscreen(void)
     cnty = 0;
     while (cnty < numy)
     {
-        if (mapy >= 0 && mapy < mesh.sizey)
+        if (mapy >= 0 && mapy < mesh.tilesy)
         {
             mapx = mapxstt;
             cntx = 0;
@@ -1022,7 +979,7 @@ void draw_top_fan( window_t * pwin, int fan, int x, int y )
     float color[4];
     int size;
 
-    if( -1 == fan ) return;
+    if ( -1 == fan ) return;
 
     fantype = mesh.type[fan];
 
@@ -1037,7 +994,7 @@ void draw_top_fan( window_t * pwin, int fan, int x, int y )
     {
         faketoreal[cnt] = vert;
         vert = mesh.vrtnext[vert];
-    } 
+    }
 
     glPushAttrib( GL_TEXTURE_BIT | GL_ENABLE_BIT );
     {
@@ -1077,7 +1034,7 @@ void draw_top_fan( window_t * pwin, int fan, int x, int y )
         {
             glTexture * tx_tmp;
 
-            if( vert_selected(vert) )
+            if ( vert_selected(vert) )
             {
                 tx_tmp = &tx_pointon;
             }
@@ -1086,7 +1043,7 @@ void draw_top_fan( window_t * pwin, int fan, int x, int y )
                 tx_tmp = &tx_point;
             }
 
-            ogl_draw_sprite( tx_tmp, mesh.vrtx[vert]+x - point_size/2, mesh.vrty[vert]+y - point_size/2, point_size, point_size ); 
+            ogl_draw_sprite( tx_tmp, mesh.vrtx[vert] + x - point_size / 2, mesh.vrty[vert] + y - point_size / 2, point_size, point_size );
         }
     }
 }
@@ -1162,8 +1119,8 @@ void draw_side_fan(window_t * pwin, int fan, int x, int y)
             ptmp = &tx_point;
         }
 
-        ogl_draw_sprite( ptmp, mesh.vrtx[vert] + x - point_size/2,
-            -(mesh.vrtz[vert] >> 4) + y - point_size/2, point_size, point_size);
+        ogl_draw_sprite( ptmp, mesh.vrtx[vert] + x - point_size / 2,
+                         -(mesh.vrtz[vert] >> 4) + y - point_size / 2, point_size, point_size);
 
     }
 }
@@ -1216,9 +1173,9 @@ void add_line(int fantype, int start, int end)
     while (cnt < mesh.numline[fantype])
     {
         if ((mesh.line[fantype].start[cnt] == start &&
-            mesh.line[fantype].end[cnt] == end) ||
-            (mesh.line[fantype].end[cnt] == start &&
-            mesh.line[fantype].start[cnt] == end))
+                mesh.line[fantype].end[cnt] == end) ||
+                (mesh.line[fantype].end[cnt] == start &&
+                 mesh.line[fantype].start[cnt] == end))
         {
             return;
         }
@@ -1232,25 +1189,12 @@ void add_line(int fantype, int start, int end)
 }
 
 //------------------------------------------------------------------------------
-void goto_colon(FILE* fileread)
-{
-    // ZZ> This function moves a file read pointer to the next colon
-    char cTmp;
-
-    fscanf(fileread, "%c", &cTmp);
-    while (cTmp != ':')
-    {
-        fscanf(fileread, "%c", &cTmp);
-    }
-}
-
-//------------------------------------------------------------------------------
 void load_mesh_fans()
 {
     // ZZ> This function loads fan types for the mesh...  Starting vertex
     //     positions and number of vertices
     int cnt, entry;
-    int numfantype, fantype, vertices;
+    int numfantype, fantype, bigfantype, vertices;
     int numcommand, command, command_size;
     int fancenter, ilast;
     int itmp;
@@ -1275,73 +1219,110 @@ void load_mesh_fans()
         log_error("load_mesh_fans() - Cannot find fans.txt file\n");
     }
 
-    if (fileread)
+    goto_colon(fileread);
+    fscanf(fileread, "%d", &numfantype);
+
+    for (fantype = 0, bigfantype = MAXMESHTYPE / 2; fantype < numfantype; fantype++, bigfantype++ )
     {
         goto_colon(fileread);
-        fscanf(fileread, "%d", &numfantype);
-        fantype = 0;
-        while (fantype < numfantype)
+        fscanf(fileread, "%d", &vertices);
+        mesh.command[fantype].numvertices = vertices;
+        mesh.command[fantype+MAXMESHTYPE/2].numvertices = vertices;  // DUPE
+
+        for ( cnt = 0; cnt < vertices; cnt++ )
         {
+            // lighting "ref" data
             goto_colon(fileread);
-            fscanf(fileread, "%d", &vertices);
-            mesh.command[fantype].numvertices = vertices;
-            mesh.command[fantype+MAXMESHTYPE/2].numvertices = vertices;  // DUPE
-            cnt = 0;
-            while (cnt < vertices)
-            {
-                goto_colon(fileread);
-                fscanf(fileread, "%d", &itmp);
-                mesh.command[fantype].ref[cnt] = itmp;
-                mesh.command[fantype+MAXMESHTYPE/2].ref[cnt] = itmp;  // DUPE
-                goto_colon(fileread);
-                fscanf(fileread, "%f", &ftmp);
-                //        mesh.command[fantype].x[cnt] = (ftmp*.75+.5*.25)*128;
-                //        mesh.command.x[fantype+MAXMESHTYPE/2][cnt] = (ftmp*.75+.5*.25)*128;  // DUPE
-                mesh.command[fantype].x[cnt] = (ftmp) * 128;
-                mesh.command[fantype+MAXMESHTYPE/2].x[cnt] = (ftmp) * 128;  // DUPE
-                goto_colon(fileread);
-                fscanf(fileread, "%f", &ftmp);
-                //        mesh.command[fantype].y[cnt] = (ftmp*.75+.5*.25)*128;
-                //        mesh.command.y[fantype+MAXMESHTYPE/2][cnt] = (ftmp*.75+.5*.25)*128;  // DUPE
-                mesh.command[fantype].y[cnt] = (ftmp) * 128;
-                mesh.command[fantype+MAXMESHTYPE/2].y[cnt] = (ftmp) * 128;  // DUPE
-                cnt++;
-            }
+            fscanf(fileread, "%d", &itmp);
+            mesh.command[fantype].ref[cnt] = itmp;
+            mesh.command[fantype+MAXMESHTYPE/2].ref[cnt] = itmp;  // DUPE
 
-            // Get the vertex connections
+            // texure u data and mesh x data
             goto_colon(fileread);
-            fscanf(fileread, "%d", &numcommand);
-            entry = 0;
-            command = 0;
-            while (command < numcommand)
-            {
-                goto_colon(fileread);
-                fscanf(fileread, "%d", &command_size);
-                goto_colon(fileread);
-                fscanf(fileread, "%d", &fancenter);
-                goto_colon(fileread);
-                fscanf(fileread, "%d", &itmp);
-                cnt = 2;
-                while (cnt < command_size)
-                {
-                    ilast = itmp;
-                    goto_colon(fileread);
-                    fscanf(fileread, "%d", &itmp);
-                    add_line(fantype, fancenter, itmp);
-                    add_line(fantype, fancenter, ilast);
-                    add_line(fantype, ilast, itmp);
+            fscanf(fileread, "%f", &ftmp);
 
-                    add_line(fantype + MAXMESHTYPE / 2, fancenter, itmp);  // DUPE
-                    add_line(fantype + MAXMESHTYPE / 2, fancenter, ilast);  // DUPE
-                    add_line(fantype + MAXMESHTYPE / 2, ilast, itmp);  // DUPE
-                    entry++;
-                    cnt++;
-                }
-                command++;
-            }
-            fantype++;
+            mesh.command[fantype].u[cnt] = ftmp;
+            mesh.command[fantype+MAXMESHTYPE/2].u[cnt] = (ftmp) * 128;  // DUPE
+
+            mesh.command[fantype].x[cnt] = (ftmp) * 128;
+            mesh.command[fantype+MAXMESHTYPE/2].x[cnt] = (ftmp) * 128;  // DUPE
+
+            // texure v data and mesh y data
+            goto_colon(fileread);
+            fscanf(fileread, "%f", &ftmp);
+            mesh.command[fantype].v[cnt] = ftmp;
+            mesh.command[fantype+MAXMESHTYPE/2].v[cnt] = (ftmp) * 128;  // DUPE
+
+            mesh.command[fantype].y[cnt] = (ftmp) * 128;
+            mesh.command[fantype+MAXMESHTYPE/2].y[cnt] = (ftmp) * 128;  // DUPE
         }
-        fclose(fileread);
+
+
+        // Get the vertex connections
+        goto_colon(fileread);
+        fscanf(fileread, "%d", &numcommand);
+        mesh.command[fantype].count = numcommand;
+        mesh.command[bigfantype].count = numcommand;  // Dupe
+
+        entry = 0;
+        for ( command = 0; command < numcommand; command++ )
+        {
+            // grab the fan vertex data
+            goto_colon(fileread);
+            fscanf(fileread, "%d", &command_size);
+            mesh.command[fantype].size[command] = command_size;
+            mesh.command[bigfantype].size[command] = command_size;  // Dupe
+
+            for ( cnt = 0; cnt < command_size; cnt++ )
+            {
+                goto_colon( fileread );
+                fscanf( fileread, "%d", &itmp );
+                mesh.command[fantype].vrt[entry] = itmp;
+                mesh.command[bigfantype].vrt[entry] = itmp;  // Dupe
+                entry++;
+            }
+
+            // convert the fan data into lines representing the fan edges
+            cnt = 0;
+            fancenter = mesh.command[fantype].vrt[cnt++];
+            itmp      = mesh.command[fantype].vrt[cnt++];
+            for (/* nothing */; cnt < command_size; cnt++)
+            {
+                ilast = itmp;
+
+                itmp = mesh.command[fantype].vrt[cnt];
+
+                add_line(fantype, fancenter, itmp);
+                add_line(fantype, fancenter, ilast);
+                add_line(fantype, ilast, itmp);
+
+                add_line(fantype + MAXMESHTYPE / 2, fancenter, itmp);  // DUPE
+                add_line(fantype + MAXMESHTYPE / 2, fancenter, ilast);  // DUPE
+                add_line(fantype + MAXMESHTYPE / 2, ilast, itmp);  // DUPE
+            }
+        }
+    }
+    fclose(fileread);
+
+
+    // Correct all of them silly texture positions for seamless tiling
+    for ( entry = 0; entry < MAXMESHTYPE / 2; entry++  )
+    {
+        for ( cnt = 0; cnt < mesh.command[entry].numvertices; cnt++ )
+        {
+            mesh.command[entry].x[cnt] = ( 0.6f / SMALLXY ) + ( mesh.command[entry].x[cnt] * (SMALLXY - 2 * 0.6f) / SMALLXY );
+            mesh.command[entry].v[cnt] = ( 0.6f / SMALLXY ) + ( mesh.command[entry].v[cnt] * (SMALLXY - 2 * 0.6f) / SMALLXY );
+        }
+    }
+
+    // Do for big tiles too
+    for ( /*nothing*/; entry < MAXMESHTYPE; entry++ )
+    {
+        for ( cnt = 0; cnt < mesh.command[entry].numvertices; cnt++ )
+        {
+            mesh.command[entry].x[cnt] = ( 0.6f / BIGXY ) + ( mesh.command[entry].x[cnt] * (BIGXY - 2 * 0.6f) / BIGXY );
+            mesh.command[entry].v[cnt] = ( 0.6f / BIGXY ) + ( mesh.command[entry].v[cnt] * (BIGXY - 2 * 0.6f) / BIGXY );
+        }
     }
 }
 
@@ -1488,21 +1469,19 @@ void make_fanstart()
     int cnt;
 
     cnt = 0;
-    while (cnt < mesh.sizey)
+    while (cnt < mesh.tilesy)
     {
-        mesh.fanstart[cnt] = mesh.sizex * cnt;
+        mesh.fanstart[cnt] = mesh.tilesx * cnt;
         cnt++;
     }
 }
 
 //------------------------------------------------------------------------------
-glTexture *tile_at(int x, int y)
+glTexture *tile_at( int fan )
 {
     Uint16 tile, basetile;
     Uint8 type, fx;
-    int fan;
 
-    fan = get_fan(x, y);
     if (fan == -1 || mesh.tile[fan] == FANOFF)
     {
         return NULL;
@@ -1598,9 +1577,9 @@ void weld_3(int x, int y)
 void weld_cnt(int x, int y, int cnt, Uint32 fan)
 {
     if (mesh.command[mesh.type[fan]].x[cnt] < NEARLOW + 1 ||
-        mesh.command[mesh.type[fan]].y[cnt] < NEARLOW + 1 ||
-        mesh.command[mesh.type[fan]].x[cnt] > NEARHI - 1 ||
-        mesh.command[mesh.type[fan]].y[cnt] > NEARHI - 1)
+            mesh.command[mesh.type[fan]].y[cnt] < NEARLOW + 1 ||
+            mesh.command[mesh.type[fan]].x[cnt] > NEARHI - 1 ||
+            mesh.command[mesh.type[fan]].y[cnt] > NEARHI - 1)
     {
         clear_select();
         add_select(get_vertex(x, y, cnt));
@@ -1658,10 +1637,10 @@ void fix_mesh(void)
     int x, y;
 
     y = 0;
-    while (y < mesh.sizey)
+    while (y < mesh.tilesy)
     {
         x = 0;
-        while (x < mesh.sizex)
+        while (x < mesh.tilesx)
         {
             //      fix_corners(x, y);
             fix_vertices(x, y);
@@ -1876,10 +1855,10 @@ void trim_mesh_tile(Uint16 tileset, Uint16 tileand)
 
     tileset = tileset & tileand;
     y = 0;
-    while (y < mesh.sizey)
+    while (y < mesh.tilesy)
     {
         x = 0;
-        while (x < mesh.sizex)
+        while (x < mesh.tilesx)
         {
             fan = get_fan(x, y);
             if (fan != -1 && (mesh.tile[fan]&tileand) == tileset)
@@ -1912,10 +1891,10 @@ void fx_mesh_tile(Uint16 tileset, Uint16 tileand, Uint8 fx)
 
     tileset = tileset & tileand;
     y = 0;
-    while (y < mesh.sizey)
+    while (y < mesh.tilesy)
     {
         x = 0;
-        while (x < mesh.sizex)
+        while (x < mesh.tilesx)
         {
             fan = get_fan(x, y);
             if (fan != -1 && (mesh.tile[fan]&tileand) == tileset)
@@ -1936,31 +1915,31 @@ void set_mesh_tile(Uint16 tiletoset)
     int x, y;
 
     y = 0;
-    while (y < mesh.sizey)
+    while (y < mesh.tilesy)
     {
         x = 0;
-        while (x < mesh.sizex)
+        while (x < mesh.tilesx)
         {
             fan = get_fan(x, y);
             if (fan != -1 && mesh.tile[fan] == tiletoset)
             {
                 switch (mdata.presser)
                 {
-                case 0:
-                    mesh.tile[fan] = mdata.tile;
-                    break;
+                    case 0:
+                        mesh.tile[fan] = mdata.tile;
+                        break;
 
-                case 1:
-                    mesh.tile[fan] = (mdata.tile & 0xFFFE) + (rand() & 1);
-                    break;
+                    case 1:
+                        mesh.tile[fan] = (mdata.tile & 0xFFFE) + (rand() & 1);
+                        break;
 
-                case 2:
-                    mesh.tile[fan] = (mdata.tile & 0xFFFC) + (rand() & 3);
-                    break;
+                    case 2:
+                        mesh.tile[fan] = (mdata.tile & 0xFFFC) + (rand() & 3);
+                        break;
 
-                case 3:
-                    mesh.tile[fan] = (mdata.tile & 0xFFF8) + (rand() & 7);
-                    break;
+                    case 3:
+                        mesh.tile[fan] = (mdata.tile & 0xFFF8) + (rand() & 7);
+                        break;
                 }
             }
             x++;
@@ -1979,22 +1958,22 @@ void create_mesh(void)
     printf("Mesh file not found, so creating a new one...\n");
 
     printf("Number of tiles in X direction ( 32-512 ):  ");
-    scanf("%d", &mesh.sizex);
+    scanf("%d", &mesh.tilesx);
 
     printf("Number of tiles in Y direction ( 32-512 ):  ");
-    scanf("%d", &mesh.sizey);
+    scanf("%d", &mesh.tilesy);
 
-    mesh.edgex = (mesh.sizex * TILEDIV) - 1;
-    mesh.edgey = (mesh.sizey * TILEDIV) - 1;
+    mesh.edgex = (mesh.tilesx * TILEDIV) - 1;
+    mesh.edgey = (mesh.tilesy * TILEDIV) - 1;
     mesh.edgez = 180 << 4;
 
     fan = 0;
     y = 0;
     tile = 0;
-    while (y < mesh.sizey)
+    while (y < mesh.tilesy)
     {
         x = 0;
-        while (x < mesh.sizex)
+        while (x < mesh.tilesx)
         {
             mesh.type[fan] = 2 + 0;
             mesh.tile[fan] = (((x & 1) + (y & 1)) & 1) + DEFAULT_TILE;
@@ -2156,7 +2135,7 @@ void make_twist()
 {
     Uint32 fan, numfan;
 
-    numfan = mesh.sizex * mesh.sizey;
+    numfan = mesh.tilesx * mesh.tilesy;
     fan = 0;
     while (fan < numfan)
     {
@@ -2173,10 +2152,10 @@ int count_vertices()
 
     totalvert = 0;
     y = 0;
-    while (y < mesh.sizey)
+    while (y < mesh.tilesy)
     {
         x = 0;
-        while (x < mesh.sizex)
+        while (x < mesh.tilesx)
         {
             fan = get_fan(x, y);
             if ( fan != -1 )
@@ -2239,15 +2218,15 @@ void save_mesh(char *modname)
         //    This didn't work for some reason...
         //    itmp=MAXTOTALMESHVERTICES-numfreevertices;  SAVE;
         itmp = count_vertices();  SAVE;
-        itmp = mesh.sizex;  SAVE;
-        itmp = mesh.sizey;  SAVE;
+        itmp = mesh.tilesx;  SAVE;
+        itmp = mesh.tilesy;  SAVE;
 
         // Write tile data
         y = 0;
-        while (y < mesh.sizey)
+        while (y < mesh.tilesy)
         {
             x = 0;
-            while (x < mesh.sizex)
+            while (x < mesh.tilesx)
             {
                 fan = get_fan(x, y);
                 if (fan != -1)
@@ -2260,10 +2239,10 @@ void save_mesh(char *modname)
         }
         // Write twist data
         y = 0;
-        while (y < mesh.sizey)
+        while (y < mesh.tilesy)
         {
             x = 0;
-            while (x < mesh.sizex)
+            while (x < mesh.tilesx)
             {
                 fan = get_fan(x, y);
                 if (fan != -1)
@@ -2278,10 +2257,10 @@ void save_mesh(char *modname)
 
         // Write x vertices
         y = 0;
-        while (y < mesh.sizey)
+        while (y < mesh.tilesy)
         {
             x = 0;
-            while (x < mesh.sizex)
+            while (x < mesh.tilesx)
             {
                 fan = get_fan(x, y);
                 if ( fan != -1 )
@@ -2303,10 +2282,10 @@ void save_mesh(char *modname)
 
         // Write y vertices
         y = 0;
-        while (y < mesh.sizey)
+        while (y < mesh.tilesy)
         {
             x = 0;
-            while (x < mesh.sizex)
+            while (x < mesh.tilesx)
             {
                 fan = get_fan(x, y);
                 if ( fan != -1)
@@ -2328,10 +2307,10 @@ void save_mesh(char *modname)
 
         // Write z vertices
         y = 0;
-        while (y < mesh.sizey)
+        while (y < mesh.tilesy)
         {
             x = 0;
-            while (x < mesh.sizex)
+            while (x < mesh.tilesx)
             {
                 fan = get_fan(x, y);
                 if ( fan != -1)
@@ -2353,10 +2332,10 @@ void save_mesh(char *modname)
 
         // Write a vertices
         y = 0;
-        while (y < mesh.sizey)
+        while (y < mesh.tilesy)
         {
             x = 0;
-            while (x < mesh.sizex)
+            while (x < mesh.tilesx)
             {
                 fan = get_fan(x, y);
                 if (fan != -1)
@@ -2408,12 +2387,12 @@ int load_mesh(char *modname)
 
         fread( &uiTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32(uiTmp32); if ( uiTmp32 != MAPID ) return bfalse;
         fread( &uiTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32(iTmp32); numvert = uiTmp32;
-        fread( &iTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32(iTmp32); mesh.sizex = iTmp32;
-        fread( &iTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32(iTmp32); mesh.sizey = iTmp32;
+        fread( &iTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32(iTmp32); mesh.tilesx = iTmp32;
+        fread( &iTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32(iTmp32); mesh.tilesy = iTmp32;
 
-        numfan = mesh.sizex * mesh.sizey;
-        mesh.edgex = (mesh.sizex * TILEDIV) - 1;
-        mesh.edgey = (mesh.sizey * TILEDIV) - 1;
+        numfan = mesh.tilesx * mesh.tilesy;
+        mesh.edgex = (mesh.tilesx * TILEDIV) - 1;
+        mesh.edgey = (mesh.tilesy * TILEDIV) - 1;
         mesh.edgez = 180 << 4;
         numfreevertices = MAXTOTALMESHVERTICES - numvert;
 
@@ -2483,10 +2462,10 @@ int load_mesh(char *modname)
         // store the vertices in the vertex chain for editing
         vert = 0;
         y = 0;
-        while (y < mesh.sizey)
+        while (y < mesh.tilesy)
         {
             x = 0;
-            while (x < mesh.sizex)
+            while (x < mesh.tilesx)
             {
                 fan = get_fan(x, y);
                 if ( fan != -1)
@@ -2584,10 +2563,10 @@ void move_mesh_z(int z, Uint16 tiletype, Uint16 tileand)
 
     tiletype = tiletype & tileand;
     y = 0;
-    while (y < mesh.sizey)
+    while (y < mesh.tilesy)
     {
         x = 0;
-        while (x < mesh.sizex)
+        while (x < mesh.tilesx)
         {
             fan = get_fan(x, y);
             if (fan != -1)
@@ -2661,32 +2640,22 @@ void raise_mesh(int x, int y, int amount, int size)
 //------------------------------------------------------------------------------
 void load_module(char *modname)
 {
-    char newloadname[256];
+    char mod_path[256];
 
-    sprintf( newloadname, "%s" SLASH_STR "modules" SLASH_STR "%s", egoboo_path, modname);
+    sprintf( mod_path, "%s" SLASH_STR "modules" SLASH_STR "%s", egoboo_path, modname);
 
-    //  show_name(newloadname);
-    load_basic_textures(newloadname);
-    if (!load_mesh(newloadname))
+    //  show_name(mod_path);
+    load_basic_textures(mod_path);
+    if (!load_mesh(mod_path))
     {
         create_mesh();
     }
+
+    read_wawalite( mod_path );
+
     numlight = 0;
     addinglight = 0;
 }
-
-struct s_simple_vertex
-{
-    GLfloat x;
-    GLfloat y;
-    GLfloat z;
-    GLfloat s;
-    GLfloat t;
-
-    GLfloat a;
-    GLfloat l;
-};
-typedef struct s_simple_vertex simple_vertex_t;
 
 //------------------------------------------------------------------------------
 void draw_top_tile( float x, float y, int fan, glTexture * tx_tile, bool_t draw_tile )
@@ -2696,7 +2665,7 @@ void draw_top_tile( float x, float y, int fan, glTexture * tx_tile, bool_t draw_
     float max_s, max_t, dst;
     simple_vertex_t vrt[4];
 
-    if( -1 == fan || FANOFF == fan ) return;
+    if ( -1 == fan || FANOFF == fan ) return;
 
     glTexture_Bind( tx_tile );
 
@@ -2708,18 +2677,18 @@ void draw_top_tile( float x, float y, int fan, glTexture * tx_tile, bool_t draw_
     // set the texture coordinates
     vrt[0].s = dst;
     vrt[0].t = dst;
-         
+
     vrt[1].s = max_s;
     vrt[1].t = dst;
-         
+
     vrt[2].s = max_s;
     vrt[2].t = max_t;
-         
+
     vrt[3].s = dst;
     vrt[3].t = max_t;
 
-    // set the tile corners 
-    if( draw_tile )
+    // set the tile corners
+    if ( draw_tile )
     {
         // draw the tile on a 31x31 grix, using the values of x,y
 
@@ -2756,7 +2725,6 @@ void draw_top_tile( float x, float y, int fan, glTexture * tx_tile, bool_t draw_
     {
         // draw the tile using the actual values of the coordinates
 
-        Uint32 faketoreal[4];
         int cnt;
 
         vert = mesh.vrtstart[fan];
@@ -2772,16 +2740,16 @@ void draw_top_tile( float x, float y, int fan, glTexture * tx_tile, bool_t draw_
     }
 
     // Draw A Quad
-	glBegin(GL_QUADS);
+    glBegin(GL_QUADS);
     {
-        for(cnt = 0; cnt < 4; cnt++)
+        for (cnt = 0; cnt < 4; cnt++)
         {
             glColor3f( vrt[cnt].l,  vrt[cnt].l,  vrt[cnt].l );
-		    glTexCoord2f(vrt[cnt].s, vrt[cnt].t); 
+            glTexCoord2f(vrt[cnt].s, vrt[cnt].t);
             glVertex3f( vrt[cnt].x, vrt[cnt].y, vrt[cnt].z );
         };
     }
-	glEnd();
+    glEnd();
 
 
 }
@@ -2793,7 +2761,6 @@ void render_tile_window( window_t * pwin )
     float x, y;
     int mapx, mapxstt, mapxend;
     int mapy, mapystt, mapyend;
-    int cnt;
 
     glPushAttrib( GL_SCISSOR_BIT | GL_VIEWPORT_BIT | GL_ENABLE_BIT );
     {
@@ -2825,7 +2792,7 @@ void render_tile_window( window_t * pwin )
                     x = mapx * TILEDIV;
 
                     fan     = fan_at(mapx, mapy);
-                    tx_tile = tile_at(mapx, mapy);
+                    tx_tile = tile_at(fan);
 
                     draw_top_tile( x, y, fan, tx_tile, bfalse );
                 }
@@ -2956,11 +2923,11 @@ void render_vertex_window( window_t * pwin )
 
             OGL_MAKE_COLOR_4(color, 0x3F, 16 + (timclock&15), 16 + (timclock&15), 0 );
 
-            ogl_draw_box( (mdata.rectx / FOURNUM) + x, 
-                (mdata.recty / FOURNUM) + y, 
-                (mdata.x / FOURNUM) - (mdata.rectx / FOURNUM), 
-                (mdata.y / FOURNUM) - (mdata.recty / FOURNUM),
-                color);
+            ogl_draw_box( (mdata.rectx / FOURNUM) + x,
+                          (mdata.recty / FOURNUM) + y,
+                          (mdata.x / FOURNUM) - (mdata.rectx / FOURNUM),
+                          (mdata.y / FOURNUM) - (mdata.recty / FOURNUM),
+                          color);
         }
 
         if ((SDLKEYDOWN(SDLK_p) || ((mos.b&2) && numselect_verts == 0)) && mdata.mode == WINMODE_VERTEX)
@@ -3011,11 +2978,11 @@ void render_side_window( window_t * pwin )
 
             OGL_MAKE_COLOR_4(color, 0x3F, 16 + (timclock&15), 16 + (timclock&15), 0 );
 
-            ogl_draw_box( (mdata.rectx / FOURNUM) + x, 
-                (mdata.recty / FOURNUM), 
-                (mdata.x / FOURNUM) - (mdata.rectx / FOURNUM) + 1, 
-                (mdata.recty / FOURNUM) - (mdata.y / FOURNUM) + 1,
-                color);
+            ogl_draw_box( (mdata.rectx / FOURNUM) + x,
+                          (mdata.recty / FOURNUM),
+                          (mdata.x / FOURNUM) - (mdata.rectx / FOURNUM) + 1,
+                          (mdata.recty / FOURNUM) - (mdata.y / FOURNUM) + 1,
+                          color);
         }
     }
     glPopAttrib();
@@ -3063,9 +3030,9 @@ void render_window(window_t * pwin)
 void load_window(window_t * pwin, int id, char *loadname, int x, int y, int bx, int by,
                  int sx, int sy, Uint16 mode)
 {
-    if( NULL == pwin ) return;
+    if ( NULL == pwin ) return;
 
-    if( INVALID_TX_ID == glTexture_Load( GL_TEXTURE_2D, &(pwin->tex), loadname, INVALID_KEY ) )
+    if ( INVALID_TX_ID == glTexture_Load( GL_TEXTURE_2D, &(pwin->tex), loadname, INVALID_KEY ) )
     {
         log_warning( "Cannot load \"%s\".\n", loadname);
     }
@@ -3112,7 +3079,7 @@ void load_all_windows(void)
 //------------------------------------------------------------------------------
 void draw_window( window_t * pwin )
 {
-    if(NULL == pwin || !pwin->on ) return;
+    if (NULL == pwin || !pwin->on ) return;
 
     ogl_draw_sprite( &(pwin->tex), pwin->x, pwin->y, pwin->surfacex, pwin->surfacey );
 }
@@ -3139,13 +3106,13 @@ void bound_camera(void)
     {
         cam.y = 0;
     }
-    if (cam.x > mesh.sizex * TILEDIV)
+    if (cam.x > mesh.tilesx * TILEDIV)
     {
-        cam.x = mesh.sizex * TILEDIV;
+        cam.x = mesh.tilesx * TILEDIV;
     }
-    if (cam.y > mesh.sizey * TILEDIV)
+    if (cam.y > mesh.tilesy * TILEDIV)
     {
-        cam.y = mesh.sizey * TILEDIV;
+        cam.y = mesh.tilesy * TILEDIV;
     }
 }
 
@@ -3194,9 +3161,9 @@ void rect_select(void)
         {
             vert = pointsonscreen[cnt];
             if (mesh.vrtx[vert] >= tlx &&
-                mesh.vrtx[vert] <= brx &&
-                mesh.vrty[vert] >= tly &&
-                mesh.vrty[vert] <= bry)
+                    mesh.vrtx[vert] <= brx &&
+                    mesh.vrty[vert] >= tly &&
+                    mesh.vrty[vert] <= bry)
             {
                 add_select(vert);
             }
@@ -3220,9 +3187,9 @@ void rect_select(void)
         {
             vert = pointsonscreen[cnt];
             if (mesh.vrtx[vert] >= tlx &&
-                mesh.vrtx[vert] <= brx &&
-                -(mesh.vrtz[vert] >> 4) + y >= tly &&
-                -(mesh.vrtz[vert] >> 4) + y <= bry)
+                    mesh.vrtx[vert] <= brx &&
+                    -(mesh.vrtz[vert] >> 4) + y >= tly &&
+                    -(mesh.vrtz[vert] >> 4) + y <= bry)
             {
                 add_select(vert);
             }
@@ -3256,9 +3223,9 @@ void rect_unselect(void)
         {
             vert = pointsonscreen[cnt];
             if (mesh.vrtx[vert] >= tlx &&
-                mesh.vrtx[vert] <= brx &&
-                mesh.vrty[vert] >= tly &&
-                mesh.vrty[vert] <= bry)
+                    mesh.vrtx[vert] <= brx &&
+                    mesh.vrty[vert] >= tly &&
+                    mesh.vrty[vert] <= bry)
             {
                 remove_select(vert);
             }
@@ -3282,9 +3249,9 @@ void rect_unselect(void)
         {
             vert = pointsonscreen[cnt];
             if (mesh.vrtx[vert] >= tlx &&
-                mesh.vrtx[vert] <= brx &&
-                -(mesh.vrtz[vert] >> 4) + y >= tly &&
-                -(mesh.vrtz[vert] >> 4) + y <= bry)
+                    mesh.vrtx[vert] <= brx &&
+                    -(mesh.vrtz[vert] >> 4) + y >= tly &&
+                    -(mesh.vrtz[vert] >> 4) + y <= bry)
             {
                 remove_select(vert);
             }
@@ -3311,7 +3278,7 @@ int set_vrta(Uint32 vert)
           get_level(x, bry) +
           get_level(x + 46, y + 46);
     if (z < -128) z = -128;
-    if (brz < -128*3) brz = -128*3;
+    if (brz < -128*3) brz = -128 * 3;
     deltaz = z + z + z - brz;
     newa = (deltaz * direct >> 8);
 
@@ -3357,10 +3324,10 @@ void calc_vrta()
     Uint32 vert;
 
     y = 0;
-    while (y < mesh.sizey)
+    while (y < mesh.tilesy)
     {
         x = 0;
-        while (x < mesh.sizex)
+        while (x < mesh.tilesx)
         {
             fan = get_fan(x, y);
             if ( fan != -1)
@@ -3388,10 +3355,10 @@ void level_vrtz()
     Uint32 vert;
 
     y = 0;
-    while (y < mesh.sizey)
+    while (y < mesh.tilesy)
     {
         x = 0;
-        while (x < mesh.sizex)
+        while (x < mesh.tilesx)
         {
             fan = get_fan(x, y);
             if ( fan != -1)
@@ -3434,10 +3401,10 @@ void jitter_mesh()
     Uint32 vert;
 
     y = 0;
-    while (y < mesh.sizey)
+    while (y < mesh.tilesy)
     {
         x = 0;
-        while (x < mesh.sizex)
+        while (x < mesh.tilesx)
         {
             fan = get_fan(x, y);
             if (fan != -1)
@@ -3473,10 +3440,10 @@ void flatten_mesh()
     if (height < 0)  height = 0;
     if (height > mesh.edgez) height = mesh.edgez;
     y = 0;
-    while (y < mesh.sizey)
+    while (y < mesh.tilesy)
     {
         x = 0;
-        while (x < mesh.sizex)
+        while (x < mesh.tilesx)
         {
             fan = get_fan(x, y);
             if (fan != -1)
@@ -3538,7 +3505,7 @@ void mouse_side( window_t * pwin )
         if (mdata.rect == btrue)
         {
             if (numselect_verts != 0 && !SDLKEYMOD(KMOD_ALT) && !SDLKEYDOWN(SDLK_MODE) &&
-                !SDLKEYMOD(KMOD_LCTRL) && !SDLKEYMOD(KMOD_RCTRL))
+                    !SDLKEYMOD(KMOD_LCTRL) && !SDLKEYMOD(KMOD_RCTRL))
             {
                 clear_select();
             }
@@ -3618,9 +3585,9 @@ void mouse_tile( window_t * pwin )
     mdata.y = (mos.y - pwin->y - pwin->bordery) + cam.y - 69;
 
     if ( mdata.x < 0 ||
-        mdata.x >= TILEDIV * mesh.sizex ||
-        mdata.y < 0 ||
-        mdata.y >= TILEDIV * mesh.sizey)
+            mdata.x >= TILEDIV * mesh.tilesx ||
+            mdata.y < 0 ||
+            mdata.y >= TILEDIV * mesh.tilesy)
     {
         mdata.x = mdata.x * FOURNUM;
         mdata.y = mdata.y * FOURNUM;
@@ -3634,8 +3601,8 @@ void mouse_tile( window_t * pwin )
     {
         mdata.x = mdata.x * FOURNUM;
         mdata.y = mdata.y * FOURNUM;
-        if (mdata.x >= (mesh.sizex << 7))  mdata.x = (mesh.sizex << 7) - 1;
-        if (mdata.y >= (mesh.sizey << 7))  mdata.y = (mesh.sizey << 7) - 1;
+        if (mdata.x >= (mesh.tilesx << 7))  mdata.x = (mesh.tilesx << 7) - 1;
+        if (mdata.y >= (mesh.tilesy << 7))  mdata.y = (mesh.tilesy << 7) - 1;
         debugx = mdata.x / 128.0;
         debugy = mdata.y / 128.0;
         x = mdata.x >> 7;
@@ -3678,18 +3645,18 @@ void mouse_tile( window_t * pwin )
             }
             switch (mdata.presser)
             {
-            case 0:
-                mesh.tile[mdata.onfan] = mdata.tile;
-                break;
-            case 1:
-                mesh.tile[mdata.onfan] = (mdata.tile & 0xFFFE) + (rand() & 1);
-                break;
-            case 2:
-                mesh.tile[mdata.onfan] = (mdata.tile & 0xFFFC) + (rand() & 3);
-                break;
-            case 3:
-                mesh.tile[mdata.onfan] = (mdata.tile & 0xFFF8) + (rand() & 7);
-                break;
+                case 0:
+                    mesh.tile[mdata.onfan] = mdata.tile;
+                    break;
+                case 1:
+                    mesh.tile[mdata.onfan] = (mdata.tile & 0xFFFE) + (rand() & 1);
+                    break;
+                case 2:
+                    mesh.tile[mdata.onfan] = (mdata.tile & 0xFFFC) + (rand() & 3);
+                    break;
+                case 3:
+                    mesh.tile[mdata.onfan] = (mdata.tile & 0xFFF8) + (rand() & 7);
+                    break;
             }
             if (!keyt)
             {
@@ -3726,17 +3693,17 @@ void mouse_fx( window_t * pwin )
     mdata.x = mos.x - pwin->x - pwin->borderx + cam.x - 69;
     mdata.y = mos.y - pwin->y - pwin->bordery + cam.y - 69;
     if (mdata.x < 0 ||
-        mdata.x >= TILEDIV * mesh.sizex ||
-        mdata.y < 0 ||
-        mdata.y >= TILEDIV * mesh.sizey)
+            mdata.x >= TILEDIV * mesh.tilesx ||
+            mdata.y < 0 ||
+            mdata.y >= TILEDIV * mesh.tilesy)
     {
     }
     else
     {
         mdata.x = mdata.x * FOURNUM;
         mdata.y = mdata.y * FOURNUM;
-        if (mdata.x >= (mesh.sizex << 7))  mdata.x = (mesh.sizex << 7) - 1;
-        if (mdata.y >= (mesh.sizey << 7))  mdata.y = (mesh.sizey << 7) - 1;
+        if (mdata.x >= (mesh.tilesx << 7))  mdata.x = (mesh.tilesx << 7) - 1;
+        if (mdata.y >= (mesh.tilesy << 7))  mdata.y = (mesh.tilesy << 7) - 1;
         debugx = mdata.x / 128.0;
         debugy = mdata.y / 128.0;
         x = mdata.x >> 7;
@@ -3793,7 +3760,7 @@ void mouse_vertex( window_t * pwin )
         if (mdata.rect == btrue)
         {
             if (numselect_verts != 0 && !SDLKEYMOD(KMOD_ALT) && !SDLKEYDOWN(SDLK_MODE) &&
-                !SDLKEYMOD(KMOD_LCTRL) && !SDLKEYMOD(KMOD_RCTRL))
+                    !SDLKEYMOD(KMOD_LCTRL) && !SDLKEYMOD(KMOD_RCTRL))
             {
                 clear_select();
             }
@@ -3838,9 +3805,9 @@ void check_mouse(void)
         if (pwin->on)
         {
             if ( mos.x >= pwin->x + pwin->borderx &&
-                 mos.x <= pwin->x + pwin->surfacex - pwin->borderx &&
-                 mos.y >= pwin->y + pwin->bordery &&
-                 mos.y <= pwin->y + pwin->surfacey - pwin->bordery )
+                    mos.x <= pwin->x + pwin->surfacex - pwin->borderx &&
+                    mos.y >= pwin->y + pwin->bordery &&
+                    mos.y <= pwin->y + pwin->surfacey - pwin->bordery )
             {
                 mdata.which_win = pwin->id;
                 mdata.mode      = pwin->mode;
@@ -3878,10 +3845,10 @@ void clear_mesh()
     if (mdata.tile != FANOFF)
     {
         y = 0;
-        while (y < mesh.sizey)
+        while (y < mesh.tilesy)
         {
             x = 0;
-            while (x < mesh.sizex)
+            while (x < mesh.tilesx)
             {
                 fan = get_fan(x, y);
                 if (fan != -1)
@@ -3889,18 +3856,18 @@ void clear_mesh()
                     remove_fan(fan);
                     switch (mdata.presser)
                     {
-                    case 0:
-                        mesh.tile[fan] = mdata.tile;
-                        break;
-                    case 1:
-                        mesh.tile[fan] = (mdata.tile & 0xFFFE) + (rand() & 1);
-                        break;
-                    case 2:
-                        mesh.tile[fan] = (mdata.tile & 0xFFFC) + (rand() & 3);
-                        break;
-                    case 3:
-                        mesh.tile[fan] = (mdata.tile & 0xFFF8) + (rand() & 7);
-                        break;
+                        case 0:
+                            mesh.tile[fan] = mdata.tile;
+                            break;
+                        case 1:
+                            mesh.tile[fan] = (mdata.tile & 0xFFFE) + (rand() & 1);
+                            break;
+                        case 2:
+                            mesh.tile[fan] = (mdata.tile & 0xFFFC) + (rand() & 3);
+                            break;
+                        case 3:
+                            mesh.tile[fan] = (mdata.tile & 0xFFF8) + (rand() & 7);
+                            break;
                     }
                     mesh.type[fan] = mdata.type;
                     if (mdata.type <= 1) mesh.type[fan] = rand() & 1;
@@ -3925,10 +3892,10 @@ void three_e_mesh()
     if (mdata.tile != FANOFF)
     {
         y = 0;
-        while (y < mesh.sizey)
+        while (y < mesh.tilesy)
         {
             x = 0;
-            while (x < mesh.sizex)
+            while (x < mesh.tilesx)
             {
                 fan = get_fan(x, y);
                 if (fan != -1)
@@ -3967,10 +3934,10 @@ void ease_up_mesh()
     zadd = -mos.cy;
 
     y = 0;
-    while (y < mesh.sizey)
+    while (y < mesh.tilesy)
     {
         x = 0;
-        while (x < mesh.sizex)
+        while (x < mesh.tilesx)
         {
             fan = get_fan(x, y);
             if (fan != -1)
@@ -3998,10 +3965,10 @@ void select_verts_connected()
     Uint8 found, select_vertsfan;
 
     y = 0;
-    while (y < mesh.sizey)
+    while (y < mesh.tilesy)
     {
         x = 0;
-        while (x < mesh.sizex)
+        while (x < mesh.tilesx)
         {
             fan = get_fan(x, y);
             select_vertsfan = bfalse;
@@ -4277,18 +4244,18 @@ void check_input(char * modulename)
 
         switch ( evt.type )
         {
-        case SDL_MOUSEBUTTONDOWN:
-            ui.pending_click = btrue;
-            break;
+            case SDL_MOUSEBUTTONDOWN:
+                ui.pending_click = btrue;
+                break;
 
-        case SDL_MOUSEBUTTONUP:
-            ui.pending_click = bfalse;
-            break;
+            case SDL_MOUSEBUTTONUP:
+                ui.pending_click = bfalse;
+                break;
 
-        case SDL_KEYDOWN:
-        case SDL_KEYUP:
-            keystate = evt.key.state;
-            break;
+            case SDL_KEYDOWN:
+            case SDL_KEYUP:
+                keystate = evt.key.state;
+                break;
         }
     }
 
@@ -4333,52 +4300,52 @@ void load_img(void)
     int cnt;
     SDL_Surface *bmptemp;
 
-    if( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_point, "data" SLASH_STR "point.png", INVALID_KEY) )
+    if ( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_point, "data" SLASH_STR "point.png", INVALID_KEY) )
     {
         log_warning( "Cannot load image \"%s\".\n", "point.png" );
     }
 
-    if( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_pointon, "data" SLASH_STR "pointon.png", INVALID_KEY) )
+    if ( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_pointon, "data" SLASH_STR "pointon.png", INVALID_KEY) )
     {
         log_warning( "Cannot load image \"%s\".\n", "pointon.png" );
     }
 
-    if( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_ref, "data" SLASH_STR "pointon.png", INVALID_KEY) )
+    if ( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_ref, "data" SLASH_STR "pointon.png", INVALID_KEY) )
     {
         log_warning( "Cannot load image \"%s\".\n", "ref.png" );
     }
 
-    if( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_drawref, "data" SLASH_STR "drawref.png", INVALID_KEY) )
+    if ( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_drawref, "data" SLASH_STR "drawref.png", INVALID_KEY) )
     {
         log_warning( "Cannot load image \"%s\".\n", "drawref.png" );
     }
 
-    if( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_anim, "data" SLASH_STR "anim.png", INVALID_KEY) )
+    if ( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_anim, "data" SLASH_STR "anim.png", INVALID_KEY) )
     {
         log_warning( "Cannot load image \"%s\".\n", "anim.png" );
     }
 
-    if( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_water, "data" SLASH_STR "water.png", INVALID_KEY) )
+    if ( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_water, "data" SLASH_STR "water.png", INVALID_KEY) )
     {
         log_warning( "Cannot load image \"%s\".\n", "water.png" );
     }
 
-    if( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_wall, "data" SLASH_STR "slit.png", INVALID_KEY) )
+    if ( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_wall, "data" SLASH_STR "slit.png", INVALID_KEY) )
     {
         log_warning( "Cannot load image \"%s\".\n", "slit.png" );
     }
 
-    if( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_impass, "data" SLASH_STR "impass.png", INVALID_KEY) )
+    if ( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_impass, "data" SLASH_STR "impass.png", INVALID_KEY) )
     {
         log_warning( "Cannot load image \"%s\".\n", "impass.png" );
     }
 
-    if( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_damage, "data" SLASH_STR "damage.png", INVALID_KEY) )
+    if ( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_damage, "data" SLASH_STR "damage.png", INVALID_KEY) )
     {
         log_warning( "Cannot load image \"%s\".\n", "damage.png" );
     }
 
-    if( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_slippy, "data" SLASH_STR "slippy.png", INVALID_KEY) )
+    if ( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_slippy, "data" SLASH_STR "slippy.png", INVALID_KEY) )
     {
         log_warning( "Cannot load image \"%s\".\n", "slippy.png" );
     }
@@ -4392,44 +4359,44 @@ void draw_lotsa_stuff(void)
     // Tell which tile we're in
     x = debugx * 128;
     y = debugy * 128;
-    fnt_printf_OGL( gFont, 0, 226, 
-        "X = %6.2f (%d)", debugx, x);
-    fnt_printf_OGL( gFont, 0, 234, 
-        "Y = %6.2f (%d)", debugy, y);
+    fnt_printf_OGL( gFont, 0, 226,
+                    "X = %6.2f (%d)", debugx, x);
+    fnt_printf_OGL( gFont, 0, 234,
+                    "Y = %6.2f (%d)", debugy, y);
 
     // Tell user what keys are important
-    fnt_printf_OGL( gFont, 0, ui.scr.y - 120, 
-        "O = Overlay (Water)");
-    fnt_printf_OGL( gFont, 0, ui.scr.y - 112, 
-        "R = Reflective");
-    fnt_printf_OGL( gFont, 0, ui.scr.y - 104, 
-        "D = Draw Reflection");
+    fnt_printf_OGL( gFont, 0, ui.scr.y - 120,
+                    "O = Overlay (Water)");
+    fnt_printf_OGL( gFont, 0, ui.scr.y - 112,
+                    "R = Reflective");
+    fnt_printf_OGL( gFont, 0, ui.scr.y - 104,
+                    "D = Draw Reflection");
     fnt_printf_OGL( gFont, 0, ui.scr.y - 96,
-        "A = Animated");
+                    "A = Animated");
     fnt_printf_OGL( gFont, 0, ui.scr.y - 88,
-        "B = Barrier (Slit)");
+                    "B = Barrier (Slit)");
     fnt_printf_OGL( gFont, 0, ui.scr.y - 80,
-        "I = Impassable (Wall)");
+                    "I = Impassable (Wall)");
     fnt_printf_OGL( gFont, 0, ui.scr.y - 72,
-        "H = Hurt");
+                    "H = Hurt");
     fnt_printf_OGL( gFont, 0, ui.scr.y - 64,
-        "S = Slippy");
+                    "S = Slippy");
 
     // Vertices left
     fnt_printf_OGL( gFont, 0, ui.scr.y - 56,
-        "Vertices %d", numfreevertices);
+                    "Vertices %d", numfreevertices);
 
     // Misc data
     fnt_printf_OGL( gFont, 0, ui.scr.y - 40,
-        "Ambient   %d", ambi);
+                    "Ambient   %d", ambi);
     fnt_printf_OGL( gFont, 0, ui.scr.y - 32,
-        "Ambicut   %d", ambicut);
+                    "Ambicut   %d", ambicut);
     fnt_printf_OGL( gFont, 0, ui.scr.y - 24,
-        "Direct    %d", direct);
+                    "Direct    %d", direct);
     fnt_printf_OGL( gFont, 0, ui.scr.y - 16,
-        "Brush amount %d", brushamount);
+                    "Brush amount %d", brushamount);
     fnt_printf_OGL( gFont, 0, ui.scr.y - 8,
-        "Brush size   %d", brushsize);
+                    "Brush size   %d", brushsize);
 
     // Cursor
     //if (mos.x >= 0 && mos.x < ui.scr.x && mos.y >= 0 && mos.y < ui.scr.y)
@@ -4445,26 +4412,26 @@ void draw_lotsa_stuff(void)
     {
         switch (mdata.presser)
         {
-        case 0:
-            todo = 1;
-            tile = mdata.tile;
-            add = 1;
-            break;
-        case 1:
-            todo = 2;
-            tile = mdata.tile & 0xFFFE;
-            add = 1;
-            break;
-        case 2:
-            todo = 4;
-            tile = mdata.tile & 0xFFFC;
-            add = 1;
-            break;
-        case 3:
-            todo = 4;
-            tile = mdata.tile & 0xFFF8;
-            add = 2;
-            break;
+            case 0:
+                todo = 1;
+                tile = mdata.tile;
+                add = 1;
+                break;
+            case 1:
+                todo = 2;
+                tile = mdata.tile & 0xFFFE;
+                add = 1;
+                break;
+            case 2:
+                todo = 4;
+                tile = mdata.tile & 0xFFFC;
+                add = 1;
+                break;
+            case 3:
+                todo = 4;
+                tile = mdata.tile & 0xFFF8;
+                add = 2;
+                break;
         }
 
         x = 0;
@@ -4482,21 +4449,21 @@ void draw_lotsa_stuff(void)
             tile += add;
         }
 
-        fnt_printf_OGL( gFont, 0, 32, 
-            "Tile 0x%02x", mdata.tile);
-        fnt_printf_OGL( gFont, 0, 40, 
-            "Eats %d verts", mesh.command[mdata.type].numvertices);
+        fnt_printf_OGL( gFont, 0, 32,
+                        "Tile 0x%02x", mdata.tile);
+        fnt_printf_OGL( gFont, 0, 40,
+                        "Eats %d verts", mesh.command[mdata.type].numvertices);
         if (mdata.type >= MAXMESHTYPE / 2)
         {
-            fnt_printf_OGL( gFont, 0, 56, 
-                "63x63 Tile");
+            fnt_printf_OGL( gFont, 0, 56,
+                            "63x63 Tile");
         }
         else
         {
-            fnt_printf_OGL( gFont, 0, 56, 
-                "31x31 Tile");
+            fnt_printf_OGL( gFont, 0, 56,
+                            "31x31 Tile");
         }
-        draw_schematic(theSurface, mdata.type, 0, 64);
+        draw_schematic(NULL, mdata.type, 0, 64);
     }
 
     // FX select_vertsion
@@ -4526,12 +4493,12 @@ void draw_lotsa_stuff(void)
 
     if (numattempt > 0)
     {
-        fnt_printf_OGL( gFont, 0, 0, 
-            "numwritten %d/%d", numwritten, numattempt);
+        fnt_printf_OGL( gFont, 0, 0,
+                        "numwritten %d/%d", numwritten, numattempt);
     }
 
-    fnt_printf_OGL( gFont, 0, 0, 
-        "<%f, %f>", mos.x, mos.y );
+    fnt_printf_OGL( gFont, 0, 0,
+                    "<%f, %f>", mos.x, mos.y );
 }
 
 //------------------------------------------------------------------------------
@@ -4541,7 +4508,7 @@ void draw_slider(int tlx, int tly, int brx, int bry, int* pvalue, int minvalue, 
     int value;
     SDL_Rect rtmp;
 
-    float color[4] = {1,1,1,1};
+    float color[4] = {1, 1, 1, 1};
 
     // Pick a new value
     value = *pvalue;
@@ -4583,15 +4550,15 @@ void draw_main(void)
 
         itmp = ambi;
         draw_slider( 0, 250, 19, 350, &ambi,          0, 200);
-        if( itmp != ambi ) recalc_lighting = btrue;
+        if ( itmp != ambi ) recalc_lighting = btrue;
 
         itmp = ambicut;
         draw_slider(20, 250, 39, 350, &ambicut,       0, ambi);
-        if( itmp != ambicut ) recalc_lighting = btrue;
+        if ( itmp != ambicut ) recalc_lighting = btrue;
 
         itmp = direct;
         draw_slider(40, 250, 59, 350, &direct,        0, 100);
-        if( itmp != direct ) recalc_lighting = btrue;
+        if ( itmp != direct ) recalc_lighting = btrue;
 
         draw_slider(60, 250, 79, 350, &brushamount, -50,  50);
 
@@ -4599,7 +4566,7 @@ void draw_main(void)
     }
     ogl_endFrame();
 
-    if(recalc_lighting)
+    if (recalc_lighting)
     {
         calc_vrta();
     }
@@ -4831,10 +4798,10 @@ void sdlinit( int argc, char **argv )
     {
         SDL_Surface * tmp_icon;
         /* Setup the cute windows manager icon */
-        tmp_icon = SDL_LoadBMP( "basicdat" SLASH_STR "icon.bmp" );
+        tmp_icon = SDL_LoadBMP( "data" SLASH_STR "egomap_icon.bmp" );
         if ( tmp_icon == NULL )
         {
-            log_warning( "Unable to load icon (basicdat" SLASH_STR "icon.bmp)\n" );
+            log_warning( "Unable to load icon (data" SLASH_STR "egomap_icon.bmp)\n" );
         }
         else
         {
@@ -5070,7 +5037,7 @@ void ogl_draw_sprite( glTexture * img, int x, int y, int width, int height )
     // Draw the image
     glTexture_Bind( img );
 
-    glColor4f(1,1,1,1);
+    glColor4f(1, 1, 1, 1);
 
     glBegin( GL_TRIANGLE_STRIP );
     {
@@ -5149,9 +5116,9 @@ void ogl_endFrame()
 //------------------------------------------------------------------------------
 void cartman_begin_ortho_camera( window_t * pwin, camera_t * pcam  )
 {
-    float w, h; 
+    float w, h;
     float aspect;
-    float left, right, bottom, top;    
+    float left, right, bottom, top;
 
     w = pwin->surfacex;
     h = pwin->surfacey;
@@ -5159,41 +5126,41 @@ void cartman_begin_ortho_camera( window_t * pwin, camera_t * pcam  )
     pcam->w = w;
     pcam->h = h;
 
-    left   = - w / 2; 
-    right  =   w / 2; 
-    bottom = - h / 2; 
-    top    =   h / 2; 
+    left   = - w / 2;
+    right  =   w / 2;
+    bottom = - h / 2;
+    top    =   h / 2;
 
-    aspect = (GLdouble) w / h; 
-    if ( aspect < 1.0 ) 
-    { 
-        // window taller than wide 
-        bottom /= aspect; top /= aspect; 
+    aspect = (GLdouble) w / h;
+    if ( aspect < 1.0 )
+    {
+        // window taller than wide
+        bottom /= aspect; top /= aspect;
     }
-    else 
-    { 
-        left *= aspect; 
-        right *= aspect; 
-    } 
+    else
+    {
+        left *= aspect;
+        right *= aspect;
+    }
 
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
-    glLoadIdentity(); 
-    glOrtho(left, right, bottom, top, -(180 << 4), (180 << 4)); 
+    glLoadIdentity();
+    glOrtho(left, right, bottom, top, -(180 << 4), (180 << 4));
 
-    glMatrixMode(GL_MODELVIEW); 
+    glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-    glLoadIdentity();  
+    glLoadIdentity();
 
-    gluLookAt (pcam->x, pcam->y, 0, pcam->x, pcam->y, 180 << 4, 0.0, -1.0, 0.0); 
+    gluLookAt (pcam->x, pcam->y, 0, pcam->x, pcam->y, 180 << 4, 0.0, -1.0, 0.0);
 }
 
 //------------------------------------------------------------------------------
 void cartman_end_ortho_camera( )
 {
-    glMatrixMode(GL_MODELVIEW); 
+    glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
 
     glMatrixMode(GL_PROJECTION);
-    glPopMatrix();    
+    glPopMatrix();
 }

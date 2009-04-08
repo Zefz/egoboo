@@ -47,7 +47,6 @@ struct s_config_data
     bool_t   messageon;        // Messages?
     int      maxmessage;       //
 
-    bool_t   overlayon;        // Draw overlay?
     bool_t   perspective;      // Perspective correct textures?
     bool_t   dither;           // Dithering?
     GLuint   shading;          // Gourad shading?
@@ -55,7 +54,6 @@ struct s_config_data
     bool_t   refon;            // Reflections?
     bool_t   shaon;            // Shadows?
     int      texturefilter;    // Texture filtering?
-    bool_t   wateron;          // Water overlays?
     bool_t   shasprite;        // Shadow sprites?
     bool_t   zreflect;         // Reflection z buffering?
 
@@ -63,7 +61,6 @@ struct s_config_data
     int      buffersize;          // Buffer size set in setup.txt
 
     bool_t   fullscreen;       // Start in fullscreen?
-    bool_t   backgroundon;    // Do we clear every time?
     bool_t   soundon;              // Is the sound alive?
     bool_t   staton;               // Draw the status bars?
     bool_t   phongon;              // Do phong overlay?

@@ -173,4 +173,3 @@ void make_newloadname( char *modname, char *appendname, char *newloadname )
 
     newloadname[cnt] = 0;
 }
-

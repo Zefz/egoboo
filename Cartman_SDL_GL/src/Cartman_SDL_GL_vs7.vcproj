@@ -132,16 +132,55 @@
 				RelativePath=".\egoboo_endian.c">
 			</File>
 			<File
-				RelativePath=".\egoboo_setup.c">
+				RelativePath=".\egoboo_fileutil.c">
 			</File>
 			<File
-				RelativePath=".\egoboo_setup.h">
+				RelativePath=".\egoboo_graphic.c">
+			</File>
+			<File
+				RelativePath=".\egoboo_graphicfan.c">
+			</File>
+			<File
+				RelativePath=".\egoboo_graphicmad.c">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\egoboo_graphicprt.c">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\egoboo_setup.c">
 			</File>
 			<File
 				RelativePath=".\egoboo_strutil.c">
 			</File>
 			<File
 				RelativePath=".\Font.c">
+			</File>
+			<File
+				RelativePath=".\id_normals.inc">
 			</File>
 			<File
 				RelativePath=".\Log.c">
@@ -206,6 +245,15 @@
 				RelativePath=".\egoboo_endian.h">
 			</File>
 			<File
+				RelativePath=".\egoboo_fileutil.h">
+			</File>
+			<File
+				RelativePath=".\egoboo_graphic.h">
+			</File>
+			<File
+				RelativePath=".\egoboo_setup.h">
+			</File>
+			<File
 				RelativePath=".\egoboo_strutil.h">
 			</File>
 			<File
@@ -228,6 +276,9 @@
 			</File>
 			<File
 				RelativePath=".\ogl_texture.h">
+			</File>
+			<File
+				RelativePath=".\resource.h">
 			</File>
 			<File
 				RelativePath=".\SDL_extensions.h">
@@ -253,10 +304,19 @@
 				RelativePath="..\backdrop.png">
 			</File>
 			<File
+				RelativePath=".\Cartman_SDL_GL.rc">
+			</File>
+			<File
 				RelativePath="..\damage.png">
 			</File>
 			<File
 				RelativePath="..\drawref.png">
+			</File>
+			<File
+				RelativePath="..\data\egomap_icon.ico">
+			</File>
+			<File
+				RelativePath=".\icon1.ico">
 			</File>
 			<File
 				RelativePath="..\impass.png">

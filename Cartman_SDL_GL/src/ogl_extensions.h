@@ -91,7 +91,7 @@ extern "C"
         GLenum    perspective;             ///< current correction hint
         GLboolean dither;                  ///< current dithering flag
         GLenum    shading;                 ///< current shading type
-        GLfloat   userAnisotropy;          ///< current value of the anisotropic filtering 
+        GLfloat   userAnisotropy;          ///< current value of the anisotropic filtering
     };
     typedef struct s_oglx_video_parameters oglx_video_parameters_t;
 

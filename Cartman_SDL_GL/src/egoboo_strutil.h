@@ -37,3 +37,4 @@ char * str_decode( char *strout, size_t insize, char * strin );
 char * str_encode( char *strout, size_t insize, char * strin );
 
 #define _EGOBOOSTRUTIL_H_
+

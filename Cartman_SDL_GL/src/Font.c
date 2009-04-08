@@ -55,56 +55,56 @@ static char * writeFont( const char *format, va_list args )
 
 struct Font
 {
-  TTF_Font *ttfFont;
+    TTF_Font *ttfFont;
 
-  GLuint texture;
-  GLfloat texCoords[4];
+    GLuint texture;
+    GLfloat texCoords[4];
 };
 
 
 Font* fnt_loadFont( const char *fileName, int pointSize )
 {
-  Font *newFont;
-  TTF_Font *ttfFont;
+    Font *newFont;
+    TTF_Font *ttfFont;
 
-  // Make sure the TTF library was initialized
-  if ( !TTF_WasInit() )
-  {
-    if ( TTF_Init() != -1 )
+    // Make sure the TTF library was initialized
+    if ( !TTF_WasInit() )
     {
-      atexit( TTF_Quit );
+        if ( TTF_Init() != -1 )
+        {
+            atexit( TTF_Quit );
+        }
+        else
+        {
+            printf( "fnt_loadFont: Could not initialize SDL_TTF!\n" );
+            return NULL;
+        }
     }
-    else
+
+    // Try and open the font
+    ttfFont = TTF_OpenFont( fileName, pointSize );
+    if ( !ttfFont )
     {
-      printf( "fnt_loadFont: Could not initialize SDL_TTF!\n" );
-      return NULL;
+        // couldn't open it, for one reason or another
+        return NULL;
     }
-  }
 
-  // Try and open the font
-  ttfFont = TTF_OpenFont( fileName, pointSize );
-  if ( !ttfFont )
-  {
-    // couldn't open it, for one reason or another
-    return NULL;
-  }
+    // Everything looks good
+    newFont = ( Font* )malloc( sizeof( Font ) );
+    newFont->ttfFont = ttfFont;
+    newFont->texture = 0;
 
-  // Everything looks good
-  newFont = ( Font* )malloc( sizeof( Font ) );
-  newFont->ttfFont = ttfFont;
-  newFont->texture = 0;
-
-  return newFont;
+    return newFont;
 }
 
 void fnt_freeFont( Font *font )
 {
-  if ( font )
-  {
-    TTF_CloseFont( font->ttfFont );
-    glDeleteTextures( 1, &font->texture );
-    free( font );
-  }
+    if ( font )
+    {
+        TTF_CloseFont( font->ttfFont );
+        glDeleteTextures( 1, &font->texture );
+        free( font );
+    }
 }
 //
 //void fnt_drawText( Font *font, int x, int y, const char *text )
@@ -166,66 +166,66 @@ void fnt_freeFont( Font *font )
  */
 void fnt_drawTextBox( Font *font, const char *text, int x, int y, int width, int height, int spacing )
 {
-  size_t len;
-  char *buffer, *line;
+    size_t len;
+    char *buffer, *line;
 
-  if ( !font ) return;
+    if ( !font ) return;
 
-  // If text is empty, there's nothing to draw
-  if ( !text || !text[0] ) return;
+    // If text is empty, there's nothing to draw
+    if ( !text || !text[0] ) return;
 
-  // Split the passed in text into separate lines
-  len = strlen( text );
-  buffer = calloc( 1, len + 1 );
-  strncpy( buffer, text, len );
+    // Split the passed in text into separate lines
+    len = strlen( text );
+    buffer = calloc( 1, len + 1 );
+    strncpy( buffer, text, len );
 
-  line = strtok( buffer, "\n" );
-  while ( line != NULL )
-  {
-    fnt_drawText_OGL( font, x, y, line );
-    y += spacing;
-    line = strtok( NULL, "\n" );
-  }
-  free( buffer );
+    line = strtok( buffer, "\n" );
+    while ( line != NULL )
+    {
+        fnt_drawText_OGL( font, x, y, line );
+        y += spacing;
+        line = strtok( NULL, "\n" );
+    }
+    free( buffer );
 }
 
 void fnt_getTextBoxSize( Font *font, const char *text, int spacing, int *width, int *height )
 {
-  char *buffer, *line;
-  size_t len;
-  int tmp_w, tmp_h;
+    char *buffer, *line;
+    size_t len;
+    int tmp_w, tmp_h;
 
-  if ( !font ) return;
-  if ( !text || !text[0] ) return;
+    if ( !font ) return;
+    if ( !text || !text[0] ) return;
 
-  // Split the passed in text into separate lines
-  len = strlen( text );
-  buffer = calloc( 1, len + 1 );
-  strncpy( buffer, text, len );
+    // Split the passed in text into separate lines
+    len = strlen( text );
+    buffer = calloc( 1, len + 1 );
+    strncpy( buffer, text, len );
 
-  line = strtok( buffer, "\n" );
-  *width = *height = 0;
-  while ( line != NULL )
-  {
-    TTF_SizeText( font->ttfFont, line, &tmp_w, &tmp_h );
-    *width = ( *width > tmp_w ) ? *width : tmp_w;
-    *height += spacing;
+    line = strtok( buffer, "\n" );
+    *width = *height = 0;
+    while ( line != NULL )
+    {
+        TTF_SizeText( font->ttfFont, line, &tmp_w, &tmp_h );
+        *width = ( *width > tmp_w ) ? *width : tmp_w;
+        *height += spacing;
 
-    line = strtok( NULL, "\n" );
-  }
-  free( buffer );
+        line = strtok( NULL, "\n" );
+    }
+    free( buffer );
 }
 
 SDL_Surface * fnt_printf( Font *font, SDL_Color color, const char *format, ... )
 {
-  char * msg;
-  va_list args;
+    char * msg;
+    va_list args;
 
-  va_start( args, format );
-  msg = writeFont( format, args );
-  va_end( args );
+    va_start( args, format );
+    msg = writeFont( format, args );
+    va_end( args );
 
-  return TTF_RenderText_Blended( font->ttfFont, msg, color );
+    return TTF_RenderText_Blended( font->ttfFont, msg, color );
 }
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
@@ -251,7 +251,7 @@ void fnt_streamText_SDL(SDL_Surface * surface, TTF_Font * font, int x, int y, SD
     char *buffer, *line;
     Uint16 spacing;
 
-    if( NULL == surface ) return;
+    if ( NULL == surface ) return;
 
     if ( NULL == font ) return;
     spacing = TTF_FontHeight(font);

@@ -103,9 +103,9 @@ void ErrorImage_bind(GLenum target, GLuint id)
 //--------------------------------------------------------------------------------------------
 glTexture * glTexture_new(glTexture * ptex)
 {
-    if( NULL == ptex ) return ptex;
+    if ( NULL == ptex ) return ptex;
 
-    if( INVALID_TX_ID != ptex->base.binding )
+    if ( INVALID_TX_ID != ptex->base.binding )
     {
         glDeleteTextures( 1, &(ptex->base.binding) );
         ptex->base.binding = INVALID_TX_ID;
@@ -120,12 +120,14 @@ glTexture * glTexture_new(glTexture * ptex)
     // set the image to be clamped in s and t
     ptex->base.wrap_s = GL_CLAMP;
     ptex->base.wrap_t = GL_CLAMP;
+
+    return ptex;
 }
 
 //--------------------------------------------------------------------------------------------
 void glTexture_delete(glTexture * ptex)
 {
-    if( NULL == ptex ) return;
+    if ( NULL == ptex ) return;
 
     // actually delete the OpenGL texture data
     glDeleteTextures( 1, &ptex->base.binding );
@@ -139,7 +141,7 @@ void glTexture_delete(glTexture * ptex)
     ptex->imgH = ptex->imgW = ptex->base.width = ptex->base.height  = 0;
     ptex->name[0] = '\0';
 
-    if( NULL != ptex->surface )
+    if ( NULL != ptex->surface )
     {
         SDL_FreeSurface( ptex->surface );
         ptex->surface = NULL;
@@ -322,7 +324,7 @@ Uint32 glTexture_Load( GLenum tx_target, glTexture *ptex, const char *filename, 
     if ( NULL == image ) return INVALID_TX_ID;
 
     retval = glTexture_Convert( tx_target, ptex, image, key );
-    
+
     if ( INVALID_TX_ID == retval )
     {
         glTexture_delete(ptex);
@@ -438,35 +440,35 @@ void glTexture_Bind( glTexture *texture )
     {
         switch ( filt_type )
         {
-            // Unfiltered
-        case TX_UNFILTERED:
-            oglx_bind(target, id, GL_REPEAT, GL_NEAREST, GL_NEAREST, GL_LINEAR, 0);
-            break;
+                // Unfiltered
+            case TX_UNFILTERED:
+                oglx_bind(target, id, GL_REPEAT, GL_NEAREST, GL_NEAREST, GL_LINEAR, 0);
+                break;
 
-            // Linear filtered
-        case TX_LINEAR:
-            oglx_bind(target, id, GL_REPEAT, GL_LINEAR, GL_LINEAR, GL_LINEAR, 0);
-            break;
+                // Linear filtered
+            case TX_LINEAR:
+                oglx_bind(target, id, GL_REPEAT, GL_LINEAR, GL_LINEAR, GL_LINEAR, 0);
+                break;
 
-            // Bilinear interpolation
-        case TX_MIPMAP:
-            oglx_bind(target, id, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_LINEAR, GL_LINEAR, 0);
-            break;
+                // Bilinear interpolation
+            case TX_MIPMAP:
+                oglx_bind(target, id, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_LINEAR, GL_LINEAR, 0);
+                break;
 
-            // Bilinear interpolation
-        case TX_BILINEAR:
-            oglx_bind(target, id, GL_REPEAT, GL_LINEAR_MIPMAP_NEAREST, GL_LINEAR, GL_LINEAR, 0);
-            break;
+                // Bilinear interpolation
+            case TX_BILINEAR:
+                oglx_bind(target, id, GL_REPEAT, GL_LINEAR_MIPMAP_NEAREST, GL_LINEAR, GL_LINEAR, 0);
+                break;
 
-            // Trilinear filtered (quality 1)
-        case TX_TRILINEAR_1:
-            oglx_bind(target, id, GL_REPEAT, GL_NEAREST_MIPMAP_LINEAR, GL_LINEAR, GL_LINEAR, 0);
-            break;
+                // Trilinear filtered (quality 1)
+            case TX_TRILINEAR_1:
+                oglx_bind(target, id, GL_REPEAT, GL_NEAREST_MIPMAP_LINEAR, GL_LINEAR, GL_LINEAR, 0);
+                break;
 
-            // Trilinear filtered (quality 2)
-        case TX_TRILINEAR_2:
-            oglx_bind(target, id, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_LINEAR, 0);
-            break;
+                // Trilinear filtered (quality 2)
+            case TX_TRILINEAR_2:
+                oglx_bind(target, id, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_LINEAR, 0);
+                break;
         };
     }
 

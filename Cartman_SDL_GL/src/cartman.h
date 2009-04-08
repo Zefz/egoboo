@@ -2,6 +2,11 @@
 
 #include <SDL_opengl.h>
 
+struct s_glTexture;
+typedef struct s_glTexture glTexture;
+
+#define TWO_PI 3.1415926535897932384626433832795f
+
 #ifndef ABS
 #    define ABS(X)  (((X) > 0) ? (X) : -(X))
 #endif
@@ -69,15 +74,21 @@ typedef struct s_ogl_surface ogl_surface;
 //#define ONSIZE 600            // Max size of raise mesh
 #define ONSIZE 264          // Max size of raise mesh
 
-#define MAXMESHTYPE 64          // Number of mesh types
-#define MAXMESHLINE 64          // Number of lines in a fan schematic
-#define MAXMESHVERTICES 16      // Max number of vertices in a fan
-#define MAXMESHFAN (512*512)        // Size of map in fans
-#define MAXTOTALMESHVERTICES (MAXMESHFAN*MAXMESHVERTICES)
-#define MAXMESHSIZEY 1024       // Max fans in y direction
-#define MAXMESHTYPE 64          // Number of vertex configurations
+
+#define MAXMESHTYPE                     64          // Number of mesh types
+#define MAXMESHLINE                     64          // Number of lines in a fan schematic
+#define MAXMESHVERTICES                 16      // Max number of vertices in a fan
+#define MAXMESHFAN                      (512*512)        // Size of map in fans
+#define MAXTOTALMESHVERTICES            (MAXMESHFAN*MAXMESHVERTICES)
+#define MAXMESHTILEY                    1024       // Max fans in y direction
+#define MAXMESHBLOCKY                   (( MAXMESHTILEY >> 2 )+1)  // max blocks in the y direction
+#define MAXMESHCOMMAND                  4             // Draw up to 4 fans
+#define MAXMESHCOMMANDENTRIES           32            // Fansquare command list size
+#define MAXMESHCOMMANDSIZE              32            // Max trigs in each command
+
 #define FANOFF   0xFFFF         // Don't draw
 #define CHAINEND 0xFFFFFFFF     // End of vertex chain
+
 #define VERTEXUNUSED 0          // Check mesh.vrta to see if used
 #define MAXPOINTS 20480         // Max number of points to draw
 
@@ -98,3 +109,111 @@ typedef struct s_ogl_surface ogl_surface;
 extern config_data_t cfg;
 extern SDLX_video_parameters_t sdl_vparam;
 extern oglx_video_parameters_t ogl_vparam;
+
+extern int    animtileupdateand;                      // New tile every ( (1 << n) - 1 ) frames
+extern Uint16 animtileframeand;                       // 1 << n frames
+extern Uint16 animtilebaseand;
+extern Uint16 biganimtileframeand;                    // 1 << n frames
+extern Uint16 biganimtilebaseand;
+extern Uint16 animtileframeadd;
+
+
+struct s_command
+{
+    Uint8   numvertices;                // Number of vertices
+
+    Uint8   ref[MAXMESHVERTICES];       // Lighting references
+
+    int     x[MAXMESHVERTICES];         // Vertex texture posi
+    int     y[MAXMESHVERTICES];         //
+
+    float   u[MAXMESHVERTICES];         // Vertex texture posi
+    float   v[MAXMESHVERTICES];         //
+
+    int     count;                      // how many commands
+    int     size[MAXMESHCOMMAND];      // how many command entries
+    int     vrt[MAXMESHCOMMANDENTRIES];       // which vertex for each command entry
+};
+typedef struct s_command command_t;
+
+struct s_line_data
+{
+    Uint8     start[MAXMESHTYPE];
+    Uint8     end[MAXMESHTYPE];
+};
+typedef struct s_line_data line_data_t;
+
+#define INVALID_BLOCK ((Uint32)(~0))
+#define INVALID_TILE  ((Uint32)(~0))
+
+
+struct s_mesh
+{
+    bool_t exploremode;
+
+    int               tilesx;           // Size of mesh
+    int               tilesy;           //
+    Uint32  fanstart[MAXMESHTILEY];           // Y to fan number
+
+    int               blocksx;          // Size of mesh
+    int               blocksy;          //
+    Uint32  blockstart[(MAXMESHTILEY >> 4) + 1];
+
+    int               edgex;            // Borders of mesh
+    int               edgey;            //
+    int               edgez;            //
+
+    Uint8   type[MAXMESHFAN];         // Command type
+    Uint8   fx[MAXMESHFAN];           // Special effects flags
+    Uint16  tile[MAXMESHFAN];         // Get texture from this
+    Uint8   twist[MAXMESHFAN];        // Surface normal
+
+    Uint32  vrtstart[MAXMESHFAN];     // Which vertex to start at
+    Uint32  vrtnext[MAXTOTALMESHVERTICES];   // Next vertex in fan
+
+    Uint16  vrtx[MAXTOTALMESHVERTICES];      // Vertex position
+    Uint16  vrty[MAXTOTALMESHVERTICES];      //
+    Sint16  vrtz[MAXTOTALMESHVERTICES];      // Vertex elevation
+    Uint8   vrta[MAXTOTALMESHVERTICES];      // Vertex base light, 0=unused
+
+    Uint32       numline[MAXMESHTYPE];       // Number of lines to draw
+    line_data_t  line[MAXMESHLINE];
+    command_t    command[MAXMESHTYPE];
+};
+typedef struct s_mesh mesh_t;
+
+
+extern mesh_t mesh;
+
+glTexture * tile_at( int fan );
+
+#define DAMAGENULL          255                        //
+
+enum e_damage_type
+{
+    DAMAGE_SLASH = 0,                        //
+    DAMAGE_CRUSH,                            //
+    DAMAGE_POKE,                             //
+    DAMAGE_HOLY,                             // (Most invert Holy damage )
+    DAMAGE_EVIL,                             //
+    DAMAGE_FIRE,                             //
+    DAMAGE_ICE,                              //
+    DAMAGE_ZAP,                              //
+    DAMAGE_COUNT                             // Damage types
+};
+
+#define DAMAGECHARGE        8                       // 0000x000 Converts damage to mana
+#define DAMAGEINVERT        4                       // 00000x00 Makes damage heal
+#define DAMAGESHIFT         3                       // 000000xx Resistance ( 1 is common )
+#define DAMAGETILETIME      32                      // Invincibility time
+#define DAMAGETIME          16                      // Invincibility time
+#define DEFENDTIME          16                      // Invincibility time
+
+
+extern Sint16          damagetileparttype;
+extern short           damagetilepartand;
+extern short           damagetilesound;
+extern short           damagetilesoundtime;
+extern Uint16          damagetilemindistance;
+extern int             damagetileamount;                           // Amount of damage
+extern Uint8           damagetiletype;                      // Type of damage
