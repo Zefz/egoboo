@@ -684,6 +684,8 @@ void make_planmap(void)
         {
             glTexture * tx_tile;
             tx_tile = tiny_tile_at(x, y);
+
+            if( NULL != tx_tile )
             {
                 SDL_Rect dst = {putx, puty, TINYXY, TINYXY};
                 cartman_BlitSurface( tx_tile->surface, NULL, bmphitemap, &dst);
@@ -1168,23 +1170,24 @@ void add_line(int fantype, int start, int end)
     // ZZ> This function adds a line to the vertex schematic
     int cnt;
 
+    if( fantype < 0 || fantype >= MAXMESHTYPE ) return;
+
+    if( mesh.numline[fantype] >= MAXMESHTYPE ) return;
+
     // Make sure line isn't already in list
-    cnt = 0;
-    while (cnt < mesh.numline[fantype])
+    for (cnt = 0; cnt < mesh.numline[fantype]; cnt++)
     {
-        if ((mesh.line[fantype].start[cnt] == start &&
-                mesh.line[fantype].end[cnt] == end) ||
-                (mesh.line[fantype].end[cnt] == start &&
-                 mesh.line[fantype].start[cnt] == end))
+        if ((mesh.line[fantype].start[cnt] == start && mesh.line[fantype].end[cnt] == end) ||
+            (mesh.line[fantype].end[cnt] == start && mesh.line[fantype].start[cnt] == end))
         {
             return;
         }
-        cnt++;
     }
 
     // Add it in
+    cnt = mesh.numline[fantype];
     mesh.line[fantype].start[cnt] = start;
-    mesh.line[fantype].end[cnt] = end;
+    mesh.line[fantype].end[cnt]   = end;
     mesh.numline[fantype]++;
 }
 
@@ -1196,19 +1199,16 @@ void load_mesh_fans()
     int cnt, entry;
     int numfantype, fantype, bigfantype, vertices;
     int numcommand, command, command_size;
-    int fancenter, ilast;
     int itmp;
     float ftmp;
     FILE* fileread;
     STRING fname;
 
     // Initialize all mesh types to 0
-    entry = 0;
-    while (entry < MAXMESHTYPE)
+    for (entry = 0; entry < MAXMESHTYPE; entry++)
     {
         mesh.numline[entry] = 0;
         mesh.command[entry].numvertices = 0;
-        entry++;
     }
 
     // Open the file and go to it
@@ -1281,28 +1281,38 @@ void load_mesh_fans()
                 mesh.command[bigfantype].vrt[entry] = itmp;  // Dupe
                 entry++;
             }
-
-            // convert the fan data into lines representing the fan edges
-            cnt = 0;
-            fancenter = mesh.command[fantype].vrt[cnt++];
-            itmp      = mesh.command[fantype].vrt[cnt++];
-            for (/* nothing */; cnt < command_size; cnt++)
-            {
-                ilast = itmp;
-
-                itmp = mesh.command[fantype].vrt[cnt];
-
-                add_line(fantype, fancenter, itmp);
-                add_line(fantype, fancenter, ilast);
-                add_line(fantype, ilast, itmp);
-
-                add_line(fantype + MAXMESHTYPE / 2, fancenter, itmp);  // DUPE
-                add_line(fantype + MAXMESHTYPE / 2, fancenter, ilast);  // DUPE
-                add_line(fantype + MAXMESHTYPE / 2, ilast, itmp);  // DUPE
-            }
         }
     }
     fclose(fileread);
+
+    for (fantype = 0, bigfantype = MAXMESHTYPE / 2; fantype < numfantype; fantype++, bigfantype++ )
+    {
+        int inow, ilast, fancenter;
+
+        entry = 0;
+        numcommand = mesh.command[fantype].count;
+        for ( command = 0; command < numcommand; command++ )
+        {
+            command_size = mesh.command[fantype].size[command];
+
+            // convert the fan data into lines representing the fan edges
+            fancenter = mesh.command[fantype].vrt[entry++];
+            inow      = mesh.command[fantype].vrt[entry++];
+            for (cnt = 2; cnt < command_size; cnt++, entry++)
+            {
+                ilast = inow;
+                inow = mesh.command[fantype].vrt[entry];
+
+                add_line(fantype, fancenter, inow);
+                add_line(fantype, fancenter, ilast);
+                add_line(fantype, ilast,     inow);
+
+                add_line(bigfantype, fancenter, inow);
+                add_line(bigfantype, fancenter, ilast);
+                add_line(bigfantype, ilast,     inow);
+            }
+        }
+    }
 
 
     // Correct all of them silly texture positions for seamless tiling
@@ -2667,6 +2677,8 @@ void draw_top_tile( float x, float y, int fan, glTexture * tx_tile, bool_t draw_
 
     if ( -1 == fan || FANOFF == fan ) return;
 
+    if( NULL == tx_tile ) return;
+
     glTexture_Bind( tx_tile );
 
     dst = 1.0 / 64.0;
@@ -2824,63 +2836,69 @@ void render_fx_window( window_t * pwin )
     int mapy, mapystt, mapyend;
     int fan, cnt;
 
-    //glPushAttrib( GL_SCISSOR_BIT );
-    //{
-    //    glEnable( GL_SCISSOR_TEST );
-    //    glScissor( pwin->x, sdl_scr.y - (pwin->y + pwin->surfacey), pwin->surfacex, pwin->surfacey );
+    glPushAttrib( GL_SCISSOR_BIT | GL_VIEWPORT_BIT | GL_ENABLE_BIT );
+    {
+        // set the viewport transformation
+        glViewport( pwin->x, sdl_scr.y - (pwin->y + pwin->surfacey), pwin->surfacex, pwin->surfacey );
 
-    //    mapxstt = (cam.x - (pwin->surfacex / 2)) / TILEDIV - 1;
-    //    mapystt = (cam.y - (pwin->surfacey / 2)) / TILEDIV - 1;
+        // clip the viewport
+        glEnable( GL_SCISSOR_TEST );
+        glScissor( pwin->x, sdl_scr.y - (pwin->y + pwin->surfacey), pwin->surfacex, pwin->surfacey );
 
-    //    mapxend = (cam.x + (pwin->surfacex / 2)) / TILEDIV + 1;
-    //    mapyend = (cam.y + (pwin->surfacey / 2)) / TILEDIV + 1;
+        cartman_begin_ortho_camera( pwin, &cam );
+        {
 
-    //    xstt = pwin->x - ((cam.x - (pwin->surfacex >> 1)) % TILEDIV) - (SMALLXY-1);
-    //    ystt = pwin->y - ((cam.y - (pwin->surfacey >> 1)) % TILEDIV) - (SMALLXY-1);
+            mapxstt = ( cam.x - cam.w / 2) / TILEDIV - 1;
+            mapystt = ( cam.y - cam.h / 2) / TILEDIV - 1;
 
-    //    y = ystt;
-    //    for ( mapy = mapystt; mapy <= mapyend; mapy++ )
-    //    {
-    //        x = xstt;
-    //        for ( mapx = mapxstt; mapx <= mapxend; mapx++ )
-    //        {
-    //            tx_tile = tile_at(mapx, mapy);
+            mapxend = ( cam.x + cam.w / 2) / TILEDIV + 1;
+            mapyend = ( cam.y + cam.h / 2) / TILEDIV + 1;
 
-    //            ogl_draw_sprite( tx_tile, x, y, TILEDIV, TILEDIV );
+            for ( mapy = mapystt; mapy <= mapyend; mapy++ )
+            {
+                y = mapy * TILEDIV;
+                for ( mapx = mapxstt; mapx <= mapxend; mapx++ )
+                {
+                    x = mapx * TILEDIV;
 
-    //            fan = fan_at(mapx, mapy);
-    //            if (fan != -1)
-    //            {
-    //                if (mesh.fx[fan]&MPDFX_WATER)
-    //                    ogl_draw_sprite( &tx_water, x, y, 0, 0);
+                    fan     = fan_at(mapx, mapy);
+                    if (fan != -1)
+                    {
+                        tx_tile = tile_at(fan);
 
-    //                if (!(mesh.fx[fan]&MPDFX_SHA))
-    //                    ogl_draw_sprite( &tx_ref, x, y, 0, 0);
+                        ogl_draw_sprite( tx_tile, x, y, TILEDIV, TILEDIV );
 
-    //                if (mesh.fx[fan]&MPDFX_DRAWREF)
-    //                    ogl_draw_sprite( &tx_drawref, x + 16, y, 0, 0);
+                        if (mesh.fx[fan]&MPDFX_WATER)
+                            ogl_draw_sprite( &tx_water, x, y, 0, 0);
 
-    //                if (mesh.fx[fan]&MPDFX_ANIM)
-    //                    ogl_draw_sprite( &tx_anim, x, y + 16, 0, 0);
+                        if (!(mesh.fx[fan]&MPDFX_SHA))
+                            ogl_draw_sprite( &tx_ref, x, y, 0, 0);
 
-    //                if (mesh.fx[fan]&MPDFX_WALL)
-    //                    ogl_draw_sprite( &tx_wall, x + 15, y + 15, 0, 0);
+                        if (mesh.fx[fan]&MPDFX_DRAWREF)
+                            ogl_draw_sprite( &tx_drawref, x + 16, y, 0, 0);
 
-    //                if (mesh.fx[fan]&MPDFX_IMPASS)
-    //                    ogl_draw_sprite( &tx_impass, x + 15 + 8, y + 15, 0, 0);
+                        if (mesh.fx[fan]&MPDFX_ANIM)
+                            ogl_draw_sprite( &tx_anim, x, y + 16, 0, 0);
 
-    //                if (mesh.fx[fan]&MPDFX_DAMAGE)
-    //                    ogl_draw_sprite( &tx_damage, x + 15, y + 15 + 8, 0, 0);
+                        if (mesh.fx[fan]&MPDFX_WALL)
+                            ogl_draw_sprite( &tx_wall, x + 15, y + 15, 0, 0);
 
-    //                if (mesh.fx[fan]&MPDFX_SLIPPY)
-    //                    ogl_draw_sprite( &tx_slippy, x + 15 + 8, y + 15 + 8, 0, 0);
-    //            }
-    //            x += SMALLXY - 1;
-    //        }
-    //        y += SMALLXY - 1;
-    //    }
-    //}
-    //glPopAttrib();
+                        if (mesh.fx[fan]&MPDFX_IMPASS)
+                            ogl_draw_sprite( &tx_impass, x + 15 + 8, y + 15, 0, 0);
+
+                        if (mesh.fx[fan]&MPDFX_DAMAGE)
+                            ogl_draw_sprite( &tx_damage, x + 15, y + 15 + 8, 0, 0);
+
+                        if (mesh.fx[fan]&MPDFX_SLIPPY)
+                            ogl_draw_sprite( &tx_slippy, x + 15 + 8, y + 15 + 8, 0, 0);
+                    }
+                }
+            }
+        }
+        cartman_end_ortho_camera();
+
+    }
+    glPopAttrib();
 }
 
 //------------------------------------------------------------------------------
@@ -3483,52 +3501,85 @@ void move_camera()
 //------------------------------------------------------------------------------
 void mouse_side( window_t * pwin )
 {
-    mdata.x = mos.x - pwin->x - pwin->borderx + cam.x - 69;
-    mdata.y = mos.y - pwin->y - pwin->bordery;
-    mdata.x = mdata.x * FOURNUM;
-    mdata.y = mdata.y * FOURNUM;
-    if (SDLKEYDOWN(SDLK_f))
+    int mpix_x = mos.x - (pwin->x + pwin->borderx + pwin->surfacex / 2) + cam.x;
+    int mpix_y = mos.y - (pwin->y + pwin->bordery + pwin->surfacey / 2);
+
+    mdata.y = mpix_y * FOURNUM;
+
+    if ( mpix_x < 0 || mpix_x >= TILEDIV * mesh.tilesx )
     {
-        flatten_mesh();
-    }
-    if (mos.b&1)
-    {
-        if (mdata.rect == bfalse)
+        mdata.x = mpix_x * FOURNUM;
+
+        if (mos.b&1)
         {
-            mdata.rect = btrue;
-            mdata.rectx = mdata.x;
-            mdata.recty = mdata.y;
-        }
-    }
-    else
-    {
-        if (mdata.rect == btrue)
-        {
-            if (numselect_verts != 0 && !SDLKEYMOD(KMOD_ALT) && !SDLKEYDOWN(SDLK_MODE) &&
-                    !SDLKEYMOD(KMOD_LCTRL) && !SDLKEYMOD(KMOD_RCTRL))
+            if (mdata.rect == bfalse)
             {
-                clear_select();
+                mdata.rect = btrue;
+                mdata.rectx = mdata.x;
+                mdata.recty = mdata.y;
             }
-            if ( SDLKEYMOD(KMOD_ALT) || SDLKEYDOWN(SDLK_MODE))
+        }
+        else
+        {
+            if (mdata.rect == btrue)
             {
-                rect_unselect();
+                if (numselect_verts != 0 && !SDLKEYMOD(KMOD_ALT) && !SDLKEYDOWN(SDLK_MODE) &&
+                    !SDLKEYMOD(KMOD_LCTRL) && !SDLKEYMOD(KMOD_RCTRL))
+                {
+                    clear_select();
+                }
+                if ( SDLKEYMOD(KMOD_ALT) || SDLKEYDOWN(SDLK_MODE))
+                {
+                    rect_unselect();
+                }
+                else
+                {
+                    rect_select();
+                }
+                mdata.rect = bfalse;
+            }
+        }
+        if (mos.b&2)
+        {
+            move_select(mos.cx, 0, -(mos.cy << 4));
+            bound_mouse();
+        }
+        if (SDLKEYDOWN(SDLK_y))
+        {
+            move_select(0, 0, -(mos.cy << 4));
+            bound_mouse();
+        }
+        if (SDLKEYDOWN(SDLK_u))
+        {
+            if (mdata.type >= MAXMESHTYPE / 2)
+            {
+                move_mesh_z(-(mos.cy << 4), mdata.tile, 0xC0);
             }
             else
             {
-                rect_select();
+                move_mesh_z(-(mos.cy << 4), mdata.tile, 0xF0);
             }
-            mdata.rect = bfalse;
+            bound_mouse();
+        }
+        if (SDLKEYDOWN(SDLK_n))
+        {
+            if (SDLKEYDOWN(SDLK_RSHIFT))
+            {
+                // Move the first 16 up and down
+                move_mesh_z(-(mos.cy << 4), 0, 0xF0);
+            }
+            else
+            {
+                // Move the entire mesh up and down
+                move_mesh_z(-(mos.cy << 4), 0, 0);
+            }
+            bound_mouse();
         }
     }
-    if (mos.b&2)
+
+    if (SDLKEYDOWN(SDLK_f))
     {
-        move_select(mos.cx, 0, -(mos.cy << 4));
-        bound_mouse();
-    }
-    if (SDLKEYDOWN(SDLK_y))
-    {
-        move_select(0, 0, -(mos.cy << 4));
-        bound_mouse();
+        flatten_mesh();
     }
     if (SDLKEYDOWN(SDLK_5))
     {
@@ -3542,32 +3593,6 @@ void mouse_side( window_t * pwin )
     {
         set_select_no_bound_z(127 << 2);
     }
-    if (SDLKEYDOWN(SDLK_u))
-    {
-        if (mdata.type >= MAXMESHTYPE / 2)
-        {
-            move_mesh_z(-(mos.cy << 4), mdata.tile, 0xC0);
-        }
-        else
-        {
-            move_mesh_z(-(mos.cy << 4), mdata.tile, 0xF0);
-        }
-        bound_mouse();
-    }
-    if (SDLKEYDOWN(SDLK_n))
-    {
-        if (SDLKEYDOWN(SDLK_RSHIFT))
-        {
-            // Move the first 16 up and down
-            move_mesh_z(-(mos.cy << 4), 0, 0xF0);
-        }
-        else
-        {
-            // Move the entire mesh up and down
-            move_mesh_z(-(mos.cy << 4), 0, 0);
-        }
-        bound_mouse();
-    }
     if (SDLKEYDOWN(SDLK_q))
     {
         fix_walls();
@@ -3580,29 +3605,28 @@ void mouse_tile( window_t * pwin )
     int x, y, keyt, vert, keyv;
     float tl, tr, bl, br;
 
-    tl = tr = bl = br = 0.0f;
-    mdata.x = (mos.x - pwin->x - pwin->borderx) + cam.x - 69;
-    mdata.y = (mos.y - pwin->y - pwin->bordery) + cam.y - 69;
+    int mpix_x = mos.x - (pwin->x + pwin->borderx + pwin->surfacex / 2) + cam.x;
+    int mpix_y = mos.y - (pwin->y + pwin->bordery + pwin->surfacey / 2) + cam.y;
 
-    if ( mdata.x < 0 ||
-            mdata.x >= TILEDIV * mesh.tilesx ||
-            mdata.y < 0 ||
-            mdata.y >= TILEDIV * mesh.tilesy)
+    tl = tr = bl = br = 0.0f;
+
+    if ( mpix_x < 0 || mpix_x >= TILEDIV * mesh.tilesx ||
+         mpix_y < 0 || mpix_y >= TILEDIV * mesh.tilesy)
     {
-        mdata.x = mdata.x * FOURNUM;
-        mdata.y = mdata.y * FOURNUM;
         if (mos.b&2)
         {
             mdata.type = 0 + 0;
-            mdata.tile = 0xffff;
+            mdata.tile = FANOFF;
         }
     }
     else
     {
-        mdata.x = mdata.x * FOURNUM;
-        mdata.y = mdata.y * FOURNUM;
+        mdata.x = mpix_x * FOURNUM;
+        mdata.y = mpix_y * FOURNUM;
+
         if (mdata.x >= (mesh.tilesx << 7))  mdata.x = (mesh.tilesx << 7) - 1;
         if (mdata.y >= (mesh.tilesy << 7))  mdata.y = (mesh.tilesy << 7) - 1;
+
         debugx = mdata.x / 128.0;
         debugy = mdata.y / 128.0;
         x = mdata.x >> 7;
@@ -3690,20 +3714,21 @@ void mouse_fx( window_t * pwin )
 {
     int x, y;
 
-    mdata.x = mos.x - pwin->x - pwin->borderx + cam.x - 69;
-    mdata.y = mos.y - pwin->y - pwin->bordery + cam.y - 69;
-    if (mdata.x < 0 ||
-            mdata.x >= TILEDIV * mesh.tilesx ||
-            mdata.y < 0 ||
-            mdata.y >= TILEDIV * mesh.tilesy)
+    int mpix_x = mos.x - (pwin->x + pwin->borderx + pwin->surfacex / 2) + cam.x;
+    int mpix_y = mos.y - (pwin->y + pwin->bordery + pwin->surfacey / 2) + cam.y;
+
+    if ( mpix_x < 0 || mpix_x >= TILEDIV * mesh.tilesx ||
+         mpix_y < 0 || mpix_y >= TILEDIV * mesh.tilesy)
     {
     }
     else
     {
-        mdata.x = mdata.x * FOURNUM;
-        mdata.y = mdata.y * FOURNUM;
+        mdata.x = mpix_x * FOURNUM;
+        mdata.y = mpix_y * FOURNUM;
+
         if (mdata.x >= (mesh.tilesx << 7))  mdata.x = (mesh.tilesx << 7) - 1;
         if (mdata.y >= (mesh.tilesy << 7))  mdata.y = (mesh.tilesy << 7) - 1;
+
         debugx = mdata.x / 128.0;
         debugy = mdata.y / 128.0;
         x = mdata.x >> 7;
@@ -3725,15 +3750,60 @@ void mouse_fx( window_t * pwin )
 //------------------------------------------------------------------------------
 void mouse_vertex( window_t * pwin )
 {
-    mdata.x = mos.x - pwin->x - pwin->borderx + cam.x - 69;
-    mdata.y = mos.y - pwin->y - pwin->bordery + cam.y - 69;
-    mdata.x = mdata.x * FOURNUM;
-    mdata.y = mdata.y * FOURNUM;
-    if (SDLKEYDOWN(SDLK_f))
+    int mpix_x = mos.x - (pwin->x + pwin->borderx + pwin->surfacex / 2) + cam.x;
+    int mpix_y = mos.y - (pwin->y + pwin->bordery + pwin->surfacey / 2) + cam.y;
+
+    if ( mpix_x < 0 || mpix_x >= TILEDIV * mesh.tilesx ||
+         mpix_y < 0 || mpix_y >= TILEDIV * mesh.tilesy)
     {
-        //    fix_corners(mdata.x>>7, mdata.y>>7);
-        fix_vertices(mdata.x >> 7, mdata.y >> 7);
     }
+    else
+    {
+        mdata.x = mpix_x * FOURNUM;
+        mdata.y = mpix_y * FOURNUM;
+
+        if (SDLKEYDOWN(SDLK_f))
+        {
+            //    fix_corners(mdata.x>>7, mdata.y>>7);
+            fix_vertices(mdata.x >> 7, mdata.y >> 7);
+        }
+
+        if (mos.b&1)
+        {
+            if (mdata.rect == bfalse)
+            {
+                mdata.rect = btrue;
+                mdata.rectx = mdata.x;
+                mdata.recty = mdata.y;
+            }
+        }
+        else
+        {
+            if (mdata.rect == btrue)
+            {
+                if (numselect_verts != 0 && !SDLKEYMOD(KMOD_ALT) && !SDLKEYDOWN(SDLK_MODE) &&
+                        !SDLKEYMOD(KMOD_LCTRL) && !SDLKEYMOD(KMOD_RCTRL))
+                {
+                    clear_select();
+                }
+                if ( SDLKEYMOD(KMOD_ALT) || SDLKEYDOWN(SDLK_MODE))
+                {
+                    rect_unselect();
+                }
+                else
+                {
+                    rect_select();
+                }
+                mdata.rect = bfalse;
+            }
+        }
+        if (mos.b&2)
+        {
+            move_select(mos.cx, mos.cy, 0);
+            bound_mouse();
+        }
+    }
+
     if (SDLKEYDOWN(SDLK_5))
     {
         set_select_no_bound_z(-8000 << 2);
@@ -3745,40 +3815,6 @@ void mouse_vertex( window_t * pwin )
     if (SDLKEYDOWN(SDLK_7))
     {
         set_select_no_bound_z(127 << 2);
-    }
-    if (mos.b&1)
-    {
-        if (mdata.rect == bfalse)
-        {
-            mdata.rect = btrue;
-            mdata.rectx = mdata.x;
-            mdata.recty = mdata.y;
-        }
-    }
-    else
-    {
-        if (mdata.rect == btrue)
-        {
-            if (numselect_verts != 0 && !SDLKEYMOD(KMOD_ALT) && !SDLKEYDOWN(SDLK_MODE) &&
-                    !SDLKEYMOD(KMOD_LCTRL) && !SDLKEYMOD(KMOD_RCTRL))
-            {
-                clear_select();
-            }
-            if ( SDLKEYMOD(KMOD_ALT) || SDLKEYDOWN(SDLK_MODE))
-            {
-                rect_unselect();
-            }
-            else
-            {
-                rect_select();
-            }
-            mdata.rect = bfalse;
-        }
-    }
-    if (mos.b&2)
-    {
-        move_select(mos.cx, mos.cy, 0);
-        bound_mouse();
     }
 }
 

@@ -55,10 +55,10 @@ typedef struct s_ogl_surface ogl_surface;
 #define BIGXY   64              // Big tiles
 #define CAMRATE 8               // Arrow key movement rate
 #define MAXSELECT 2560          // Max points that can be select_vertsed
-#define FOURNUM 4.137           // Magic number
-#define FIXNUM  4 // 4.129           // 4.150
-#define TILEDIV SMALLXY
-#define MAPID 0x4470614d        // The string... MapD
+#define FOURNUM   ((1<<7)/((float)(SMALLXY)))          // Magic number
+#define FIXNUM    4 // 4.129           // 4.150
+#define TILEDIV   SMALLXY
+#define MAPID     0x4470614d        // The string... MapD
 
 #define FADEBORDER 64           // Darkness at the edge of map
 #define SLOPE 50            // Twist stuff
