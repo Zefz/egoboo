@@ -64,46 +64,49 @@ void render_fan( int fan )
     Uint16 texture;
     Uint16 cnt, tnc, entry, vertex;
     Uint32 badvertex;
-    Uint16 tile;
+    Uint16 tx_bits;
     Uint8  fx;
-    Uint16 type;
+    Uint16 fantype;
 
     if ( -1 == fan || FANOFF == fan ) return;
 
     // vertex is a value from 0-15, for the mesh.commandref/u/v variables
     // badvertex is a value that references the actual vertex number
 
-    tile = mesh.tile[fan];               // Tile
-    fx   = mesh.fx[fan];                   // Fx bits
-    type = mesh.type[fan];               // Command type ( index to points in fan )
-    if ( 0 != ( 0xFF00 & tile ) )
-        return;
+    tx_bits = mesh.tx_bits[fan];               // Tile
+    fx      = mesh.fx[fan];                   // Fx bits
+    fantype = mesh.fantype[fan];               // Command fantype ( index to points in fan )
+
+    if ( TILE_IS_FANOFF(tx_bits) ) return;
 
     // Animate the tiles
     if ( fx & MPDFX_ANIM )
     {
-        if ( type >= ( MAXMESHTYPE >> 1 ) )
+        if ( fantype >= ( MAXMESHTYPE >> 1 ) )
         {
             // Big tiles
-            basetile = tile & biganimtilebaseand;// Animation set
-            tile += animtileframeadd << 1;         // Animated tile
-            tile = ( tile & biganimtileframeand ) + basetile;
+            basetile = tx_bits & biganimtilebaseand;// Animation set
+            tx_bits += animtileframeadd << 1;         // Animated tx_bits
+            tx_bits = ( tx_bits & biganimtileframeand ) + basetile;
         }
         else
         {
             // Small tiles
-            basetile = tile & animtilebaseand;// Animation set
-            tile += animtileframeadd;         // Animated tile
-            tile = ( tile & animtileframeand ) + basetile;
+            basetile = tx_bits & animtilebaseand;// Animation set
+            tx_bits += animtileframeadd;         // Animated tx_bits
+            tx_bits = ( tx_bits & animtileframeand ) + basetile;
         }
     }
 
-    texture = ( tile >> 6 ) + TX_TILE_0;    // 64 tiles in each 256x256 texture
-    vertices = mesh.command[type].numvertices;// Number of vertices
-    commands = mesh.command[type].count;          // Number of commands
+    // remove any of the upper bit information
+    tx_bits &= 0xFF;
+
+    texture = ( tx_bits >> 6 ) + TX_TILE_0;    // 64 tiles in each 256x256 texture
+    vertices = mesh.command[fantype].numvertices;// Number of vertices
+    commands = mesh.command[fantype].count;          // Number of commands
 
     // Generate the vertex "translation" from a linked list to an array
-    generate_faketoreal( tile );
+    generate_faketoreal( tx_bits );
 
     {
         for ( cnt = 0; cnt < vertices; cnt++ )
@@ -118,14 +121,14 @@ void render_fan( int fan )
                 v[cnt].g =
                     v[cnt].b = mesh.vrta[badvertex] / 255.0;
 
-            v[cnt].s = mesh.command[type].u[badvertex];
-            v[cnt].t = mesh.command[type].v[badvertex];
+            v[cnt].s = mesh.command[fantype].u[badvertex];
+            v[cnt].t = mesh.command[fantype].v[badvertex];
             badvertex++;
         }
     }
 
-    // bind the texture for this tile
-    glTexture_Bind( tile_at( tile ) );
+    // bind the texture for this tx_bits
+    glTexture_Bind( tile_at( tx_bits ) );
 
 
     // Render each command
@@ -135,11 +138,11 @@ void render_fan( int fan )
     {
         glBegin ( GL_TRIANGLE_FAN );
         {
-            for ( tnc = 0; tnc < mesh.command[type].size[cnt]; tnc++ )
+            for ( tnc = 0; tnc < mesh.command[fantype].size[cnt]; tnc++ )
             {
-                vertex = mesh.command[type].vrt[entry];
+                vertex = mesh.command[fantype].vrt[entry];
                 glColor3fv( &v[vertex].r );
-                glTexCoord2f ( mesh.command[type].u[vertex], mesh.command[type].v[vertex]);
+                glTexCoord2f ( mesh.command[fantype].u[vertex], mesh.command[fantype].v[vertex]);
                 glVertex3fv ( &v[vertex].x );
                 entry++;
             }
@@ -172,8 +175,8 @@ void render_water_fan( int tile, Uint8 layer )
     // BB > the water info is for TILES, not fot vertices, so ignore all vertex info and just draw the water
     //      tile where it's supposed to go
 
-    ix = tile % mesh.tilesx;
-    iy = tile / mesh.tilesx;
+    ix = tile % mesh.tiles_x;
+    iy = tile / mesh.tiles_x;
 
     // just do the mode this way instead of requiring all mesh.es to be multiples of 4
     mode = (iy & 1) | ((ix & 1) << 1);

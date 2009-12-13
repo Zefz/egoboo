@@ -21,6 +21,19 @@
 
 Font * gFont = NULL;
 
+enum
+{
+    CORNER_TL,
+    CORNER_TR,
+    CORNER_BL,
+    CORNER_BR,
+    CORNER_COUNT
+};
+
+enum { kX, kY, kZ };
+
+typedef float cart_vec_t[3];
+
 bool_t                  keyon = btrue;                // Is the keyboard alive?
 int                     keycount = 0;
 Uint8  *                keysdlbuffer = NULL;
@@ -176,18 +189,21 @@ float   debugy = -1;        //
 
 struct s_mouse_data
 {
-    int               which_win;    // More mouse_ data
-    int               x;          //
-    int               y;          //
+    int     which_win;    // More mouse_ data
+    int     x;          //
+    int     y;          //
+
     Uint16  mode;       // Window mode
-    int             onfan;    // Fan mouse_ is on
-    Uint16  tile;       // Tile
+    int     onfan;      // Fan mouse is on
+    Uint8   tx;         // Tile texture
+    Uint8   fx;         // Tile effects
+    Uint8   type;       // Tile fantype
+    Uint8   upper;      // Tile upper bits
     Uint16  presser;    // Random add for tiles
-    Uint8     type;     // Fan type
-    Uint8     fx;
-    int               rect;     // Rectangle drawing
-    int               rectx;      //
-    int               recty;      //
+
+    int     rect;       // Rectangle drawing
+    int     rectx;      //
+    int     recty;      //
 };
 typedef struct s_mouse_data mouse_data_t;
 
@@ -333,10 +349,10 @@ int dist_from_border(int x, int y)
 //------------------------------------------------------------------------------
 int dist_from_edge(int x, int y)
 {
-    if (x > (mesh.tilesx >> 1))
-        x = mesh.tilesx - x - 1;
-    if (y > (mesh.tilesy >> 1))
-        y = mesh.tilesy - y - 1;
+    if (x > (mesh.tiles_x >> 1))
+        x = mesh.tiles_x - x - 1;
+    if (y > (mesh.tiles_y >> 1))
+        y = mesh.tiles_y - y - 1;
     if (x < y)
         return x;
     return y;
@@ -346,9 +362,9 @@ int dist_from_edge(int x, int y)
 int get_fan(int x, int y)
 {
     int fan = -1;
-    if (y >= 0 && y < MAXMESHTILEY && y < mesh.tilesy)
+    if (y >= 0 && y < MAXMESHTILEY && y < mesh.tiles_y)
     {
-        if (x >= 0 && x < MAXMESHTILEY && x < mesh.tilesx)
+        if (x >= 0 && x < MAXMESHTILEY && x < mesh.tiles_x)
         {
             fan = mesh.fanstart[y] + x;
         }
@@ -359,103 +375,125 @@ int get_fan(int x, int y)
 //------------------------------------------------------------------------------
 int fan_is_floor(int x, int y)
 {
-    int fan;
+    int fan = get_fan(x, y);
+    if (-1 == fan) return 0;
 
-    fan = get_fan(x, y);
-    if (fan != -1)
-    {
-        if ((mesh.fx[fan]&48) == 0)
-        {
-            return 1;
-        }
-    }
-    return 0;
+    return 0 == (mesh.fx[fan]&48);
 }
 
 //------------------------------------------------------------------------------
-void set_barrier_height(int x, int y)
+void set_barrier_height(int x, int y, int bits)
 {
-    Uint32 type, fan, vert;
+    Uint32 fantype, fan, vert, vert_count;
     int cnt, noedges;
-    float bestprox, prox, tprox, scale;
+    float bestprox, prox, tprox, scale, max_height, min_height;
+
+    bool_t floor_mx, floor_px, floor_my, floor_py;
+    bool_t floor_mxmy, floor_mxpy, floor_pxmy, floor_pxpy;
 
     fan = get_fan(x, y);
-    if (fan != -1)
+    if (-1 == fan) return;
+
+    // bust be a MPDFX_WALL
+    if ( 0 == (mesh.fx[fan]&bits) ) return;
+
+    floor_mx   = fan_is_floor(x - 1, y);
+    floor_px   = fan_is_floor(x + 1, y);
+    floor_my   = fan_is_floor(x, y - 1);
+    floor_py   = fan_is_floor(x, y + 1);
+    noedges = !(floor_mx || floor_px || floor_my || floor_py);
+
+    floor_mxmy = fan_is_floor(x - 1, y - 1);
+    floor_mxpy = fan_is_floor(x - 1, y + 1);
+    floor_pxmy = fan_is_floor(x + 1, y - 1);
+    floor_pxpy = fan_is_floor(x + 1, y + 1);
+
+    fantype    = mesh.fantype[fan];
+    vert_count = mesh.command[fantype].numvertices;
+
+    vert       = mesh.vrtstart[fan];
+
+    min_height = mesh.vrtz[vert];
+    max_height = mesh.vrtz[vert];
+    vert       = mesh.vrtnext[vert];
+    for (cnt = 1; cnt < vert_count; cnt++ )
     {
-        if (mesh.fx[fan]&MPDFX_WALL)
+        min_height = MIN( min_height, mesh.vrtz[vert] );
+        max_height = MAX( max_height, mesh.vrtz[vert] );
+        vert       = mesh.vrtnext[vert];
+    }
+
+    vert = mesh.vrtstart[fan];
+    for (cnt = 0; cnt < vert_count; cnt++ )
+    {
+        float ftmp;
+
+        bestprox = NEARHI; // 2.0f / 3.0f * (NEARHI - NEARLOW);
+        if (floor_px)
         {
-            type = mesh.type[fan];
-            noedges = btrue;
-            vert = mesh.vrtstart[fan];
-            cnt = 0;
-            while (cnt < mesh.command[type].numvertices)
+            prox = NEARHI - mesh.command[fantype].x[cnt];
+            if (prox < bestprox) bestprox = prox;
+        }
+        if (floor_py)
+        {
+            prox = NEARHI - mesh.command[fantype].y[cnt];
+            if (prox < bestprox) bestprox = prox;
+        }
+        if (floor_mx)
+        {
+            prox = mesh.command[fantype].x[cnt] - NEARLOW;
+            if (prox < bestprox) bestprox = prox;
+        }
+        if (floor_my)
+        {
+            prox = mesh.command[fantype].y[cnt] - NEARLOW;
+            if (prox < bestprox) bestprox = prox;
+        }
+        if (noedges)
+        {
+            // Surrounded by walls on all 4 sides, but it may be a corner piece
+            if (floor_pxpy)
             {
-                bestprox = 2 * (NEARHI - NEARLOW) / 3.0;
-                if (fan_is_floor(x + 1, y))
-                {
-                    prox = NEARHI - mesh.command[type].x[cnt];
-                    if (prox < bestprox) bestprox = prox;
-                    noedges = bfalse;
-                }
-                if (fan_is_floor(x, y + 1))
-                {
-                    prox = NEARHI - mesh.command[type].y[cnt];
-                    if (prox < bestprox) bestprox = prox;
-                    noedges = bfalse;
-                }
-                if (fan_is_floor(x - 1, y))
-                {
-                    prox = mesh.command[type].x[cnt] - NEARLOW;
-                    if (prox < bestprox) bestprox = prox;
-                    noedges = bfalse;
-                }
-                if (fan_is_floor(x, y - 1))
-                {
-                    prox = mesh.command[type].y[cnt] - NEARLOW;
-                    if (prox < bestprox) bestprox = prox;
-                    noedges = bfalse;
-                }
-                if (noedges)
-                {
-                    // Surrounded by walls on all 4 sides, but it may be a corner piece
-                    if (fan_is_floor(x + 1, y + 1))
-                    {
-                        prox = NEARHI - mesh.command[type].x[cnt];
-                        tprox = NEARHI - mesh.command[type].y[cnt];
-                        if (tprox > prox) prox = tprox;
-                        if (prox < bestprox) bestprox = prox;
-                    }
-                    if (fan_is_floor(x + 1, y - 1))
-                    {
-                        prox = NEARHI - mesh.command[type].x[cnt];
-                        tprox = mesh.command[type].y[cnt] - NEARLOW;
-                        if (tprox > prox) prox = tprox;
-                        if (prox < bestprox) bestprox = prox;
-                    }
-                    if (fan_is_floor(x - 1, y + 1))
-                    {
-                        prox = mesh.command[type].x[cnt] - NEARLOW;
-                        tprox = NEARHI - mesh.command[type].y[cnt];
-                        if (tprox > prox) prox = tprox;
-                        if (prox < bestprox) bestprox = prox;
-                    }
-                    if (fan_is_floor(x - 1, y - 1))
-                    {
-                        prox = mesh.command[type].x[cnt] - NEARLOW;
-                        tprox = mesh.command[type].y[cnt] - NEARLOW;
-                        if (tprox > prox) prox = tprox;
-                        if (prox < bestprox) bestprox = prox;
-                    }
-                }
-                scale = window_lst[mdata.which_win].surfacey - (mdata.y / FOURNUM);
-                bestprox = bestprox * scale * BARRIERHEIGHT / window_lst[mdata.which_win].surfacey;
-                if (bestprox > mesh.edgez) bestprox = mesh.edgez;
-                if (bestprox < 0) bestprox = 0;
-                mesh.vrtz[vert] = bestprox;
-                vert = mesh.vrtnext[vert];
-                cnt++;
+                prox  = NEARHI - mesh.command[fantype].x[cnt];
+                tprox = NEARHI - mesh.command[fantype].y[cnt];
+                if (tprox > prox) prox = tprox;
+                if (prox < bestprox) bestprox = prox;
+            }
+            if (floor_pxmy)
+            {
+                prox = NEARHI - mesh.command[fantype].x[cnt];
+                tprox = mesh.command[fantype].y[cnt] - NEARLOW;
+                if (tprox > prox) prox = tprox;
+                if (prox < bestprox) bestprox = prox;
+            }
+            if (floor_mxpy)
+            {
+                prox = mesh.command[fantype].x[cnt] - NEARLOW;
+                tprox = NEARHI - mesh.command[fantype].y[cnt];
+                if (tprox > prox) prox = tprox;
+                if (prox < bestprox) bestprox = prox;
+            }
+            if (floor_mxmy)
+            {
+                prox = mesh.command[fantype].x[cnt] - NEARLOW;
+                tprox = mesh.command[fantype].y[cnt] - NEARLOW;
+                if (tprox > prox) prox = tprox;
+                if (prox < bestprox) bestprox = prox;
             }
         }
+        //scale = window_lst[mdata.which_win].surfacey - (mdata.y / FOURNUM);
+        //bestprox = bestprox * scale * BARRIERHEIGHT / window_lst[mdata.which_win].surfacey;
+
+        //if (bestprox > mesh.edgez) bestprox = mesh.edgez;
+        //if (bestprox < 0) bestprox = 0;
+
+        ftmp = bestprox / 128.0f;
+        ftmp = 1.0f - ftmp;
+        ftmp *= ftmp * ftmp;
+        ftmp = 1.0f - ftmp;
+
+        mesh.vrtz[vert] = ftmp * (max_height - min_height) + min_height;
+        vert = mesh.vrtnext[vert];
     }
 }
 
@@ -464,16 +502,12 @@ void fix_walls()
 {
     int x, y;
 
-    y = 0;
-    while (y < mesh.tilesy)
+    for (y = 0; y < mesh.tiles_y; y++)
     {
-        x = 0;
-        while (x < mesh.tilesx)
+        for (x = 0; x < mesh.tiles_x; x++)
         {
-            set_barrier_height(x, y);
-            x++;
+            set_barrier_height(x, y, MPDFX_WALL | MPDFX_IMPASS);
         }
-        y++;
     }
 }
 
@@ -483,23 +517,18 @@ void impass_edges(int amount)
     int x, y;
     int fan;
 
-    y = 0;
-    while (y < mesh.tilesy)
+    for (y = 0; y < mesh.tiles_y; y++)
     {
-        x = 0;
-        while (x < mesh.tilesx)
+        for(x = 0; x < mesh.tiles_x; x++)
         {
             if (dist_from_edge(x, y) < amount)
             {
                 fan = get_fan(x, y);
-                if (fan != -1)
-                {
-                    mesh.fx[fan] = mesh.fx[fan] | MPDFX_IMPASS;
-                };
+                if (-1 == fan) continue;
+
+                mesh.fx[fan] |= MPDFX_IMPASS;
             }
-            x++;
         }
-        y++;
     }
 }
 
@@ -550,7 +579,7 @@ int get_level(int x, int y)
 
     zdone = 0;
     fan = get_fan(x >> 7, y >> 7);
-    if (fan != -1)
+    if (-1 != fan)
     {
         x = x & 127;
         y = y & 127;
@@ -575,22 +604,22 @@ void make_hitemap(void)
 
     if (bmphitemap) SDL_FreeSurface(bmphitemap);
 
-    bmphitemap = cartman_CreateSurface(mesh.tilesx << 2, mesh.tilesy << 2);
+    bmphitemap = cartman_CreateSurface(mesh.tiles_x << 2, mesh.tiles_y << 2);
     if (NULL == bmphitemap) return;
 
     y = 16;
     pixy = 0;
-    while (pixy < (mesh.tilesy << 2))
+    while (pixy < (mesh.tiles_y << 2))
     {
         x = 16;
         pixx = 0;
-        while (pixx < (mesh.tilesx << 2))
+        while (pixx < (mesh.tiles_x << 2))
         {
             level = (get_level(x, y) * 255 / mesh.edgez);  // level is 0 to 255
             if (level > 252) level = 252;
             fan = get_fan(pixx >> 2, pixy);
             level = 255;
-            if (fan != -1)
+            if (-1 != fan)
             {
                 if (mesh.fx[fan]&16) level = 253;        // Wall
                 if (mesh.fx[fan]&32) level = 254;        // Impass
@@ -608,56 +637,59 @@ void make_hitemap(void)
 //------------------------------------------------------------------------------
 glTexture * tiny_tile_at(int x, int y)
 {
-    Uint16 tile, basetile;
-    Uint8 type, fx;
+    Uint16 tx_bits, basetile;
+    Uint8 fantype, fx;
     int fan;
 
-    if (x < 0 || x >= mesh.tilesx || y < 0 || y >= mesh.tilesy)
+    if (x < 0 || x >= mesh.tiles_x || y < 0 || y >= mesh.tiles_y)
     {
         return NULL;
     }
 
-    tile = 0;
-    type = 0;
+    tx_bits = 0;
+    fantype = 0;
     fx = 0;
     fan = get_fan(x, y);
-    if (fan != -1)
+    if (-1 != fan)
     {
-        if (mesh.tile[fan] == FANOFF)
+        if ( TILE_IS_FANOFF(mesh.tx_bits[fan]) )
         {
             return NULL;
         }
-        tile = mesh.tile[fan];
-        type = mesh.type[fan];
-        fx = mesh.fx[fan];
+        tx_bits = mesh.tx_bits[fan];
+        fantype = mesh.fantype[fan];
+        fx      = mesh.fx[fan];
     }
 
     if (fx&MPDFX_ANIM)
     {
         animtileframeadd = (timclock >> 3) & 3;
-        if (type >= (MAXMESHTYPE >> 1))
+        if (fantype >= (MAXMESHTYPE >> 1))
         {
             // Big tiles
-            basetile = tile & biganimtilebaseand;// Animation set
-            tile += (animtileframeadd << 1);     // Animated tile
-            tile = (tile & biganimtileframeand) + basetile;
+            basetile = tx_bits & biganimtilebaseand;// Animation set
+            tx_bits += (animtileframeadd << 1);     // Animated tx_bits
+            tx_bits = (tx_bits & biganimtileframeand) + basetile;
         }
         else
         {
             // Small tiles
-            basetile = tile & animtilebaseand;// Animation set
-            tile += animtileframeadd;       // Animated tile
-            tile = (tile & animtileframeand) + basetile;
+            basetile = tx_bits & animtilebaseand;// Animation set
+            tx_bits += animtileframeadd;       // Animated tx_bits
+            tx_bits = (tx_bits & animtileframeand) + basetile;
         }
     }
 
-    if (type >= (MAXMESHTYPE >> 1))
+    // remove any of the upper bit information
+    tx_bits &= 0xFF;
+
+    if (fantype >= (MAXMESHTYPE >> 1))
     {
-        return tx_bigtile + tile;
+        return tx_bigtile + tx_bits;
     }
     else
     {
-        return tx_smalltile + tile;
+        return tx_smalltile + tx_bits;
     }
 }
 
@@ -671,16 +703,16 @@ void make_planmap(void)
     //if(NULL != bmptemp)  return;
 
     if (NULL == bmphitemap) SDL_FreeSurface(bmphitemap);
-    bmphitemap = cartman_CreateSurface(mesh.tilesx * TINYXY, mesh.tilesy * TINYXY);
+    bmphitemap = cartman_CreateSurface(mesh.tiles_x * TINYXY, mesh.tiles_y * TINYXY);
     if (NULL == bmphitemap) return;
 
     SDL_FillRect(bmphitemap, NULL, MAKE_BGR(bmphitemap, 0, 0, 0));
 
     puty = 0;
-    for ( y = 0; y < mesh.tilesy; y++ )
+    for ( y = 0; y < mesh.tiles_y; y++ )
     {
         putx = 0;
-        for (x = 0; x < mesh.tilesx; x++)
+        for (x = 0; x < mesh.tiles_x; x++)
         {
             glTexture * tx_tile;
             tx_tile = tiny_tile_at(x, y);
@@ -732,9 +764,9 @@ int get_vertex(int x, int y, int num)
 
     vert = -1;
     fan = get_fan(x, y);
-    if (fan != -1)
+    if (-1 != fan)
     {
-        if (mesh.command[mesh.type[fan]].numvertices > num)
+        if (mesh.command[mesh.fantype[fan]].numvertices > num)
         {
             vert = mesh.vrtstart[fan];
             cnt = 0;
@@ -744,7 +776,7 @@ int get_vertex(int x, int y, int num)
                 if (vert == -1)
                 {
                     printf("BAD GET_VERTEX NUMBER(2nd), %d at %d, %d...\n", num, x, y);
-                    printf("%d VERTICES ALLOWED...\n\n", mesh.command[mesh.type[fan]].numvertices);
+                    printf("%d VERTICES ALLOWED...\n\n", mesh.command[mesh.fantype[fan]].numvertices);
                     exit(-1);
                 }
                 cnt++;
@@ -766,9 +798,9 @@ int nearest_vertex(int x, int y, float nearx, float neary)
 
     bestvert = -1;
     fan = get_fan(x, y);
-    if (fan != -1)
+    if (-1 != fan)
     {
-        num = mesh.command[mesh.type[fan]].numvertices;
+        num = mesh.command[mesh.fantype[fan]].numvertices;
         vert = mesh.vrtstart[fan];
         vert = mesh.vrtnext[vert];
         vert = mesh.vrtnext[vert];
@@ -778,8 +810,8 @@ int nearest_vertex(int x, int y, float nearx, float neary)
         cnt = 4;
         while (cnt < num)
         {
-            proxx = mesh.command[mesh.type[fan]].x[cnt] - nearx;
-            proxy = mesh.command[mesh.type[fan]].y[cnt] - neary;
+            proxx = mesh.command[mesh.fantype[fan]].x[cnt] - nearx;
+            proxy = mesh.command[mesh.fantype[fan]].y[cnt] - neary;
             if (proxx < 0) proxx = -proxx;
             if (proxy < 0) proxy = -proxy;
             prox = proxx + proxy;
@@ -924,7 +956,7 @@ void fan_onscreen(Uint32 fan)
 
     vert = mesh.vrtstart[fan];
     cnt = 0;
-    while (cnt < mesh.command[mesh.type[fan]].numvertices)
+    while (cnt < mesh.command[mesh.fantype[fan]].numvertices)
     {
         pointsonscreen[numpointsonscreen] = vert;  numpointsonscreen++;
         vert = mesh.vrtnext[vert];
@@ -950,14 +982,14 @@ void make_onscreen(void)
     cnty = 0;
     while (cnty < numy)
     {
-        if (mapy >= 0 && mapy < mesh.tilesy)
+        if (mapy >= 0 && mapy < mesh.tiles_y)
         {
             mapx = mapxstt;
             cntx = 0;
             while (cntx < numx)
             {
                 fan = get_fan(mapx, mapy);
-                if (fan != -1)
+                if (-1 != fan)
                 {
                     fan_onscreen(fan);
                 }
@@ -983,7 +1015,7 @@ void draw_top_fan( window_t * pwin, int fan, int x, int y )
 
     if ( -1 == fan ) return;
 
-    fantype = mesh.type[fan];
+    fantype = mesh.fantype[fan];
 
     OGL_MAKE_COLOR_4(color, 32, 16, 16, 31);
     if (fantype >= MAXMESHTYPE / 2)
@@ -1062,7 +1094,7 @@ void draw_side_fan(window_t * pwin, int fan, int x, int y)
     int size;
     int point_size;
 
-    fantype = mesh.type[fan];
+    fantype = mesh.fantype[fan];
 
     OGL_MAKE_COLOR_4(color, 32, 16, 16, 31);
     if (fantype >= MAXMESHTYPE / 2)
@@ -1242,7 +1274,7 @@ void load_mesh_fans()
             fscanf(fileread, "%f", &ftmp);
 
             mesh.command[fantype].u[cnt] = ftmp;
-            mesh.command[fantype+MAXMESHTYPE/2].u[cnt] = (ftmp) * 128;  // DUPE
+            mesh.command[fantype+MAXMESHTYPE/2].u[cnt] = ftmp;  // DUPE
 
             mesh.command[fantype].x[cnt] = (ftmp) * 128;
             mesh.command[fantype+MAXMESHTYPE/2].x[cnt] = (ftmp) * 128;  // DUPE
@@ -1251,7 +1283,7 @@ void load_mesh_fans()
             goto_colon(fileread);
             fscanf(fileread, "%f", &ftmp);
             mesh.command[fantype].v[cnt] = ftmp;
-            mesh.command[fantype+MAXMESHTYPE/2].v[cnt] = (ftmp) * 128;  // DUPE
+            mesh.command[fantype+MAXMESHTYPE/2].v[cnt] = ftmp;  // DUPE
 
             mesh.command[fantype].y[cnt] = (ftmp) * 128;
             mesh.command[fantype+MAXMESHTYPE/2].y[cnt] = (ftmp) * 128;  // DUPE
@@ -1320,7 +1352,7 @@ void load_mesh_fans()
     {
         for ( cnt = 0; cnt < mesh.command[entry].numvertices; cnt++ )
         {
-            mesh.command[entry].x[cnt] = ( 0.6f / SMALLXY ) + ( mesh.command[entry].x[cnt] * (SMALLXY - 2 * 0.6f) / SMALLXY );
+            mesh.command[entry].u[cnt] = ( 0.6f / SMALLXY ) + ( mesh.command[entry].u[cnt] * (SMALLXY - 2 * 0.6f) / SMALLXY );
             mesh.command[entry].v[cnt] = ( 0.6f / SMALLXY ) + ( mesh.command[entry].v[cnt] * (SMALLXY - 2 * 0.6f) / SMALLXY );
         }
     }
@@ -1330,7 +1362,7 @@ void load_mesh_fans()
     {
         for ( cnt = 0; cnt < mesh.command[entry].numvertices; cnt++ )
         {
-            mesh.command[entry].x[cnt] = ( 0.6f / BIGXY ) + ( mesh.command[entry].x[cnt] * (BIGXY - 2 * 0.6f) / BIGXY );
+            mesh.command[entry].u[cnt] = ( 0.6f / BIGXY ) + ( mesh.command[entry].u[cnt] * (BIGXY - 2 * 0.6f) / BIGXY );
             mesh.command[entry].v[cnt] = ( 0.6f / BIGXY ) + ( mesh.command[entry].v[cnt] * (BIGXY - 2 * 0.6f) / BIGXY );
         }
     }
@@ -1388,7 +1420,7 @@ void remove_fan(int fan)
     int cnt, vert;
     Uint32 numvert;
 
-    numvert = mesh.command[mesh.type[fan]].numvertices;
+    numvert = mesh.command[mesh.fantype[fan]].numvertices;
     vert = mesh.vrtstart[fan];
     cnt = 0;
     while (cnt < numvert)
@@ -1398,7 +1430,7 @@ void remove_fan(int fan)
         vert = mesh.vrtnext[vert];
         cnt++;
     }
-    mesh.type[fan] = 0;
+    mesh.fantype[fan] = 0;
     mesh.fx[fan] = MPDFX_SHA;
 }
 
@@ -1411,7 +1443,7 @@ int add_fan(int fan, int x, int y)
     Uint32 vertex;
     Uint32 vertexlist[17];
 
-    numvert = mesh.command[mesh.type[fan]].numvertices;
+    numvert = mesh.command[mesh.fantype[fan]].numvertices;
     if (numfreevertices >= numvert)
     {
         mesh.fx[fan] = MPDFX_SHA;
@@ -1439,8 +1471,8 @@ int add_fan(int fan, int x, int y)
         while (cnt < numvert)
         {
             vertex = vertexlist[cnt];
-            mesh.vrtx[vertex] = x + (mesh.command[mesh.type[fan]].x[cnt] >> 2);
-            mesh.vrty[vertex] = y + (mesh.command[mesh.type[fan]].y[cnt] >> 2);
+            mesh.vrtx[vertex] = x + (mesh.command[mesh.fantype[fan]].x[cnt] >> 2);
+            mesh.vrty[vertex] = y + (mesh.command[mesh.fantype[fan]].y[cnt] >> 2);
             mesh.vrtz[vertex] = 0;
             mesh.vrtnext[vertex] = vertexlist[cnt+1];
             cnt++;
@@ -1479,9 +1511,9 @@ void make_fanstart()
     int cnt;
 
     cnt = 0;
-    while (cnt < mesh.tilesy)
+    while (cnt < mesh.tiles_y)
     {
-        mesh.fanstart[cnt] = mesh.tilesx * cnt;
+        mesh.fanstart[cnt] = mesh.tiles_x * cnt;
         cnt++;
     }
 }
@@ -1489,43 +1521,46 @@ void make_fanstart()
 //------------------------------------------------------------------------------
 glTexture *tile_at( int fan )
 {
-    Uint16 tile, basetile;
-    Uint8 type, fx;
+    Uint16 tx_bits, basetile;
+    Uint8 fantype, fx;
 
-    if (fan == -1 || mesh.tile[fan] == FANOFF)
+    if (fan == -1 || TILE_IS_FANOFF(mesh.tx_bits[fan]))
     {
         return NULL;
     }
 
-    tile = mesh.tile[fan];
-    type = mesh.type[fan];
+    tx_bits = mesh.tx_bits[fan];
+    fantype = mesh.fantype[fan];
     fx = mesh.fx[fan];
     if (fx&MPDFX_ANIM)
     {
         animtileframeadd = (timclock >> 3) & 3;
-        if (type >= (MAXMESHTYPE >> 1))
+        if (fantype >= (MAXMESHTYPE >> 1))
         {
             // Big tiles
-            basetile = tile & biganimtilebaseand;// Animation set
-            tile += (animtileframeadd << 1);     // Animated tile
-            tile = (tile & biganimtileframeand) + basetile;
+            basetile = tx_bits & biganimtilebaseand;// Animation set
+            tx_bits += (animtileframeadd << 1);     // Animated tx_bits
+            tx_bits = (tx_bits & biganimtileframeand) + basetile;
         }
         else
         {
             // Small tiles
-            basetile = tile & animtilebaseand;  // Animation set
-            tile += animtileframeadd;           // Animated tile
-            tile = (tile & animtileframeand) + basetile;
+            basetile = tx_bits & animtilebaseand;  // Animation set
+            tx_bits += animtileframeadd;           // Animated tx_bits
+            tx_bits = (tx_bits & animtileframeand) + basetile;
         }
     }
 
-    if (type >= (MAXMESHTYPE >> 1))
+    // remove any of the upper bit information
+    tx_bits &= 0xFF;
+
+    if (fantype >= (MAXMESHTYPE >> 1))
     {
-        return tx_bigtile + tile;
+        return tx_bigtile + tx_bits;
     }
     else
     {
-        return tx_smalltile + tile;
+        return tx_smalltile + tx_bits;
     }
 }
 
@@ -1586,21 +1621,21 @@ void weld_3(int x, int y)
 //------------------------------------------------------------------------------
 void weld_cnt(int x, int y, int cnt, Uint32 fan)
 {
-    if (mesh.command[mesh.type[fan]].x[cnt] < NEARLOW + 1 ||
-            mesh.command[mesh.type[fan]].y[cnt] < NEARLOW + 1 ||
-            mesh.command[mesh.type[fan]].x[cnt] > NEARHI - 1 ||
-            mesh.command[mesh.type[fan]].y[cnt] > NEARHI - 1)
+    if (mesh.command[mesh.fantype[fan]].x[cnt] < NEARLOW + 1 ||
+        mesh.command[mesh.fantype[fan]].y[cnt] < NEARLOW + 1 ||
+        mesh.command[mesh.fantype[fan]].x[cnt] > NEARHI - 1 ||
+        mesh.command[mesh.fantype[fan]].y[cnt] > NEARHI - 1)
     {
         clear_select();
         add_select(get_vertex(x, y, cnt));
-        if (mesh.command[mesh.type[fan]].x[cnt] < NEARLOW + 1)
-            add_select(nearest_vertex(x - 1, y, NEARHI, mesh.command[mesh.type[fan]].y[cnt]));
-        if (mesh.command[mesh.type[fan]].y[cnt] < NEARLOW + 1)
-            add_select(nearest_vertex(x, y - 1, mesh.command[mesh.type[fan]].x[cnt], NEARHI));
-        if (mesh.command[mesh.type[fan]].x[cnt] > NEARHI - 1)
-            add_select(nearest_vertex(x + 1, y, NEARLOW, mesh.command[mesh.type[fan]].y[cnt]));
-        if (mesh.command[mesh.type[fan]].y[cnt] > NEARHI - 1)
-            add_select(nearest_vertex(x, y + 1, mesh.command[mesh.type[fan]].x[cnt], NEARLOW));
+        if (mesh.command[mesh.fantype[fan]].x[cnt] < NEARLOW + 1)
+            add_select(nearest_vertex(x - 1, y, NEARHI, mesh.command[mesh.fantype[fan]].y[cnt]));
+        if (mesh.command[mesh.fantype[fan]].y[cnt] < NEARLOW + 1)
+            add_select(nearest_vertex(x, y - 1, mesh.command[mesh.fantype[fan]].x[cnt], NEARHI));
+        if (mesh.command[mesh.fantype[fan]].x[cnt] > NEARHI - 1)
+            add_select(nearest_vertex(x + 1, y, NEARLOW, mesh.command[mesh.fantype[fan]].y[cnt]));
+        if (mesh.command[mesh.fantype[fan]].y[cnt] > NEARHI - 1)
+            add_select(nearest_vertex(x, y + 1, mesh.command[mesh.fantype[fan]].x[cnt], NEARLOW));
         weld_select();
         clear_select();
     }
@@ -1612,7 +1647,7 @@ void fix_corners(int x, int y)
     int fan;
 
     fan = get_fan(x, y);
-    if (fan != -1)
+    if (-1 != fan)
     {
         weld_0(x, y);
         weld_1(x, y);
@@ -1629,10 +1664,10 @@ void fix_vertices(int x, int y)
 
     fix_corners(x, y);
     fan = get_fan(x, y);
-    if ( fan != -1 )
+    if ( -1 != fan )
     {
         cnt = 4;
-        while (cnt < mesh.command[mesh.type[fan]].numvertices)
+        while (cnt < mesh.command[mesh.fantype[fan]].numvertices)
         {
             weld_cnt(x, y, cnt, fan);
             cnt++;
@@ -1646,251 +1681,248 @@ void fix_mesh(void)
     // ZZ> This function corrects corners across entire mesh
     int x, y;
 
-    y = 0;
-    while (y < mesh.tilesy)
+    for (y = 0; y < mesh.tiles_y; y++)
     {
-        x = 0;
-        while (x < mesh.tilesx)
+        
+        for (x = 0; x < mesh.tiles_x; x++)
         {
             //      fix_corners(x, y);
-            fix_vertices(x, y);
-            x++;
+            fix_vertices(x, y);   
         }
-        y++;
     }
 }
 
 //------------------------------------------------------------------------------
-char tile_is_different(int x, int y, Uint16 tileset, Uint16 tileand)
-{
-    // ZZ> bfalse if of same set, btrue if different
-    int fan;
-
-    fan = get_fan(x, y);
-    if ( fan != -1 )
-    {
-        return bfalse;
-    }
-    else
-    {
-        if (tileand == 0xC0)
-        {
-            if (mesh.tile[fan] >= 48) return bfalse;
-        }
-
-        if ((mesh.tile[fan]&tileand) == tileset)
-        {
-            return bfalse;
-        }
-    }
-    return btrue;
-}
-
-//------------------------------------------------------------------------------
-Uint16 trim_code(int x, int y, Uint16 tileset)
-{
-    // ZZ> This function returns the standard tile set value thing...  For
-    //     Trimming tops of walls and floors
-
-    Uint16 code;
-
-    if (tile_is_different(x, y - 1, tileset, 0xF0))
-    {
-        // Top
-        code = 0;
-        if (tile_is_different(x - 1, y, tileset, 0xF0))
-        {
-            // Left
-            code = 8;
-        }
-        if (tile_is_different(x + 1, y, tileset, 0xF0))
-        {
-            // Right
-            code = 9;
-        }
-        return code;
-    }
-
-    if (tile_is_different(x, y + 1, tileset, 0xF0))
-    {
-        // Bottom
-        code = 1;
-        if (tile_is_different(x - 1, y, tileset, 0xF0))
-        {
-            // Left
-            code = 10;
-        }
-        if (tile_is_different(x + 1, y, tileset, 0xF0))
-        {
-            // Right
-            code = 11;
-        }
-        return code;
-    }
-
-    if (tile_is_different(x - 1, y, tileset, 0xF0))
-    {
-        // Left
-        code = 2;
-        return code;
-    }
-    if (tile_is_different(x + 1, y, tileset, 0xF0))
-    {
-        // Right
-        code = 3;
-        return code;
-    }
-
-    if (tile_is_different(x + 1, y + 1, tileset, 0xF0))
-    {
-        // Bottom Right
-        code = 4;
-        return code;
-    }
-    if (tile_is_different(x - 1, y + 1, tileset, 0xF0))
-    {
-        // Bottom Left
-        code = 5;
-        return code;
-    }
-    if (tile_is_different(x + 1, y - 1, tileset, 0xF0))
-    {
-        // Top Right
-        code = 6;
-        return code;
-    }
-    if (tile_is_different(x - 1, y - 1, tileset, 0xF0))
-    {
-        // Top Left
-        code = 7;
-        return code;
-    }
-
-    code = 255;
-    return code;
-}
+//char tile_is_different(int x, int y, Uint16 tileset, Uint16 tileand)
+//{
+//    // ZZ> bfalse if of same set, btrue if different
+//    int fan;
+//
+//    fan = get_fan(x, y);
+//    if ( -1 != fan )
+//    {
+//        return bfalse;
+//    }
+//    else
+//    {
+//        if (tileand == 0xC0)
+//        {
+//            if (mesh.tx_bits[fan] >= 48) return bfalse;
+//        }
+//
+//        if ( tileset == (mesh.tx_bits[fan]&tileand) )
+//        {
+//            return bfalse;
+//        }
+//    }
+//    return btrue;
+//}
 
 //------------------------------------------------------------------------------
-Uint16 wall_code(int x, int y, Uint16 tileset)
-{
-    // ZZ> This function returns the standard tile set value thing...  For
-    //     Trimming tops of walls and floors
-
-    Uint16 code;
-
-    if (tile_is_different(x, y - 1, tileset, 0xC0))
-    {
-        // Top
-        code = (rand() & 2) + 20;
-        if (tile_is_different(x - 1, y, tileset, 0xC0))
-        {
-            // Left
-            code = 48;
-        }
-        if (tile_is_different(x + 1, y, tileset, 0xC0))
-        {
-            // Right
-            code = 50;
-        }
-
-        return code;
-    }
-
-    if (tile_is_different(x, y + 1, tileset, 0xC0))
-    {
-        // Bottom
-        code = (rand() & 2);
-        if (tile_is_different(x - 1, y, tileset, 0xC0))
-        {
-            // Left
-            code = 52;
-        }
-        if (tile_is_different(x + 1, y, tileset, 0xC0))
-        {
-            // Right
-            code = 54;
-        }
-        return code;
-    }
-
-    if (tile_is_different(x - 1, y, tileset, 0xC0))
-    {
-        // Left
-        code = (rand() & 2) + 16;
-        return code;
-    }
-
-    if (tile_is_different(x + 1, y, tileset, 0xC0))
-    {
-        // Right
-        code = (rand() & 2) + 4;
-        return code;
-    }
-
-    if (tile_is_different(x + 1, y + 1, tileset, 0xC0))
-    {
-        // Bottom Right
-        code = 32;
-        return code;
-    }
-    if (tile_is_different(x - 1, y + 1, tileset, 0xC0))
-    {
-        // Bottom Left
-        code = 34;
-        return code;
-    }
-    if (tile_is_different(x + 1, y - 1, tileset, 0xC0))
-    {
-        // Top Right
-        code = 36;
-        return code;
-    }
-    if (tile_is_different(x - 1, y - 1, tileset, 0xC0))
-    {
-        // Top Left
-        code = 38;
-        return code;
-    }
-
-    code = 255;
-    return code;
-}
+//Uint16 trim_code(int x, int y, Uint16 tileset)
+//{
+//    // ZZ> This function returns the standard tile set value thing...  For
+//    //     Trimming tops of walls and floors
+//
+//    Uint16 code;
+//
+//    if (tile_is_different(x, y - 1, tileset, 0xF0))
+//    {
+//        // Top
+//        code = 0;
+//        if (tile_is_different(x - 1, y, tileset, 0xF0))
+//        {
+//            // Left
+//            code = 8;
+//        }
+//        if (tile_is_different(x + 1, y, tileset, 0xF0))
+//        {
+//            // Right
+//            code = 9;
+//        }
+//        return code;
+//    }
+//
+//    if (tile_is_different(x, y + 1, tileset, 0xF0))
+//    {
+//        // Bottom
+//        code = 1;
+//        if (tile_is_different(x - 1, y, tileset, 0xF0))
+//        {
+//            // Left
+//            code = 10;
+//        }
+//        if (tile_is_different(x + 1, y, tileset, 0xF0))
+//        {
+//            // Right
+//            code = 11;
+//        }
+//        return code;
+//    }
+//
+//    if (tile_is_different(x - 1, y, tileset, 0xF0))
+//    {
+//        // Left
+//        code = 2;
+//        return code;
+//    }
+//    if (tile_is_different(x + 1, y, tileset, 0xF0))
+//    {
+//        // Right
+//        code = 3;
+//        return code;
+//    }
+//
+//    if (tile_is_different(x + 1, y + 1, tileset, 0xF0))
+//    {
+//        // Bottom Right
+//        code = 4;
+//        return code;
+//    }
+//    if (tile_is_different(x - 1, y + 1, tileset, 0xF0))
+//    {
+//        // Bottom Left
+//        code = 5;
+//        return code;
+//    }
+//    if (tile_is_different(x + 1, y - 1, tileset, 0xF0))
+//    {
+//        // Top Right
+//        code = 6;
+//        return code;
+//    }
+//    if (tile_is_different(x - 1, y - 1, tileset, 0xF0))
+//    {
+//        // Top Left
+//        code = 7;
+//        return code;
+//    }
+//
+//    code = 255;
+//    return code;
+//}
 
 //------------------------------------------------------------------------------
-void trim_mesh_tile(Uint16 tileset, Uint16 tileand)
-{
-    // ZZ> This function trims walls and floors and tops automagically
-    int fan;
-    int x, y, code;
-
-    tileset = tileset & tileand;
-    y = 0;
-    while (y < mesh.tilesy)
-    {
-        x = 0;
-        while (x < mesh.tilesx)
-        {
-            fan = get_fan(x, y);
-            if (fan != -1 && (mesh.tile[fan]&tileand) == tileset)
-            {
-                if (tileand == 0xC0)
-                {
-                    code = wall_code(x, y, tileset);
-                }
-                else
-                {
-                    code = trim_code(x, y, tileset);
-                }
-                if (code != 255)
-                {
-                    mesh.tile[fan] = tileset + code;
-                }
-            }
-            x++;
-        }
-        y++;
-    }
-}
+//Uint16 wall_code(int x, int y, Uint16 tileset)
+//{
+//    // ZZ> This function returns the standard tile set value thing...  For
+//    //     Trimming tops of walls and floors
+//
+//    Uint16 code;
+//
+//    if (tile_is_different(x, y - 1, tileset, 0xC0))
+//    {
+//        // Top
+//        code = (rand() & 2) + 20;
+//        if (tile_is_different(x - 1, y, tileset, 0xC0))
+//        {
+//            // Left
+//            code = 48;
+//        }
+//        if (tile_is_different(x + 1, y, tileset, 0xC0))
+//        {
+//            // Right
+//            code = 50;
+//        }
+//
+//        return code;
+//    }
+//
+//    if (tile_is_different(x, y + 1, tileset, 0xC0))
+//    {
+//        // Bottom
+//        code = (rand() & 2);
+//        if (tile_is_different(x - 1, y, tileset, 0xC0))
+//        {
+//            // Left
+//            code = 52;
+//        }
+//        if (tile_is_different(x + 1, y, tileset, 0xC0))
+//        {
+//            // Right
+//            code = 54;
+//        }
+//        return code;
+//    }
+//
+//    if (tile_is_different(x - 1, y, tileset, 0xC0))
+//    {
+//        // Left
+//        code = (rand() & 2) + 16;
+//        return code;
+//    }
+//
+//    if (tile_is_different(x + 1, y, tileset, 0xC0))
+//    {
+//        // Right
+//        code = (rand() & 2) + 4;
+//        return code;
+//    }
+//
+//    if (tile_is_different(x + 1, y + 1, tileset, 0xC0))
+//    {
+//        // Bottom Right
+//        code = 32;
+//        return code;
+//    }
+//    if (tile_is_different(x - 1, y + 1, tileset, 0xC0))
+//    {
+//        // Bottom Left
+//        code = 34;
+//        return code;
+//    }
+//    if (tile_is_different(x + 1, y - 1, tileset, 0xC0))
+//    {
+//        // Top Right
+//        code = 36;
+//        return code;
+//    }
+//    if (tile_is_different(x - 1, y - 1, tileset, 0xC0))
+//    {
+//        // Top Left
+//        code = 38;
+//        return code;
+//    }
+//
+//    code = 255;
+//    return code;
+//}
+//
+//------------------------------------------------------------------------------
+//void trim_mesh_tile(Uint16 tileset, Uint16 tileand)
+//{
+//    // ZZ> This function trims walls and floors and tops automagically
+//    int fan;
+//    int x, y, code;
+//
+//    tileset = tileset & tileand;
+//    
+//    for (y = 0; y < mesh.tiles_y; y++)
+//    {
+//        for (x = 0; x < mesh.tiles_x; x++)
+//        {
+//            fan = get_fan(x, y);
+//            if (-1 == fan) continue;
+//            
+//            if( tileset == (mesh.tx_bits[fan]&tileand) )
+//            {
+//                if (tileand == 0xC0)
+//                {
+//                    code = wall_code(x, y, tileset);
+//                }
+//                else
+//                {
+//                    code = trim_code(x, y, tileset);
+//                }
+//
+//                if (code != 255)
+//                {
+//                    mesh.tx_bits[fan] = tileset + code;
+//                }
+//            }
+//        }
+//    }
+//}
 
 //------------------------------------------------------------------------------
 void fx_mesh_tile(Uint16 tileset, Uint16 tileand, Uint8 fx)
@@ -1900,20 +1932,18 @@ void fx_mesh_tile(Uint16 tileset, Uint16 tileand, Uint8 fx)
     int x, y;
 
     tileset = tileset & tileand;
-    y = 0;
-    while (y < mesh.tilesy)
-    {
-        x = 0;
-        while (x < mesh.tilesx)
+    for(y = 0; y < mesh.tiles_y; y++)
+    { 
+        for (x = 0; x < mesh.tiles_x; x++)
         {
             fan = get_fan(x, y);
-            if (fan != -1 && (mesh.tile[fan]&tileand) == tileset)
+            if (-1 == fan) continue;
+            
+            if( tileset == (mesh.tx_bits[fan]&tileand) )
             {
                 mesh.fx[fan] = fx;
             }
-            x++;
         }
-        y++;
     }
 }
 
@@ -1924,37 +1954,44 @@ void set_mesh_tile(Uint16 tiletoset)
     int fan;
     int x, y;
 
-    y = 0;
-    while (y < mesh.tilesy)
+    for (y = 0; y < mesh.tiles_y; y++)
     {
-        x = 0;
-        while (x < mesh.tilesx)
+        for (x = 0; x < mesh.tiles_x; x++)
         {
             fan = get_fan(x, y);
-            if (fan != -1 && mesh.tile[fan] == tiletoset)
+            if( -1 == fan ) continue;
+
+            if( TILE_IS_FANOFF(mesh.tx_bits[fan]) ) continue;
+
+            if ( tiletoset == mesh.tx_bits[fan] )
             {
+                int tx_bits;
+
+                tx_bits = TILE_SET_UPPER_BITS( mdata.upper );
                 switch (mdata.presser)
                 {
                     case 0:
-                        mesh.tile[fan] = mdata.tile;
+                        tx_bits |= mdata.tx & 0xFF;
                         break;
 
                     case 1:
-                        mesh.tile[fan] = (mdata.tile & 0xFFFE) + (rand() & 1);
+                        tx_bits |= (mdata.tx & 0xFE) + (rand() & 1);
                         break;
 
                     case 2:
-                        mesh.tile[fan] = (mdata.tile & 0xFFFC) + (rand() & 3);
+                        tx_bits |= (mdata.tx & 0xFC) + (rand() & 3);
                         break;
 
                     case 3:
-                        mesh.tile[fan] = (mdata.tile & 0xFFF8) + (rand() & 7);
+                        tx_bits |= (mdata.tx & 0xF8) + (rand() & 7);
                         break;
+
+                    default:
+                        tx_bits = mesh.tx_bits[fan];
                 }
+                mesh.tx_bits[fan] = tx_bits;                
             }
-            x++;
         }
-        y++;
     }
 }
 
@@ -1968,25 +2005,24 @@ void create_mesh(void)
     printf("Mesh file not found, so creating a new one...\n");
 
     printf("Number of tiles in X direction ( 32-512 ):  ");
-    scanf("%d", &mesh.tilesx);
+    scanf("%d", &mesh.tiles_x);
 
     printf("Number of tiles in Y direction ( 32-512 ):  ");
-    scanf("%d", &mesh.tilesy);
+    scanf("%d", &mesh.tiles_y);
 
-    mesh.edgex = (mesh.tilesx * TILEDIV) - 1;
-    mesh.edgey = (mesh.tilesy * TILEDIV) - 1;
+    mesh.edgex = (mesh.tiles_x * TILEDIV) - 1;
+    mesh.edgey = (mesh.tiles_y * TILEDIV) - 1;
     mesh.edgez = 180 << 4;
 
     fan = 0;
-    y = 0;
+    
     tile = 0;
-    while (y < mesh.tilesy)
+    for (y = 0; y < mesh.tiles_y; y++)
     {
-        x = 0;
-        while (x < mesh.tilesx)
+        for (x = 0; x < mesh.tiles_x; x++)
         {
-            mesh.type[fan] = 2 + 0;
-            mesh.tile[fan] = (((x & 1) + (y & 1)) & 1) + DEFAULT_TILE;
+            mesh.fantype[fan] = 0;
+            mesh.tx_bits[fan] = (((x & 1) + (y & 1)) & 1) + DEFAULT_TILE;
 
             if ( !add_fan(fan, x*TILEDIV, y*TILEDIV) )
             {
@@ -1994,9 +2030,7 @@ void create_mesh(void)
                 exit(-1);
             }
             fan++;
-            x++;
         }
-        y++;
     }
 
     make_fanstart();
@@ -2145,7 +2179,7 @@ void make_twist()
 {
     Uint32 fan, numfan;
 
-    numfan = mesh.tilesx * mesh.tilesy;
+    numfan = mesh.tiles_x * mesh.tiles_y;
     fan = 0;
     while (fan < numfan)
     {
@@ -2162,15 +2196,15 @@ int count_vertices()
 
     totalvert = 0;
     y = 0;
-    while (y < mesh.tilesy)
+    while (y < mesh.tiles_y)
     {
         x = 0;
-        while (x < mesh.tilesx)
+        while (x < mesh.tiles_x)
         {
             fan = get_fan(x, y);
-            if ( fan != -1 )
+            if ( -1 != fan )
             {
-                num = mesh.command[mesh.type[fan]].numvertices;
+                num = mesh.command[mesh.fantype[fan]].numvertices;
                 vert = mesh.vrtstart[fan];
                 cnt = 0;
                 while (cnt < num)
@@ -2228,34 +2262,35 @@ void save_mesh(char *modname)
         //    This didn't work for some reason...
         //    itmp=MAXTOTALMESHVERTICES-numfreevertices;  SAVE;
         itmp = count_vertices();  SAVE;
-        itmp = mesh.tilesx;  SAVE;
-        itmp = mesh.tilesy;  SAVE;
+        itmp = mesh.tiles_x;  SAVE;
+        itmp = mesh.tiles_y;  SAVE;
 
         // Write tile data
         y = 0;
-        while (y < mesh.tilesy)
+        while (y < mesh.tiles_y)
         {
             x = 0;
-            while (x < mesh.tilesx)
+            while (x < mesh.tiles_x)
             {
                 fan = get_fan(x, y);
-                if (fan != -1)
+                if (-1 != fan)
                 {
-                    itmp = (mesh.type[fan] << 24) + (mesh.fx[fan] << 16) + mesh.tile[fan];  SAVE;
+                    itmp = (mesh.fantype[fan] << 24) + (mesh.fx[fan] << 16) + mesh.tx_bits[fan];  SAVE;
                 }
                 x++;
             }
             y++;
         }
+
         // Write twist data
         y = 0;
-        while (y < mesh.tilesy)
+        while (y < mesh.tiles_y)
         {
             x = 0;
-            while (x < mesh.tilesx)
+            while (x < mesh.tiles_x)
             {
                 fan = get_fan(x, y);
-                if (fan != -1)
+                if (-1 != fan)
                 {
                     ctmp = mesh.twist[fan];  numwritten += fwrite(&ctmp, 1, 1, filewrite);
                 }
@@ -2267,15 +2302,15 @@ void save_mesh(char *modname)
 
         // Write x vertices
         y = 0;
-        while (y < mesh.tilesy)
+        while (y < mesh.tiles_y)
         {
             x = 0;
-            while (x < mesh.tilesx)
+            while (x < mesh.tiles_x)
             {
                 fan = get_fan(x, y);
-                if ( fan != -1 )
+                if ( -1 != fan )
                 {
-                    num = mesh.command[mesh.type[fan]].numvertices;
+                    num = mesh.command[mesh.fantype[fan]].numvertices;
                     vert = mesh.vrtstart[fan];
                     cnt = 0;
                     while (cnt < num)
@@ -2292,15 +2327,15 @@ void save_mesh(char *modname)
 
         // Write y vertices
         y = 0;
-        while (y < mesh.tilesy)
+        while (y < mesh.tiles_y)
         {
             x = 0;
-            while (x < mesh.tilesx)
+            while (x < mesh.tiles_x)
             {
                 fan = get_fan(x, y);
-                if ( fan != -1)
+                if ( -1 != fan)
                 {
-                    num = mesh.command[mesh.type[fan]].numvertices;
+                    num = mesh.command[mesh.fantype[fan]].numvertices;
                     vert = mesh.vrtstart[fan];
                     cnt = 0;
                     while (cnt < num)
@@ -2317,15 +2352,15 @@ void save_mesh(char *modname)
 
         // Write z vertices
         y = 0;
-        while (y < mesh.tilesy)
+        while (y < mesh.tiles_y)
         {
             x = 0;
-            while (x < mesh.tilesx)
+            while (x < mesh.tiles_x)
             {
                 fan = get_fan(x, y);
-                if ( fan != -1)
+                if ( -1 != fan)
                 {
-                    num = mesh.command[mesh.type[fan]].numvertices;
+                    num = mesh.command[mesh.fantype[fan]].numvertices;
                     vert = mesh.vrtstart[fan];
                     cnt = 0;
                     while (cnt < num)
@@ -2342,15 +2377,15 @@ void save_mesh(char *modname)
 
         // Write a vertices
         y = 0;
-        while (y < mesh.tilesy)
+        while (y < mesh.tiles_y)
         {
             x = 0;
-            while (x < mesh.tilesx)
+            while (x < mesh.tiles_x)
             {
                 fan = get_fan(x, y);
-                if (fan != -1)
+                if (-1 != fan)
                 {
-                    num = mesh.command[mesh.type[fan]].numvertices;
+                    num = mesh.command[mesh.fantype[fan]].numvertices;
                     vert = mesh.vrtstart[fan];
                     cnt = 0;
                     while (cnt < num)
@@ -2397,12 +2432,12 @@ int load_mesh(char *modname)
 
         fread( &uiTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32(uiTmp32); if ( uiTmp32 != MAPID ) return bfalse;
         fread( &uiTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32(iTmp32); numvert = uiTmp32;
-        fread( &iTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32(iTmp32); mesh.tilesx = iTmp32;
-        fread( &iTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32(iTmp32); mesh.tilesy = iTmp32;
+        fread( &iTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32(iTmp32); mesh.tiles_x = iTmp32;
+        fread( &iTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32(iTmp32); mesh.tiles_y = iTmp32;
 
-        numfan = mesh.tilesx * mesh.tilesy;
-        mesh.edgex = (mesh.tilesx * TILEDIV) - 1;
-        mesh.edgey = (mesh.tilesy * TILEDIV) - 1;
+        numfan = mesh.tiles_x * mesh.tiles_y;
+        mesh.edgex = (mesh.tiles_x * TILEDIV) - 1;
+        mesh.edgey = (mesh.tiles_y * TILEDIV) - 1;
         mesh.edgez = 180 << 4;
         numfreevertices = MAXTOTALMESHVERTICES - numvert;
 
@@ -2413,9 +2448,9 @@ int load_mesh(char *modname)
             fread( &uiTmp32, 4, 1, fileread );
             uiTmp32 = ENDIAN_INT32(uiTmp32);
 
-            mesh.type[fan] = (uiTmp32 >> 24) & 0x00FF;
-            mesh.fx[fan]   = (uiTmp32 >> 16) & 0x00FF;
-            mesh.tile[fan] = (uiTmp32 >>  0) & 0xFFFF;
+            mesh.fantype[fan] = (uiTmp32 >> 24) & 0x00FF;
+            mesh.fx[fan]      = (uiTmp32 >> 16) & 0x00FF;
+            mesh.tx_bits[fan] = (uiTmp32 >>  0) & 0xFFFF;
 
             fan++;
         }
@@ -2472,15 +2507,15 @@ int load_mesh(char *modname)
         // store the vertices in the vertex chain for editing
         vert = 0;
         y = 0;
-        while (y < mesh.tilesy)
+        while (y < mesh.tiles_y)
         {
             x = 0;
-            while (x < mesh.tilesx)
+            while (x < mesh.tiles_x)
             {
                 fan = get_fan(x, y);
-                if ( fan != -1)
+                if ( -1 != fan)
                 {
-                    int type = mesh.type[fan];
+                    int type = mesh.fantype[fan];
                     if ( type >= 0 && type < MAXMESHTYPE)
                     {
                         num = mesh.command[type].numvertices;
@@ -2572,34 +2607,29 @@ void move_mesh_z(int z, Uint16 tiletype, Uint16 tileand)
     int fan;
 
     tiletype = tiletype & tileand;
-    y = 0;
-    while (y < mesh.tilesy)
+    
+    for (y = 0; y < mesh.tiles_y; y++)
     {
-        x = 0;
-        while (x < mesh.tilesx)
+        for (x = 0; x < mesh.tiles_x; x++)
         {
             fan = get_fan(x, y);
-            if (fan != -1)
+            if (-1 == fan) continue;
+
+            if (tiletype == (mesh.tx_bits[fan]&tileand))
             {
-                if ((mesh.tile[fan]&tileand) == tiletype)
+                vert = mesh.vrtstart[fan];
+                totalvert = mesh.command[mesh.fantype[fan]].numvertices;
+                
+                for (cnt = 0; cnt < totalvert; cnt++)
                 {
-                    vert = mesh.vrtstart[fan];
-                    totalvert = mesh.command[mesh.type[fan]].numvertices;
-                    cnt = 0;
-                    while (cnt < totalvert)
-                    {
-                        newz = mesh.vrtz[vert] + z;
-                        if (newz < 0)  newz = 0;
-                        if (newz > mesh.edgez) newz = mesh.edgez;
-                        mesh.vrtz[vert] = newz;
-                        vert = mesh.vrtnext[vert];
-                        cnt++;
-                    }
+                    newz = mesh.vrtz[vert] + z;
+                    if (newz < 0)  newz = 0;
+                    if (newz > mesh.edgez) newz = mesh.edgez;
+                    mesh.vrtz[vert] = newz;
+                    vert = mesh.vrtnext[vert];
                 }
             }
-            x++;
         }
-        y++;
     }
 }
 
@@ -2675,7 +2705,7 @@ void draw_top_tile( float x, float y, int fan, glTexture * tx_tile, bool_t draw_
     float max_s, max_t, dst;
     simple_vertex_t vrt[4];
 
-    if ( -1 == fan || FANOFF == fan ) return;
+    if ( -1 == fan || TILE_IS_FANOFF(fan) ) return;
 
     if( NULL == tx_tile ) return;
 
@@ -2831,10 +2861,10 @@ void render_tile_window( window_t * pwin )
 void render_fx_window( window_t * pwin )
 {
     glTexture * tx_tile;
-    int x, y, xstt, ystt;
+    int x, y;
     int mapx, mapxstt, mapxend;
     int mapy, mapystt, mapyend;
-    int fan, cnt;
+    int fan;
 
     glPushAttrib( GL_SCISSOR_BIT | GL_VIEWPORT_BIT | GL_ENABLE_BIT );
     {
@@ -2862,7 +2892,7 @@ void render_fx_window( window_t * pwin )
                     x = mapx * TILEDIV;
 
                     fan     = fan_at(mapx, mapy);
-                    if (fan != -1)
+                    if (-1 != fan)
                     {
                         tx_tile = tile_at(fan);
 
@@ -2928,7 +2958,7 @@ void render_vertex_window( window_t * pwin )
             for ( mapx = mapxstt; mapx <= mapxend; mapx++ )
             {
                 fan = get_fan(mapx, mapy);
-                if ( fan != -1 )
+                if ( -1 != fan )
                 {
                     draw_top_fan( pwin, fan, x, y );
                 }
@@ -2983,7 +3013,7 @@ void render_side_window( window_t * pwin )
             for ( mapx = mapxstt; mapx <= mapxend; mapx++ )
             {
                 fan = get_fan(mapx, mapy);
-                if (fan != -1)
+                if (-1 != fan)
                 {
                     draw_side_fan(pwin, fan, x, y);
                 }
@@ -3124,13 +3154,13 @@ void bound_camera(void)
     {
         cam.y = 0;
     }
-    if (cam.x > mesh.tilesx * TILEDIV)
+    if (cam.x > mesh.tiles_x * TILEDIV)
     {
-        cam.x = mesh.tilesx * TILEDIV;
+        cam.x = mesh.tiles_x * TILEDIV;
     }
-    if (cam.y > mesh.tilesy * TILEDIV)
+    if (cam.y > mesh.tiles_y * TILEDIV)
     {
-        cam.y = mesh.tilesy * TILEDIV;
+        cam.y = mesh.tiles_y * TILEDIV;
     }
 }
 
@@ -3342,16 +3372,16 @@ void calc_vrta()
     Uint32 vert;
 
     y = 0;
-    while (y < mesh.tilesy)
+    while (y < mesh.tiles_y)
     {
         x = 0;
-        while (x < mesh.tilesx)
+        while (x < mesh.tiles_x)
         {
             fan = get_fan(x, y);
-            if ( fan != -1)
+            if ( -1 != fan)
             {
                 vert = mesh.vrtstart[fan];
-                num = mesh.command[mesh.type[fan]].numvertices;
+                num = mesh.command[mesh.fantype[fan]].numvertices;
                 cnt = 0;
                 while (cnt < num)
                 {
@@ -3373,16 +3403,16 @@ void level_vrtz()
     Uint32 vert;
 
     y = 0;
-    while (y < mesh.tilesy)
+    while (y < mesh.tiles_y)
     {
         x = 0;
-        while (x < mesh.tilesx)
+        while (x < mesh.tiles_x)
         {
             fan = get_fan(x, y);
-            if ( fan != -1)
+            if ( -1 != fan)
             {
                 vert = mesh.vrtstart[fan];
-                num = mesh.command[mesh.type[fan]].numvertices;
+                num = mesh.command[mesh.fantype[fan]].numvertices;
                 cnt = 0;
                 while (cnt < num)
                 {
@@ -3419,16 +3449,16 @@ void jitter_mesh()
     Uint32 vert;
 
     y = 0;
-    while (y < mesh.tilesy)
+    while (y < mesh.tiles_y)
     {
         x = 0;
-        while (x < mesh.tilesx)
+        while (x < mesh.tiles_x)
         {
             fan = get_fan(x, y);
-            if (fan != -1)
+            if (-1 != fan)
             {
                 vert = mesh.vrtstart[fan];
-                num = mesh.command[mesh.type[fan]].numvertices;
+                num = mesh.command[mesh.fantype[fan]].numvertices;
                 cnt = 0;
                 while (cnt < num)
                 {
@@ -3458,16 +3488,16 @@ void flatten_mesh()
     if (height < 0)  height = 0;
     if (height > mesh.edgez) height = mesh.edgez;
     y = 0;
-    while (y < mesh.tilesy)
+    while (y < mesh.tiles_y)
     {
         x = 0;
-        while (x < mesh.tilesx)
+        while (x < mesh.tiles_x)
         {
             fan = get_fan(x, y);
-            if (fan != -1)
+            if (-1 != fan)
             {
                 vert = mesh.vrtstart[fan];
-                num = mesh.command[mesh.type[fan]].numvertices;
+                num = mesh.command[mesh.fantype[fan]].numvertices;
                 cnt = 0;
                 while (cnt < num)
                 {
@@ -3506,7 +3536,7 @@ void mouse_side( window_t * pwin )
 
     mdata.y = mpix_y * FOURNUM;
 
-    if ( mpix_x < 0 || mpix_x >= TILEDIV * mesh.tilesx )
+    if ( mpix_x < 0 || mpix_x >= TILEDIV * (mesh.tiles_x + 1) )
     {
         mdata.x = mpix_x * FOURNUM;
 
@@ -3553,11 +3583,11 @@ void mouse_side( window_t * pwin )
         {
             if (mdata.type >= MAXMESHTYPE / 2)
             {
-                move_mesh_z(-(mos.cy << 4), mdata.tile, 0xC0);
+                move_mesh_z(-(mos.cy << 4), mdata.tx, 0xC0);
             }
             else
             {
-                move_mesh_z(-(mos.cy << 4), mdata.tile, 0xF0);
+                move_mesh_z(-(mos.cy << 4), mdata.tx, 0xF0);
             }
             bound_mouse();
         }
@@ -3603,29 +3633,29 @@ void mouse_side( window_t * pwin )
 void mouse_tile( window_t * pwin )
 {
     int x, y, keyt, vert, keyv;
-    float tl, tr, bl, br;
 
     int mpix_x = mos.x - (pwin->x + pwin->borderx + pwin->surfacex / 2) + cam.x;
     int mpix_y = mos.y - (pwin->y + pwin->bordery + pwin->surfacey / 2) + cam.y;
 
-    tl = tr = bl = br = 0.0f;
-
-    if ( mpix_x < 0 || mpix_x >= TILEDIV * mesh.tilesx ||
-         mpix_y < 0 || mpix_y >= TILEDIV * mesh.tilesy)
+    if ( mpix_x < 0 || mpix_x > TILEDIV * (mesh.tiles_x + 1) ||
+         mpix_y < 0 || mpix_y > TILEDIV * (mesh.tiles_y + 1))
     {
         if (mos.b&2)
         {
-            mdata.type = 0 + 0;
-            mdata.tile = FANOFF;
+            mdata.type  = 0;
+            mdata.tx    = TILE_GET_LOWER_BITS(FANOFF);
+            mdata.upper = TILE_GET_UPPER_BITS(FANOFF);
         }
     }
     else
     {
+        cart_vec_t pos[CORNER_COUNT];
+
         mdata.x = mpix_x * FOURNUM;
         mdata.y = mpix_y * FOURNUM;
 
-        if (mdata.x >= (mesh.tilesx << 7))  mdata.x = (mesh.tilesx << 7) - 1;
-        if (mdata.y >= (mesh.tilesy << 7))  mdata.y = (mesh.tilesy << 7) - 1;
+        if (mdata.x >= (mesh.tiles_x << 7))  mdata.x = (mesh.tiles_x << 7) - 1;
+        if (mdata.y >= (mesh.tiles_y << 7))  mdata.y = (mesh.tiles_y << 7) - 1;
 
         debugx = mdata.x / 128.0;
         debugy = mdata.y / 128.0;
@@ -3649,62 +3679,95 @@ void mouse_tile( window_t * pwin )
         }
         if (mos.b&1)
         {
+            int tx_bits;
+
             keyt = SDLKEYDOWN(SDLK_t);
             keyv = SDLKEYDOWN(SDLK_v);
+
             if (!keyt)
             {
                 if (!keyv)
                 {
-                    // Save corner heights
+                    // Save corner positions
                     vert = mesh.vrtstart[mdata.onfan];
-                    tl = mesh.vrtz[vert];
+                    pos[CORNER_TL][kX] = mesh.vrtx[vert];
+                    pos[CORNER_TL][kY] = mesh.vrty[vert];
+                    pos[CORNER_TL][kZ] = mesh.vrtz[vert];
+
                     vert = mesh.vrtnext[vert];
-                    tr = mesh.vrtz[vert];
+                    pos[CORNER_TR][kX] = mesh.vrtx[vert];
+                    pos[CORNER_TR][kY] = mesh.vrty[vert];
+                    pos[CORNER_TR][kZ] = mesh.vrtz[vert];
+
                     vert = mesh.vrtnext[vert];
-                    br = mesh.vrtz[vert];
+                    pos[CORNER_BL][kX] = mesh.vrtx[vert];
+                    pos[CORNER_BL][kY] = mesh.vrty[vert];
+                    pos[CORNER_BL][kZ] = mesh.vrtz[vert];
+
                     vert = mesh.vrtnext[vert];
-                    bl = mesh.vrtz[vert];
+                    pos[CORNER_BR][kX] = mesh.vrtx[vert];
+                    pos[CORNER_BR][kY] = mesh.vrty[vert];
+                    pos[CORNER_BR][kZ] = mesh.vrtz[vert];
                 }
                 remove_fan(mdata.onfan);
             }
+
+            tx_bits = TILE_SET_UPPER_BITS( mdata.upper );
             switch (mdata.presser)
             {
                 case 0:
-                    mesh.tile[mdata.onfan] = mdata.tile;
+                    tx_bits |= mdata.tx & 0xFF;
                     break;
                 case 1:
-                    mesh.tile[mdata.onfan] = (mdata.tile & 0xFFFE) + (rand() & 1);
+                    tx_bits |= (mdata.tx & 0xFE) | (rand() & 1);
                     break;
                 case 2:
-                    mesh.tile[mdata.onfan] = (mdata.tile & 0xFFFC) + (rand() & 3);
+                    tx_bits |= (mdata.tx & 0xFC) | (rand() & 3);
                     break;
                 case 3:
-                    mesh.tile[mdata.onfan] = (mdata.tile & 0xFFF8) + (rand() & 7);
+                    tx_bits |= (mdata.tx & 0xF8) | (rand() & 7);
                     break;
-            }
+                default:
+                    tx_bits = mesh.tx_bits[mdata.onfan];
+                    break;
+            };
+            mesh.tx_bits[mdata.onfan] = tx_bits;
+
             if (!keyt)
             {
-                mesh.type[mdata.onfan] = mdata.type;
+                mesh.fantype[mdata.onfan] = mdata.type;
                 add_fan(mdata.onfan, (mdata.x >> 7)*TILEDIV, (mdata.y >> 7)*TILEDIV);
                 mesh.fx[mdata.onfan] = mdata.fx;
                 if (!keyv)
                 {
-                    // Return corner heights
+                    // Return corner positions
                     vert = mesh.vrtstart[mdata.onfan];
-                    mesh.vrtz[vert] = tl;
+                    mesh.vrtx[vert] = pos[CORNER_TL][kX];
+                    mesh.vrty[vert] = pos[CORNER_TL][kY];
+                    mesh.vrtz[vert] = pos[CORNER_TL][kZ];
+
                     vert = mesh.vrtnext[vert];
-                    mesh.vrtz[vert] = tr;
+                    mesh.vrtx[vert] = pos[CORNER_TR][kX];
+                    mesh.vrty[vert] = pos[CORNER_TR][kY];
+                    mesh.vrtz[vert] = pos[CORNER_TR][kZ];
+
                     vert = mesh.vrtnext[vert];
-                    mesh.vrtz[vert] = br;
+                    mesh.vrtx[vert] = pos[CORNER_BL][kX];
+                    mesh.vrty[vert] = pos[CORNER_BL][kY];
+                    mesh.vrtz[vert] = pos[CORNER_BL][kZ];
+
                     vert = mesh.vrtnext[vert];
-                    mesh.vrtz[vert] = bl;
+                    mesh.vrtx[vert] = pos[CORNER_BR][kX];
+                    mesh.vrty[vert] = pos[CORNER_BR][kY];
+                    mesh.vrtz[vert] = pos[CORNER_BR][kZ];
                 }
             }
         }
         if (mos.b&2)
         {
-            mdata.type = mesh.type[mdata.onfan];
-            mdata.tile = mesh.tile[mdata.onfan];
+            mdata.type  = mesh.fantype[mdata.onfan];
+            mdata.tx    = TILE_GET_LOWER_BITS(mesh.tx_bits[mdata.onfan]);
+            mdata.upper = TILE_GET_UPPER_BITS(mesh.tx_bits[mdata.onfan]);
         }
     }
 }
@@ -3717,8 +3780,8 @@ void mouse_fx( window_t * pwin )
     int mpix_x = mos.x - (pwin->x + pwin->borderx + pwin->surfacex / 2) + cam.x;
     int mpix_y = mos.y - (pwin->y + pwin->bordery + pwin->surfacey / 2) + cam.y;
 
-    if ( mpix_x < 0 || mpix_x >= TILEDIV * mesh.tilesx ||
-         mpix_y < 0 || mpix_y >= TILEDIV * mesh.tilesy)
+    if ( mpix_x < 0 || mpix_x >= TILEDIV * (mesh.tiles_x + 1) ||
+         mpix_y < 0 || mpix_y >= TILEDIV * (mesh.tiles_y + 1))
     {
     }
     else
@@ -3726,8 +3789,8 @@ void mouse_fx( window_t * pwin )
         mdata.x = mpix_x * FOURNUM;
         mdata.y = mpix_y * FOURNUM;
 
-        if (mdata.x >= (mesh.tilesx << 7))  mdata.x = (mesh.tilesx << 7) - 1;
-        if (mdata.y >= (mesh.tilesy << 7))  mdata.y = (mesh.tilesy << 7) - 1;
+        if (mdata.x >= (mesh.tiles_x << 7))  mdata.x = (mesh.tiles_x << 7) - 1;
+        if (mdata.y >= (mesh.tiles_y << 7))  mdata.y = (mesh.tiles_y << 7) - 1;
 
         debugx = mdata.x / 128.0;
         debugy = mdata.y / 128.0;
@@ -3753,8 +3816,8 @@ void mouse_vertex( window_t * pwin )
     int mpix_x = mos.x - (pwin->x + pwin->borderx + pwin->surfacex / 2) + cam.x;
     int mpix_y = mos.y - (pwin->y + pwin->bordery + pwin->surfacey / 2) + cam.y;
 
-    if ( mpix_x < 0 || mpix_x >= TILEDIV * mesh.tilesx ||
-         mpix_y < 0 || mpix_y >= TILEDIV * mesh.tilesy)
+    if ( mpix_x < 0 || mpix_x >= TILEDIV * (mesh.tiles_x + 1) ||
+         mpix_y < 0 || mpix_y >= TILEDIV * (mesh.tiles_y + 1))
     {
     }
     else
@@ -3878,37 +3941,47 @@ void clear_mesh()
     int x, y;
     int fan;
 
-    if (mdata.tile != FANOFF)
+    if ( !TILE_IS_FANOFF(TILE_SET_BITS(mdata.upper, mdata.tx)) )
     {
         y = 0;
-        while (y < mesh.tilesy)
+        while (y < mesh.tiles_y)
         {
             x = 0;
-            while (x < mesh.tilesx)
+            while (x < mesh.tiles_x)
             {
                 fan = get_fan(x, y);
-                if (fan != -1)
+                if (-1 != fan)
                 {
+                    int tx_bits, type;
+
                     remove_fan(fan);
+
+                    tx_bits = TILE_SET_UPPER_BITS( mdata.upper );
                     switch (mdata.presser)
                     {
                         case 0:
-                            mesh.tile[fan] = mdata.tile;
+                            tx_bits |= mdata.tx & 0xFF;
                             break;
                         case 1:
-                            mesh.tile[fan] = (mdata.tile & 0xFFFE) + (rand() & 1);
+                            tx_bits |= (mdata.tx & 0xFE) | (rand() & 1);
                             break;
                         case 2:
-                            mesh.tile[fan] = (mdata.tile & 0xFFFC) + (rand() & 3);
+                            tx_bits |= (mdata.tx & 0xFC) | (rand() & 3);
                             break;
                         case 3:
-                            mesh.tile[fan] = (mdata.tile & 0xFFF8) + (rand() & 7);
+                            tx_bits |= (mdata.tx & 0xF8) | (rand() & 7);
+                            break;
+                        default:
+                            tx_bits = mesh.tx_bits[fan];
                             break;
                     }
-                    mesh.type[fan] = mdata.type;
-                    if (mdata.type <= 1) mesh.type[fan] = rand() & 1;
-                    if (mdata.type == 32 || mdata.type == 33)
-                        mesh.type[fan] = 32 + (rand() & 1);
+                    mesh.tx_bits[fan] = tx_bits;
+
+                    type = mdata.type;
+                    if (type <= 1) type = rand() & 1;
+                    if (type == 32 || type == 33) type = 32 + (rand() & 1);
+                    mesh.fantype[fan] = type;
+
                     add_fan(fan, x * TILEDIV, y * TILEDIV);
                 }
                 x++;
@@ -3925,22 +3998,17 @@ void three_e_mesh()
     int x, y;
     int fan;
 
-    if (mdata.tile != FANOFF)
+    if (!TILE_IS_FANOFF( TILE_SET_BITS(mdata.upper, mdata.tx) ))
     {
-        y = 0;
-        while (y < mesh.tilesy)
+        for (y = 0; y < mesh.tiles_y; y++)
         {
-            x = 0;
-            while (x < mesh.tilesx)
+            for (x = 0; x < mesh.tiles_x; x++)
             {
                 fan = get_fan(x, y);
-                if (fan != -1)
-                {
-                    if ( mesh.tile[fan] == 0x3F )  mesh.tile[fan] = 0x3E;
-                }
-                x++;
+                if (-1 == fan) continue;
+
+                if ( mesh.tx_bits[fan] == 0x3F )  mesh.tx_bits[fan] = 0x3E;
             }
-            y++;
         }
     }
 }
@@ -3970,17 +4038,17 @@ void ease_up_mesh()
     zadd = -mos.cy;
 
     y = 0;
-    while (y < mesh.tilesy)
+    while (y < mesh.tiles_y)
     {
         x = 0;
-        while (x < mesh.tilesx)
+        while (x < mesh.tiles_x)
         {
             fan = get_fan(x, y);
-            if (fan != -1)
+            if (-1 != fan)
             {
                 vert = mesh.vrtstart[fan];
                 cnt = 0;
-                while (cnt < mesh.command[mesh.type[fan]].numvertices)
+                while (cnt < mesh.command[mesh.fantype[fan]].numvertices)
                 {
                     move_vert(vert, 0, 0, zadd);
                     vert = mesh.vrtnext[vert];
@@ -4001,16 +4069,16 @@ void select_verts_connected()
     Uint8 found, select_vertsfan;
 
     y = 0;
-    while (y < mesh.tilesy)
+    while (y < mesh.tiles_y)
     {
         x = 0;
-        while (x < mesh.tilesx)
+        while (x < mesh.tiles_x)
         {
             fan = get_fan(x, y);
             select_vertsfan = bfalse;
-            if (fan != -1)
+            if (-1 != fan)
             {
-                totalvert = mesh.command[mesh.type[fan]].numvertices;
+                totalvert = mesh.command[mesh.fantype[fan]].numvertices;
                 cnt = 0;
                 vert = mesh.vrtstart[fan];
                 while (cnt < totalvert)
@@ -4120,33 +4188,33 @@ void check_keys(char *modname)
         }
         if (SDLKEYDOWN(SDLK_z))
         {
-            set_mesh_tile(mesh.tile[mdata.onfan]);
+            set_mesh_tile(mesh.tx_bits[mdata.onfan]);
             keydelay = KEYDELAY;
         }
         if (SDLKEYDOWN(SDLK_LSHIFT))
         {
-            if (mesh.type[mdata.onfan] >= (MAXMESHTYPE >> 1))
+            if (mesh.fantype[mdata.onfan] >= (MAXMESHTYPE >> 1))
             {
-                fx_mesh_tile(mesh.tile[mdata.onfan], 0xC0, mdata.fx);
+                fx_mesh_tile(mesh.tx_bits[mdata.onfan], 0xC0, mdata.fx);
             }
             else
             {
-                fx_mesh_tile(mesh.tile[mdata.onfan], 0xF0, mdata.fx);
+                fx_mesh_tile(mesh.tx_bits[mdata.onfan], 0xF0, mdata.fx);
             }
             keydelay = KEYDELAY;
         }
-        if (SDLKEYDOWN(SDLK_x))
-        {
-            if (mesh.type[mdata.onfan] >= (MAXMESHTYPE >> 1))
-            {
-                trim_mesh_tile(mesh.tile[mdata.onfan], 0xC0);
-            }
-            else
-            {
-                trim_mesh_tile(mesh.tile[mdata.onfan], 0xF0);
-            }
-            keydelay = KEYDELAY;
-        }
+        //if (SDLKEYDOWN(SDLK_x))
+        //{
+        //    if (mesh.fantype[mdata.onfan] >= (MAXMESHTYPE >> 1))
+        //    {
+        //        trim_mesh_tile(mesh.tx_bits[mdata.onfan], 0xC0);
+        //    }
+        //    else
+        //    {
+        //        trim_mesh_tile(mesh.tx_bits[mdata.onfan], 0xF0);
+        //    }
+        //    keydelay = KEYDELAY;
+        //}
         if (SDLKEYDOWN(SDLK_e))
         {
             ease_up_mesh();
@@ -4207,12 +4275,12 @@ void check_keys(char *modname)
         }
         if (SDLKEYDOWN(SDLK_KP_PLUS))
         {
-            mdata.tile = (mdata.tile + 1) & 0xFF;
+            mdata.tx = (mdata.tx + 1) & 0xFF;
             keydelay = KEYDELAY;
         }
         if (SDLKEYDOWN(SDLK_KP_MINUS))
         {
-            mdata.tile = (mdata.tile - 1) & 0xFF;
+            mdata.tx = (mdata.tx - 1) & 0xFF;
             keydelay = KEYDELAY;
         }
         if (SDLKEYDOWN(SDLK_UP) || SDLKEYDOWN(SDLK_LEFT) || SDLKEYDOWN(SDLK_DOWN) || SDLKEYDOWN(SDLK_RIGHT))
@@ -4333,7 +4401,6 @@ void create_imgcursor(void)
 //------------------------------------------------------------------------------
 void load_img(void)
 {
-    int cnt;
     SDL_Surface *bmptemp;
 
     if ( INVALID_TX_ID == glTexture_Load(GL_TEXTURE_2D, &tx_point, "data" SLASH_STR "point.png", INVALID_KEY) )
@@ -4444,28 +4511,28 @@ void draw_lotsa_stuff(void)
     todo = 0;
     tile = 0;
     add  = 1;
-    if (mdata.tile <= MAXTILE)
+    if (mdata.tx < MAXTILE)
     {
         switch (mdata.presser)
         {
             case 0:
                 todo = 1;
-                tile = mdata.tile;
+                tile = mdata.tx;
                 add = 1;
                 break;
             case 1:
                 todo = 2;
-                tile = mdata.tile & 0xFFFE;
+                tile = mdata.tx & 0xFE;
                 add = 1;
                 break;
             case 2:
                 todo = 4;
-                tile = mdata.tile & 0xFFFC;
+                tile = mdata.tx & 0xFC;
                 add = 1;
                 break;
             case 3:
                 todo = 4;
-                tile = mdata.tile & 0xFFF8;
+                tile = mdata.tx & 0xF8;
                 add = 2;
                 break;
         }
@@ -4486,7 +4553,7 @@ void draw_lotsa_stuff(void)
         }
 
         fnt_printf_OGL( gFont, 0, 32,
-                        "Tile 0x%02x", mdata.tile);
+            "Tile 0x%02x 0x%02x", mdata.upper, mdata.tx);
         fnt_printf_OGL( gFont, 0, 40,
                         "Eats %d verts", mesh.command[mdata.type].numvertices);
         if (mdata.type >= MAXMESHTYPE / 2)
@@ -4542,7 +4609,6 @@ void draw_slider(int tlx, int tly, int brx, int bry, int* pvalue, int minvalue, 
 {
     int cnt;
     int value;
-    SDL_Rect rtmp;
 
     float color[4] = {1, 1, 1, 1};
 

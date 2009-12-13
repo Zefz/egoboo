@@ -348,21 +348,21 @@ float light_for_normal( int rotation, int normal, float lx, float ly, float lz, 
 //    int cnt;
 //
 //    // do the fanstart
-//    for ( cnt = 0; cnt < mesh.tilesy; cnt++ )
+//    for ( cnt = 0; cnt < mesh.tiles_y; cnt++ )
 //    {
-//        mesh.fanstart[cnt] = mesh.tilesx * cnt;
+//        mesh.fanstart[cnt] = mesh.tiles_x * cnt;
 //    }
 //
 //    // calculate some of the block info
-//    mesh.blocksx = (mesh.tilesx >> 2);
-//    if( 0 != (mesh.tilesx & 0x03) ) mesh.blocksx++;
+//    mesh.blocksx = (mesh.tiles_x >> 2);
+//    if( 0 != (mesh.tiles_x & 0x03) ) mesh.blocksx++;
 //    if( mesh.blocksx >= MAXMESHBLOCKY )
 //    {
 //        log_warning( "Number of mesh blocks in the x direction too large (%d out of %d).\n", mesh.blocksx, MAXMESHBLOCKY );
 //    }
 //
-//    mesh.blocksy = (mesh.tilesy >> 2);
-//    if( 0 != (mesh.tilesy & 0x03) ) mesh.blocksy++;
+//    mesh.blocksy = (mesh.tiles_y >> 2);
+//    if( 0 != (mesh.tiles_y & 0x03) ) mesh.blocksy++;
 //    if( mesh.blocksy >= MAXMESHBLOCKY )
 //    {
 //        log_warning( "Number of mesh blocks in the y direction too large (%d out of %d).\n", mesh.blocksy, MAXMESHBLOCKY );
@@ -386,9 +386,9 @@ float light_for_normal( int rotation, int normal, float lx, float ly, float lz, 
 //    Uint32 fan;
 //
 //    vert = 0;
-//    for ( y = 0; y < mesh.tilesy; y++ )
+//    for ( y = 0; y < mesh.tiles_y; y++ )
 //    {
-//        for ( x = 0; x < mesh.tilesx; x++ )
+//        for ( x = 0; x < mesh.tiles_x; x++ )
 //        {
 //            // allow raw access because we are careful
 //            fan = mesh.fanstart[y] + x;
@@ -587,11 +587,11 @@ float light_for_normal( int rotation, int normal, float lx, float ly, float lz, 
 //
 //        while ( fany < run )
 //        {
-//            if ( fany >= 0 && fany < mesh.tilesy )
+//            if ( fany >= 0 && fany < mesh.tiles_y )
 //            {
 //                fanx = x >> 7;
 //                if ( fanx < 0 )  fanx = 0;
-//                if ( fanx >= mesh.tilesx )  fanx = mesh.tilesx - 1;
+//                if ( fanx >= mesh.tiles_x )  fanx = mesh.tiles_x - 1;
 //
 //                fanrowstart[row] = fanx;
 //                row++;
@@ -627,11 +627,11 @@ float light_for_normal( int rotation, int normal, float lx, float ly, float lz, 
 //
 //        while ( fany < run )
 //        {
-//            if ( fany >= 0 && fany < mesh.tilesy )
+//            if ( fany >= 0 && fany < mesh.tiles_y )
 //            {
 //                fanx = x >> 7;
 //                if ( fanx < 0 )  fanx = 0;
-//                if ( fanx >= mesh.tilesx - 1 )  fanx = mesh.tilesx - 1;//-2
+//                if ( fanx >= mesh.tiles_x - 1 )  fanx = mesh.tiles_x - 1;//-2
 //
 //                fanrowrun[row] = ABS( fanx - fanrowstart[row] ) + 1;
 //                row++;
@@ -651,7 +651,7 @@ float light_for_normal( int rotation, int normal, float lx, float ly, float lz, 
 //    // Fill 'em up again
 //    fany = ylist[0] >> 7;
 //    if ( fany < 0 ) fany = 0;
-//    if ( fany >= mesh.tilesy ) fany = mesh.tilesy - 1;
+//    if ( fany >= mesh.tiles_y ) fany = mesh.tiles_y - 1;
 //
 //    row = 0;
 //    while ( row < numrow )
@@ -1600,7 +1600,7 @@ void read_wawalite( char *modname )
 //    float level;
 //    float light;
 //
-//    if ( fanx >= 0 && fanx < mesh.tilesx && fany >= 0 && fany < mesh.tilesy )
+//    if ( fanx >= 0 && fanx < mesh.tiles_x && fany >= 0 && fany < mesh.tiles_y )
 //    {
 //        // allow raw access because we were careful
 //        fan = fanx + mesh.fanstart[fany];

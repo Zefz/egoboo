@@ -151,8 +151,8 @@ struct s_mesh
 {
     bool_t exploremode;
 
-    int               tilesx;           // Size of mesh
-    int               tilesy;           //
+    int               tiles_x;           // Size of mesh
+    int               tiles_y;           //
     Uint32  fanstart[MAXMESHTILEY];           // Y to fan number
 
     int               blocksx;          // Size of mesh
@@ -163,10 +163,10 @@ struct s_mesh
     int               edgey;            //
     int               edgez;            //
 
-    Uint8   type[MAXMESHFAN];         // Command type
-    Uint8   fx[MAXMESHFAN];           // Special effects flags
-    Uint16  tile[MAXMESHFAN];         // Get texture from this
-    Uint8   twist[MAXMESHFAN];        // Surface normal
+    Uint8   fantype[MAXMESHFAN];        // Tile fan type
+    Uint8   fx[MAXMESHFAN];             // Rile special effects flags
+    Uint16  tx_bits[MAXMESHFAN];        // Tile texture bits and special tile bits
+    Uint8   twist[MAXMESHFAN];          // Surface normal
 
     Uint32  vrtstart[MAXMESHFAN];     // Which vertex to start at
     Uint32  vrtnext[MAXTOTALMESHVERTICES];   // Next vertex in fan
@@ -217,3 +217,18 @@ extern short           damagetilesoundtime;
 extern Uint16          damagetilemindistance;
 extern int             damagetileamount;                           // Amount of damage
 extern Uint8           damagetiletype;                      // Type of damage
+
+// handle the upper and lower bits for the tile image
+#define TILE_UPPER_SHIFT                8
+#define TILE_LOWER_MASK                 ((1 << TILE_UPPER_SHIFT)-1)
+#define TILE_UPPER_MASK                 (~TILE_LOWER_MASK)
+
+#define TILE_GET_LOWER_BITS(XX)         ( TILE_LOWER_MASK & (XX) )
+
+#define TILE_GET_UPPER_BITS(XX)         (( TILE_UPPER_MASK & (XX) ) >> TILE_UPPER_SHIFT )
+#define TILE_SET_UPPER_BITS(XX)         (( (XX) << TILE_UPPER_SHIFT ) & TILE_UPPER_MASK )
+#define TILE_SET_BITS(HI,LO)            (TILE_SET_UPPER_BITS(HI) | TILE_GET_LOWER_BITS(LO))
+
+#define TILE_IS_FANOFF(XX)              ( FANOFF == (XX) )
+
+#define TILE_HAS_INVALID_IMAGE(XX)      HAS_SOME_BITS( TILE_UPPER_MASK, (XX).img )
