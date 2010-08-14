@@ -136,13 +136,6 @@ struct s_command
 };
 typedef struct s_command command_t;
 
-struct s_line_data
-{
-    Uint8     start[MAXMESHTYPE];
-    Uint8     end[MAXMESHTYPE];
-};
-typedef struct s_line_data line_data_t;
-
 #define INVALID_BLOCK ((Uint32)(~0))
 #define INVALID_TILE  ((Uint32)(~0))
 
