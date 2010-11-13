@@ -78,3 +78,4 @@ Dexterity boost ( -3.0 to 3.0 )			: 0.0
 :[FACE] 0  	// Facing add for each one...
 :[SEND] 0		// The end sound
 :[CKUR] 1		// Allow character to see kurses
+:[DARK] 3   //Give level 3 darkvision

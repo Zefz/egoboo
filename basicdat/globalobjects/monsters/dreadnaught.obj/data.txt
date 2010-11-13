@@ -76,7 +76,7 @@ CRUSH inversion ( eg. F F F T )				:  F  F  F  F
 POKE inversion ( eg. F F F T )				:  F  F  F  F
 HOLY inversion ( eg. T T T T )				:  F  F  F  F
 EVIL inversion ( eg. F F F T )				:  F  F  F  F
-FIRE inversion ( eg. F F F T )				:  C  C  C  C
+FIRE inversion ( eg. F F F T )				:  I  I  I  I
 ICE inversion ( eg. F F F T )				:  F  F  F  F
 ZAP inversion ( eg. F F F T )				:  F  F  F  F
 Acceleration rate ( eg. 40 38 30 20 )			: 35 60 60 60
@@ -194,7 +194,6 @@ Sound of Jump ( -1 for none )				: -1
 
 //Expansions
 :[AWEP] 1             //Advanced weapons profiency
-:[SPHR] 4             //Shield profiency
 
 
 //-Notes------------------------------------------------------------------------

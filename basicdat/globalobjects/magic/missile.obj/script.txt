@@ -10,8 +10,7 @@ IfTakenOut
 
 // Spell AI
 IfUsed
-  GetContent
-  tmpx = tmpargument
+  tmpx = selfcontent
   tmpy = 1536
   IfXIsLessThanY
     SetTargetToWhoeverIsHolding
@@ -19,17 +18,14 @@ IfUsed
     IfTargetHasSkillID
       tmpy = targetmanaflow
       IfXIsLessThanY
-        tmpx = 10			//Mana cost
-        tmpargument = tmpx
+        tmpargument = 10			//Default mana cost        
         CostTargetMana
-          GetContent
-          tmpargument = tmpargument + 16	//Casting time
+          tmpargument = selfcontent + 16	//Casting time
           SetContent
-          tmpargument = tmpargument > 8
+          tmpargument = selfcontent > 8
           SetState
 Else
-  GetContent
-  tmpx = tmpargument
+  tmpx = selfcontent
   tmpy = 256
   IfXIsMoreThanY
     // Make the target shoot
@@ -72,6 +68,7 @@ Else
       SpawnExactParticle
       SpawnExactParticle
       SpawnExactParticle
+      SpawnExactParticle
     tmpargument = 0
     PlaySound
   // Reset the charge counter
@@ -81,11 +78,10 @@ Else
 
 // Put the little mana ball on the
 // character's hand
-GetContent
-tmpx = tmpargument
+tmpx = selfcontent
 tmpy = 0
 IfXIsMoreThanY
-  tmpturn = tmpargument < 4 + 5000
+  tmpturn = selfcontent < 4 + 5000
   tmpdistance = SPAWNORIGIN
   tmpargument = 0
   SpawnAttachedSizedParticle
