@@ -46,7 +46,7 @@ ulna:   NONE    37  23.5   22.5   1.0   N    2   0  0   0   0   F   F   E
 
 chest:   NONE    67  38.0   51.5   1.0   N    4   0  0   0   0   F   F   N
   Sword:   NONE    45  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  LPotion:   NONE    50  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    50  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 
 brazier:   NONE    39  20.5   34.5   1.0   N    0   0  0   0   0   F   F   N
 brazier:   NONE    39  27.5   34.5   1.0   N    0   0  0   0   0   F   F   N
@@ -58,8 +58,8 @@ blob:   NONE    48  39.5   20.5   1.0   N    0   0  0   0   0   F   F   E
 blob:   NONE    48  36.5   27.5   1.0   N    0   0  0   0   0   F   F   E
 blob:   NONE    48  39.0   27.0   1.0   N    0   0  0   0   0   F   F   E
 tomb:   NONE    51  12.5   40.0   1.0   N    0   0  0   0   0   F   F   N
-  Sword:   NONE    45  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  LPotion:   NONE    50  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:   NONE    101  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    100  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 Pillar:   NONE    40  53.5   4.5   1.0   N    0   1  0   0   0   F   F   N
 Pillar:   NONE    40  53.5   7.5   1.0   N    0   1  0   0   0   F   F   N
 Pillar:   NONE    40  47.5   7.5   1.0   N    0   1  0   0   0   F   F   N
@@ -101,7 +101,7 @@ rockhead:   NONE    52  47.5   25.5   1.0   S    0   0  0   54   0   F   F   E
   Cinquedea:   NONE    46  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 rockhead:   NONE    52  47.5   21.5   1.0   N    19   0  0   54   0   F   F   E
 rockhead:   NONE    52  47.5   16.5   1.0   S    0   0  0   54   0   F   F   E
-  LPotion:   NONE    50  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    102  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
   OilFlask:   NONE    41  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 rockhead:   NONE    52  13.5   41.5   1.0   N    0   0  0   54   0   F   F   E
   lamp:   NONE    49  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N

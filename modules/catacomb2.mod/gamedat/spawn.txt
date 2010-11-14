@@ -62,10 +62,10 @@ warlock:   NONE    54  26.5   63.5   1.0   N    39   0  0   55183   3   F   F   
   BattleWard:   NONE    56  0.0   0.0   0.0   R    0   0  0   0   0   F   F   N
   Orbstorm:   NONE    60  0.0   0.0   0.0   L    0   0  0   0   0   F   F   N
 bookstand:   NONE    53  26.5   65.5   1.0   N    0   0  0   0   0   F   F   N
-  Meteor:   NONE    61  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_ARCANE_SPELLBOOK:   NONE    61  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 bookstand:   NONE    53  29.5   65.5   1.0   N    0   0  0   0   0   F   F   N
 bookshelf:   NONE    50  25.3   60.0   1.0   E    0   0  0   0   0   F   F   N
-  skulltrap:   NONE    70  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_ARCANE_SPELLBOOK:   NONE    70  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 bookshelf:   NONE    50  30.8   60.0   1.0   W    0   0  0   0   0   F   F   N
 bookshelf:   NONE    50  30.8   64.0   1.0   W    0   0  0   0   0   F   F   N
 bookshelf:   NONE    50  25.3   64.0   1.0   E    0   0  0   0   0   F   F   N
@@ -78,16 +78,16 @@ ghoul:   NONE    42  7.0   74.0   1.0   N    3   0  0   0   0   F   F   E
 ghoul:   NONE    42  5.0   76.0   1.0   N    0   0  0   0   0   F   F   E
 ghoul:   NONE    42  5.0   72.0   1.0   N    2   0  0   0   0   F   F   E
 chest:   NONE    46  6.5   27.0   1.0   E    0   0  0   1   0   F   F   N       //Locked
-  wbracelet:   NONE    67  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  silxbow:   NONE    65  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  AmmoBox:   NONE    79  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %MAGIC_ITEM:   NONE    67  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %SILVER_WEAPON:   NONE    65  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_ITEM:   NONE    79  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 KeyC:   NONE    44  36.5   6.5   1.0   N    0   0  0   0   0   F   F   N
 KeyC:   NONE    44  47.5   17.5   1.0   N    0   0  0   0   0   F   F   N
 KeyC:   NONE    44  58.5   42.0   1.0   N    0   0  0   0   0   F   F   N
 chest:   NONE    46  13.5   64.0   1.0   W    0   0  0   1   0   F   F   N        //Locked
-  dexamulet:   NONE    66  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  LPotion:   NONE    38  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  powpotion:   NONE    71  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %MAGIC_ITEM:   NONE    66  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    38  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    71  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 butcher:   NONE    48  8.5   48.5   1.0   N    12   0  0   0   0   F   F   E
   butcheraxe:   NONE    36  0.0   0.0   0.0   R    0   0  0   0   0   F   F   N
 butcher:   NONE    48  10.5   49.5   1.0   N    14   0  0   0   0   F   F   E
@@ -107,8 +107,8 @@ vampyre:   NONE    39  36.0   15.0   1.0   N    51   0  0   0   0   F   F   U
 vampyre:   NONE    39  37.0   17.0   1.0   N    42   0  0   0   0   F   F   U
 vampyre:   NONE    39  39.5   74.5   1.0   N    12   0  0   0   0   F   F   V
 SpkMace:   NONE    55  8.0   13.0   1.0   N    0   0  0   0   0   F   F   N
-LPotion:   NONE    38  11.0   14.0   1.0   N    0   0  0   0   0   F   F   N
-LPotion:   NONE    38  9.0   11.0   1.0   N    0   0  0   0   0   F   F   N
+%RANDOM_POTION:   NONE    83  11.0   14.0   1.0   N    0   0  0   0   0   F   F   N
+%RANDOM_POTION:   NONE    82  9.0   11.0   1.0   N    0   0  0   0   0   F   F   N
 shutdoor:   NONE    49  29.0   32.0   1.0   S    0   0  12   0   0   F   F   N
 shutdoor:   NONE    49  24.0   14.0   1.0   W    0   0  2   0   0   F   F   N
 shutdoor:   NONE    49  24.0   39.0   1.0   W    0   0  4   0   0   F   F   N

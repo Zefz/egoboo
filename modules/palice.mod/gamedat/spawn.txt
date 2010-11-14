@@ -96,11 +96,11 @@ lockdoor:   NONE    56  26.0   38.0   1.0   N    0   0  14   0   0   F   F   N
 
 chest:   NONE    36  22.5   24.0   1.0   E    57   0  0   8   0   F   F   N       //Secret bottom
   XBow:   NONE    49  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  RgPotion:   NONE    86  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    86  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 
 chest:   NONE    36  22.5   33.0   1.0   E    0   0  0   0   0   F   F   N
   KeyA:   NONE    93  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  bridge:   NONE    52  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_ARCANE_SPELLBOOK:   NONE    52  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 
 //Map room
 mephit:   NONE    77  13.0   9.0   1.0   S    0   1  0   0   0   F   F   E
@@ -119,12 +119,12 @@ halldoor:   NONE    38  43.0   50.0   1.0   W    0   0  20   0   0   F   F   N
 lockdoor   NONE    56  15.0   53.0   0.0   N    0   0  26   0   0   F   F   N
 lockdoor   NONE    56  9.0   53.0   0.0   N    0   0  24   0   0   F   F   N
 chest:   NONE    36  9.0   56.0   1.0   N    0   0  0   1   0   F   F   N           //Locked
-  confusion:   NONE    88  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_DIVINE_RUNE:   NONE    88  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
   frog:   NONE    65  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
   KiteShield:   NONE    39  0.0   0.0   0.0   I    1   0  0   0   0   F   F   N
 chest:   NONE    36  14.8   56.0   1.0   N    0   0  0   1   0   F   F   N          //Locked
-  medkit:   NONE    80  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  sloth:   NONE    63  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:   NONE    80  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_KURSED:   NONE    63  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
   LPotion:   NONE    86  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
   LPotion:   NONE    86  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 frostlizard:   NONE    48  14.0   44.0   1.0   N    0   0  0   0   0   F   F   E
@@ -141,13 +141,13 @@ lockdoor:   NONE    56  38.0   46.0   0.0   S    0   0  17   0   0   F   F   N
 
 //Treasure chamber
 chest:   NONE    36  46.5   27.5   1.0   S    0   0  0   0   0   F   F   N
-  ibrace:   NONE    66  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  smite:   NONE    59  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RARE_TREASURE:   NONE    66  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RARE_TREASURE:   NONE    59  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 chest:   NONE    36  44.5   27.5   1.0   S    3   0  0   32   0   F   F   N     //Contains random level 4 armor
 chest:   NONE    36  46.5   30.5   1.0   N    0   0  0   0   0   F   F   N
   LPotion:   NONE    86  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  Haste:   NONE    62  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  TrueSightScroll:   NONE    140  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_ARCANE_SPELLBOOK:   NONE    62  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_SCROLL:   NONE    140  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 spork:   NONE    60  36.5   28.5   2.0   W    0   0  0   0   0   F   F   N
 
 //Mimic room
@@ -186,10 +186,10 @@ rustmaggot:   NONE    54  46.0   8.0   1.0   N    0   0  0   0   0   F   F   E
 rustmaggot:   NONE    54  50.0   10.0   1.0   N    0   0  0   0   0   F   F   E
 
 chest:   NONE    36  56.5   8.5   1.0   N    99   0  0   128   0   F   F   N      //Rune Warded chest
-  Regeneration:   NONE    50  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_DIVINE_RUNE:   NONE    50  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
   lance:   NONE    132  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  LifeRing:   NONE    136  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  fortunecookie:   NONE    137  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RARE_TREASURE:   NONE    136  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:   NONE    137  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 
 
 //Ice chamber

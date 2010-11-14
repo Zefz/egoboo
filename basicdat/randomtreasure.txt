@@ -1,8 +1,9 @@
 //This file describes the random treasure tables in Egoboo. When spawn.txt is parsed and a table name
 //preceeded with a % character is read, it will be replaced with one of the names in that table. 
-//For example: %NORMAL_TREASURE could be replaced by Beartrap, Quiver or any other item in the NORMAL_TREASURE list
+//For example %NORMAL_TREASURE could be replaced by Beartrap, Quiver or any other item in the NORMAL_TREASURE list
 //These tables link to eachother so one of the items in NORMAL_TREASURE could point to a different table by
 //using the same % syntax as in spawn.txt
+
 //-----------------------------------------------------------------------------------------------------------------
 //Table for random normal treasure
 :NORMAL_TREASURE
@@ -69,9 +70,10 @@
 //-----------------------------------------------------------------------------------------------------------------
 //Table for random more rare gnomish tinkertoys (not just ammo or a lamp)
 :RANDOM_GNOMISH_TINKER
-:Gonne
+:Clockwork
 :DeathDevice
 :Flamethrower
+:Gonne
 :Musketoon
 :Pistol
 :PowderKeg
@@ -251,7 +253,9 @@
 //Random normal magic potions
 :RANDOM_POTION
 :LPotion
+:LPotion          //Twice for double chance
 :MPotion
+:MPotion          //Twice for double chance
 :OilFlask
 :PPotion
 :LevPotion

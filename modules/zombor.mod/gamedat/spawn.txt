@@ -55,7 +55,7 @@ chest:   NONE    49  48.5   46.5   1.0   W    49   0  0   0   0   F   F   N
 chest:   NONE    49  48.5   50.5   1.0   W    0   0  0   0   0   F   F   N
   LBow:   NONE    51  14.0   48.0   2.0   I    0   0  0   0   0   F   F   N
   Tranch:   NONE    37  48.5   46.5   1.0   I    0   0  0   0   0   F   F   G
-  claw:   NONE    41  14.0   48.0   2.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:   NONE    100  14.0   48.0   2.0   I    0   0  0   0   0   F   F   N
 knave:   NONE    35  34.5   42.5   1.0   N    3   0  0   0   0   F   F   G
   Torch:   NONE    30  14.0   48.0   2.0   R    0   0  0   0   0   F   F   N
 knave:   NONE    35  36.5   42.5   1.0   N    4   0  0   0   0   F   F   G
@@ -102,7 +102,7 @@ grubbug:   NONE    48  14.0   10.0   1.0   N    0   0  0   0   0   F   F   V
 chest:   NONE    49  11.5   12.5   1.0   E    19   0  0   0   0   F   F   N
   Torch:   NONE    30  14.0   48.0   2.0   I    0   0  0   0   0   F   F   N
 chest:   NONE    49  48.5   17.5   1.0   S    0   0  0   0   0   F   F   N
-  spotion:   NONE    55  14.0   48.0   2.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    55  14.0   48.0   2.0   I    0   0  0   0   0   F   F   N
   Scimitar:   NONE    53  14.0   48.0   2.0   I    0   0  0   0   0   F   F   N
   scythe:   NONE    59  14.0   48.0   2.0   I    0   0  0   0   0   F   F   N
 

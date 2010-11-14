@@ -106,7 +106,7 @@ unknown:   NONE    16  59.0   56.0   1.0   N    23   2  0   0   0   F   F   L
 unknown:   NONE    20  51.0   58.0   1.0   N    0   0  0   0   0   F   F   N
 unknown:   NONE    20  58.0   59.0   1.0   W    0   0  0   0   0   F   F   N
 Tent:   NONE    27  60.0   58.0   1.0   N    0   1  0   0   0   F   F   N
-  Rebirth:   NONE    40  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_SCROLL:   NONE    40  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 Tree:   NONE    26  44.0   54.0   1.0   N    0   0  0   0   0   F   F   N
 Tree:   NONE    26  48.0   61.0   1.0   N    0   0  0   0   0   F   F   N
 Tree:   NONE    26  60.0   53.0   1.0   N    0   0  0   0   0   F   F   N
@@ -120,7 +120,7 @@ unknown:   NONE    24  47.0   40.0   2.0   N    0   0  0   0   0   F   F   I
 Tent:   NONE    27  56.0   61.0   1.0   N    0   0  0   0   0   F   F   N
   KeyA:   NONE    34  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 Tent:   NONE    27  62.0   62.0   1.0   N    0   0  0   0   0   F   F   N
-  Rebirth:   NONE    40  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_SCROLL:   NONE    100  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 unknown:   NONE    31  31.0   39.0   1.0   E    0   0  7   0   0   F   F   N
 unknown:   NONE    31  43.0   35.0   2.0   E    0   0  5   0   0   F   F   N
 unknown:   NONE    15  36.0   41.0   1.0   S    0   0  0   0   0   F   F   V
@@ -132,7 +132,7 @@ chest:   NONE    60  61.0   36.0   3.0   W    0   0  0   2   0   F   F   N      
 Mimic:   NONE    38  61.0   35.0   3.0   W    13   0  0   0   0   F   F   M
   KeyC:   NONE    36  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 Mimic:   NONE    38  61.0   41.0   3.0   W    13   0  0   0   0   F   F   M
-  Clairvoyance:   NONE    85  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_DIVINE_RUNE:   NONE    85  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 Mimic:   NONE    38  61.0   40.0   3.0   W    13   0  0   0   0   F   F   M
   OilFlask:   NONE    41  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
   lamp:   NONE    42  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
@@ -209,7 +209,7 @@ chest:   NONE    60  3.0   18.0   1.0   E    153   0  0   0   0   F   F   N
 chest:   NONE    60  3.0   19.0   1.0   E    0   0  0   0   0   F   F   N
   GDagger:   NONE    28  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
   GDagger:   NONE    28  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  Exorcism:   NONE    56  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_DIVINE_RUNE:   NONE    56  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 chest:   NONE    60  3.0   20.0   1.0   E    227   0  0   0   0   F   F   N
 chest:   NONE    60  3.0   26.0   1.0   E    96   0  0   8   0   F   F   N       //Secret bottom
   AtShield:   NONE    50  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
@@ -218,7 +218,7 @@ chest:   NONE    60  3.0   25.0   1.0   E    0   0  0   1   0   F   F   N
   OilFlask:   NONE    41  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
   unknown:   NONE    42  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 unknown:   NONE    35  3.0   24.0   1.0   E    0   0  0   0   0   F   F   N
-  FlyingCarpet:   NONE    48  0.0   0.0   0.0   I    0   3  0   0   0   F   F   N
+  %RARE_TREASURE:   NONE    48  0.0   0.0   0.0   I    0   3  0   0   0   F   F   N
 unknown:   NONE    49  0.0   0.0   0.0   N    0   0  0   0   0   F   F   N
 unknown:   NONE    52  13.0   0.0   0.0   N    0   0  13   3   0   F   F   N
 unknown:   NONE    52  43.0   24.0   0.0   N    0   0  14   1   0   F   F   N

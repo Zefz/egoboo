@@ -166,17 +166,17 @@ Chest: NONE          43   12.5 21.5 0    E   0   0   0   0   0   F   F   Null
   Torch:   NONE      80    0    0   0    I   0   0   0   0   0   F   F   Null
 Chest:  NONE         43   39   57   0    N   0   0   0   2   0   F   F   Null     //Contains map
 Chest: NONE          43   39   41   0    N   0   0   0   0   0   F   F   Null
-  TheBait: NONE      92    0    0   0    I   0   0   0   0   0   F   F   Null
+  %RARE_TREASURE: NONE      92    0    0   0    I   0   0   0   0   0   F   F   Null
 Chest: NONE          43   54.5 54.5 0    W 199   0   0   8   0   F   F   Null     //Secret bottom
-  Rebirth: NONE      72    0    0   0    I   0   0   0   0   0   F   F   Null
+  %RANDOM_SCROLL: NONE      72    0    0   0    I   0   0   0   0   0   F   F   Null
   Knife:             46    0    0   0    I   0   0   0   0   0   F   F   Null
 Chest: NONE          43   51.5 54.5 0    N   0   0   0   0   0   F   F   Null
   LPotion: NONE      86    0    0   0    I   0   0   0   0   0   F   F   Null
   LPotion: NONE      86    0    0   0    I   0   0   0   0   0   F   F   Null
 Chest:  NONE         43   41.5 19.5 0    W   0   0   0   4   0   F   F   Null   //Fire trapped
-  SBrace:  NONE      49    0    0   0    I   0   0   0   0   0   F   F   Null
+  %MAGIC_ITEM:  NONE      49    0    0   0    I   0   0   0   0   0   F   F   Null
 Chest: NONE          43   41.5 14.5 0    S   0   0   0   16  0   F   F   Null    //Invisible
-  SordWall: NONE      91    0    0   0    I   0   0   0   0   0   F   F   Null
+  %RANDOM_ARCANE_SPELLBOOK: NONE      91    0    0   0    I   0   0   0   0   0   F   F   Null
   MPotion: NONE      87    0    0   0    I   0   0   0   0   0   F   F   Null
   MPotion: NONE      87    0    0   0    I   0   0   0   0   0   F   F   Null
   MPotion: NONE      87    0    0   0    I   0   0   0   0   0   F   F   Null
@@ -186,7 +186,7 @@ Chest:     NONE      43   53.5 21.5 0    S   0   0   0   0   0   F   F   Null
 Chest:     NONE      43   13.5 7.5  0    E   0   0   0   32   0   F   F   Null    //Contains random armor
 Chest:     NONE      43   16.5 10.5 0    W   0   0   0   0   0   F   F   Null
   Gonne:   NONE      74    0    0   0    I   0   0   0   0   0   F   F   Null
-  MoonBeam:NONE      48    0    0   0    I   0   0   0   0   0   F   F   Null
+  %RANDOM_DIVINE_RUNE:NONE      48    0    0   0    I   0   0   0   0   0   F   F   Null
 Chest:     NONE      43   13.5 10.5 0    E   0   0   0   0   0   F   F   Null
   Tundra:  NONE      90   15.0  9.0 0    I   0   0   0   0   0   F   F   Null
 
