@@ -78,18 +78,18 @@ shaft:   NONE    44  37.5   51.5   1.0   W    0   0  0   0   0   F   F   N
 
 //Locked chest with map and secret bottom
 chest:   NONE    37  31.5   50.5   0.0   S    0   0  0  11   0   F   F   N
-  %RANDOM_SCROLL:   NONE    51  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %NORMAL_TREASURE:   NONE    50  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_POTION:   NONE    63  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_SCROLL:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 
 waterwierd:   NONE    40  7.0   18.0   1.0   N    0   0  0   0   0   F   F   E
 waterwierd:   NONE    40  9.0   16.0   1.0   N    0   0  0   0   0   F   F   E
 
 chest:   NONE    37  41.0   34.0   0.0   N    119   0  0   8   0   F   F   N
-  %RANDOM_POTION:   NONE    63  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %NORMAL_TREASURE:   NONE    43  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
   KeyC:   NONE    39  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_KURSED:   NONE    71  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_KURSED:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 
 deadfall:   NONE    36  27.5   41.0   1.0   N    0   0  2   0   0   F   F   T
 eyeball:   NONE    45  34.0   41.0   1.0   N    0   0  0   0   0   F   F   E
@@ -124,25 +124,25 @@ mephit:   NONE    49  39.5   32.5   1.0   N    14   3  0   0   0   F   F   E
 
 //Trapped firebomb chest
 chest:   NONE    37  8.0   41.0   1.0   E    0   0  0   4   0   F   F   N
-  %RARE_TREASURE:   NONE    54  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_POTION:   NONE    43  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_POTION:   NONE    43  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RARE_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 
 ghost:   NONE    55  9.5   54.5   1.0   N    0   0  0   0   0   F   F   U
 ghost:   NONE    55  6.5   51.5   1.0   N    0   0  0   0   0   F   F   U
 ghost:   NONE    55  7.5   50.5   1.0   N    0   0  0   0   0   F   F   U
 
 chest:   NONE    37  20.0   17.0   1.0   S    0   0  0   1   0   F   F   N
-  %RARE_TREASURE:   NONE    57  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %NORMAL_TREASURE:   NONE    53  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RARE_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 deadfall:   NONE    36  43.5   12.5   1.0   N    0   0  3   0   0   F   F   T
 chest:   NONE    37  34.5   13.5   0.0   S    99   0  0   8   0   F   F   N
-  %RANDOM_SCROLL:   NONE    51  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_POTION:   NONE    43  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_POTION:   NONE    63  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %NORMAL_ITEM:   NONE    50  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %NORMAL_ITEM:   NONE    53  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_ARCANE_SPELLBOOK:   NONE    70  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_SCROLL:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_ARCANE_SPELLBOOK:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 waterwierd:   NONE    40  34.5   9.5   1.0   N    0   0  0   0   0   F   F   E
 eyeball:   NONE    45  33.5   13.5   1.0   N    0   0  0   0   0   F   F   E
 eyeball:   NONE    45  35.5   13.5   1.0   N    0   0  0   0   0   F   F   E

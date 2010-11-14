@@ -159,12 +159,12 @@ crate:   NONE    42  51.5   57.5   1.0   N    0   0  0   0   0   F   F   N
 crate:   NONE    42  46.5   50.5   1.0   N    0   0  0   0   0   F   F   N
 powbox:   NONE    68  47.0   52.0   1.0   N    0   0  0   0   0   F   F   N
 Mimic:   NONE    62  51.5   58.5   1.0   W    99   0  0   0   0   F   F   E
-  %RANDOM_SCROLL:   NONE    80  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_SCROLL:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 
 chest:   NONE    61  46.5   56.5   1.0   E    19   0  0   0   0   F   F   N
-  %RANDOM_POTION:   NONE    36  66.0   38.0   1.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  66.0   38.0   1.0   I    0   0  0   0   0   F   F   N
   gshield:   NONE    52  0.5   0.5   1.0   I    0   0  0   0   0   F   F   N
-  %NORMAL_TREASURE:   NONE    118  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 
 
 //--------------------------------------------------------------------------------
@@ -195,9 +195,9 @@ prisoner:   NONE    44  62.0   27.0   1.0   N    0   0  0   0   0   F   F   E
   SpkMace:   NONE    56  0.0   0.0   0.0   R    0   0  0   0   0   F   F   N
 
 chest:   NONE    61  62.0   24.0   1.0   N    12   0  0   1   0   F   F   N       //Locked
-  %RANDOM_WAND:   NONE    51  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_POTION:   NONE    65  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_POTION:   NONE    36  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_WAND:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 
 //--------------------------------------------------------------------------------
 //Key prisoners
@@ -244,7 +244,7 @@ bosslumpkin:   NONE    69  25.0   44.0   1.0   N    49   0  0   0   0   F   F   
   KeyC:   NONE    64  49.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 
 chest:   NONE    61  27.5   38.5   1.0   N    14   0  0   1   0   F   F   N         //Locked
-  %RANDOM_POTION:   NONE    109  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
   gonne:   NONE    53  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
   KeyA:   NONE    70  49.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 
@@ -304,8 +304,8 @@ chair:   NONE    66  31.5   20.5   1.0   N    0   0  0   0   0   F   F   N
 crate:   NONE    42  34.0   10.0   1.0   N    0   0  0   0   0   F   F   N
 Mimic:   NONE    62  31.0   9.0   1.0   N    0   0  0   0   0   F   F   E
   KeyC:   NONE    64  49.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_SCROLL:   NONE    108  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_ARCANE_SPELLBOOK:   NONE    79  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_SCROLL:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_ARCANE_SPELLBOOK:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 
 
 //--------------------------------------------------------------------------------
@@ -322,10 +322,10 @@ cobol:   NONE    63  42.0   6.0   1.0   N    3   2  0   300   0   F   F   E
   ironball:   NONE    55  0.0   0.0   0.0   L    0   0  0   0   0   F   F   N
 
 chest:   NONE    61  54.0   6.0   1.0   S    0   0  0   1   0   F   F   N           //Locked
-  %RANDOM_POTION:   NONE    107  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_POTION:   NONE    106  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %NORMAL_TREASURE:   NONE    120  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %NORMAL_TREASURE:   NONE    104  75.0   53.0   1.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:   NONE    -1  75.0   53.0   1.0   I    0   0  0   0   0   F   F   N
 
 gate:   NONE    43  54.0   12.75   1.0   S    0   0  5   0   0   F   F   N
 gate:   NONE    43  44.0   12.75   1.0   N    0   0  4   0   0   F   F   N
@@ -438,7 +438,7 @@ prisoner:   NONE    44  7.0   27.0   1.0   N    0   0  0   0   0   F   F   E
 gate:   NONE    43  10.0   36.0   1.0   N    0   0  14   0   0   F   F   N
 chest:   NONE    61  8.5   41.5   1.0   N    2   0  0   32   0   F   F   N            //Contains random level 3 armor
 chest:   NONE    61  11.5   41.5   1.0   N    0   0  0   1   0   F   F   N              //Chest
-  %NORMAL_TREASURE:   NONE    105  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_SCROLL:   NONE    103  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RARE_TREASURE:   NONE    81  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_DIVINE_RUNE:   NONE    97  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_SCROLL:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RARE_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_DIVINE_RUNE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N

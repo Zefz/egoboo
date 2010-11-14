@@ -36,7 +36,7 @@ PRISONER:  Butch     96   10.5 9.5  0.0  E   0   2   0   0   0   F   F   Null
 // Scattered chests
 GASCHEST:  NONE      51   55   33   0.0  W   0   0   0   1   0   F   F   Null
   Pick:    NONE      45   0    0    0    I   0   0   0   0   0   F   F   Null
-  %NORMAL_TREASURE:    NONE      60   0    0    0    I   0   0   0   0   0   F   F   Null
+  %NORMAL_TREASURE:    NONE      -1   0    0    0    I   0   0   0   0   0   F   F   Null
   Cinquedea:    NONE      47   0    0    0    I   0   0   0   0   0   F   F   Null
 Chest:    NONE      53   27.5 7.5  0.0  S   0   0   0   2   0   F   F   Null        //Contains map
 Chest:    NONE      53   14.5 31.5 0.0  W   0   0   0   0   0   F   F   Null

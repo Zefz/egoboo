@@ -143,15 +143,15 @@ daemonlord:   NONE    38  31.5   23.5   1.0   N    999   0  0   0   0   F   F   
 
 //Normal chest
 chest:   NONE    46  52.5   30.5   1.0   S    0   0  0   0   0   F   F   N
-  %RANDOM_POTION:   NONE    36  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %NORMAL_TREASURE:   NONE    60  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %NORMAL_TREASURE:   NONE    61  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 
 //Invisible chest
 chest:   NONE    46  55.5   35.5   1.0   N    0   0  0   16   0   F   F   N
-  %RARE_TREASURE:   NONE    43  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_POTION:   NONE    62  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_WAND:   NONE    59  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RARE_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_WAND:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 
 deadfall:  NONE    52  13.5   19.0   2.0   N    0   0  2   0   0   F   F   E
 deadfall:  NONE    52  9.5   14.0   3.0   N    0   0  4   0   0   F   F   E
@@ -225,18 +225,18 @@ dreadnaught:   NONE    50  18.5   90.5   1.0   N    0   0  0   0   0   F   F   E
 dreadnaught:   NONE    50  15.5   90.5   1.0   N    0   0  0   0   0   F   F   E
   SpkMace:   NONE    51  0.0   0.0   0.0   R    0   0  0   0   0   F   F   N
 chest:   NONE    46  25.5   83.0   1.0   W    0   0  0   16   0   F   F   N               //Invisible chest
-  %RANDOM_SCROLL:   NONE    67  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_POTION:   NONE    43  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_POTION:   NONE    71  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_SCROLL:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
   clencher:   NONE    72  0.0   0.0   0.0   I    0   0  0   0   0   F   F   E
 chest:   NONE    46  23.5   99.5   1.0   S    0   0  0   0   0   F   F   N          //Normal chest
-  %RARE_TREASURE:   NONE    70  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RARE_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 
 //Area between hell room and amazing maze
 pchest:   NONE    63  36.0   93.0   1.0   S    59   0  0   2   0   F   F   N
-  %RANDOM_NORMAL:  NONE    98  0.0    0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_SCROLL:   NONE    67  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_NORMAL:   NONE    61  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:  NONE    -1  0.0    0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_SCROLL:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 mephit:   NONE    40  36.0   93.0   1.0   N    0   0  0   0   0   F   F   E
   mephitwing:   NONE    41  0.0   0.0   0.0   L    0   0  0   0   0   F   F   E
 mephit:   NONE    40  38.0   93.0   1.0   N    0   1  0   0   0   F   F   E
@@ -305,9 +305,9 @@ demon:   NONE    42  97.0   72.0   1.0   N    0   0  0   0   0   F   F   E
 dreadnaught:   NONE    50  100.0   73.0   1.0   N    19   0  0   0   0   F   F   E
   SpkMace:   NONE    51  0.0   0.0   0.0   R    0   0  0   0   0   F   F   N
 chest:   NONE    46  101.5   72.5   1.0   W    0   0  0   0   0   F   F   N
- %RANDOM_SCROLL:  NONE    90  0.0    0.0   0.0   I    0   0  0   0   0   F   F   N
- %RANDOM_POTION:  NONE    71  0.0    0.0   0.0   I    0   0  0   0   0   F   F   N
- %NORMAL_TREASURE:  NONE    61  0.0    0.0   0.0   I    0   0  0   0   0   F   F   N
+ %RANDOM_SCROLL:  NONE    -1  0.0    0.0   0.0   I    0   0  0   0   0   F   F   N
+ %RANDOM_POTION:  NONE    -1  0.0    0.0   0.0   I    0   0  0   0   0   F   F   N
+ %NORMAL_TREASURE:  NONE    -1  0.0    0.0   0.0   I    0   0  0   0   0   F   F   N
 
 //Trap hall
 arrowtrap:   NONE    53  90.0   75.0   1.0   N    0   0  18   0   0   F   F   N
@@ -339,11 +339,11 @@ DarkSpirit:   NONE    117  54.5   13.5   1.0   N    0   0  0   0   0   F   F   E
 Hellrover:   NONE    118  54.5   13.5   1.0   N    0   0  0   0   0   F   F   E
 
 chest:   NONE    46  62.0   23.0   1.0   N    17   0  0   8   0   F   F   N
-  %RANDOM_POTION:   NONE    71  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %NORMAL_TREASURE:  NONE    98  0.0    0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:  NONE    -1  0.0    0.0   0.0   I    0   0  0   0   0   F   F   N
 kursetrap:   NONE    91  62.0   23.0   1.0   N    0   0  33   0   0   F   F   E
-  %NORMAL_TREASURE:  NONE    98  0.0    0.0   0.0   I    0   0  0   0   0   F   F   N
-  %NORMAL_TREASURE:  NONE    98  0.0    0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:  NONE    -1  0.0    0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:  NONE    -1  0.0    0.0   0.0   I    0   0  0   0   0   F   F   N
 
 //Prison cell of elayne
 devildoor:   NONE    74  69.0   12.0   1.0   E    0   0  26   10   0   F   F   N
@@ -375,9 +375,9 @@ fiendbug:   NONE    55  38.0   76.0   1.0   N    0   0  0   0   0   F   F   E
 fiendbug:   NONE    55  36.0   74.0   1.0   N    0   0  0   0   0   F   F   E
 
 chest:   NONE    46  39.5   78.5   1.0   W    29   0  0   16   0   F   F   N
-  %RANDOM_ARCANE_SPELLBOOK:  NONE    96  0.0    0.0   0.0   I    0   0  0   0   0   F   F   N
-  %NORMAL_TREASURE:   NONE    60  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_POTION:   NONE    62  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_ARCANE_SPELLBOOK:  NONE    -1  0.0    0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 
 GigaGelfeet:   NONE    93  23.5   70.5   1.0   N    0   0  0   1   0   F   F   E
 GigaGelfeet:   NONE    93  23.5   72.0   1.0   N    0   0  0   1   0   F   F   E

@@ -76,11 +76,11 @@ KeyA:      NONE     93    27   23   0    S   0   0   0   0   0   F   F   Null
 
 Chest:     NONE     43    27.0 37.0 0.0  N   0   0   0   2   0   F   F   Null     //Map chest
 Chest:     NONE     43    53.0 35.0 0.0  N   0   0   0   0   0   F   F   Null
-  %MAGIC_ITEM:  NONE     51    0    0    0    I   0   0   0   0   0   F   F   Null
+  %MAGIC_ITEM:  NONE     -1    0    0    0    I   0   0   0   0   0   F   F   Null
   Sword:   NONE     52    0    0    0    I   0   0   0   0   0   F   F   Null
   LPotion: NONE     86    0    0    0    I   0   0   0   0   0   F   F   Null
   LPotion: NONE     86    0    0    0    I   0   0   0   0   0   F   F   Null
-  %NORMAL_TREASURE: NONE     53    0    0    0    I   0   0   0   0   0   F   F   Null
+  %NORMAL_TREASURE: NONE     -1    0    0    0    I   0   0   0   0   0   F   F   Null
   MPotion: NONE     87    0    0    0    I   0   0   0   0   0   F   F   Null
   MPotion: NONE     87    0    0    0    I   0   0   0   0   0   F   F   Null
 Chest: NONE     43    51.5 35.0 0.0  N   4   1   0   32   0   F   F   Null    //Random armor (Level 1 to 3)

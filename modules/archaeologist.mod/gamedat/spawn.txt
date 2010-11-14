@@ -145,10 +145,10 @@ JungleWarrior:   NONE    64  83.0   51.0   1.0   N    2   0  0   0   0   F   F  
 
 //Secret island
 chest:   NONE    55  83.5   9.5   1.0   S    59   0  0   0   0   F   F   N
-  %RANDOM_POTION:   NONE    61  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_POTION:   NONE    61  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %NORMAL_TREASURE:   NONE    40  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %NORMAL_TREASURE:   NONE    56  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %NORMAL_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 shufflingheap:   NONE    66  83.5   10.5   1.0   S    0   0  0   0   0   F   F   S
 
 //Temple treasure
@@ -157,9 +157,9 @@ chest:   NONE    55  68.5   53.5   3.0   S    0   0  0   0   0   F   F   N
   AmmoBox:   NONE    56  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 chest:   NONE    55  43.5   52.5   4.0   S    0   0  0   0   0   F   F   N
   OilFlask:   NONE    71  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_POTION:   NONE    61  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 chest:   NONE    55  38.5   35.5   3.0   E    0   0  0   0   0   F   F   N
-  %RANDOM_POTION:   NONE    68  0.0   0.0   0.0   I    19   0  0   0   0   F   F   N
+  %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    19   0  0   0   0   F   F   N
   whip:   NONE    59  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
   OilFlask:   NONE    71  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 pedestal:   NONE    50  51.0   51.0   6.0   E    0   0  0   0   0   F   F   N
