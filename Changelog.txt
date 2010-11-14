@@ -5,6 +5,7 @@ Version 2.9.x (??.??.201?)
 
 Credits to Penguinflyer5234, Seth, Khaos89 and Octagon this release for extensive play testing!
 Version 2.8.1 (??.11.2010)
+- New Feature: Most of the treasure found in Egoboo is now completely randomized each time you play!
 - New Feature: Added special camera effects whenever a player gets dazed or grogged.
 - Update: Added larger denomination "money" in the form of gems.
 - Update: Increased the effect of darkvision.
@@ -19,6 +20,7 @@ Version 2.8.1 (??.11.2010)
 - Update: Various modules are now slightly darker than before.
 - Update: Money is easier to pick up now.
 - Update: Kite Shields now have a small chance to be Kursed.
+- Bugfix: Fixed exploit where you could keep doors open by placing specific items between the door.
 - Bugfix: Fixed many particle bugs.
 - Bugfix: Fixed bug where Grogging and Dazing was inverted.
 - Bugfix: A number of grammar and spelling fixes.
