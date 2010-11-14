@@ -47,9 +47,9 @@ Trog:      NONE      36   8.0  32.0 4.0  N   1   4   0   0   0   F   F   Trog
   Spear:   NONE      51   0    0    0    R   0   0   0   0   0   F   F   Null
 Spit:      NONE      44   5    27   0    S   0   0   0   0   0   F   F   Null
 Chest:     NONE      40   3    25   0    E   0   0   0   0   0   F   F   Null
-  %RANDOM_SCROLL:NONE 60   0    0   0     I   0   0   0   0   0   F   F   Null
+  %RANDOM_SCROLL: NONE -1   0    0   0     I   0   0   0   0   0   F   F   Null
   GrubBug: NONE      37   0    0   0     I   0   0   0   0   0   F   F   Insect
-  %NORMAL_TREASURE: NONE      43   0    0   0     I   0   0   0   0   0   F   F   Null
+  %NORMAL_TREASURE: NONE      -1   0    0   0     I   0   0   0   0   0   F   F   Null
   
 GrubBug:   NONE      37   29   47   6    N   0   0   0   0   0   F   F   Insect
 GrubBug:   NONE      37   36   54   6    N   0   0   0   0   0   F   F   Insect
