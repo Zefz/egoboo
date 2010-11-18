@@ -11,17 +11,17 @@
 #dependency Sword             57
 #dependency Cinquedea         67
 #dependency Lance             68
-#dependency KiteShield           74
+#dependency KiteShield        74
 #dependency Spear             75
 #dependency Hatchet           77
 #dependency Mace              78
 #dependency Broadsword        82
 #dependency DShield           84
 #dependency Scimitar          92
-#dependency MLance           102
+#dependency MagicLance       102
 #dependency MagXBow          103
 #dependency TMaul            120
-#dependency WSword           122
+#dependency WpnMasterBlade   122
 #dependency Scythe           131
 #dependency Trident          139
 #dependency FrostSabre       148
@@ -472,6 +472,6 @@ Meena:   NONE    146  0.0   0.0   0.0   N    0   0  0   0   0   F   F   G
   Knife: NONE    89  0.0   0.0   0.0   R    0   0  0   0   0   F   F   N
 Beggar:  NONE    151  28.0   48.5   0.0   E    3   0  0   0   0   F   F   G		
 TouristGuide:   NONE    159  34.5   12.0   0.0  E    0   0  0   0   0   F   F   G
-Angus:   NONE    153  39.6 117.5   0.0   N    0   0  0   0   0   T   F   G
+Angus:   NONE    153  39.6 117.5   0.0   N    0   0  0   0   0   F   F   G
 Prophet:   NONE    154  41.5   99.0   0.0  S    0   0  0   0   0   F   F   G
   QStaff: NONE    47  0.0   0.0   0.0   R    0   0  0   0   0   F   F   N

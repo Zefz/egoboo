@@ -14,6 +14,8 @@ IfSpawned
     IfTargetHasQuest
       tmpargument = TEAME
       TargetJoinTeam
+      tmparugment = 0
+      SendMessage
   
 //Check the two exits for runners
 IfTimeOut
