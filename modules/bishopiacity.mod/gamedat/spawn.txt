@@ -361,10 +361,10 @@ barrel:   NONE    158  93.8   52.5   1.0   ?    0   0  0   0   0   F   F   N
 barrel:   NONE    158  94.5   52.5   1.0   ?    0   0  0   0   0   F   F   N
 crate:   NONE    43  84.5   48.5   1.0   S    0   2  0   0   0   F   F   N
 crate:   NONE    43  12.5   97.5   2.0   N    0   0  0   0   0   F   F   N
-crate:   NONE    43  12.5   97.5   1.0   N    0   2  0   0   0   F   F   N
+crate:   NONE    43  12.5   97.5   0.0   N    0   2  0   0   0   F   F   N
 barrel:   NONE    158  27.5   47.5   1.0   ?    0   0  0   0   0   F   F   N
-crate:   NONE    43  27.3   48.3   1.0   N    0   0  0   0   0   F   F   N
-crate:   NONE    43  28.3   47.3   1.0   N    0   2  0   0   0   F   F   N
+crate   NONE    43  27.3   48.3   1.0   N    0   0  0   0   0   F   F   N            //This one caused the crash
+crate   NONE    43  28.3   47.3   1.0   N    0   2  0   0   0   F   F   N            //and this one
 crate:   NONE    43  100.5   44.5   1.0   N    0   0  0   0   0   F   F   N
 barrel:   NONE    158  98.5   40.5   1.0   ?    0   0  0   0   0   F   F   N
 crate:   NONE    43  100.5   43.5   1.0   N    0   0  0   0   0   F   F   N
@@ -472,6 +472,6 @@ Meena:   NONE    146  0.0   0.0   0.0   N    0   0  0   0   0   F   F   G
   Knife: NONE    89  0.0   0.0   0.0   R    0   0  0   0   0   F   F   N
 Beggar:  NONE    151  28.0   48.5   0.0   E    3   0  0   0   0   F   F   G		
 TouristGuide:   NONE    159  34.5   12.0   0.0  E    0   0  0   0   0   F   F   G
-Angus:   NONE    153  39.6 117.5   0.0   N    0   0  0   0   0   F   F   G
-Prophet:   NONE    154  41.5   99.0   0.0  S    0   0  0   0   0   F   F   G
+Angus:   NONE    153  16.5 61.5   0.0   N    0   0  0   0   0   F   F   G
+Prophet:   NONE    154  41.5   100.0   0.0  S    0   0  0   0   0   F   F   G
   QStaff: NONE    47  0.0   0.0   0.0   R    0   0  0   0   0   F   F   N

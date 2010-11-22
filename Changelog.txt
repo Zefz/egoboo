@@ -7,6 +7,7 @@ Credits to Penguinflyer5234, Seth, Khaos89 and Octagon this release for extensiv
 Version 2.8.1 (??.11.2010)
 - New Feature: Most of the treasure found in Egoboo is now completely randomized each time you play!
 - New Feature: Added special camera effects whenever a player gets dazed or grogged.
+- Update: The Light spell now costs 1 mana to activate and more mana to sustain.
 - Update: Implemented various code optimizations to improve game performance.
 - Update: Added larger denomination "money" in the form of gems.
 - Update: Increased the effect of darkvision.
@@ -21,6 +22,7 @@ Version 2.8.1 (??.11.2010)
 - Update: Various modules are now slightly darker than before.
 - Update: Money is easier to pick up now.
 - Update: Kite Shields now have a small chance to be Kursed.
+- Bugfix: The hitboxes for various objects and attacks are now more correct.
 - Bugfix: Fixed various GUI bugs on higher resolutions.
 - Bugfix: Fixed exploit where you could keep doors open by placing specific items between the door.
 - Bugfix: Fixed many particle bugs.

@@ -9,7 +9,7 @@ End message ( -1 for none )			: -1
 
 
 // Enchantment draining/sustaining
-Owner's mana boost each second ( -1.0 to 1.0 )	: -0.3
+Owner's mana boost each second ( -1.0 to 1.0 )	: 0.0
 Target's mana boost each second ( -1.0 to 1.0 ) : 0.0
 End if mana can't be payed ( TRUE or FALSE )	: FALSE
 Owner's life boost each second ( -1.0 to 1.0 )	: 0.0
@@ -73,4 +73,3 @@ Dexterity boost ( -3.0 to 3.0 )			: +6.0
 
 // Expansions
 :[SEND] 2       // The end sound
-:[SFRQ] 15000   // The end sound frequency
