@@ -28,7 +28,7 @@ Size           : 1.00
 Size up        : 0.10
 Shadow size    : 19
 Bump size      : 24
-Bump height    : 80
+Bump height    : 23
 Bump dampen    : 0.70
 Weight         : 20
 Jump power     : 30.00

@@ -32,8 +32,8 @@ Dexterity increase per level ( eg. 0-1 )	: 1-5
 Size ( eg. 1.0 )				: 1.00
 Size increase per level ( eg. 0.05 )		: 0.0
 Shadow size ( eg. 30, 0 is none )		: 25
-Bump size ( eg. 30 )				: 30
-Bump height ( eg. 70 )				: 50
+Bump size ( eg. 30 )				: 28
+Bump height ( eg. 70 )				: 30
 Bump dampen ( 0.0 to 1.0, lower is massive )	: 0.50
 Weight ( 0 to 255 )				: 50
 Jump power ( eg. 14.0 )				: 30.0

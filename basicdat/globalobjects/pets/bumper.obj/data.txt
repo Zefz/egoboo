@@ -31,9 +31,9 @@ Dexterity increase per level ( eg. 0-1 )	: 1
 // More physical attributes
 Size ( eg. 1.0 )				: 1.0
 Size increase per level ( eg. 0.05 )		: 0.0
-Shadow size ( eg. 30, 0 is none )		: 30
-Bump size ( eg. 30 )				: 60
-Bump height ( eg. 70 )				: 60
+Shadow size ( eg. 30, 0 is none )		: 57
+Bump size ( eg. 30 )				: 57
+Bump height ( eg. 70 )				: 42
 Bump dampen ( 0.0 to 1.0, lower is massive )	: .95
 Weight ( 0 to 255 )				: 190
 Jump power ( eg. 14.0 )				: 16.0
@@ -191,6 +191,9 @@ Chance of being cursed ( 0 to 100 )		: 0
 Sound of Footfall ( -1 for none )		: -1
 Sound of Jump ( -1 for none )			: -1
 
+
+// expansions
+:[MODL] H
 
 
 //-Notes------------------------------------------------------------------------
