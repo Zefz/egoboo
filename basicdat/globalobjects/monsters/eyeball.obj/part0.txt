@@ -20,7 +20,7 @@ Water ends particle ( TRUE or FALSE )			: FALSE
 Bump ends particle ( TRUE or FALSE )			: FALSE
 End if hits ground ( TRUE or FALSE )			: FALSE
 End after last frame ( TRUE or FALSE )			: FALSE
-Time before end ( 1 to 1000, 0 )			: 10
+Time before end ( 1 to 1000, 0 )			: 12
 
 
 
@@ -46,7 +46,7 @@ Dynalight falloff ( around 1000 )			: 0
 // Initial spawning of this particle
 Facing base ( 0 to 65535 )				: 0
 Facing randomness ( 0, 1, 3, 7, 15, 31, 63... )		: 0
-XY Spacing ( 0 to 100 )					: -40
+XY Spacing ( 0 to 100 )					: 0
 XY Spacing randomness ( 0, 1, 3, 7, 15, 31, 63... )	: 0
 Z Spacing ( -100 to 100 )				: 0
 Z Spacing randomness ( 0, 1, 3, 7, 15, 31, 63... )	: 0

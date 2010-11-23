@@ -4,9 +4,11 @@ Version 2.9.x (??.??.201?)
 - Update: Optimized menu rendering using pre-chaching. Menus should no longer lag or cause slowdowns.
 
 Credits to Penguinflyer5234, Seth, Khaos89 and Octagon this release for extensive play testing!
-Version 2.8.1 (??.11.2010)
+Version 2.8.1 (23.11.2010)
+- New Feature: A completely new music track for the Abyss modules.
 - New Feature: Most of the treasure found in Egoboo is now completely randomized each time you play!
 - New Feature: Added special camera effects whenever a player gets dazed or grogged.
+- Update: Improved the Floating Eye AI.
 - Update: The Light spell now costs 1 mana to activate and more mana to sustain.
 - Update: Implemented various code optimizations to improve game performance.
 - Update: Added larger denomination "money" in the form of gems.

@@ -45,12 +45,12 @@ Dynalight falloff ( around 1000 )			: 1400
 
 // Initial spawning of this particle
 Facing base ( 0 to 65535 )				: 0
-Facing randomness ( 0, 1, 3, 7, 15, 31, 63... )		: 8191
+Facing randomness ( 0, 1, 3, 7, 15, 31, 63... )		: 0
 XY Spacing ( 0 to 100 )					: -20
 XY Spacing randomness ( 0, 1, 3, 7, 15, 31, 63... )	: 0
 Z Spacing ( -100 to 100 )				: 5
 Z Spacing randomness ( 0, 1, 3, 7, 15, 31, 63... )	: 0
-XY Velocity ( 0 to 100 )				: 30
+XY Velocity ( 0 to 100 )				: 20
 XY Velocity randomness ( 0, 1, 3, 7, 15, 31, 63... )	: 0
 Z Velocity ( -100 to 100 )				: 0
 Z Velocity randomness ( 0, 1, 3, 7, 15, 31, 63... )	: 0
@@ -91,8 +91,8 @@ Spawn sound ( -1 for none )				: -1
 End sound ( -1 for none )				: -1
 Friendly fire ( TRUE or FALSE )				: FALSE
 Only hit hate group ( TRUE or FALSE )			: FALSE
-New target on spawn ( TRUE or FALSE )			: TRUE
-Target angle ( 0 to 32768 )				: 8000
+New target on spawn ( TRUE or FALSE )			: FALSE
+Target angle ( 0 to 32768 )				: 0
 Home in on target ( TRUE or FALSE )			: FALSE
 Homing friction ( 0.0 to 1.0 )				: 0.0
 Homing acceleration ( 0.0 to 1.0 )			: 0.0

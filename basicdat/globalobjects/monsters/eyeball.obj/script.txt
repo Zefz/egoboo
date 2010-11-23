@@ -41,20 +41,27 @@ IfTimeOut
         IfXIsLessThanY			//Target not flying or jumping out of sight?
           tmpargument = 1		//Enter combat mode
           SetState
-    Else
-      SetTurnModeToSpin			//Spin around
-    tmpx = selfx
-    tmpy = selfy
+    
+    //Spin around when we are home
+    tmpx = spawndistance
+    tmpy = 100
+    IfXIsLessThanY
+      SetTurnModeToSpin
 
+    //Stay where we spawned
+    tmpx = selfspawnx
+    tmpy = selfspawny
+    
   //COMBAT MODE
   IfStateIs1
     SetTurnModeToVelocity
     Run
     SetTargetToWideEnemy		//Enemy nearby?
       CallForHelp
-      //SHOOT EYE RAY
+      
+      //shoot eye ray
       IfFacingTarget
-        tmpargument = rand % 25 + 25	//Time between shots
+        tmpargument = rand & 31 + 50	//Time between shots
         SetTime
         tmpargument = rand % 3 + 1	//Randomize ray
         tmpx = selfx
@@ -64,25 +71,54 @@ IfTimeOut
 //        tmpargument = 256		//1 ray costs 1 mana
 //        SetTargetToSelf
 //        CostTargetMana
-      tmpx = targetx
-      tmpy = targety			//Move towards him or her
+        
+        //Battlelust!
+        tmpargument = 0
+        SetContent
+        
+      //We cant see them... if this goes on for long, then we give up
+      Else
+        tmpargument = selfcontent + 1
+        SetContent
+        
+      tmpx = targetdistance
+      tmpy = 400
+      IfXIsLessThanY
+        IfFacingTarget
+          SetTurnModeToWatchTarget
+          tmpx = targetx
+          tmpy = targety			//Move towards him or her
+          tmpdistance = -400
+          tmpturn = targetturnto
+          Compass
+        Else
+          tmpx = targetx
+          tmpy = targety			//Move towards him or her
+      Else
+        tmpx = targetx
+        tmpy = targety			//Move towards him or her
+
 
     Else				//Enemy ran away
       tmpargument = 0
       SetState
+      SetContent
+      SetTurnModeToVelocity
+      
+    //We give up if the player outsmarts us
+    tmpargument = 8
+    IfContentIs
+      tmpargument = 0
+      SetState
+      SetContent
+      SetTurnModeToVelocity
+      
   ClearWaypoints			  //
   AddWaypoint				  //
 
 //---------------------------------------------------------------------------------
-//Change skin
-IfStateIs0		//When watching
-  tmpargument = 0
-  tmpx = selfspawnx	//Return to start
-  tmpy = selfspawny
-  ClearWaypoints
-  AddWaypoint
-IfStateIs1		//Or in combat
-  tmpargument = 1
+//Change skin depending on state
+tmpargument = selfstate
 SetTargetToSelf
 IfTargetIsAlive		//and when killed
   DoNothing
