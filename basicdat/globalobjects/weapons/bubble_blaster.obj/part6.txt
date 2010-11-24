@@ -93,7 +93,7 @@ Friendly fire ( TRUE or FALSE )				: TRUE
 Only hit hate group ( TRUE or FALSE )			: FALSE
 New target on spawn ( TRUE or FALSE )			: FALSE
 Target angle ( 0 to 32768 )				: 0
-Home in on target ( TRUE or FALSE )			: TRUE
+Home in on target ( TRUE or FALSE )			: FALSE
 Homing friction ( 0.0 to 1.0 )				: 0.0
 Homing acceleration ( 0.0 to 1.0 )			: 0.0
 Rotate to face direction ( TRUE or FALSE )		: FALSE
