@@ -33,9 +33,9 @@ Bump dampen    : 0.35
 Weight         : 80
 Jump power     : 10.00
 Jump number    : 1
-Sneak speed    : 1
-Walk speed     : 3
-Run speed      : 5
+Sneak speed    : 1.4
+Walk speed     : 2.0
+Run speed      : 2.8
 Fly to height  : 0
 Flashing AND   : 255
 Alpha blending : 255
