@@ -1,5 +1,6 @@
 The globalobjects directory is broken up into subdirectories by the in-game purpose of the objects
 
+armor       = shields and suits of armor
 magic       = spell books, spell orbs, runes, etc.
 potions     = anything that comes in a bottle
 scrolls     = magical scrolls, usually one time use like potions
