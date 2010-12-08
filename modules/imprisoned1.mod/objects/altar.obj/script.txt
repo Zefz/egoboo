@@ -4,43 +4,44 @@ IfSpawned
   SpawnAttachedParticle
 
 IfTimeOut
-  tmpargument = 50
+  tmpargument = rand & 15 + 50
   SetTime
 
+  //Assume nothing happens
   tmpturn = 0
-  tmpargument = passage
-  SetTargetToWhoeverIsInPassage
+  
+  //Now check any item that is placed on the hand
+  tmpargument = passage       //The area around the hand
+  tmpdistance = BLAHITEMS     //Only items
+  tmpturn = [NONE]            //Any item
+  SetTargetToBlahInPassage
     tmpargument = 380
     SetTime
-    IfTargetIsAPlayer
-      DoNothing
-    Else
-      IfTargetIsOnSameTeam
-        DoNothing
-      Else
-        tmpturn = 10          //assume its the wrong item
-            
-        //1: The skull
-        tmpx = selfstate
-        tmpy = 4
-        IfXIsLessThanY
-          tmpargument = [SKUL]
-          IfTargetHasID
-            tmpturn = 4
-              
-        //2: The backpack
-        tmpy = 6
-        IfXIsLessThanY
-          tmpargument = [PACK]
-          IfTargetHasID
-            tmpturn = 6
-              
-        //3: The gem
-        tmpy = 8
-        IfXIsLessThanY
-          tmpargument = [GEMM]
-          IfTargetHasID
-            tmpturn = 8
+    
+    //assume its the wrong item
+    tmpturn = 10
+        
+    //1: The skull
+    tmpx = selfstate
+    tmpy = 4
+    IfXIsLessThanY
+      tmpargument = [SKUL]
+      IfTargetHasID
+        tmpturn = 4
+          
+    //2: The backpack
+    tmpy = 6
+    IfXIsLessThanY
+      tmpargument = [PACK]
+      IfTargetHasID
+        tmpturn = 6
+          
+    //3: The gem
+    tmpy = 8
+    IfXIsLessThanY
+      tmpargument = [GEMM]
+      IfTargetHasID
+        tmpturn = 8
               
     //They placed a token in the hand... do something
     tmpx = tmpturn
@@ -94,7 +95,7 @@ IfTimeOut
       tmpx = 49*128             //Hand coordinates
       tmpy = 38*128
       tmpdistance = 0
-      SpawnExactParticle
+      SpawnExactParticle        //Spawn some glitter
       
   tmpdistance = 1
   IfDistanceIsMoreThanTurn

@@ -82,13 +82,15 @@ IfUsed
         tmpargument = 1
         SetChildAmmo
         CostAmmo
-        IfAmmoOut
-          GoPoof
     Else
       tmpargument = 5
       SendMessageNear
       MakeSimilarNamesKnown		//Ugh he drank it...
       CostAmmo
+    tmpargument = 1
+    PlaySound
+    IfAmmoOut
+      GoPoof
 
 //Explode when in contact with fire
 IfReaffirmed

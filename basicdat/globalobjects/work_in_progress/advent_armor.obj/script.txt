@@ -1,0 +1,74 @@
+//-----------------------------------------------------------------------------------------------
+//Setup character
+IfSpawned
+  MakeCrushValid
+  
+//-----------------------------------------------------------------------------------------------
+//Swap armors if it fits
+IfUsed
+  //Remember what type of armor we are
+  SetTargetToSelf
+  tmpturn = targetarmor
+    
+  //Do we share the same type IDSZ?
+  SetTargetToWhoeverIsHolding
+  tmpargument = selfid
+  IfTargetHasID
+  
+    //Do they already use this kind of armor?
+    tmpx = targetarmor
+    tmpy = tmpturn
+    IfXIsEqualToY
+      tmpargument = 4
+      SendMessageNear
+
+    //Swap armors!
+    Else
+      //They swap to our armor
+      tmpargument = tmpturn
+      ChangeTargetArmor
+    
+      //We swap to their type
+      ChangeArmor
+      SendMessageNear
+      
+      //Play sound effect
+      tmpargument = 1
+      PlaySound
+    
+  //This armour doesn't fit this character
+  Else
+    tmpargument = 6
+    SendMessageNear
+    
+  //Set some cooldown
+  tmpargument = 100
+  SetReloadTime
+
+//-----------------------------------------------------------------------------------------------
+//Tell them what they found
+IfGrabbed
+  SetTargetToSelf
+  tmpargument = targetarmor + 5     //Determine which message to display
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    SendMessageNear
+  
+  
+//-----------------------------------------------------------------------------------------------
+//Sound if hit ground
+IfHitGround
+  tmpargument = 0
+  PlaySound
+  
+//-----------------------------------------------------------------------------------------------
+//Crushed in a passage
+IfCrushed
+  tmpargument = 9
+  SendMessageNear
+  SpawnPoof
+  GoPoof
+  
+//-----------------------------------------------------------------------------------------------
+End
+//-----------------------------------------------------------------------------------------------

@@ -62,7 +62,6 @@ IfXIsMoreThanY
       tmpargument = 0
       SetBumpHeight
       SendMessageNear
-      tmpdistance = 11025
       PlaySound
 
       // Begin...
