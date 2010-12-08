@@ -43,7 +43,7 @@ Walk speed ( 1 to 20, 3 is good )		: 3
 Run speed ( 1 to 20, 5 is good )		: 5
 Fly to height ( 0 is none )			: 0
 Flashing AND ( 1, 3, 7, 15...  255 is don't )	: 255
-Transparency blending ( 255 is normal )		: 128
+Transparency blending ( 255 is normal )		: 255
 Light blending ( 255 is normal )		: 255
 Transfer blending to weapons ( TRUE or FALSE )	: FALSE
 Sheen ( 0 - 15, 0 is dull, 15 is shiny )	: 0
@@ -196,6 +196,7 @@ Sound of Jump ( -1 for none )			: -1
 // Expansions
 :[ICON] 1	Show the icon, needed if usage not known
 :[SHAD] 1	Force a shadow
+:[MODL] C
 
 
 //-Notes------------------------------------------------------------------------
