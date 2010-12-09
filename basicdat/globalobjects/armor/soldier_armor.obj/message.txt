@@ -8,4 +8,4 @@ Message 6: %o_found_some_%1.
 Message 7: %o_found_some_%2.
 Message 8: %o_found_some_%3.
 Message 9: The_%c_was_destroyed!
-Message 10: This_%c_only_fits_for_an_Adventurer.
+Message 10: This_%c_only_fits_for_a_Soldier.

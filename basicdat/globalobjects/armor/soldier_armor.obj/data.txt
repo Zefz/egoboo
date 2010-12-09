@@ -103,7 +103,7 @@ Experience rate... Talking in character ( 1.0 )	: 1.0
 
 // IDSZ Identification tags ( [NONE] is valid )
 Parent ID ( eg. [FROG] for Trogs )		: [ARMO]
-Type ID ( eg. [TROG] for Trogs )		: [ADVE]
+Type ID ( eg. [TROG] for Trogs )		: [SOLD]
 Skill ID ( eg. [WMAG] for wizard spells )	: [NONE]
 Special ID ( eg. [SUM0] for animated bones )	: [NONE]
 Hate group ID ( eg. [GOBL] for dwarves )	: [NONE]
@@ -169,14 +169,14 @@ Life healing when used ( 0.0 to 100.0 )		: 0.0
 Mana cost to use ( 0.0 to 100.0 )		: 0.0
 Life return rate, ( 0 to 255 )			: 0
 Stoppedby mask ( 48 is the only one )		: 48
-Skin Name 0 ( use underscores for spaces )	: a_Leather_Tunic
-Skin Name 1 ( use underscores for spaces )	: a_Chainshirt
-Skin Name 2 ( use underscores for spaces )	: a_Breastplate
-Skin Name 3 ( use underscores for spaces )	: a_Robin_Costume
-Skin Cost 0 ( 0 to 65535 )			: 50
-Skin Cost 1 ( 0 to 65535 )			: 100
-Skin Cost 2 ( 0 to 65535 )			: 300
-Skin Cost 3 ( 0 to 65535 )			: 600
+Skin Name 0 ( use underscores for spaces )	: a_Gladiator's_Armor
+Skin Name 1 ( use underscores for spaces )	: some_Chainmail
+Skin Name 2 ( use underscores for spaces )	: some_Platemail
+Skin Name 3 ( use underscores for spaces )	: some_D'warven_Mithril
+Skin Cost 0 ( 0 to 65535 )			: 80
+Skin Cost 1 ( 0 to 65535 )			: 200
+Skin Cost 2 ( 0 to 65535 )			: 600
+Skin Cost 3 ( 0 to 65535 )			: 1100
 Strength dampen for weapons ( 0.0 to 1.0 )	: 0.00
 
 
