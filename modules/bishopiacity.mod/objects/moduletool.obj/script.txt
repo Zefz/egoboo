@@ -49,36 +49,32 @@ IfContentIs
     //If tmpx == 0, then someone escaped!
     tmpx = 1
     tmpargument = passage
-    tmpturn = [EVIL]
-    tmpdistance = BLAHQUEST + BLAHFRIENDS + BLAHENEMIES
+    tmpturn = [NONE]
+    tmpdistance = BLAHPLAYERS + BLAHENEMIES
     SetTargetToBlahInPassage
       tmpx = 0  
     Else
       tmpargument = passage + 1
-      tmpturn = [EVIL]
-      tmpdistance = BLAHQUEST + BLAHFRIENDS + BLAHENEMIES
+      tmpturn = [NONE]
+      tmpdistance = BLAHPLAYERS + BLAHENEMIES
       SetTargetToBlahInPassage
         tmpx = 0
         
     tmpy = 0
     IfXIsEqualToY
-      IfTargetIsAPlayer
-        tmpx = targetteam
-        tmpy = TEAME
-        IfXIsEqualToY
-          EnableExport
-          EndModule
-          BeatModule
-          ClearEndMessage
-          tmpargument = 0
-          AddEndMessage
-          tmpargument = 1
-          AddEndMessage
-          
-          //Remember them for next time
-          tmpargument = [EVIL]
-          tmpdistance = 0
-          AddQuestAllPlayers
+      EnableExport
+      EndModule
+      BeatModule
+      ClearEndMessage
+      tmpargument = 0
+      AddEndMessage
+      tmpargument = 1
+      AddEndMessage
+      
+      //Remember them for next time
+      tmpargument = [EVIL]
+      tmpdistance = 0
+      AddQuestAllPlayers
 
 //------------------------------------------------------------------------------------
 //Create some random magic stuff

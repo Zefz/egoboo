@@ -10,8 +10,7 @@ IfBumped
       SetState
       tmpargument = 100		//2 seconds
       SetTime
-      GetContent
-      tmpx = tmpargument
+      tmpx = selfcontent
 
       //Royal crypt
       tmpy = 0
