@@ -283,4 +283,6 @@
 :RANDOM_ARMOR_SUIT
 :Soldier_Armor
 :Advent_Armor
+:Paladin_Armor
+:Rogue_Armor
 :END
