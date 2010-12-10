@@ -4,7 +4,8 @@ Version 2.9.x (??.??.201?)
 - Update: Optimized menu rendering using pre-chaching. Menus should no longer lag or cause slowdowns.
 
 Credits to Penguinflyer5234, Seth, Khaos89 and Octagon this release for extensive play testing!
-Version 2.8.1 (23.11.2010)
+Version 2.8.1 (??.12.2010)
+- New Feature: Turn your enemies into gold with the new 'Hand of Midas' artifact!
 - New Feature: A completely new music track for the Abyss modules (Credits to Sakari).
 - New Feature: Most of the treasure found in Egoboo is now completely randomized each time you play!
 - New Feature: Added special camera effects whenever a player gets dazed or grogged.
@@ -25,6 +26,8 @@ Version 2.8.1 (23.11.2010)
 - Update: Various modules are now slightly darker than before.
 - Update: Money is easier to pick up now.
 - Update: Kite Shields now have a small chance to be Kursed.
+- Bugfix: Fixed some strange messages.
+- Bugfix: Removed various minor graphic glitches.
 - Bugfix: The hitboxes for various objects and attacks are now more correct.
 - Bugfix: Fixed various GUI bugs on higher resolutions.
 - Bugfix: Fixed exploit where you could keep doors open by placing specific items between the door.

@@ -283,3 +283,4 @@
 :RANDOM_ARMOR_SUIT
 :Soldier_Armor
 :Advent_Armor
+:END

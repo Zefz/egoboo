@@ -1,0 +1,7 @@
+Message 0: %t_found_a_%c.
+Message 1: The_%c_was_flattened!
+Message 2: %t_drew_a_%c.
+Message 3: %t's_%c_is_%k...
+Message 4: %t_turned_into_gold!
+Message 5: Transformed!
+Message 6: Immune_to_Transformation!

@@ -21,7 +21,7 @@ IfMounted
   SetContent
 
 IfDismounted
-  TargetNullTeam
+  JoinNullTeam
   tmpargument = 0
   SetContent
 
