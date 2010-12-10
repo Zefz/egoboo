@@ -1,7 +1,7 @@
 //         Name      Slot Xpos Ypos Zpos Dir Mon Skn Pas Con Lvl Stt Gho Team
 
 Player1:   NONE    0  37.6  37.6   0.0   N    0   0  0   0   0   T   F   G			// Player 1 stuff
-  soldier_armor: NONE    1   0.0    0.0   0.0   L    0   4  0   0   0   F   F   N
+  unknown: NONE    1   0.0    0.0   0.0   L    0   0  0   0   0   F   F   N
   unknown: NONE    2   0.0    0.0   0.0   R    0   0  0   0   0   F   F   N
   unknown: NONE    3   0.0    0.0   0.0   I    0   0  0   0   0   F   F   N
   unknown: NONE    4   0.0    0.0   0.0   I    0   0  0   0   0   F   F   N
@@ -48,3 +48,6 @@ mouse:   NONE    104 41 43   0.0   N    0   0  0   0   0   F   F   N
 hellrover:   NONE    105 43 43   0.0   N    0   0  0   0   0   F   F   N
 choco:   NONE    106 45 43   0.0   N    0   0  0   0   0   F   F   N
 tinker_plane:   NONE    107 47 43   0.0   N    0   0  0   0   0   F   F   N
+
+
+advent_armor: NONE    99   37.6  37.6   0.0   N    0   0  0   0   0   F   F   G
