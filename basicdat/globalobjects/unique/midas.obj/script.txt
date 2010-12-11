@@ -55,6 +55,8 @@ IfTimeOut
     CostAmmo
     IfAmmoOut
       GoPoof
+      tmpargument = 7
+      SendMessageNear
     tmpargument = 0
     SetState
   

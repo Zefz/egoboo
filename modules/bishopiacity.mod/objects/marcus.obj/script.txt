@@ -1,5 +1,7 @@
 //become nasty
 IfAttacked
+  tmpargument = 6
+  PlaySound
   SetTargetToWhoeverAttacked
   IfTargetIsOnSameTeam
     tmpargument = TEAME
@@ -8,6 +10,8 @@ IfAttacked
 IfKilled
   tmpargument = TEAME
   TargetJoinTeam
+  tmpargument = 7
+  PlaySound
 
 //Talk
 IfBumped

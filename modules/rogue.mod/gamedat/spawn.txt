@@ -48,7 +48,8 @@ Chest:    NONE      53   7.5  48.5 0.0  S   0   0   0   0   0   F   F   Null
 
 // Item room
 Chest:    NONE      53   37.5 19.5 0.0  E   24  0   0   0   0   F   F   Null
-Chest:   NONE      53   37.5 21.0 0.0  E   1   0   0   33   8   F   F   Null    //Locked rogue armor chest (Level 2)
+Chest:   NONE      53   37.5 21.0 0.0  E   0   0   0   0   1   F   F   Null
+  Rogue_Armor:    NONE   -1   0.0 0.0 0.0  I   0   1   0   0   0   F   F   Null
 Chest:    NONE      53   37.5 22.5 0.0  E   24  0   0   0   0   F   F   Null
 Chest:    NONE      53   40.5 19.5 0.0  W   24  0   0   0   0   F   F   Null
 Chest:    NONE      53   40.5 21.0 0.0  W   24  0   0   8   0   F   F   Null      //Secret bottom
