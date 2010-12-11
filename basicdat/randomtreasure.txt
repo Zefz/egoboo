@@ -285,4 +285,5 @@
 :Advent_Armor
 :Paladin_Armor
 :Rogue_Armor
+:Gnome_Armor
 :END

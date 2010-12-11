@@ -35,6 +35,7 @@
 #dependency TMaul            120
 #dependency LifeElixir       130
 #dependency LevitationShoes  147
+#dependency FBow              87
 
 // Shady Rogue Goods
 #dependency  Claw             65

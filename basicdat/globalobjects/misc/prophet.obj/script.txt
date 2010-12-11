@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 IfSpawned
   tmpx = rand % 10
-  tmpy = 1              //Only a 20% chance he is actually here
+  tmpy = 12              //Only a 30% chance he is actually here
   IfXIsMoreThanY
     SetTargetToSelf
     SetTargetToTargetRightHand
