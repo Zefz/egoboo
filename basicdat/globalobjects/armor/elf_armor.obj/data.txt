@@ -1,7 +1,7 @@
 // Real general data
-Object slot number ( 0 to 63, don't use twice )	: 72
-Object class name ( use underscore for spaces ) : Treasure_Chest
-Object is lit uniformly ( TRUE or FALSE )	: FALSE
+Object slot number ( 0 to 63, don't use twice )	: -1
+Object class name ( use underscore for spaces ) : Armor
+Object is lit uniformly ( TRUE or FALSE )	: TRUE
 Maximum ammo ( 0 for doesn't matter )		: 0
 Starting ammo ( 0 for doesn't matter )		: 0
 Gender ( MALE or FEMALE or OTHER )		: OTHER
@@ -31,11 +31,11 @@ Dexterity increase per level ( eg. 0-1 )	: 0
 // More physical attributes
 Size ( eg. 1.0 )				: 1.0
 Size increase per level ( eg. 0.05 )		: 0.05
-Shadow size ( eg. 30, 0 is none )		: 40
-Bump size ( eg. 30 )				: 40
-Bump height ( eg. 70 )				: 70
-Bump dampen ( 0.0 to 1.0, lower is massive )	: 0.0
-Weight ( 0 to 255 )				: 255
+Shadow size ( eg. 30, 0 is none )		: 15
+Bump size ( eg. 30 )				: 1
+Bump height ( eg. 70 )				: 0
+Bump dampen ( 0.0 to 1.0, lower is massive )	: .8
+Weight ( 0 to 255 )				: 10
 Jump power ( eg. 14.0 )				: 0.0
 Number of jumps ( eg. 1 )			: 0
 Sneak speed ( 1 to 20, 1 is good )		: 1
@@ -45,7 +45,7 @@ Fly to height ( 0 is none )			: 0
 Flashing AND ( 1, 3, 7, 15...  255 is don't )	: 255
 Transparency blending ( 255 is normal )		: 255
 Light blending ( 255 is normal )		: 255
-Transfer blending to weapons ( TRUE or FALSE )	: TRUE
+Transfer blending to weapons ( TRUE or FALSE )	: FALSE
 Sheen ( 0 - 15, 0 is dull, 15 is shiny )	: 0
 Phong mapping ( TRUE or FALSE )			: FALSE
 Texture X movement rate ( eg. 0.0 )		: 0.0
@@ -102,8 +102,8 @@ Experience rate... Talking in character ( 1.0 )	: 1.0
 
 
 // IDSZ Identification tags ( [NONE] is valid )
-Parent ID ( eg. [FROG] for Trogs )		: [CHES]
-Type ID ( eg. [TROG] for Trogs )		: [LOCK]
+Parent ID ( eg. [FROG] for Trogs )		: [ARMO]
+Type ID ( eg. [TROG] for Trogs )		: [ELFF]
 Skill ID ( eg. [WMAG] for wizard spells )	: [NONE]
 Special ID ( eg. [SUM0] for animated bones )	: [NONE]
 Hate group ID ( eg. [GOBL] for dwarves )	: [NONE]
@@ -111,24 +111,24 @@ Vuilnerability ID ( eg. [SILV] for werewolves )	: [NONE]
 
 
 // Item and damage flags
-Object is an item ( TRUE or FALSE )		: FALSE
+Object is an item ( TRUE or FALSE )		: TRUE
 Object is a mount ( TRUE or FALSE )		: FALSE
 Object is stackable ( TRUE or FALSE )		: FALSE
-Object's name is known ( TRUE or FALSE )	: FALSE
+Object's name is known ( TRUE or FALSE )	: TRUE
 Item of known usage ( TRUE or FALSE )		: TRUE
-Item carries to next module ( TRUE or FALSE )	: FALSE
+Item carries to next module ( TRUE or FALSE )	: TRUE
 Item requires skill ID to use ( TRUE or FALSE )	: FALSE
-Object is a platform ( TRUE or FALSE)		: TRUE
+Object is a platform ( TRUE or FALSE)		: FALSE
 Object collects money ( TRUE or FALSE )		: FALSE
 Object can open chests/doors ( TRUE or FALSE )	: FALSE
 
 
 // Other item and damage stuff
 DamageTarget type ( SLASH, CRUSH, POKE, HOLY,
-                    EVIL, FIRE, ICE, or ZAP )	: SLASH
+                    EVIL, FIRE, ICE, or ZAP )	: CRUSH
 Attack type if it's a weapon ( UNARMED, THRUST,
                      SLICE, CHOP, BASH, LONGBOW,
-                     XBOW, FLINGED, PARRY, ZAP)	: UNARMED
+                     XBOW, FLINGED, PARRY, ZAP)	: WALK
 
 
 // Particle attachments
@@ -139,8 +139,8 @@ Particle type ( 0 to 3 )			: 0
 
 
 // Character hands
-Left ( or only ) grip valid ( TRUE or FALSE )	: FALSE
-Right grip valid ( TRUE or FALSE )		: FALSE
+Left ( or only ) grip valid ( TRUE or FALSE )	: TRUE
+Right grip valid ( TRUE or FALSE )		: TRUE
 
 
 // Particle spawning on attack order ( for weapon characters )
@@ -161,7 +161,7 @@ Particle type ( 0 to 3 )			: 0
 
 // Extra stuff I forgot 
 Character can walk on water ( TRUE or FALSE )	: FALSE
-Character bounciness ( 0.00 to 0.95 )		: 0.0
+Character bounciness ( 0.00 to 0.95 )		: .40
 
 
 // More stuff I forgot
@@ -169,15 +169,15 @@ Life healing when used ( 0.0 to 100.0 )		: 0.0
 Mana cost to use ( 0.0 to 100.0 )		: 0.0
 Life return rate, ( 0 to 255 )			: 0
 Stoppedby mask ( 48 is the only one )		: 48
-Skin Name 0 ( use underscores for spaces )	: Skin_0
-Skin Name 1 ( use underscores for spaces )	: Skin_1
-Skin Name 2 ( use underscores for spaces )	: Skin_2
-Skin Name 3 ( use underscores for spaces )	: Skin_3
-Skin Cost 0 ( 0 to 65535 )			: 0
-Skin Cost 1 ( 0 to 65535 )			: 0
-Skin Cost 2 ( 0 to 65535 )			: 0
-Skin Cost 3 ( 0 to 65535 )			: 0
-Strength dampen for weapons ( 0.0 to 1.0 )	: 0.0
+Skin Name 0 ( use underscores for spaces )	: a_Leather_Tunic
+Skin Name 1 ( use underscores for spaces )	: a_Chainshirt
+Skin Name 2 ( use underscores for spaces )	: a_Breastplate
+Skin Name 3 ( use underscores for spaces )	: a_Robin_Costume
+Skin Cost 0 ( 0 to 65535 )			: 50
+Skin Cost 1 ( 0 to 65535 )			: 100
+Skin Cost 2 ( 0 to 65535 )			: 300
+Skin Cost 3 ( 0 to 65535 )			: 600
+Strength dampen for weapons ( 0.0 to 1.0 )	: 0.00
 
 
 // Another memory lapse
@@ -191,9 +191,8 @@ Chance of being cursed ( 0 to 100 )		: 0
 Sound of Footfall ( -1 for none )		: -1
 Sound of Jump ( -1 for none )			: -1
 
-
 // Expansions
-:[RIPP] 0               No ripples
+:[MODL] C     //Draw backface
 
 
 //-Notes------------------------------------------------------------------------

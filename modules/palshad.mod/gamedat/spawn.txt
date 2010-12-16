@@ -91,7 +91,9 @@ Chest:     NONE     43    53   45   0.0  W   0   0   0   2   0   F   F   Null   
 Chest:     NONE     43    19   35   0.0  S   0   0   0   0   0   F   F   Null
   KeyA:    NONE     93     0    0     0  I   0   0   0   0   0   F   F   Null
   %RANDOM_DIVINE_RUNE: NONE     -1     0    0     0  I   0   0   0   0   0   F   F   Null
-Chest: NONE     43    45   35   0.0  S   2   0   0   32   8   F   F   Null    //Contains rogue armor (Level 3)
+Chest: NONE     43    45   35   0.0  S   0   0   0   0   0   F   F   Null
+  %RANDOM_ARMOR:   	NONE    -1  0.0   0.0   0.0   I    0   4  0   0   0   F   F   N
+  %POISONED_WEAPON: NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 GasChest:  NONE     42    35   47   0.0  N   0   0   0   1   0   F   F   Null
   PPotion: NONE     57     0    0     0  I   0   0   0   0   0   F   F   Null
   Scythe:  NONE     94     0    0     0  I   0   0   0   0   0   F   F   Null
@@ -102,7 +104,8 @@ GasChest:  NONE     42    39   47   0.0  N   0   0   0   1   0   F   F   Null
 
 
 
-Chest:     NONE     43  14.5 23.5   0.0  E   1   0   0   32   3   F   F   Null  //Contains soldier armor (Level 2)
+Chest:     NONE     43  14.5 23.5   0.0  E   0   0   0   0   0   F   F   Null
+  %RANDOM_ARMOR: NONE     -1     0    1     0  I   0   0   0   0   0   F   F   Null
 Chest:     NONE     43  14.5 20.5   0.0  E   0   0   0   0   0   F   F   Null
   %RANDOM_POTION: NONE     -1     0    0     0  I   0   0   0   0   0   F   F   Null
   %RANDOM_POTION: NONE     -1     0    0     0  I   0   0   0   0   0   F   F   Null

@@ -138,8 +138,10 @@ chest:   NONE    46  5.5   60.5   1.0   S    999   0  0   0   0   F   F   N
 //Hall of the lords
 daemonlord:   NONE    38  34.5   21.5   1.0   N    999   0  0   0   0   F   F   L
   daemonlordwing:   NONE    39  0.0   0.0   0.0   L    0   0  0   0   0   F   F   S
+  %UNIQUE_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 daemonlord:   NONE    38  31.5   23.5   1.0   N    999   0  0   0   0   F   F   L
   daemonlordwing:   NONE    39  0.0   0.0   0.0   L    0   0  0   0   0   F   F   S
+  %UNIQUE_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 
 //Normal chest
 chest:   NONE    46  52.5   30.5   1.0   S    0   0  0   0   0   F   F   N

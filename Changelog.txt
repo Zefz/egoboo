@@ -5,6 +5,7 @@ Version 2.9.x (??.??.201?)
 
 Credits to Penguinflyer5234, Seth, Khaos89 and Octagon this release for extensive play testing!
 Version 2.8.1 (??.12.2010)
+- New Feature: Armor suits are now actual items that you can equip or carry around.
 - New Feature: Turn your enemies into gold with the new 'Hand of Midas' artifact!
 - New Feature: A completely new music track for the Abyss modules (Credits to Sakari).
 - New Feature: Most of the treasure found in Egoboo is now completely randomized each time you play!

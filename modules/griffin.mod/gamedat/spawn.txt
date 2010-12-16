@@ -379,7 +379,8 @@ haypile:   NONE    40  51.0   72.0   1.0   N    0   0  0   0   0   F   F   N
 
 //--------------------------------------------------------------------------------
 //Right guard chamber
-chest:   NONE    61  71.5   49.5   1.0   S    1   0  0   32   0   F   F   N            //Contains random level 2 armor
+chest:   NONE    61  71.5   49.5   1.0   S    0   0  0   0   0   F   F   N            //Contains random level 2 armor
+  %RANDOM_ARMOR:   NONE    -1  0.0   0.0   0.0   I    0   1  0   0   0   F   F   N
 table:   NONE    38  71.5   52.5   1.0   W    0   0  0   0   0   F   F   N
 chair:   NONE    66  72.5   52.5   1.0   W    0   0  0   0   0   F   F   N
 table:   NONE    38  76.5   55.5   1.0   E    0   0  0   0   0   F   F   N
@@ -436,9 +437,10 @@ prisoner:   NONE    44  7.0   27.0   1.0   N    0   0  0   0   0   F   F   E
 //--------------------------------------------------------------------------------
 //Treasury!
 gate:   NONE    43  10.0   36.0   1.0   N    0   0  14   0   0   F   F   N
-chest:   NONE    61  8.5   41.5   1.0   N    2   0  0   32   0   F   F   N            //Contains random level 3 armor
+chest:   NONE    61  8.5   41.5   1.0   N    0   0  0   0   0   F   F   N            //Contains random level 3 armor
+  %RANDOM_ARMOR:   NONE    -1  0.0   0.0   0.0   I    0   2  0   0   0   F   F   N
+  %RANDOM_SCROLL:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 chest:   NONE    61  11.5   41.5   1.0   N    0   0  0   1   0   F   F   N              //Chest
   %NORMAL_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_SCROLL:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
   %RARE_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
   %RANDOM_DIVINE_RUNE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N

@@ -79,15 +79,19 @@ Chest:     NONE     43    53.0 35.0 0.0  N   0   0   0   0   0   F   F   Null
   %MAGIC_ITEM:  NONE     -1    0    0    0    I   0   0   0   0   0   F   F   Null
   Sword:   NONE     52    0    0    0    I   0   0   0   0   0   F   F   Null
   LPotion: NONE     86    0    0    0    I   0   0   0   0   0   F   F   Null
-  LPotion: NONE     86    0    0    0    I   0   0   0   0   0   F   F   Null
   %NORMAL_TREASURE: NONE     -1    0    0    0    I   0   0   0   0   0   F   F   Null
   MPotion: NONE     87    0    0    0    I   0   0   0   0   0   F   F   Null
+Chest: NONE     43    51.5 35.0 0.0  N   4   1   0   0   0   F   F   Null    //Random armor (Level 1 to 3)
+  %RANDOM_ARMOR: NONE     -1     0    1     0  I   0   4   0   0   0   F   F   Null
+  LPotion: NONE     86    0    0    0    I   0   0   0   0   0   F   F   Null
+Chest: NONE     43    54.5 35.0 0.0  N   4   0   0   0   0   F   F   Null    //Random armor (Level 1 to 3)
+  %RANDOM_ARMOR: NONE     -1     0    1     0  I   0   4   0   0   0   F   F   Null
   MPotion: NONE     87    0    0    0    I   0   0   0   0   0   F   F   Null
-Chest: NONE     43    51.5 35.0 0.0  N   4   1   0   32   0   F   F   Null    //Random armor (Level 1 to 3)
-Chest: NONE     43    54.5 35.0 0.0  N   4   0   0   32   0   F   F   Null    //Random armor (Level 1 to 3)
-Chest: NONE     43    8.5  57.5 0.0  N   4   0   0   32   0   F   F   Null    //Random armor (Level 1 to 3)
-Chest: NONE     43    17.5 57.5 0.0  N   4   0   0   32   0   F   F   Null    //Random armor (Level 1 to 3)
-
+Chest: NONE     43    8.5  57.5 0.0  N   4   0   0   0   0   F   F   Null    //Random armor (Level 1 to 3)
+  %RANDOM_ARMOR: NONE     -1     0    1     0  I   0   4   0   0   0   F   F   Null
+  %NORMAL_TREASURE: NONE     -1    0    0    0    I   0   0   0   0   0   F   F   Null
+Chest: NONE     43    17.5 57.5 0.0  N   4   0   0   0   0   F   F   Null    //Random armor (Level 1 to 3)
+  %RANDOM_ARMOR: NONE     -1     0    1     0  I   0   4   0   0   0   F   F   Null
 
 
 Brazier:   NONE     36    13.0 9.0  0.0  N   0   0   20  2   0   F   F   Null

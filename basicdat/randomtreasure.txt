@@ -281,9 +281,10 @@
 //-----------------------------------------------------------------------------------------------------------------
 //Armor suit for any class
 :RANDOM_ARMOR_SUIT
-:Soldier_Armor
 :Advent_Armor
+:Elf_Armor
+:Gnome_Armor
 :Paladin_Armor
 :Rogue_Armor
-:Gnome_Armor
+:Soldier_Armor
 :END

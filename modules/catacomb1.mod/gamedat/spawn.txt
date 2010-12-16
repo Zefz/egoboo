@@ -192,8 +192,13 @@ kbutton:   NONE    81  74.0   52.0   1.0   N    0   0  14   0   0   F   F   N
 kbutton:   NONE    81  79.0   57.0   1.0   N    0   0  15   0   0   F   F   N
 switch:   NONE    75  74.0   57.0   1.0   N    0   0  14   0   0   F   F   N
 switch:   NONE    75  79.0   62.0   1.0   N    0   0  15   0   0   F   F   N
-chest:   NONE    58  62.0   72.5   0.0   S    3   0  0   32   0   F   F   N      //Contains random level 4 armor
-chest:   NONE    58  62.0   79.5   0.0   N    4   0  0   0   0   F   F   N			//Final chest
-  %RARE_TREASURE:   NONE    -1  62.0   79.5   1.0   I    0   0  0   0   0   F   F   N
+
+//Final chests
+chest:   NONE    58  62.0   72.5   0.0   S    0   0  0   0   0   F   F   N 
+  %RANDOM_ARMOR:  -1	0.0		0.0		0.0		I  0   3  0   0   0   F   F   N		//Random level 3 armor
+  %NORMAL_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+chest:   NONE    58  62.0   79.5   0.0   N    4   0  0   0   0   F   F   N
+  %RARE_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
   %RANDOM_POTION:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  
 KeyA:   NONE    63  49.5   75.0   1.0   N    0   0  0   0   0   F   F   N
