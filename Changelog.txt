@@ -10,6 +10,7 @@ Version 2.8.1 (??.12.2010)
 - New Feature: A completely new music track for the Abyss modules (Credits to Sakari).
 - New Feature: Most of the treasure found in Egoboo is now completely randomized each time you play!
 - New Feature: Added special camera effects whenever a player gets dazed or grogged.
+- Update: Added some easter eggs :)
 - Update: Various improvements to model animations.
 - Update: Improved the Floating Eye AI.
 - Update: The Light spell now costs 1 mana to activate and more mana to sustain.
