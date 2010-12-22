@@ -3,8 +3,7 @@
 //PLAYERS
 //-----------------------------------------------------------------------------------
 
-// Objects that override a global object
-#dependency Pot 90
+// Secret easter egg
 #dependency Plunger 132
 
 // Dunlar Blacksmith Shop
@@ -338,49 +337,49 @@ haypile:   NONE    39  26.0   95.0   1.0   N    0   0  0   0   0   F   F   N
 haypile:   NONE    39  32.0   97.0   1.0   N    0   0  0   0   0   F   F   N
 haypile:   NONE    39  30.0   92.0   1.0   N    0   0  0   0   0   F   F   N
 haypile:   NONE    39  12.5   95.5   2.0   N    0   0  0   0   0   F   F   N
-Stool:   NONE    46  9.5   105.5   1.0   N    0   0  0   0   0   F   F   N
-Stool:   NONE    46  28.0   75.5   1.0   N    0   0  0   0   0   F   F   N
-well:   NONE    40  43.0   102.0   1.0   N    0   0  0   0   0   F   F   N
-well:   NONE    40  22.5   48.5   1.0   N    0   0  0   0   0   F   F   N
+Stool:   NONE    46  9.5   105.5   1.0   ?    0   0  0   0   0   F   F   N
+Stool:   NONE    46  28.0   75.5   1.0   ?    0   0  0   0   0   F   F   N
+well:   NONE    40  43.0   102.0   1.0   ?    0   0  0   0   0   F   F   N
+well:   NONE    40  22.5   48.5    1.0   ?    0   0  0   0   0   F   F   N
 FlagPost:   NONE    54  16.5   19.5   1.0   ?    0   0  0   0   0   F   F   N
 trapdoor:   NONE    55  99.5   59.5   1.0   E    0   0  0   0   0   F   F   N
 trapdoor:   NONE    55  52.5   101.5   4.0   N    0   0  0   1   0   F   F   N //Griffin trapdoor
 trapdoor:   NONE    55  95.5   80.3   1.0   N    0   0  0   0   0   F   F   N
-Tree:   NONE    36  61.5   37.5   1.0   N    0   0  0   0   0   F   F   N
-Tree:   NONE    36  67.5   40.5   1.0   N    0   0  0   0   0   F   F   N
-Tree:   NONE    36  74.0   26.0   1.0   E    0   0  0   0   0   F   F   N
-Tree:   NONE    36  63.0   24.0   1.0   S    0   0  0   0   0   F   F   N
-Tree:   NONE    36  66.0   29.0   1.0   N    0   0  0   0   0   F   F   N
+Tree:    NONE    36  61.5   37.5   1.0   ?    0   0  0   0   0   F   F   N
+Tree:    NONE    36  67.5   40.5   1.0   ?    0   0  0   0   0   F   F   N
+Tree:    NONE    36  74.0   26.0   1.0   ?    0   0  0   0   0   F   F   N
+Tree:    NONE    36  63.0   24.0   1.0   ?    0   0  0   0   0   F   F   N
+Tree:    NONE    36  66.0   29.0   1.0   ?    0   0  0   0   0   F   F   N
 Table:   NONE    60  77.5   44.5   1.0   N    0   0  0   0   0   F   F   N
 Table:   NONE    60  76.5   46.5   1.0   E    0   0  0   0   0   F   F   N
-Stool:   NONE    46  76.0   46.5   1.0   N    0   0  0   0   0   F   F   N
-Stool:   NONE    46  78.3   44.8   1.0   N    0   0  0   0   0   F   F   N
-Stool:   NONE    46  76.8   44.5   1.0   N    0   0  0   0   0   F   F   N
-Stool:   NONE    46  77.0   46.5   1.0   N    0   0  0   0   0   F   F   N
-Stool:   NONE    46  89.5   43.5   1.0   N    0   0  0   0   0   F   F   N
+Stool:   NONE    46  76.0   46.5   1.0   ?    0   0  0   0   0   F   F   N
+Stool:   NONE    46  78.3   44.8   1.0   ?    0   0  0   0   0   F   F   N
+Stool:   NONE    46  76.8   44.5   1.0   ?    0   0  0   0   0   F   F   N
+Stool:   NONE    46  77.0   46.5   1.0   ?    0   0  0   0   0   F   F   N
+Stool:   NONE    46  89.5   43.5   1.0   ?    0   0  0   0   0   F   F   N
 barrel:   NONE    158  93.8   52.5   1.0   ?    0   0  0   0   0   F   F   N
 barrel:   NONE    158  94.5   52.5   1.0   ?    0   0  0   0   0   F   F   N
 crate:   NONE    43  84.5   48.5   1.0   S    0   2  0   0   0   F   F   N
 crate:   NONE    43  12.5   97.5   2.0   N    0   0  0   0   0   F   F   N
 crate:   NONE    43  12.5   97.5   0.0   N    0   2  0   0   0   F   F   N
 barrel:   NONE    158  27.5   47.5   1.0   ?    0   0  0   0   0   F   F   N
-crate   NONE    43  27.3   48.3   1.0   N    0   0  0   0   0   F   F   N            //This one caused the crash
-crate   NONE    43  28.3   47.3   1.0   N    0   2  0   0   0   F   F   N            //and this one
+crate:   NONE    43  27.3   48.3   1.0   N    0   0  0   0   0   F   F   N
+crate:   NONE    43  28.3   47.3   1.0   N    0   2  0   0   0   F   F   N
 crate:   NONE    43  100.5   44.5   1.0   N    0   0  0   0   0   F   F   N
 barrel:   NONE    158  98.5   40.5   1.0   ?    0   0  0   0   0   F   F   N
 crate:   NONE    43  100.5   43.5   1.0   N    0   0  0   0   0   F   F   N
 crate:   NONE    43  7.0   67.0   1.0   N    0   0  0   0   0   F   F   N
 crate:   NONE    43  12.5   96.8   1.0   N    0   3  0   0   0   F   F   N
-Tree:   NONE    36  31.0   12.0   1.0   N    0   0  0   0   0   F   F   N
-Tree:   NONE    36  15.0   10.0   1.0   N    0   0  0   0   0   F   F   N
-Tree:   NONE    36  7.0   83.0   1.0   N    0   0  0   0   0   F   F   N
-Tree:   NONE    36  78.0   75.0   1.0   N    0   0  0   0   0   F   F   N
-Tree:   NONE    36  45.0   109.5   1.0   N    0   0  0   0   0   F   F   N
-Tree:   NONE    36  19.5   24.5   1.0   N    0   0  0   0   0   F   F   N
-Tree:   NONE    36  6.5   41.5   1.0   N    0   0  0   0   0   F   F   N
-Tree:   NONE    36  18.0   104.0   1.0   N    0   0  0   0   0   F   F   N
-Tree:   NONE    36  81.0   96.0   1.0   N    0   0  0   0   0   F   F   N
-Tree:   NONE    36  79.0   110.0   1.0   N    0   0  0   0   0   F   F   N
+Tree:   NONE    36  31.0   12.0   1.0    ?    0   0  0   0   0   F   F   N
+Tree:   NONE    36  15.0   10.0   1.0    ?    0   0  0   0   0   F   F   N
+Tree:   NONE    36  7.0   83.0   1.0     ?    0   0  0   0   0   F   F   N
+Tree:   NONE    36  78.0   75.0   1.0    ?    0   0  0   0   0   F   F   N
+Tree:   NONE    36  45.0   109.5   1.0   ?    0   0  0   0   0   F   F   N
+Tree:   NONE    36  19.5   24.5   1.0    ?    0   0  0   0   0   F   F   N
+Tree:   NONE    36  6.5   41.5   1.0     ?    0   0  0   0   0   F   F   N
+Tree:   NONE    36  18.0   104.0   1.0   ?    0   0  0   0   0   F   F   N
+Tree:   NONE    36  81.0   96.0   1.0    ?    0   0  0   0   0   F   F   N
+Tree:   NONE    36  79.0   110.0   1.0   ?    0   0  0   0   0   F   F   N
 FlagPost:   NONE    54  84.0   10.0   1.0   ?    0   0  0   0   0   F   F   N
 FlagPost:   NONE    54  90.0   41.0   3.0   ?    0   0  0   0   0   F   F   N
 FlagPost:   NONE    54  89.5   78.5   3.0   ?    0   0  0   0   0   F   F   N
