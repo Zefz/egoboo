@@ -33,7 +33,7 @@ IfBumped
               tmpargument = 9
               tmpx = targetx
               tmpy = targety
-              tmpdistance = 200
+              tmpdistance = 203
               SpawnExactCharacterXYZ
               
               //Only once!
