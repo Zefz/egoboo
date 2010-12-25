@@ -69,7 +69,7 @@ IfSpawned
     
   //Set the timer
   tmpdistance = BLAHFRIENDS + BLAHENEMIES + BLAHQUEST
-  tmpturn = [IMPD]
+  tmpargument = [IMPD]
   SetTargetToNearestBlahID          
   IfTargetHasQuest                  //Get the current quest level
     tmpargument = tmpdistance       //quest level = time left

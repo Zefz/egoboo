@@ -15,7 +15,7 @@ Level rating ( *, **, ***, ****, or ***** )     : ******
 :The_Archmage_Trials!
 :Are_you_worthy_to_wield_the_power
 :of_an_Arcane_Demigod?_Prove_it_by_surviving
-:the Eight_Chellenges_of_Wizardry.
+:the_Eight_Chellenges_of_Wizardry.
 :Only_then_can_you_be_trusted_to_access
 :this_ultimate_power.
 :Remember_to_bring_along_the_five

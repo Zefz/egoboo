@@ -1,10 +1,9 @@
-Version 2.9.x (??.??.201?)
-- Update: Added the ability to use a gamepad to control the cursor in the menu screens
-- Update: Complete rewrite of the Physics engine that fixed numerous physics issues.
-- Update: Optimized menu rendering using pre-chaching. Menus should no longer lag or cause slowdowns.
+Version 2.8.1b (??.12.2010)
+- Bugfix: Fixed the Imprisoned One and Archmage Trials questlines not properly progressing.
+- Bugfix: Removed a crash bug that was caused by specific animations.
+- Bugfix: Fixed some typos.
 
-Credits to Penguinflyer5234, Seth, Khaos89 and Octagon this release for extensive play testing!
-Version 2.8.1 (??.12.2010)
+Version 2.8.1 (23.12.2010)
 - New Feature: Armor suits are now actual items that you can equip or carry around.
 - New Feature: Turn your enemies into gold with the new 'Hand of Midas' artifact!
 - New Feature: A completely new music track for the Abyss modules (Credits to Sakari).

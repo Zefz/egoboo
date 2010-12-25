@@ -17,8 +17,7 @@ IfOrdered
     
     //Allow death
     JoinEvilTeam
-    tmpargument = 1
-    ChangeArmor
+    DisableInvictus
     SetTargetToSelf
     EnchantTarget
     

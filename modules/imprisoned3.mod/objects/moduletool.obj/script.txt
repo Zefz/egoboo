@@ -6,7 +6,7 @@ IfSpawned
   PlayMusic
   
   tmpdistance = BLAHFRIENDS + BLAHENEMIES + BLAHQUEST
-  tmpturn = [IMPB]
+  tmpargument = [IMPB]
   SetTargetToNearestBlahID
   IfTargetHasQuest                  //Get the current quest level
     tmpargument = tmpdistance       //quest level = time left

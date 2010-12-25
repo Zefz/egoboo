@@ -12,7 +12,7 @@ IfSpawned
   
   //Display all enemies on this level
   tmpdistance = BLAHFRIENDS + BLAHENEMIES + BLAHQUEST
-  tmpturn = [IMPC]
+  tmpargument = [IMPC]
   SetTargetToNearestBlahID
   IfTargetHasQuest                  //Get the current quest level
     tmpargument = [NONE]

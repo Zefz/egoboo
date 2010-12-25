@@ -128,7 +128,7 @@ IfBumped
       tmpargument = ACTIONME
       DoAction
       
-      /Acid sizzle
+      //Acid sizzle
       tmpargument = 1
       PlaySound
   Else

@@ -102,9 +102,9 @@ unknown:   NONE    49  18.5   19.5   0.0   N    0   0  0   0   0   F   F   N
     Sword:   NONE    50  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
     KiteShield:   NONE    78  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
  
-tower:   NONE    57  12.5   19.5   0.0   N    0   0  0   0   0   F   F   E
+tower:   NONE    57  12.5   19.5   0.0   N    0   0  0   0   0   F   F   N
   Missile:   NONE    73  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-tower:   NONE    57  19.5   19.5   0.0   N    0   0  0   0   0   F   F   E
+tower:   NONE    57  19.5   19.5   0.0   N    0   0  0   0   0   F   F   N
   Missile:   NONE    73  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 
 bishop:   NONE    62  14.5   19.5   0.0   N    0   0  0   0   0   F   F   N

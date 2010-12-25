@@ -75,7 +75,6 @@
 #dependency %RARE_TREASURE     202
 
 //         Name      Slot Xpos Ypos Zpos Dir Mon Skn Pas Con Lvl Stt Gho Team
-present: NONE -1 31 31 0 ? 0 0 0 0 0 F F G
 HERO 0:    NONE      0    31.5 31.5 0.0  N   0   0   0   0   0   T   F   Good
   HERO 1:  NONE      1    0    0    0    L   0   0   0   0   0   F   F   Null
   HERO 2:  NONE      2    0    0    0    R   0   0   0   0   0   F   F   Null
