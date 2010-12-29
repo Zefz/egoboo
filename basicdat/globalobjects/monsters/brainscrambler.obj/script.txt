@@ -162,10 +162,10 @@ IfTimeOut
       tmpy = 256
       IfXIsMoreThanY
         tmpargument = 0
-        tmpdistance = SPAWNORIGIN
-        tmpx = 0
-        tmpy = 0
-        SpawnParticle
+        tmpdistance = selfz + 75
+        tmpx = selfx
+        tmpy = selfy
+        SpawnExactParticle
         tmpargument = 60
         SetContent
         

@@ -34,7 +34,7 @@ Size increase per level ( eg. 0.05 )		: 0.05
 Shadow size ( eg. 30, 0 is none )		: 30
 Bump size ( eg. 30 )				: 5	//Ghosts cannot be touched
 Bump height ( eg. 70 )				: 40
-Bump dampen ( 0.0 to 1.0, lower is massive )	: 0.50
+Bump dampen ( 0.0 to 1.0, lower is massive )	: 1.00
 Weight ( 0 to 255 )				: 255 //10
 Jump power ( eg. 14.0 )				: 0.0
 Number of jumps ( eg. 1 )			: 0
@@ -79,7 +79,7 @@ EVIL inversion ( eg. F F F T )			:  F  F  F  F
 FIRE inversion ( eg. F F F T )			:  F  F  F  F
 ICE inversion ( eg. F F F T )			:  F  F  F  F
 ZAP inversion ( eg. F F F T )			:  F  F  F  F
-Acceleration rate ( eg. 40 38 30 20 )		: 80 80 80 80
+Acceleration rate ( eg. 40 38 30 20 )		: 40 40 40 40
 
 
 // Experience and level data

@@ -1,4 +1,8 @@
-Version 2.8.1b (??.12.2010)
+Version 2.8.2 (??.01.2011)
+- Bugfix: Confusion rays of the brain scrambler monsters work again.
+- Bugfix: Portal to the next level now correctly spawns in Imprisoned One level 1.
+- Bugfix: Any new unlocked modules are now properly scanned for when a module was just beaten.
+- Bugfix: Armor suits did not spawn properly due to a script typo.
 - Bugfix: Fixed the Imprisoned One and Archmage Trials questlines not properly progressing.
 - Bugfix: Removed a crash bug that was caused by specific animations.
 - Bugfix: Fixed some typos.

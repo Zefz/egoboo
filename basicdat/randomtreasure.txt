@@ -280,7 +280,7 @@
 
 //-----------------------------------------------------------------------------------------------------------------
 //Armor suit for any class
-:RANDOM_ARMOR_SUIT
+:RANDOM_ARMOR
 :Advent_Armor
 :Elf_Armor
 :Gnome_Armor

@@ -17,6 +17,8 @@ IfTimeOut
   SetTargetToBlahInPassage
     tmpargument = 380
     SetTime
+  
+    DebugMessage
     
     //assume its the wrong item
     tmpturn = 10
@@ -69,7 +71,9 @@ IfTimeOut
           SetState
       Else
         tmpturn = 0               //Nothing happened, cant poof it!      
-
+  Else
+    tmpturn = 0                   //No item found
+    
   //Spawn punishment?
   tmpx = tmpturn
   tmpy = 10

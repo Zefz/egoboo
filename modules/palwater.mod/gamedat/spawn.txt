@@ -32,7 +32,8 @@ Blob:  NONE     42    27   23   0.0  N   0   0   0   0   0   F   F   Evil
 Blob:  NONE     42    27   23   5.0  W   0   0   0   0   0   F   F   Evil
 
 
-Hero 00:   NONE      0    11.5 7.5  5.0  S   0   0   0   0   0   T   F   Good
+Hero 00:   NONE      0    27.5 53.5  5.0  S   0   0   0   0   0   T   F   Good
+Hero 00   NONE      0    11.5 7.5  5.0  S   0   0   0   0   0   T   F   Good
   Hero 01: NONE      1    0    0    0    L   0   0   0   0   0   F   F   Null
   Hero 02: NONE      2    0    0    0    R   0   0   0   0   0   F   F   Null
   Hero 03: NONE      3    0    0    0    I   0   0   0   0   0   F   F   Null
