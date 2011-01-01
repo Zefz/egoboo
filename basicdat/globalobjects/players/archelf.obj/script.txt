@@ -121,11 +121,18 @@ IfXIsMoreThanY
     SetState
 
 //-----------------------------------------------------------------------------
-//Listen skill
-tmpx = selflevel
-tmpy = 0            //At least level 2
-IfXIsMoreThanY
-  EnableListenSkill
+//-----------------------------------------------------------------------------
+//Handle skills gained from level ups
+IfLevelUp
+
+  //Listen skill
+  tmpx = selflevel
+  tmpy = 1             //Level 2
+  IfXIsEqualToY
+    SetTargetToSelf
+    tmpargument = [LIST]
+    tmpdistance = 1
+    GiveSkillToTarget
 
 //-----------------------------------------------------------------------------
 //Bow Mastery skill

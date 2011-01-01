@@ -29,11 +29,17 @@ IfSpawned
   SetContent
   
 //-----------------------------------------------------------------------------
-//Listen skill
-tmpx = selflevel
-tmpy = 2            //At least level 4
-IfXIsMoreThanY
-  EnableListenSkill
+//Handle skills gained from level ups
+IfLevelUp
+
+  //Listen skill
+  tmpx = selflevel
+  tmpy = 3             //Level 4
+  IfXIsEqualToY
+    SetTargetToSelf
+    tmpargument = [LIST]
+    tmpdistance = 1
+    GiveSkillToTarget
   
 //-----------------------------------------------------------------------------
 //Nuclear blast death (Things that go Boom skill)

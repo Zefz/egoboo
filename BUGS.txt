@@ -4,6 +4,16 @@ at: http://egoboo.sourceforge.net/forum/
 
 Thanks!
 
+
+- The Ice Balls don't move 
+- Ice don't works, no slippery 
+- Icebreath is IMO too strong.
+- The warlocks are too easy to kill in Ash Palace. They always kill themselfs with fire lol 
+- Almots all projectiles stays in place before they die. 
+- Imbalanced whip rocks as weapon xD 
+- The Sand palace don't have any sign that suggest that it was already beaten. 
+- Hotseat don't works!  
+
 KNOWN BUGS:
 - Trigger Tiles move through players.
 - Xbows and Longbows have horrible attack range as the arrows hit ground too early

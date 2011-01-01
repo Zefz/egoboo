@@ -1,4 +1,5 @@
 Version 2.8.2 (??.01.2011)
+- Bugfix: Fixed listen skill not always working.
 - Bugfix: Confusion rays of the brain scrambler monsters work again.
 - Bugfix: Portal to the next level now correctly spawns in Imprisoned One level 1.
 - Bugfix: Any new unlocked modules are now properly scanned for when a module was just beaten.
