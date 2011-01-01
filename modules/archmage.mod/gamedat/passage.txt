@@ -20,7 +20,7 @@
 15 DoorSevenDetect:47  40      48  42          F       T             F
 16 DoorSevenLock:  47  37      48  38          T       T             F
 17 DoorEight:      40  47      41  48          F       F             F
-18 DoorEightDetect:36  47      38  48          F       T             F
-19 DoorEightTalk:  42  47      42  48          T       T             F
+18 DoorEightDetect:36  47      38  48          T       T             F
+19 DoorEightTalk:  42  47      43  49          T       T             F
 20 DoorLast:       31  37      32  41          F       F             F
 21 DoorLastDetect: 31  42      32  42          T       T             F

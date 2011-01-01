@@ -1,4 +1,4 @@
-Module Name :Valkyrie_Starter
+Module Name :Valkyrie_Start
 Reference Directory          :abyss2.mod
 Required reference IDSZ      :[BEAT]
 Number of imports ( 0 to 4 ) :0

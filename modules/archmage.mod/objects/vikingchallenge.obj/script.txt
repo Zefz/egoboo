@@ -35,14 +35,18 @@ IfScoredAHit
 IfScoredAHit
   SetTargetToWhoeverWasHit
   tmpx = rand % 100
-  tmpy = 6
+  tmpy = 6              //5% chance
   IfXIsLessThanY
     tmpargument = 768   //+3 damage
     DamageTarget
     tmpargument = 10
     PlaySound
+    
+    //Billboard
     tmpargument = 2
-    SendMessage
+    tmpdistance = 3
+    tmpturn = RED
+    DrawBillboard
 
 //------------------------------------------------------------------------------
 // ZZ> Handle death by sending a message and other stuff
@@ -68,7 +72,7 @@ IfTargetIsAttacking
       IfXIsLessThanY
         tmpargument = STATEPARRY
         SetState
-        tmpargument = 25
+        tmpargument = 30        //keep doing this a short while
         SetTime
 Else
   IfStateIsParry
@@ -166,7 +170,7 @@ IfTimeOut
           tmpy = 1
           IfXIsMoreThanY                    //Throw knives
             tmpx = rand % 100
-            tmpy = 16
+            tmpy = 25                       //25% chance to throw
             IfXIsLessThanY
               tmpargument = LATCHLEFT
               PressLatchButton
@@ -185,42 +189,13 @@ IfBumped
     PressLatchButton
     
 //------------------------------------------------------------------------------
-//Say ouch or tell it didnt work
+//Say ouch when they use physical weapons
 IfAttacked
   SetTargetToWhoeverAttacked
-  
-  IfTargetIsAPlayer
-    tmpdistance = 0
-    GetDamageType
-    tmpx = tmpargument
-    tmpy = DAMAGEZAP
-    IfXIsEqualToY
-      tmpdistance = 1
-    tmpy = DAMAGEFIRE
-    IfXIsEqualToY
-      tmpdistance = 1
-    tmpy = DAMAGEICE
-    IfXIsEqualToY
-      tmpdistance = 1
-    tmpy = DAMAGEEVIL
-    IfXIsEqualToY
-      tmpdistance = 1
-
-    //Tell them magic damage simply doesn't work    
-    tmpturn = 0
-    IfDistanceIsMoreThanTurn
-      tmpargument = 1
-      SendMessage
-    
-    //They actually hurt us!
-    Else
-      tmpargument = rand & 1 + 5
-      PlaySound
-      
+          
   //They actually hurt us!
-  Else
-    tmpargument = rand & 1 + 5
-    PlaySound
+  tmpargument = rand & 1 + 5
+  PlaySound
     
   //Now they've done it!
   tmpargument = STATECHARGE
@@ -235,6 +210,7 @@ IfAttacked
   AddWaypoint
   tmpargument = 10
   SetTime
+  
 //------------------------------------------------------------------------------
 End
 //------------------------------------------------------------------------------

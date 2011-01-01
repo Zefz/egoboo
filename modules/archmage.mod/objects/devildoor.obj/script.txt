@@ -9,11 +9,11 @@ IfSpawned
   tmpargument = passage
   ClosePassage
 
-  //Create the anti-teleport blocker
-  tmpargument = 0
-  IfArmorIs
-    tmpargument = passage + 2
-    ClosePassage
+  //Create the anti-teleport blocker          DISABLED IN THE ARCHMAGE TRIALS, CAUSES ISSUES
+//  tmpargument = 0
+//  IfArmorIs
+//    tmpargument = passage + 2
+//    ClosePassage
 
   //Setup so that [GOOD] guys can sacrifice their soul to open
   tmpargument = 0
@@ -82,7 +82,7 @@ IfArmorIs
   IfTimeOut
     tmpargument = 80
     SetTime
-    tmpargument = passage + 1
+    tmpargument = passage + 2
     SetTargetToWhoeverIsInPassage
       tmpturn = 0
       tmpdistance = 0       //0 = Riddle not solved    1 = Riddle solved

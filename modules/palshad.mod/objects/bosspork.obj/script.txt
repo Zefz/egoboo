@@ -38,6 +38,9 @@ IfGrabbed
   tmpdistance = 2           //The quest level
   AddQuestAllPlayers        //Add it
 
+  tmpargument = [BEAT]
+  AddIDSZ
+  
   // Become the export object
   SetTargetToSelf
   tmpargument = 125

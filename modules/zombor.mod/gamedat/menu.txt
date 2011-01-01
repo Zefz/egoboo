@@ -1,4 +1,4 @@
-Module Name 			:Zombi_Starter
+Module Name 			:Zombi_Start
 Reference Directory 		:elf.mod
 Required reference IDSZ 	:[ZOMB]
 Number of imports ( 0 to 4 ) 	:0

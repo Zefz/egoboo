@@ -171,12 +171,13 @@ IfStateIsCharge
     tmpx = selfcontent
     tmpy = 150
     IfXIsLessThanY	     //This stuff makes the breath correctly
-      tmpdistance = selfz     //appear out of the lizards mouth
+      tmpdistance = 64
       tmpturn = targetturnto
       tmpx = selfx
       tmpy = selfy 
-      Compass    
+      Compass             //appear out of the lizards mouth
       tmpargument = 0
+      tmpdistance = selfz 
       SpawnExactParticle
       
       tmpargument = 0
@@ -193,7 +194,8 @@ IfStateIsCharge
       DoAction
     Else
       tmpargument = STATECOMBAT
-      SetState      
+      SetState
+
 //Recharge breath attack
 tmpx = selfcontent
 tmpy = 0

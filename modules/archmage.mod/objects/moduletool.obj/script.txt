@@ -8,14 +8,16 @@ IfSpawned
   SetState
   
 IfTimeOut
-  tmpargument = rand & 7 + 15
+  tmpargument = rand & 7 + 20
   SetTime
 
   //Activate Chess game  
   tmpargument = 0
   IfContentIs
     tmpargument = 2
-    SetTargetToWhoeverIsInPassage
+    tmpdistance = BLAHFRIENDS + BLAHENEMIES + BLAHPLAYERS
+    tmpturn = [NONE]
+    SetTargetToBlahInPassage
       IfTargetIsAPlayer
         tmpargument = [CHES]
         tmpdistance = [CHES]

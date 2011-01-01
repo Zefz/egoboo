@@ -15,7 +15,7 @@ Mana return    : 50.00
 Mana return up : 0.00-0.00
 Mana flow      : 0.00
 Mana flow up   : 0.00-0.00
-STR            : 19.87
+STR            : 22.00
 STR up         : 3.00-4.00
 WIS            : 7.23
 WIS up         : 0.00-0.00
@@ -66,10 +66,10 @@ S damage code  :   F   F   F   F
 C damage code  :   F   F   F   F
 P damage code  :   F   F   F   F
 H damage code  :   T   T   F   T
-E damage code  :   M   F   T   F
-F damage code  :   M   F   F   F
-I damage code  :   M   F   F   F
-Z damage code  :   M   F   F   F
+E damage code  :   I   F   T   F
+F damage code  :   I   F   F   F
+I damage code  :   I   F   F   F
+Z damage code  :   I   F   F   F
 Acceleration   :  50  40  45  55
 
 EXP for 2nd    : 300

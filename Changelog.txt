@@ -1,4 +1,6 @@
 Version 2.8.2 (??.01.2011)
+- Update: Some minor GUI improvements.
+- Bugfix: Removed various glitches in character animations.
 - Bugfix: Fixed listen skill not always working.
 - Bugfix: Confusion rays of the brain scrambler monsters work again.
 - Bugfix: Portal to the next level now correctly spawns in Imprisoned One level 1.

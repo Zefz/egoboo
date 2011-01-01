@@ -38,11 +38,13 @@ IfGrabbed
   AddEndMessage
 
   // Mark this module as beaten, hidden modules may open up
-  // Mark this module as beaten, hidden modules may open up
   tmpargument = [MAIN]
   tmpdistance = 4           //The quest level
   AddQuestAllPlayers        //Add it
 
+  tmpargument = [BEAT]
+  AddIDSZ
+  
   // Become the export object
   SetTargetToSelf
   tmpargument = 119
