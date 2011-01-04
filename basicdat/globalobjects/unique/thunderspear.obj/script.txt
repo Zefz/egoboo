@@ -55,22 +55,20 @@ IfCrushed
   GoPoof
   tmpargument = 2
   SendMessageNear
+
 IfThrown				// Make it attack
   tmpargument = 2
   tmpdistance = 1
   SpawnAttachedParticle
   tmpargument = 1			//Mark spear as thrown (Fake)
   SetState
+  NotAnItem           //Thrown thunder spears cannot be grabbed
+  
 IfNotDropped				// Say oops, that's kursed
   SetTargetToWhoeverIsHolding		  //
   tmpargument = 1			  //
   SendMessageNear			  //
   
-//IfNotPutAway
-//  SetTargetToWhoeverIsHolding
-//  tmpargument = 3         //No longer needed, this is handled by the sourcecode now...
-//  SendMessageNear
-
 IfDropped				// Make it lie on floor
   KeepAction				  //
 IfHitGround				// Make a sound			

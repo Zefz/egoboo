@@ -1,5 +1,10 @@
 Version 2.8.2 (??.01.2011)
+- Update: The Valkyrie can now enter Divine Order of Aaron shops.
 - Update: Some minor GUI improvements.
+- Bugfix: Fixed a problem with dynamic slot loading where data got loaded more than one time.
+- Bugfix: Fixed Forgotten Fortress missing half of its objects and monsters.
+- Bugfix: Antialiasing wasn't working properly for some solid objects.
+- Bugfix: Fixed duplicate item exploit with the thunder spear.
 - Bugfix: Removed various glitches in character animations.
 - Bugfix: Fixed listen skill not always working.
 - Bugfix: Confusion rays of the brain scrambler monsters work again.

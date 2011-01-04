@@ -24,8 +24,8 @@ IfTimeOut
   
   tmpargument = passage + 1
   SetTargetToWhoeverIsInPassage
-  tmpargument = [GOOD]
-  IfTargetHasSpecialID
+  tmpargument = [HMAG]
+  IfTargetHasSkillID
     tmpargument = passage
     OpenPassage
   Else

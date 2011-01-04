@@ -5,27 +5,28 @@ IfTimeOut
   tmpargument = passage + 1
   SetTargetToWhoeverIsInPassage
 
-  tmpargument = 0
-  IfContentIs			//Find the class of the player
-    tmpargument = [PALA]	//Paladin
-  Else
+    //Rogues only
     tmpargument = 1
     IfContentIs
       tmpargument = [ROGU]	//Rogue
-
-  IfTargetHasID 		//Open the gate
-    tmpargument = passage
-    OpenPassage
-  Else
-    tmpx = tmpargument		//Is it the Paladin gate?
-    tmpy = [PALA]
-    IfXIsEqualToY
-      tmpargument = [HEAL]	//Then Healers can also enter paladin order
-      IfTargetHasID
+      IfTargetHasID 		//Open the gate
         tmpargument = passage
         OpenPassage
-  tmpargument = passage 	//Close it if noone is inside passage
-  ClosePassage
+
+      Else
+        tmpargument = passage 	//Close it if noone is inside passage
+        ClosePassage
+    
+    //Divine users only
+    Else
+      tmpargument = [HMAG]
+      IfTargetHasSkillID
+        tmpargument = passage
+        OpenPassage
+        
+      Else
+        tmpargument = passage 	//Close it if noone is inside passage
+        ClosePassage
 
 //This function makes the door open if its passage is open
 KeepAction			//
@@ -38,7 +39,6 @@ IfPassageOpen			//
       tmpargument = 1		      // Open it
       SetState			      //
       tmpargument = 0		      //
-      tmpdistance = 11025	      //
       PlaySound			      //
 Else
   tmpargument = 1		  //
@@ -48,7 +48,6 @@ Else
       tmpargument = 0		      // Close it
       SetState			      //
       tmpargument = 1		      // Sound effect
-      tmpdistance = 11025	      //
       PlaySound			      //
 
 End				// Finished with this character

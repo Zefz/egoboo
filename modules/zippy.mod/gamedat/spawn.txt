@@ -47,7 +47,7 @@
 #dependency Pick               64
 #dependency LRBrace            65
 #dependency StriderShoes       66
-#dependency RegAmulet          67
+#dependency LPotion            67
 #dependency Trident            68
 #dependency Spear              71
 #dependency SilvDagger         72

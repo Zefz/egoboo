@@ -5,6 +5,11 @@ at: http://egoboo.sourceforge.net/forum/
 Thanks!
 
 KNOWN BUGS:
+- Imbalanced whip rocks as weapon xD 
+- Abyss 1 is unbeatable. When I kill one of the minotaurs the game slows down and then freezes 
+- one of the keys ( at platforms) always fell trough the platform to the pit. that makes this level unbeatable. 
+- "items falls through the floor" bug
+- Griffin Tower; Switches from right side disapeared and this makes this level unbeatable
 - Redo some of the Devil Door stuff (detect dead)
 - Almots all projectiles stays in place before they die. 
 - The Ice Balls don't move 
@@ -22,9 +27,7 @@ KNOWN BUGS:
 - Unlocking the door of the Cobol Mage room does not work; you can walk through the - still visible - door after "unlocking" it, but the middle part is not trespassable. 
 
 COSMETIC/TRIVIAL 
-- Icebreath is IMO too strong.
 - The warlocks are too easy to kill in Ash Palace. They always kill themselfs with fire lol 
-- Imbalanced whip rocks as weapon xD 
 - The Sand palace don't have any sign that suggest that it was already beaten. 
 - Whips attack too fast.
 - Starting equipment is not properly unkursed
