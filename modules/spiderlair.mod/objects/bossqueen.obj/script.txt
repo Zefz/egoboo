@@ -1,0 +1,25 @@
+IfKilled
+  tmpargument = 0
+  PlaySound
+  
+  tmpargument = 1
+  SendMessageNear
+  
+  EnableExport
+  BeatModule
+  tmpargument = [BEAT]
+  AddIDSZ
+  
+IfAttacked
+  tmpargument = rand & 1 + 1
+  PlaySound
+  
+IfTimeOut
+  tmpargument = 50
+  SetTime
+  
+  SetTargetToWideEnemy
+    tmpargument = 3
+    PlaySound
+
+End

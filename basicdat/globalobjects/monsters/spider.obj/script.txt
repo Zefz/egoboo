@@ -10,6 +10,37 @@ IfSpawned
   tmpargument = STATEGUARD
   SetState
   
+  //Fire particle attached
+  tmpargument = 2
+  IfArmorIs
+    tmpargument = 6                     //Pure cosmetical
+    tmpdistance = 25                    //behind
+    tmpturn = selflevel*1000 + 20000    //flame size increases with level
+    SpawnAttachedSizedParticle
+    
+  //Transparent
+  tmpargument = 3
+  IfArmorIs
+    tmpargument = 250
+    SetAlpha
+    SetLight
+
+
+IfScoredAHit
+
+  //Black widows are extra poisonous  
+  tmpargument = 1
+  IfArmorIs
+    SetTargetToWhoeverWasHit
+    IfTargetIsAlive
+      EnchantTarget
+      
+  tmpargument = 2
+  IfArmorIs
+    tmpargument = 7
+    tmpdistance = GRIPONLY
+    SpawnParticle
+  
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -36,7 +67,25 @@ IfKilled
   SetBumpHeight
   tmpargument = 4
   PlaySound
+  
+  //Get rid of those flames (if any)
+  tmpargument = 2
+  IfArmorIs
+    DisaffirmCharacter
+  
+  //Award bonus xp for special spider types
+  IfTargetIsOnHatedTeam
+    SetTargetToSelf
+    tmpargument = targetarmor*20    //0, 20, 40 and 80 xp bonus
+    tmpdistance = EXPKILL
+    GiveExperienceToTarget
 
+  //Poof away
+  tmpargument = 3
+  IfArmorIs
+    SpawnPoof
+    GoPoof
+    
 //Ouch!
 IfAttacked
   SetTargetToWhoeverAttacked
@@ -51,11 +100,14 @@ IfBumped
       tmpargument = ACTIONUA
       DoAction
   Else
-    tmpx = rand & 1023 - 512 + selfx
-    tmpy = rand & 1023 - 512 + selfy
-    ClearWaypoints
-    AddWaypoint
-    SetTargetToOldTarget
+    //Scuttle around
+    tmpargument = STATECOMBAT
+    IfStateIsNot
+      tmpx = rand & 1023 - 512 + selfx
+      tmpy = rand & 1023 - 512 + selfy
+      ClearWaypoints
+      AddWaypoint
+      SetTargetToOldTarget
 
 //The nest is under attack!
 IfCalledForHelp
@@ -65,6 +117,7 @@ IfCalledForHelp
     tmpx = targetdistance
     tmpy = targetlevel*128 + 768    //6 tiles +1 tile per level
     IfXIsLessThanY
+      SetTargetToNearestEnemy
       tmpx = targetx
       tmpy = targety
       ClearWaypoints
@@ -74,7 +127,7 @@ IfCalledForHelp
       
 //Main AI loop
 IfTimeOut
-  
+    
   // Look for enemies
   SetTargetToSelf
   tmpx = targetlevel*128 + 768    //6 tiles +1 tile per level
