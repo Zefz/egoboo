@@ -40,4 +40,7 @@ IfGrabbed				// Tell them what they've won...
 IfUsed
   tmpargument = 0
   PlaySound
+  tmpargument = 25
+  SetReloadTime
+  
 End					// All done

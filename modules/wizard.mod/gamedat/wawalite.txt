@@ -11,8 +11,8 @@ Random map ( TRUE or FALSE ) ( doesn't work )           : FALSE
 Number of Water Layers ( 1=Fast, 2=Good )		: 2
 Water specular start ( 0-255 )				: 150
 Water specular level ( 0-255 )				: 150
-Water douse level ( For torches, 90 )			: 45
-Water surface level ( For water striders, 55 )		: 25
+Water douse level ( For torches, 90 )			: 15
+Water surface level ( For water striders, 55 )		: 10
 Water light ( TRUE or FALSE )				: FALSE
 Water is really water? ( TRUE or FALSE )		: FALSE
 Use watertop.bmp as an overlay? ( TRUE or FALSE )       : FALSE
@@ -55,9 +55,9 @@ Normal friction ( .95 )					:  0.91
 Gravity ( -1.0 )					: -1.00
 Animated tile update AND ( 0, 1, 3, 7, 15, 31 )		:  1
 Animated tile frame AND ( 3 == 4 frame, 7 == 8 frame )	:  7
-Damage tile damage ( 0 to 65535, 512 is 1 life block )	:  512
+Damage tile damage ( 0 to 65535, 512 is 1 life block )	:  0
 Damage tile damage type ( SLASH, CRUSH, POKE, HOLY
-                          EVIL, FIRE, ICE, ZAP )	:  FIRE
+                          EVIL, FIRE, ICE, ZAP )	:  HOLY
 
 Weather particle effect ( 0 to 10, RAIN or SNOW )  : 4
 Weather particles only over water ( TRUE or FALSE )	: FALSE

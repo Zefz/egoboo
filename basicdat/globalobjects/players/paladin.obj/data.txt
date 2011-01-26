@@ -25,7 +25,7 @@ Wisdom increase per level ( eg. 0-1 )		: 0.9-1.7
 Intelligence ( eg. 3-18 )			: 6-8
 Intelligence increase per level ( eg. 0-1 )	: 0.0-0.5
 Dexterity ( eg. 3-18 )				: 6-8
-Dexterity increase per level ( eg. 0-1 )	: 0
+Dexterity increase per level ( eg. 0-1 )	: 0-0.85
 
 
 // More physical attributes

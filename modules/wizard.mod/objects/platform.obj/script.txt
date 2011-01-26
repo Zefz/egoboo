@@ -1,6 +1,6 @@
 //When Spawned
 IfSpawned
-  tmpargument = rand & 75 + 50
+  tmpargument = rand & 63 + 64
   SetFlyHeight
 
 // All Done

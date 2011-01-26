@@ -53,7 +53,7 @@
 :UNIQUE_TREASURE
 :AmuletOfYore
 :Chaos
-:DragonTounge
+:DragonTongue
 :FlyingCarpet
 :Gungnr
 :LifeElixir

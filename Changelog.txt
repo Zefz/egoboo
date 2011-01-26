@@ -1,6 +1,10 @@
 Version 2.8.2 (??.01.2011)
+- Update: Rebalance tweaks to the attack speed system.
 - Update: The Valkyrie can now enter Divine Order of Aaron shops.
 - Update: Some minor GUI improvements.
+- Bugfix: Issues with the Frost Orbs in the Ice Palace has been resolved.
+- Bugfix: Player no longer gets lava damage while standing on the platforms in the Wizard Starter.
+- Bugfix: Fixed a spawn problem when shooting the Gonne weapon.
 - Bugfix: Fixed a problem with dynamic slot loading where data got loaded more than one time.
 - Bugfix: Fixed Forgotten Fortress missing half of its objects and monsters.
 - Bugfix: Antialiasing wasn't working properly for some solid objects.

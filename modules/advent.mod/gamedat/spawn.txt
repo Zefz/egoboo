@@ -34,7 +34,6 @@ Healer:    NONE      42   13.5 60.5 4.0  N   8   0   0   0   0   T   F   Good
   SpkMace: NONE      46   0    0    0    R   0   0   0   0   0   F   F   Null
 GrubMum:   NONE      38   16.5 60.5 0    S   0   0   0   0   0   F   F   Insect
 
-
 Trog:      NONE      36   7.0  31.0 4.0  N   3   0   0   0   0   F   F   Trog
   Spear:   NONE      51   0    0    0    L   0   0   0   0   0   F   F   Null
 Trog:      NONE      36   6.0  30.0 4.0  N   1   0   0   0   0   F   F   Trog

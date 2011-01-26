@@ -39,6 +39,7 @@
 #dependency FrostBlast         50
 
 //Watts shop
+#dependency ArmorChest         40
 #dependency Identify           82
 #dependency LBow               60
 #dependency Claw               61

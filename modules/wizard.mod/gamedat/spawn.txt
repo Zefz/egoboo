@@ -7,7 +7,8 @@
 
 //Player with starting stuff
 PlayerAtBoss   NONE    0  11.5   17.5   1.0   N    0   0  0   0   0   T   F   G
-Player1:         NONE    0  30.5   57.5   0.0   N    0   0  0   0   0   T   F   G
+PlayerAtPlatforms        NONE    0  55.0   23.5   0.0   N    0   0  0   0   0   T   F   G
+Player:         NONE    0  30.5   57.5   0.0   N    0   0  0   0   0   T   F   G
   Missile:   NONE    48  0.0   0.0   0.0   L    0   0  0   0   0   F   F   N
   QStaff:    NONE    57  0.0   0.0   0.0   R    0   0  0   0   0   F   F   N
   Light:     NONE    47  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
