@@ -69,12 +69,6 @@ deadfall.obj:   NONE    38  48.5   12.5   1.0   N    0   0  0   0   0   F   F   
 deadfall.obj:   NONE    38  46.0   10.0   1.0   N    0   0  0   0   0   F   F   E
 deadfall.obj:   NONE    38  48.0   8.0   1.0   N    0   0  0   0   0   F   F   E
 
-chest.obj:   NONE    40  46.5   52.5   1.0   N    0   0  0   0   0   F   F   N
-  %POISONED_WEAPON:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RARE_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RANDOM_KURSED:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-  %RARE_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
-
 //Clenchy room
 clencher.obj:   NONE    45  13.0   12.0   0.0   ?    0   0  0   0   0   F   F   E
 clencher.obj:   NONE    45  14.0   17.0   0.0   ?    0   0  0   0   0   F   F   E
@@ -105,3 +99,10 @@ arrowtrap:   NONE    71  46.0   31.0   0.0   ?    0   0  0   0   0   F   F   Tra
 
 //Boss room
 throne.obj:   NONE    -1  54.5   47.0   0.0   W    0   0  0   0   0   F   F   N
+bossqueen.obj:   NONE    -1  54.5   45.0   0.0   ?    0   0  0   0   0   F   F   E
+
+chest.obj:   NONE    40  46.5   52.5   1.0   N    0   0  0   0   0   F   F   N
+  %POISONED_WEAPON:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RARE_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RANDOM_KURSED:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
+  %RARE_TREASURE:   NONE    -1  0.0   0.0   0.0   I    0   0  0   0   0   F   F   N

@@ -1,3 +1,7 @@
+IfSpawned
+  tmpargument = STATEWANDER
+  SetState
+
 IfKilled
   tmpargument = 0
   PlaySound
@@ -18,8 +22,42 @@ IfTimeOut
   tmpargument = 50
   SetTime
   
-  SetTargetToWideEnemy
-    tmpargument = 3
-    PlaySound
+  IfStateIsWander
+    SetTurnModeToVelocity
+    SetTargetToWideEnemy
+      tmpargument = 3
+      PlayFullSound
+      tmpargument = 0
+      SendMessageNear
+      tmpargument = STATECOMBAT
+      SetState
+    Else
+      tmpx = rand & 1023 + selfspawnx - 512
+      tmpy = rand & 1023 + selfspawny - 512
+      ClearWaypoints
+      AddWaypoint
+      
+  IfStateIsCombat
+    tmpdistance = 128*10        //10 tiles
+    SetTargetToDistantEnemy
+      CallForHelp               //summon any spiderlings
+      tmpx = targetx
+      tmpy = targety
+      tmpdistance = -600
+      tmpturn = rand
+      Compass
+      ClearWaypoints
+      AddWaypoint
+     
+      //Attack!
+      SetTurnModeToWatchTarget
+      IfFacingTarget
+        tmpargument = ACTIONUA
+        DoAction
+      
+    //Enemy ran away
+    Else
+      tmpargument = STATEWANDER
+      SetState
 
 End
