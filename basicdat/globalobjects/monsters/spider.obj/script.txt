@@ -115,7 +115,7 @@ IfCalledForHelp
   IfStateIsNot
     SetTargetToWhoeverCalledForHelp
     tmpx = targetdistance
-    tmpy = targetlevel*128 + 768    //6 tiles +1 tile per level
+    tmpy = 128*12    //12 tiles away
     IfXIsLessThanY
       SetTargetToNearestEnemy
       tmpx = targetx
