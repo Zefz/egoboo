@@ -11,7 +11,7 @@ IfSpawned
 // This raises the ghouls after they've died
 IfTimeOut
   CleanUp
-  tmpargument = 30
+  tmpargument = 50
   SetTime
   
 End					// All done

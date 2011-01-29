@@ -1,7 +1,6 @@
 //------------------------------------------------------------------------------
 // ZZ> Breath some fire
-GetContent
-tmpx = tmpargument
+tmpx = selfcontent
 tmpy = 0
 IfXIsMoreThanY
   SetTargetToSelf
@@ -32,10 +31,8 @@ Else
       tmpargument = 1
       SetContent
       tmpargument = 1
-      tmpdistance = rand & 4095 + 20000
       PlaySound
       tmpargument = 2
-      tmpdistance = 11025
       PlaySound
       //tmpdistance = 0
       //PlaySoundVolume
@@ -73,13 +70,12 @@ IfKilled
   //StopSound
 
   tmpargument = 5
-  tmpdistance = rand & 2047 + 10000
   PlaySound
   tmpargument = 0
   SendMessageNear
 
   // Drop goodies
-  tmpargument = 65535
+  tmpargument = selfmoney
   DropMoney
 
   // Make the character body
@@ -98,7 +94,6 @@ IfAttacked
     DropWeapons
 
   tmpargument = rand & 1 + 3
-  tmpdistance = rand & 2047 + 10000
   PlaySound
 
 //------------------------------------------------------------------------------

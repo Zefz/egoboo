@@ -1,7 +1,11 @@
 Version 2.8.2 (??.01.2011)
+- New Feature: New sidequest called 'Lair of the Spider Queen'! Unlock the quest in Zippy Town.
+- Update: The boss fight in the Shadow Palace is now tougher.
 - Update: Rebalance tweaks to the attack speed system.
 - Update: The Valkyrie can now enter Divine Order of Aaron shops.
 - Update: Some minor GUI improvements.
+- Bugfix: Fixed issue where Ghouls would spawn and die instantly.
+- Bugfix: Hot Dog mounts no longer damage their riders while using fire breath.
 - Bugfix: Fixed arrow trap no longer working.
 - Bugfix: Issues with the Frost Orbs in the Ice Palace has been resolved.
 - Bugfix: Player no longer gets lava damage while standing on the platforms in the Wizard Starter.

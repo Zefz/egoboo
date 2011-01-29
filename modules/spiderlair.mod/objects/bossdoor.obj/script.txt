@@ -26,7 +26,7 @@ IfOrdered
 IfTimeOut
   tmpargument = rand & 15 + 10
   SetTime
-  tmpargument = passage
+  tmpargument = passage + 1
   SetTargetToWhoeverIsInPassage
   tmpargument = [KEYB]
   CostTargetItemID

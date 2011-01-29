@@ -11,7 +11,8 @@ IfOrdered
 // ZZ> Most undead have an enchantment sustaining them
 IfSpawned
   SetTargetToSelf
-  EnchantTarget  // Enchant self...
+  SetOwnerToTarget
+  EnchantTarget         // Enchant self...
 
 //------------------------------------------------------------------------------
 //Rise from the dead...  Takes several times to wake...

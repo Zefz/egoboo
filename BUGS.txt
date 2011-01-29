@@ -6,12 +6,10 @@ Thanks!
 
 KNOWN BUGS:
 - Rework how identifying stuff works. Currently it doesn't work at all.
-- Using the Hot Dog breath attack will damage the rider.
 - Abyss 1 is unbeatable. When I kill one of the minotaurs the game slows down and then freezes 
 - Tourist: one of the keys ( at platforms) always fell trough the platform to the pit. that makes this level unbeatable. 
 - "items falls through the floor" bug
 - Redo some of the Devil Door stuff (detect dead)
-- Almots all projectiles stays in place before they die. 
 - Hotseat don't work!
 - Trigger Tiles move through players.
 - Xbows and Longbows have horrible attack range as the arrows hit ground too early
@@ -26,14 +24,9 @@ KNOWN BUGS:
 
 COSMETIC/TRIVIAL 
 - The warlocks are too easy to kill in Ash Palace. They always kill themselfs with fire lol 
-- The Sand palace don't have any sign that suggest that it was already beaten. 
 - Starting equipment is not properly unkursed
 - Scorpions lose their claws against crushing weapons
 - Fix those black tile artifacts on the bottom of the camera.
 - SetFrame doesnt seem to work properly. (see mosquitoes, they are stuck in one frame)
 - Need magic sparks for the sporks attacks.
-- The "monster" from Imprisoned One is seemingly able to fly. It flings itself through the room and spams its poison bubbles on you. 
-- Ghouls in Shadow Palace rise either extremely fast or not at all. 
-- If you step on a dead Darkshine Knight, you see a floating message of "Blocked". 
 - Backstab messages in the ticker are displayed twice. 
-- Stalkers in Shadow Palace are not spawned.

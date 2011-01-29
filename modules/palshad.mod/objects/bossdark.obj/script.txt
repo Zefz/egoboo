@@ -1,15 +1,20 @@
 //------------------------------------------------------------------------------
 // ZZ> Most undead have an enchantment sustaining them
 IfSpawned
+  SetTargetToSelf
+  SetOwnerToTarget
   EnchantTarget  // Enchant self...
+  
+  tmpargument = STATEGUARD
+  SetState
 
 //------------------------------------------------------------------------------
 IfTargetKilled
   SetTargetToNearestEnemy
-    tmpargument = 1
+    tmpargument = STATECHARGE
     SetState
   Else
-    tmpargument = 0
+    tmpargument = STATEGUARD
     SetState
 
 //------------------------------------------------------------------------------
@@ -60,20 +65,26 @@ IfBumped
 
 //------------------------------------------------------------------------------
 IfTimeOut
-  // Return to normal
-  IfStateIs4
-    tmpargument = 1
-    SetState
+  
+  //Spooky sounds
+  tmpx = rand & 255
+  tmpy = 5
+  IfXIsLessThanY
+    tmpargument = rand % 3 + 3
+    PlaySound
+      
   // Wait for the good guys to barge in...
-  IfStateIs0
+  IfStateIsGuard
     tmpargument = 20
     SetTime
+    
     tmpargument = passage
     SetTargetToSelf
     SetTargetToWhoeverIsInPassage
       DoNothing
     Else
       SetTargetToWideEnemy
+      
     IfTargetIsOnHatedTeam
       tmpargument = rand & 15 + 50
       SetTime
@@ -81,31 +92,19 @@ IfTimeOut
       SetTurnModeToVelocity
       tmpx = targetx
       tmpy = targety
-      tmpargument = 4
+      tmpargument = STATECHARGE
       SetState
     Else
       Stop
       SetTurnModeToWatch
-      tmpx = selfx
-      tmpy = selfy + 200
+      tmpx = selfspawnx
+      tmpy = selfspawny
       ClearWaypoints
       AddWaypoint
-  // Follow through
-  IfStateIs3
-    tmpargument = rand & 31 + 50
-    SetTime
-    tmpargument = 4
-    SetState
-    tmpx = selfx
-    tmpy = selfy
-    tmpturn = selfturn
-    tmpdistance = 200
-    Compass
-    ClearWaypoints
-    AddWaypoint
+    
   // Chop the enemy
-  IfStateIs2
-    tmpargument = rand & 31 + 15
+  IfStateIsCombat
+    tmpargument = rand & 31 + 50
     SetTime
     tmpx = targetdistance
     tmpy = 180
@@ -113,25 +112,31 @@ IfTimeOut
       // Close enough to swing...
       IfHoldingMeleeWeapon
         PressLatchButton
-        tmpargument = 3
+        tmpargument = STATESURROUND
         SetState
     Else
       // Fall through to next...
-      tmpargument = 1
+      tmpargument = STATECHARGE
       SetState
+      
   // Rush the enemy
-  IfStateIs1
+  IfStateIsCharge
+    IfTargetIsOnHatedTeam
+      DoNothing
+    Else
+      SetTargetToNearestEnemy
+  
     SetTurnModeToVelocity
     tmpx = targetdistance
     tmpy = 1400
     IfXIsMoreThanY
       // Find a new enemy
       SetTargetToNearestEnemy
-        tmpargument = 5
+        DoNothing
       Else
-        tmpargument = 0             //no enemies left
+        tmpargument = STATEGUARD             //no enemies left
         SetState
-        tmpargument = 5
+      tmpargument = 5
       SetTime
     Else
       // Charge the enemy
@@ -148,21 +153,34 @@ IfTimeOut
         SetTargetToOldTarget
       ClearWaypoints
       AddWaypoint
-      tmpargument = 2
+      tmpargument = STATECOMBAT
       SetState
-      tmpargument = rand & 3 + 6
+      tmpargument = rand & 31 + 50
       SetTime
+
+  // Follow through
+  IfStateIsSurround
+    tmpargument = rand & 31 + 50
+    SetTime
+    tmpargument = STATECHARGE
+    SetState
+    tmpx = selfx
+    tmpy = selfy
+    tmpturn = selfturn
+    tmpdistance = 200
+    Compass
+    ClearWaypoints
+    AddWaypoint
 
 //------------------------------------------------------------------------------
 // ZZ> Handle being attacked by blocking or countering or running away
 IfAttacked
   Run
-  tmpargument = 1
+  tmpargument = STATECOMBAT
   SetState
   SetTurnModeToVelocity
   SetTargetToWhoeverAttacked
   tmpargument = rand & 1
-  tmpdistance = rand & 2047 + 10000
   PlaySound
 
 //------------------------------------------------------------------------------
