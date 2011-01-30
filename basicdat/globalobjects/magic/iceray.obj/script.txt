@@ -17,8 +17,10 @@ IfUsed
   IfXIsMoreThanY
     tmpargument = 512
     CostTargetMana
-    MakeNameKnown
-    MakeUsageKnown
+    
+    IfTargetIsAPlayer
+      MakeNameKnown
+      MakeUsageKnown
     
     //Cooldown
     tmpturn = targetint > 8

@@ -89,21 +89,21 @@ HotDog:    NONE      40   28.5 40.5 0.0  N   0   0   0   0   0   F   F   Null
 
 
 // First Warlock
-Warlock:   NONE      41   40.5 18.5 0.0  N   0   0   0 55183 6   F   F   Evil
-  Unseen:  NONE      62   0    0    0    R   0   0   0   0   0   F   F   Null
-  Missile: NONE      51   0    0    0    L   0   0   0   0   0   F   F   Null
+Warlock:   NONE      41   40.5 18.5 0.0  N   0   0   0   849 6   F   F   Evil
+  Unseen:  NONE      -1   0    0    0    R   0   0   0   0   0   F   F   Null
+  Missile: NONE      -1   0    0    0    L   0   0   0   0   0   F   F   Null
 
 
 
 // Key guards
 Cobol:     NONE      42   52.5 29.5 0.0  S   7   1   0  400  2   F   F   Evil
   XBow:    NONE      53   0    0    0    R   0   0   0   0   0   F   F   Null
-Warlock:   NONE      41   51.5 19.5 0.0  N   0   0   0 32975 0   F   F   Evil
+Warlock:   NONE      41   51.5 19.5 0.0  N   0   0   0  901  0   F   F   Evil     //32975
   Sword:   NONE      50   0    0    0    R   0   0   0   0   0   F   F   Null
   Enchant: NONE      61   0    0    0    L   0   0   0   0   0   F   F   Null
-Warlock:   NONE      41   54.5 19.5 0.0  N   0   0   0 39400 0   F   F   Evil
-  Fireball:NONE      60   0    0    0    R   0   0   0   0   0   F   F   Null
-Warlock:   NONE      41   51.5 21.5 0.0  N   0   0   0 32768 0   F   F   Evil
+Warlock:   NONE      41   54.5 19.5 0.0  N   0   0   0 256  2   F   F   Evil     39400
+  IceRay:    NONE      -1   0    0    0    L   0   0   0   0   0   F   F   Null
+Warlock:   NONE      41   51.5 21.5 0.0  N   0   0   0 640 0   F   F   Evil     32768
   Shock:   NONE      109  0    0    0    R   0   0   0   0   0   F   F   Null
 
 
@@ -119,8 +119,6 @@ Cobol:     NONE      42   53.5 53.5 1.0  N   3   2   0  200  0   F   F   Evil
   Whip:    NONE      58   0    0    0    R   0   0   0   0   0   F   F   Null
 
 
-
-
 // Not sleeping lumpkins
 Lumpkin:   NONE      63   51.5 43.5 0.0  N   0   0   0   0   0   F   F   Lump
   Claw:    NONE      64   0    0    0    R   0   0   0   0   0   F   F   Null
@@ -128,9 +126,6 @@ Lumpkin:   NONE      63   54.5 45.5 0.0  N   0   3   0   0   3   F   F   Lump
   Claw:    NONE      64   0    0    0    R   0   0   0   0   0   F   F   Null
 Lumpkin:   NONE      63   52.5 46.5 0.0  N   0   1   0   0   2   F   F   Lump
   Claw:    NONE      64   0    0    0    R   0   0   0   0   0   F   F   Null
-
-
-
 
 
 Breaker:   NONE      119  7    43   0    N   0   0   29  0   0   F   F   Null

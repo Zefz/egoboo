@@ -24,7 +24,7 @@ Wisdom ( eg. 3-18 )				: 8-13
 Wisdom increase per level ( eg. 0-1 )		: 0-1
 Intelligence ( eg. 3-18 )			: 17-20
 Intelligence increase per level ( eg. 0-1 )	: 2-3
-Dexterity ( eg. 3-18 )				: 5-10
+Dexterity ( eg. 3-18 )				: 5-15
 Dexterity increase per level ( eg. 0-1 )	: 0-1
 
 
@@ -79,7 +79,7 @@ EVIL inversion ( eg. F F F T )			:  F  F  F  F
 FIRE inversion ( eg. F F F T )			:  F  F  F  F
 ICE inversion ( eg. F F F T )			:  F  F  F  F
 ZAP inversion ( eg. F F F T )			:  F  F  F  F
-Acceleration rate ( eg. 40 38 30 20 )		: 20 20 20 20
+Acceleration rate ( eg. 40 38 30 20 )		: 30 30 30 30
 
 
 // Experience and level data

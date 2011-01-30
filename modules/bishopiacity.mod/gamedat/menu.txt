@@ -1,6 +1,6 @@
 // This file contains info for the module's menu description
 Module Name 		: Capital_City_of_Bishopia
-Reference Directory 		: palshad.mod
+Reference Directory 		: palice.mod
 Required reference IDSZ 	: [MAIN] 4
 Number of imports ( 0 to 4 ) 	: 4
 Exporting ( TRUE or FALSE ) 	: TRUE

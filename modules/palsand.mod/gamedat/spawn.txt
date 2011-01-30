@@ -24,6 +24,7 @@
 
 //         Name      Slot Xpos Ypos Zpos Dir Mon Skn Pas Con Lvl Stt Gho Team
 PlayerAtMimic   NONE      0    43.5  18.5  0.0  S   0   0   0   0   0   T   F   Good
+PlayerAtBoss   NONE      0    23.5  53.5  0.0  S   0   0   0   0   0   T   F   Good
 Hero 00:   NONE      0    8.5  8.5  0.0  S   0   0   0   0   0   T   F   Good
   Hero 01: NONE      1    0    0    0    L   0   0   0   0   0   F   F   Null
   Hero 02: NONE      2    0    0    0    R   0   0   0   0   0   F   F   Null
@@ -153,8 +154,8 @@ Chest: NONE     43    47.5 39.5 0    S   24  0   0   4   0   F   F   Null     //
   %RANDOM_SCROLL:  NONE     -1    0    0    0    I   0   0   0   0   0   F   F   Null
 
 Scorpion:  NONE     73    23   53   0    S   0   0   52  0   0   F   F   Evil
-  Claw:    NONE     74    0    0    0    L   0   0   0   0   0   F   F   Null
-  Claw:    NONE     74    0    0    0    R   0   0   0   0   0   F   F   Null
+  Claw:    NONE     74    0    0    0    L   0   0   0   0   0   F   F   Evil
+  Claw:    NONE     74    0    0    0    R   0   0   0   0   0   F   F   Evil
 
 ModuleTool: NONE    66    9    9    0    S   0   0   1   0   0   F   F   Troll
 

@@ -1,5 +1,5 @@
 // Lightning sparks that does damage
-Force spawn ( TRUE or FALSE )				: FALSE
+Force spawn ( TRUE or FALSE )				: TRUE
 Image type ( SOLID, LIGHT, or TRANS )			: LIGHT
 Starting frame ( 0 to 255 )				: 92
 Number of frames ( 1 to 16 )				: 4
@@ -17,7 +17,7 @@ Facing rate ( 0 to 1000 )				: 0
 
 // Ending conditions
 Water ends particle ( TRUE or FALSE )			: FALSE
-Bump ends particle ( TRUE or FALSE )			: TRUE
+Bump ends particle ( TRUE or FALSE )			: F TRUE
 End if hits ground ( TRUE or FALSE )			: FALSE
 End after last frame ( TRUE or FALSE )			: FALSE
 Time before end ( 1 to 1000, 0 )			: 8
@@ -27,7 +27,7 @@ Time before end ( 1 to 1000, 0 )			: 8
 // Collision data
 Bounce dampen ( 0.0 to 0.9 )				: 0
 Bump money ( 0 to 100 )					: 0
-Bump size ( 0 to 60 )					: 50
+Bump size ( 0 to 60 )					: 120
 Bump height ( 0 to 60 )					: 80
 Bump damage amount ( 0-0 to 0-16 to 16-16 )		: 4-8
 Bump damage type ( SLASH, CRUSH, POKE, HOLY,
@@ -96,7 +96,7 @@ Target angle ( 0 to 32768 )				: 0
 Home in on target ( TRUE or FALSE )			: FALSE
 Homing friction ( 0.0 to 1.0 )				: 0.0
 Homing acceleration ( 0.0 to 1.0 )			: 0.0
-Rotate to face direction ( TRUE or FALSE )		: TRUE
+Rotate to face direction ( TRUE or FALSE )		: FALSE
 Respawn character on hit ( TRUE or FALSE )		: FALSE
 Mana drain on hit ( 0 to 50 )				: 0
 Life drain on hit ( 0 to 50 )				: 0
@@ -106,3 +106,4 @@ Life drain on hit ( 0 to 50 )				: 0
 :[BLOC]		1  // Can't be blocked
 :[ARMO]		1  // Armor doesn't work
 :[IDAM]   1  // Intelligence adds damage    
+:[GRAV]   1  // Gravity doesnt affect

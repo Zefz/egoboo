@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-// ZZ> Make the scorpion run away
+// Make the scorpion run away
 IfScoredAHit
   tmpx = selfx
   tmpy = selfy

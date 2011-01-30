@@ -61,15 +61,19 @@ IfAttacked
 
 //------------------------------------------------------------------------------
 IfBumped
-  // Teleport away...
-  tmpargument = 1
-  IfStateIsNot
-    tmpargument = 2
+  SetTargetToWhoeverBumped
+  IfTargetIsOnHatedTeam
+    // Teleport away...
+    tmpargument = 1
     IfStateIsNot
-      tmpargument = 1
-      SetState
-      tmpargument = 0
-      SetTime
+      tmpargument = 2
+      IfStateIsNot
+        tmpargument = 1
+        SetState
+        tmpargument = 0
+        SetTime
+  Else
+    SetTargetToOldTarget
 
 //------------------------------------------------------------------------------
 // ZZ> For charging a spell...
@@ -211,9 +215,8 @@ IfTimeOut
       tmpx = tmpargument & 32896
       tmpy = 0
       IfXIsEqualToY
-        // Neither hand is useable...  Fall through to state 1
-        tmpargument = 1
-        SetState
+        // Neither hand is useable...  bug!
+        DebugMessage
       Else
         tmpy = 32896
         IfXIsEqualToY
@@ -289,10 +292,11 @@ IfTimeOut
       SetTime
 
   IfStateIs0
+    AddStat
     tmpargument = 20
     SetTime
     tmpx = rand & 255
-    tmpy = 200
+    tmpy = 250
     IfXIsMoreThanY
       // Teleport...
       tmpargument = 1
@@ -307,7 +311,12 @@ IfTimeOut
         SetState
         tmpx = targetx
         tmpy = targety
+        tmpturn = targetturnto
+        tmpdistance = - 200
+        Compass
+        SetTurnModeToWatchTarget
       Else
+        SetTurnModeToVelocity
         // Wander around
         tmpargument = rand & 15 + 25
         SetTime
