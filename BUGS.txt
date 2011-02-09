@@ -5,6 +5,8 @@ at: http://egoboo.sourceforge.net/forum/
 Thanks!
 
 KNOWN BUGS:
+- Redo how input controllers work. (allow 2 players on 1 keyboard)
+- No way to introduce the Spider Lair quest.
 - A rare random crash bug (NaN with some math operation)
 - Rework how identifying stuff works. Currently it doesn't work at all.
 - Abyss 1 is unbeatable. When I kill one of the minotaurs the game slows down and then freezes 

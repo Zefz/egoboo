@@ -1,5 +1,6 @@
 Version 2.8.2 (??.01.2011)
 - New Feature: New sidequest called 'Lair of the Spider Queen'! Unlock the quest in Zippy Town.
+- Update: You can now set the new sneak button in the input controller menu.
 - Update: Damage resistance now reduces the duration of enchantments. So a high EVIL resistance
   reduces the duration of poision for example.
 - Update: Damage resistance is now expressed in percentage instead of damage shifts.
@@ -8,6 +9,7 @@ Version 2.8.2 (??.01.2011)
 - Update: Rebalance tweaks to the attack speed system.
 - Update: The Valkyrie can now enter Divine Order of Aaron shops.
 - Update: Some minor GUI improvements.
+- Bugfix: Fixed problems with shooting crossbows or longbows.
 - Bugfix: Kills made by held items or mounts are now properly awarded to the holder or rider.
 - Bugfix: Scorpion boss in Sand Palace will no longer hurt itself when using claw attacks.
 - Bugfix: Fixed issue where Ghouls would spawn and die instantly.

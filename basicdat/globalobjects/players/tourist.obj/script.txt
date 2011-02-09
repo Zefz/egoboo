@@ -18,12 +18,19 @@
 //15    n/a
 //-----------------------------------------------------------------------------
 //Carography skill
-tmpx = selflevel
-tmpy = 6            //Need level 8
-IfXIsMoreThanY
-  ShowMap
-  ShowYouAreHere
-  
+IfLevelUp
+  tmpx = selflevel
+  tmpy = 6            //Need level 8
+  IfXIsMoreThanY
+    ShowMap
+    ShowYouAreHere
+IfSpawned
+  tmpx = selflevel
+  tmpy = 6            //Need level 8
+  IfXIsMoreThanY
+    ShowMap
+    ShowYouAreHere
+    
 //-------------------------------------------
 //To Silly To Die skill
 IfKilled
@@ -42,12 +49,12 @@ IfKilled
       
 //-----------------------------------------------------------------------------
 //Invoke Lucky skill if enough xp gained
-SetTargetToSelf
 tmpx = selflevel
 tmpy = 7                //Need level 9
 IfXIsMoreThanY
   tmpargument = 0
   IfContentIs
+    SetTargetToSelf
     SetOwnerToTarget
     EnchantTarget		//Give the special bonus
     tmpargument = 1
@@ -97,7 +104,7 @@ Else
       PressLatchButton
 
 //-----------------------------------------------------------------------------
-// ZZ> Gong sound
+//Gong sound
 IfCleanedUp
   tmpargument = 2
   PlayFullSound
