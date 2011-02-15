@@ -1,5 +1,8 @@
 Version 2.8.2 (??.01.2011)
 - New Feature: New sidequest called 'Lair of the Spider Queen'! Unlock the quest in Zippy Town.
+- Update: Increased the amount the camera can zoom out for a better view.
+- Update: Major improvements to Hotseat play. You can now assign players to any input device instead
+  of player each player being hard-coded to a specific device.
 - Update: You can now set the new sneak button in the input controller menu.
 - Update: Damage resistance now reduces the duration of enchantments. So a high EVIL resistance
   reduces the duration of poision for example.
@@ -9,6 +12,7 @@ Version 2.8.2 (??.01.2011)
 - Update: Rebalance tweaks to the attack speed system.
 - Update: The Valkyrie can now enter Divine Order of Aaron shops.
 - Update: Some minor GUI improvements.
+- Bugfix: Fixed mouse controller not working properly.
 - Bugfix: Fixed problems with shooting crossbows or longbows.
 - Bugfix: Kills made by held items or mounts are now properly awarded to the holder or rider.
 - Bugfix: Scorpion boss in Sand Palace will no longer hurt itself when using claw attacks.
@@ -31,6 +35,7 @@ Version 2.8.2 (??.01.2011)
 - Bugfix: Fixed the Imprisoned One and Archmage Trials questlines not properly progressing.
 - Bugfix: Removed a crash bug that was caused by specific animations.
 - Bugfix: Fixed some typos.
+- Bugfix: The usual list of minor bugfixing.
 
 Version 2.8.1 (23.12.2010)
 - New Feature: Armor suits are now actual items that you can equip or carry around.
