@@ -16,9 +16,9 @@ Level rating ( *, **, ***, ****, or ***** )     : **
 :Crunch._Chrunch._Crunch."
 :_
 :Defeat_the_spider_queen_and_her_minions
-:to_cleanse_Lorule_of_her_evil_rule.
-:_
-:_
+:and_find_the_magical_Eye_of_Galgazar.
+:Then_bring_the_eye_back_to_Java_in_Zippy
+:for_a_reward!
 :_
 
 

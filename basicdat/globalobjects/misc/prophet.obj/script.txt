@@ -124,7 +124,7 @@ IfTimeOut
     tmpargument = ACTIONJA
     DoAction
     
-    tmpargument = 275
+    tmpargument = rand & 127 + 350
     SetTime
 
 //------------------------------------------------------------------------------

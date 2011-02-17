@@ -1,5 +1,7 @@
-Version 2.8.2 (??.01.2011)
+Version 2.8.2 (??.02.2011)
 - New Feature: New sidequest called 'Lair of the Spider Queen'! Unlock the quest in Zippy Town.
+- Update: Various improvements to the EgoScript AI compiler.
+- Update: Removed the limit for the number of messages each object can have.
 - Update: Increased the amount the camera can zoom out for a better view.
 - Update: Major improvements to Hotseat play. You can now assign players to any input device instead
   of player each player being hard-coded to a specific device.
@@ -12,6 +14,7 @@ Version 2.8.2 (??.01.2011)
 - Update: Rebalance tweaks to the attack speed system.
 - Update: The Valkyrie can now enter Divine Order of Aaron shops.
 - Update: Some minor GUI improvements.
+- Bugfix: Fixed objects dissappearing into the ground.
 - Bugfix: Fixed mouse controller not working properly.
 - Bugfix: Fixed problems with shooting crossbows or longbows.
 - Bugfix: Kills made by held items or mounts are now properly awarded to the holder or rider.
