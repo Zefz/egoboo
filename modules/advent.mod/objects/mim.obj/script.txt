@@ -51,9 +51,7 @@ IfTimeOut				// This is done every so often
     //move towards target
     tmpx = targetx
     tmpy = targety
-    ClearWaypoints
-    AddWaypoint
-      
+    FindPath      
       
   IfStateIsFollow
     SetTargetToLeader
@@ -74,9 +72,8 @@ IfTimeOut				// This is done every so often
       tmpy = leadery
       tmpturn = 49152 + leaderturn	    // Stand to side
       Compass
-      ClearWaypoints
-      AddWaypoint
-      
+      FindPath
+
       //Find someone to bash
       tmpx = leaderdistance
       tmpy = 128*6
@@ -125,8 +122,7 @@ IfTimeOut				// This is done every so often
       tmpy = targety			    
       tmpturn = targetturnto
       Compass				    
-      ClearWaypoints
-      AddWaypoint
+      FindPath
     
     //No enemies around, return to follow
     Else

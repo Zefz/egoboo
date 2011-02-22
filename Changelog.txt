@@ -8,12 +8,13 @@ Version 2.8.2 (??.02.2011)
 - Update: You can now set the new sneak button in the input controller menu.
 - Update: Damage resistance now reduces the duration of enchantments. So a high EVIL resistance
   reduces the duration of poision for example.
-- Update: Damage resistance is now expressed in percentage instead of damage shifts.
+- Update: Damage resistance can now be expressed in percentage instead of damage shifts.
 - Update: Improved the Warlock AI.
 - Update: The boss fight in the Shadow Palace is now tougher.
 - Update: Rebalance tweaks to the attack speed system.
 - Update: The Valkyrie can now enter Divine Order of Aaron shops.
 - Update: Some minor GUI improvements.
+- Bugfix: Particles no longer get stuck in walls.
 - Bugfix: Fixed objects dissappearing into the ground.
 - Bugfix: Fixed mouse controller not working properly.
 - Bugfix: Fixed problems with shooting crossbows or longbows.

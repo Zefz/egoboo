@@ -123,14 +123,20 @@ IfBumped
           //Beat the quest for all players
           tmpargument = [SPID]
           IfTargetHasQuest
-            tmpx = tmpdistance
+            tmpx = tmpdistance      //This can only be done once
             tmpy = 1
             IfXIsEqualToY
-              tmpdistance = 2
-              AddQuestAllPlayers
-              tmpargument = "%n dropped a gem!"
-              SendMessageNear
-              DropItems
+              tmpargument = [SPQU]
+              CostTargetItemID      //Make them deliver the quest item
+                tmpdistance = 2
+                AddQuestAllPlayers
+                tmpargument = "%n dropped a gem!"
+                SendMessageNear
+                DropItems           //Reward!
+                
+                tmpargument = 50
+                tmpdistance = EXPQUEST
+                GiveExperienceToGoodTeam
   
 //------------------------------------------------------------------------------
 IfTimeOut

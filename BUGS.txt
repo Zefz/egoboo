@@ -5,7 +5,10 @@ at: http://egoboo.sourceforge.net/forum/
 Thanks!
 
 KNOWN BUGS:
-- No way to introduce the Spider Lair quest.
+- Zombi in Zombi Starter tend to walk into a corner towards strange waypoints.
+- MESHFX_WALL should become hillside and not impassable while MESH_FXSLIPPERY should become icy.
+- Lose input device control sometimes
+- Mouse texture corruption (Load Game, then go to New Game menu)
 - A rare random crash bug (NaN with some math operation)
 - Rework how identifying stuff works. Currently it doesn't work at all.
 - Abyss 1 is unbeatable. When I kill one of the minotaurs the game slows down and then freezes 

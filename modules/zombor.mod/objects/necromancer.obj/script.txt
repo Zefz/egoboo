@@ -26,6 +26,9 @@ IfSpawned
   //Map stuff
   ShowMap
   ShowYouAreHere
+  
+  //Be bossy!
+  BecomeLeader
 
   //Play interactive music
   tmpargument = 17

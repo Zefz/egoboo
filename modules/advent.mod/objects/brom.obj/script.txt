@@ -88,8 +88,7 @@ IfTimeOut				// This is done every so often
       tmpy = leadery			    //
       tmpturn = 16384 + leaderturn	    // Stand to side
       Compass				    //
-      ClearWaypoints			  //
-      AddWaypoint				  //
+      FindPath
 
       //Look out for enemies
       tmpx = leaderdistance
@@ -168,8 +167,7 @@ IfTimeOut				// This is done every so often
       tmpy = targety
       tmpturn = targetturnto
       Compass
-      ClearWaypoints			  //
-      AddWaypoint				  //
+      FindPath
 
     //No enemies around
     Else

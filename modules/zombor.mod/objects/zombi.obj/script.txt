@@ -13,7 +13,7 @@ tmpy = selfy
 tmpargument = BLUE
 ShowBlipXY
 
-//Randomize join team
+//setup character
 IfSpawned
   SetTargetToSelf
   SetOwnerToTarget
@@ -77,16 +77,16 @@ IfTimeOut
 
   //STATE 0 - FOLLOW LEADER
   IfStateIs0
-    SetTargetToLeader
-    
     Run
-    tmpx = rand & 2047 + targetx - 1024
-    tmpy = rand & 2047 + targety - 1024
-    tmpdistance = 1200
-    tmpturn = targetturnto //rand & 31000 + targetturnto - 16000
-    Compass
-    ClearWaypoints
-    AddWaypoint
+    //tmpx = rand % 2048 + targetx - 1024
+    //tmpy = rand % 2048 + targety - 1024
+    //tmpdistance = 1200
+    //tmpturn = targetturnto //rand & 31000 + targetturnto - 16000
+    //Compass
+    
+    tmpx = leaderx
+    tmpy = leadery
+    FindPath
 
     //Watch out for enemies
     SetTargetToWideEnemy
@@ -119,6 +119,7 @@ IfTimeOut
               tmpargument = [SWOR]
               SetTargetToWideBlahID
                 tmpx = 1
+      tmpx = 0
       tmpy = 1
       IfXIsEqualToY			//If tmpx is 1, then a weapon was found
         tmpx = targetdistance
@@ -126,14 +127,20 @@ IfTimeOut
         IfXIsLessThanY			//Close enough to grab it?
           tmpargument = rand & 1 + ACTIONME
           DoAction
+          
         tmpx = targetx
         tmpy = targety
         tmpturn = targetturnto
         tmpdistance = 100
         Compass
         Run
-        ClearWaypoints
-        AddWaypoint
+        FindPath
+          DoNothing
+        Else
+          //We can't find our way to the weapon
+          tmpx = leaderx
+          tmpy = leadery
+          FindPath
         
     // Reset the timer
     tmpargument = rand & 31 + 40
@@ -174,8 +181,7 @@ IfTimeOut
         tmpdistance = 1500
         tmpturn = targetturnto
         Compass
-        ClearWaypoints
-        AddWaypoint
+        FindPath
       Else					//Too far away to engage. Follow leader
         tmpargument = 0
         SetState
@@ -190,21 +196,22 @@ IfTimeOut
 //Move out of way of friendlies and dont get stuck in pillar
 IfBumped
   SetTargetToWhoeverBumped
-  tmpargument = [PILL]
-  IfTargetHasID
-    tmpx = 6000           //Ugly fix! Dont' get stuck in that pillar
-    tmpy = 5600
+//  tmpargument = [PILL]
+//  IfTargetHasID
+//    tmpx = 6000           //Ugly fix! Dont' get stuck in that pillar
+//    tmpy = 5600
+//    ClearWaypoints
+//    AddWaypoint
+
+  IfTargetIsOnHatedTeam
+    DoNothing
+  Else
+    tmpx = rand & 511 + targetx - 512
+    tmpy = rand & 511 + targety - 512
+    tmpturn = targetturnto
+    tmpdistance = -600
     ClearWaypoints
     AddWaypoint
-  Else
-    IfTargetIsOnHatedTeam
-      DoNothing
-    Else
-      tmpx = rand & 511 + targetx - 512
-      tmpy = rand & 511 + targety - 512
-      tmpturn = targetturnto
-      tmpdistance = 0 - 600
-      ClearWaypoints
-      AddWaypoint
-      SetTargetToOldTarget
+    SetTargetToOldTarget
+    
 End
