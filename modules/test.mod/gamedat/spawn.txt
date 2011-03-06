@@ -40,6 +40,9 @@ Player4:   NONE    27  37.6 39.6   0.0   N    0   0  0   0   0   T   F   G			// 
   unknown: NONE    34   0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
   unknown: NONE    35   0.0   0.0   0.0   I    0   0  0   0   0   F   F   N
 
+//for debugging A*
+Follower:   NONE    37  37.6  37.6   0.0   N    0   0  0   0   0   F   F   G
+  
 Strider:   NONE    100 41 41   0.0   N    0   0  0   0   0   F   F   N
 Bullwolf:   NONE    101 43 41   0.0   N    0   0  0   0   0   F   F   N
 Bumper:   NONE    102 45 41   0.0   N    0   0  0   0   0   F   F   N
@@ -48,6 +51,3 @@ mouse:   NONE    104 41 43   0.0   N    0   0  0   0   0   F   F   N
 hellrover:   NONE    105 43 43   0.0   N    0   0  0   0   0   F   F   N
 choco:   NONE    106 45 43   0.0   N    0   0  0   0   0   F   F   N
 tinker_plane:   NONE    107 47 43   0.0   N    0   0  0   0   0   F   F   N
-
-
-advent_armor: NONE    99   37.6  37.6   0.0   N    0   0  0   0   0   F   F   G

@@ -4,14 +4,26 @@ at: http://egoboo.sourceforge.net/forum/
 
 Thanks!
 
+2.8.2 BETA bug report:
+I. The “restart module” tab simply freezes Egoboo.
+II. The lamps can only be turned on for brief moments before they are involuntarily shut off by your heroes.
+III. The cursor is not displayïng correctly; the mouse’s icon is a white square.
+IV. Ghouls cannot be harmed by (blunt) weapons, “healing” might be the only way to damage them now. That makes the Healer module considerably tædious.
+V. Editing the “sneak” command is impossible to do in-game, I could not apply any keys to it.
+VI. The hints seem to be ‘cut’ off my screen, perhaps due to the font size, or my resolution.
+VII. Sometimes the avatars in the playër select will turn into books. Could any of you guess why that might be happening?
+VIII. Some description typos: “preform”*, “rogueish”, Heist Module; “luckly”, “sheperds”, Zippy Village.
+*In its context.
+IX. The owner of Zippy’s magic shoppe is displaying incorrectly.
+X. There is a red, transparent booke in Zippy Village, which turns into a mimic when purchased.
+XI. I once could not control my characters within Zippy Village, just alter the camera. Perhaps this occurs shortly after completing a playër module (maybe the Wizard’s).
+XII. The Hellrover has a tendency to ‘climb’ the walls in order to reach his summoner.
+
 KNOWN BUGS:
-- Zombi in Zombi Starter tend to walk into a corner towards strange waypoints.
+- Zombis in the Zombi Starter tend to walk into a corner towards strange waypoints.
 - MESHFX_WALL should become hillside and not impassable while MESH_FXSLIPPERY should become icy.
-- Lose input device control sometimes
-- Mouse texture corruption (Load Game, then go to New Game menu)
 - A rare random crash bug (NaN with some math operation)
 - Rework how identifying stuff works. Currently it doesn't work at all.
-- Abyss 1 is unbeatable. When I kill one of the minotaurs the game slows down and then freezes 
 - Tourist: one of the keys ( at platforms) always fell trough the platform to the pit. that makes this level unbeatable. 
 - "items falls through the floor" bug
 - Redo some of the Devil Door stuff (detect dead)
