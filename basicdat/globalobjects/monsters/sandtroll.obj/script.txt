@@ -61,8 +61,7 @@ IfStateIs0
         tmpturn = targetturnto
         tmpdistance = 200
         Compass
-        ClearWaypoints
-        AddWaypoint
+        FindPath
     tmpargument = 20
     SetTime
 

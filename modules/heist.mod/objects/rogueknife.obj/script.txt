@@ -147,8 +147,7 @@ IfTimeOut
         tmpturn = targetturnto + 32768
         tmpdistance = 100
         Compass
-        ClearWaypoints
-        AddWaypoint
+        FindPath
         tmpargument = 20
         SetTime
       Else
@@ -158,8 +157,7 @@ IfTimeOut
         tmpturn = targetturnto
         tmpdistance = 400
         Compass
-        ClearWaypoints
-        AddWaypoint
+        FindPath
         tmpargument = 20
         SetTime
 

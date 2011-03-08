@@ -63,8 +63,7 @@ IfTimeOut
         Else                //We know nothin..
           tmpx = leaderx
           tmpy = leadery
-          ClearWaypoints
-          AddWaypoint
+          FindPath
       Else                  //It's not a mimic - Charge!
         tmpargument = 1
         SetState
@@ -81,9 +80,7 @@ IfTimeOut
         SetTargetToLeader
         tmpturn = targetturnto
         Compass
-      ClearWaypoints
-      AddWaypoint
-      
+      FindPath      
       
   //Combat
   IfStateIs1
@@ -160,55 +157,18 @@ IfTimeOut
     //First priority is to find a weapon
     IfHoldingMeleeWeapon
       DoNothing
-    Else
-      tmpargument = 0
-      SetXY                 //Store previous waypoint if fails
-      tmpx = 0
-      tmpdistance = BLAHITEMS
-      tmpargument = [KNIF]
-      SetTargetToWideBlahID
-        tmpx = 1
-      tmpargument = [HAMM]
-      SetTargetToWideBlahID
-        tmpx = 1
-      tmpargument = [SPEA]
-      SetTargetToWideBlahID
-        tmpx = 1
-      tmpargument = [TORC]
-      SetTargetToWideBlahID
-        tmpx = 1
-      tmpargument = [AXEE]
-      SetTargetToWideBlahID
-        tmpx = 1
-      tmpargument = [WHIP]
-      SetTargetToWideBlahID
-        tmpx = 1
-      tmpargument = [MACE]
-      SetTargetToWideBlahID
-        tmpx = 1
-      tmpargument = [POLE]
-      SetTargetToWideBlahID
-        tmpx = 1
-      tmpargument = [SWOR]
-      SetTargetToWideBlahID
-        tmpx = 1
-       
+    Else       
       //Found something?
-      tmpy = 1
-      IfXIsEqualToY
+      SetTargetToNearbyWeapon
         tmpx = targetdistance
         tmpy = 75
         IfXIsLessThanY
           tmpargument = LATCHALTRIGHT
           PressLatchButton
         tmpx = targetx            //Move towards it
-        tmpy = targety
-      Else
-        tmpargument = 0         //Get the previous stored waypoint if failed
-        GetXY
-          
-    ClearWaypoints
-    AddWaypoint
+        tmpy = targety 
+        
+    FindPath
       
 //Handle attacking and shield use (ressurected state only!)
 IfStateIs3

@@ -1,5 +1,7 @@
 Version 2.8.2 BETA (04.03.2011)
 - New Feature: New sidequest called 'Lair of the Spider Queen'! Unlock the quest in Zippy Town.
+- New Feature: Implemented A* pathfinding for much smarter AI movements. This means monsters and helpers
+  can now move around corners, navigate mazes, etc.
 - Update: Improved the Darkshine Knight AI.
 - Update: Various improvements to the EgoScript AI compiler.
 - Update: Removed the limit for the number of messages each object can have.
@@ -15,6 +17,7 @@ Version 2.8.2 BETA (04.03.2011)
 - Update: Rebalance tweaks to the attack speed system.
 - Update: The Valkyrie can now enter Divine Order of Aaron shops.
 - Update: Some minor GUI improvements.
+- Bugfix: Zombis in Zombi Starter no longer get stuck.
 - Bugfix: Fixed some input controller issues on Linux systems.
 - Bugfix: Fixed secret in Shadow Palace not working properly.
 - Bugfix: Particles no longer get stuck in walls.

@@ -80,8 +80,7 @@ IfTimeOut
         Else                //We know nothin..
           tmpx = leaderx
           tmpy = leadery
-          ClearWaypoints
-          AddWaypoint
+          FindPath
       Else                  //It's not a mimic - Charge!
         tmpargument = 1
         SetState    
@@ -117,9 +116,7 @@ IfTimeOut
         SetTargetToLeader
         tmpturn = targetturnto
         Compass
-      ClearWaypoints
-      AddWaypoint
-      
+      FindPath      
       
   //Combat
   IfStateIs1
@@ -134,8 +131,7 @@ IfTimeOut
         tmpy = targety
         tmpdistance = 1500
         tmpturn = targetturnto
-        ClearWaypoints
-        AddWaypoint
+        FindPath
       Else
         tmpargument = 0
         SetState                  //No enemies around anymore
@@ -146,8 +142,7 @@ IfTimeOut
       SetTargetToLeader
       tmpturn = targetturnto
       Compass
-      ClearWaypoints
-      AddWaypoint                     //Return to leader
+      FindPath                     //Return to leader
       tmpargument = 0
       SetState
 
@@ -200,54 +195,20 @@ IfTimeOut
     IfHoldingMeleeWeapon
       DoNothing
     Else
-      tmpargument = 0
-      SetXY                 //Store previous waypoint if fails
-      tmpx = 0
-      tmpdistance = 8           //Items
-      tmpargument = [KNIF]
-      SetTargetToWideBlahID
-        tmpx = 1
-      tmpargument = [HAMM]
-      SetTargetToWideBlahID
-        tmpx = 1
-      tmpargument = [SPEA]
-      SetTargetToWideBlahID
-        tmpx = 1
-      tmpargument = [TORC]
-      SetTargetToWideBlahID
-        tmpx = 1
-      tmpargument = [AXEE]
-      SetTargetToWideBlahID
-        tmpx = 1
-      tmpargument = [WHIP]
-      SetTargetToWideBlahID
-        tmpx = 1
-      tmpargument = [MACE]
-      SetTargetToWideBlahID
-        tmpx = 1
-      tmpargument = [POLE]
-      SetTargetToWideBlahID
-        tmpx = 1
-      tmpargument = [SWOR]
-      SetTargetToWideBlahID
-        tmpx = 1
-       
+    //First priority is to find a weapon
+    IfHoldingMeleeWeapon
+      DoNothing
+    Else       
       //Found something?
-      tmpy = 1
-      IfXIsEqualToY
+      SetTargetToNearbyWeapon
         tmpx = targetdistance
         tmpy = 75
         IfXIsLessThanY
           tmpargument = LATCHALTRIGHT
           PressLatchButton
         tmpx = targetx            //Move towards it
-        tmpy = targety
-      Else
-        tmpargument = 0         //Get the previous stored waypoint if failed
-        GetXY
-          
-    ClearWaypoints
-    AddWaypoint
-      
-
+        tmpy = targety 
+    
+    FindPath      
+    
 End

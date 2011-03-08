@@ -195,7 +195,6 @@ IfTimeOut
       IfXIsMoreThanY
         tmpx = rand & 511 + ownerx - 256			    //
         tmpy = rand & 511 + ownery - 256			    //
-        ClearWaypoints			  
-        AddWaypoint		  
+        FindPath
 
 End					// Finished with this character

@@ -401,6 +401,7 @@ The symbol itself follows
 :F 385 SetTargetToBlahInPassage
 :F 386 IfLevelUp
 :F 387 GiveSkillToTarget
+:F 388 SetTargetToNearbyMeleeWeapon
 :C 001 BLAHDEAD
 :C 002 BLAHENEMIES
 :C 004 BLAHFRIENDS

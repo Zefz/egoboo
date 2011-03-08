@@ -13,7 +13,7 @@ Level rating ( * to  ***** ) 		:*****
 :Your_buddy_K'nife_has_a_big
 :plan_of_robbing_a_well_guarded
 :treasury!_Use_your_rogueish_skills
-:to_preform_this_task!
+:to_perform_this_task!
 :_
 :_
 :Note:_Rogues_Only!

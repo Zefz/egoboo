@@ -83,9 +83,8 @@ IfTimeOut
     //tmpdistance = 1200
     //tmpturn = targetturnto //rand & 31000 + targetturnto - 16000
     //Compass
-    
-    tmpx = leaderx
-    tmpy = leadery
+    tmpx = rand & 1023 + leaderx - 512
+    tmpy = rand & 1023 + leadery - 512
     FindPath
 
     //Watch out for enemies
@@ -93,55 +92,30 @@ IfTimeOut
       tmpargument = 1
       SetState
 
-    //Search for weapons if not holding one
-    IfHoldingMeleeWeapon
-      DoNothing					//Already found one
     Else
-      // Find a good weapon...  Hammers, Maces, Axes, and Claws
-      tmpargument = [HAMM]
-      tmpdistance = BLAHITEMS
-      tmpx = 0
-      SetTargetToWideBlahID
-        tmpx = 1
+      //Search for weapons if not holding one
+      IfHoldingMeleeWeapon
+        DoNothing					//Already found one
       Else
-        tmpargument = [MACE]
-        SetTargetToWideBlahID
-          tmpx = 1
-        Else
-          tmpargument = [AXEE]
-          SetTargetToWideBlahID
-            tmpx = 1
-          Else
-            tmpargument = [CLAW]
-            SetTargetToWideBlahID
-              tmpx = 1
-            Else
-              tmpargument = [SWOR]
-              SetTargetToWideBlahID
-                tmpx = 1
-      tmpx = 0
-      tmpy = 1
-      IfXIsEqualToY			//If tmpx is 1, then a weapon was found
-        tmpx = targetdistance
-        tmpy = 80
-        IfXIsLessThanY			//Close enough to grab it?
-          tmpargument = rand & 1 + ACTIONME
-          DoAction
-          
-        tmpx = targetx
-        tmpy = targety
-        tmpturn = targetturnto
-        tmpdistance = 100
-        Compass
-        Run
-        FindPath
-          DoNothing
-        Else
-          //We can't find our way to the weapon
-          tmpx = leaderx
-          tmpy = leadery
+        // Find a good weapon...
+        SetTargetToNearbyMeleeWeapon
+
+          //Close enough to grab it?
+          tmpx = targetdistance
+          tmpy = 80
+          IfXIsLessThanY			
+            tmpargument = rand & 1 + ACTIONME
+            DoAction
+
+          //get closer        
+          tmpx = targetx
+          tmpy = targety
+          tmpturn = targetturnto
+          tmpdistance = 100
+          Compass
+          Run
           FindPath
-        
+
     // Reset the timer
     tmpargument = rand & 31 + 40
     SetTime
@@ -206,8 +180,8 @@ IfBumped
   IfTargetIsOnHatedTeam
     DoNothing
   Else
-    tmpx = rand & 511 + targetx - 512
-    tmpy = rand & 511 + targety - 512
+    tmpx = rand & 511 + targetx - 256
+    tmpy = rand & 511 + targety - 256
     tmpturn = targetturnto
     tmpdistance = -600
     ClearWaypoints
