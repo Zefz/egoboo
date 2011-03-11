@@ -31,12 +31,12 @@
 #dependency Rot                49
 #dependency Protect            51
 #dependency Missile            53
-#dependency Fireball           55
 #dependency FireRing           56
 #dependency Levitate           57
 #dependency Light              58
 #dependency MPotion            59
 #dependency FrostBlast         50
+#dependency Fireball           98
 
 //Watts shop
 #dependency ArmorChest         40
@@ -65,7 +65,7 @@
 
 //Potion Trader
 #dependency ESPotion           86       //Extreme Speed
-#dependency IPotion            87       //Invicibililty
+#dependency IPotion            87       //Invisibililty
 #dependency OPotion            88       //Oracle (reveal map)
 #dependency WPotion            89       //Experience
 #dependency PPotion            90       //Poison potion
@@ -129,7 +129,7 @@ dropper: NONE 112 20 57  0    S   0 0   0   0   0   F   F   NULL
 dropper: NONE 112 19 57  0    S   0 0   0   0   0   F   F   NULL
   object:    NONE      56   0    0    0    R   0   0   0   0   0   F   F   Null
 dropper: NONE 112 22 56  0    S   0 0   0   0   0   F   F   NULL
-  Object:    NONE      55   0    0    0    R   0   0   0   0   0   F   F   Null
+  Fireball:    NONE     98   0    0    0    R   0   0   0   0   0   F   F   Null
 dropper: NONE 112 21 56  0    S   0 0   0   0   0   F   F   NULL
   Storms:    NONE      54   0    0    0    R   0   0   0   0   0   F   F   Null
 dropper: NONE 112 20 56  0    S   0 0   0   0   0   F   F   NULL

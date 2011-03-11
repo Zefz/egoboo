@@ -115,15 +115,6 @@ IfStateIs0
           GiveExperienceToTarget
           MakeUsageKnown
           MakeNameKnown
-  // Return to spellbook, Do last!
-  IfDropped
-    tmpargument = 0
-    SetContent
-    BecomeSpellbook
-    DisaffirmCharacter
-    tmpargument = ACTIONJB
-    DoAction
-    KeepAction
 Else
   // Make the explosion ring fade out...
   IfTimeOut
@@ -141,4 +132,15 @@ Else
   tmpargument = 255
   FlashVariable
 
+// Return to spellbook, Do last!
+IfDropped
+  tmpargument = 0
+  SetContent
+  SetState
+  BecomeSpellbook
+  DisaffirmCharacter
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
+  
 End

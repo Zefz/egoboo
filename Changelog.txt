@@ -17,6 +17,7 @@ Version 2.8.2 BETA (04.03.2011)
 - Update: Rebalance tweaks to the attack speed system.
 - Update: The Valkyrie can now enter Divine Order of Aaron shops.
 - Update: Some minor GUI improvements.
+- Bugfix: Fixed some tiles not always rendering on the bottom of the camera view.
 - Bugfix: Zombis in Zombi Starter no longer get stuck.
 - Bugfix: Fixed some input controller issues on Linux systems.
 - Bugfix: Fixed secret in Shadow Palace not working properly.
