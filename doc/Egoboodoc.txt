@@ -20,9 +20,6 @@ TEXTURES
     txTexture[5]: "[module]/gamedat/watertop.bmp"
     txTexture[6]: "[module]/gamedat/waterlow.bmp 
 
-    Phong map:
-    txTexture[7]: "[module]/gamedat/phong.bmp"
-
 
 THE MESH
 --------

@@ -1,17 +1,41 @@
-This is a list of all the functions that can be used for AI scripting in Egoboo.
+                            EGOSCRIPT DOCUMENTATION
+--------------------------------------------------------------------------------
+== CONTENTS ==
+  INTRODUCTION TO EGOSCRIPT     - Some useful scripting information
+  FUNCTIONS                     - List of all EgoScript functions
+  VARIABLES                     - List of all EgoScript variables
+  CONSTANTS                     - Constants that are used in EgoScript
+  MATH                          - Some info on how math works in EgoScript
+
+
+==INTRODUCTION TO EGOSCRIPT==
+--------------------------------------------------------------------------------
+Each object has a script.txt file that contains the AI script of the character.
+This determines how the AI behaves, moves, attacks, talks, etc.
 Indent by 2 spaces for each level of nesting ( Do not use tabs!. )
 An indented section is only run if the last function proceeded ( eg. didn't fail )
 Order of operations are read from left to the right
 Only the tmp* variable can be set, others only read
 Each script runs from top to bottom, 50 times per second
 Commenting actually works in script files ( Use //)
-Script errors are logged into log.txt (Located under main folder).
-An AI script cannot have more than 2560 lines (Which should be more than enough).
+Script errors are logged into log.txt (Located under the debug folder).
+An AI script cannot have more than 2048 lines (Which should be more than enough).
 
-Last updated: 28-02-2010
-SOME SCRIPTS MAY ONLY WORK IN LATER VERISONS
 
-SCRIPT FUNCTIONS
+STRINGS AND OBJECT REFERENCE
+You can set the tmp* values to various strings by using the double apostrophe to
+show where the string begins and ends. These should only be used by the SendMessage 
+and SendMessageNear functions as they will be loaded into the objects message list 
+at script compile time. Example: "my string"
+
+You can also load and reference to other objects in the Global Object Repository (GOR) 
+or the local module object folder. This is done with the number symbol (#) before the 
+object name. Example: "#grubbug.obj"
+
+
+
+
+==SCRIPT FUNCTIONS==
 --------------------------------------------------------------------------------
 IfSpawned
   // This function proceeds if the character was spawned this update
@@ -73,19 +97,19 @@ AddWaypoint
   AddWaypoint
 --------------------------------------------------------------------------------
 FindPath
-  //This function makes life easier through setting tmpx, tmpy, tmpturn, waypoints
-  //tmpdistance and movement speed automatically. You only need to specify
-  //which type of movement you want. You also might want to clear
-  //existing waypoints. Movement modes are set in tmpdistance as constants.
-  SetTargetToWideEnemy
-    ClearWaypoints
-    tmpdistance = MOVECHARGE
-    FindPath            //Charge the found enemy
+  // This function will use pathfinding to fill up the waypoint list to create 
+  // an intelligent path from the character current position to the position 
+  // specified in tmpx and tmpy. There is no need to call ClearWaypoints
+  tmpx = targetx
+  tmpy = targety
+  FindPath
+    //path found!
+    tmpargument = "Attack!"
+    SendMessageNear
   Else
-    SetTargetToLeader
-    ClearWaypoints
-    tmpdistance = MOVEFOLLOW
-    FindPath            //Follow the leader
+    //could not find a smart path
+    tmpargument = "Where are you hiding?!"
+    SendMessageNear
 --------------------------------------------------------------------------------
 Compass
   // This function modifies tmpx and tmpy, depending on the setting of
@@ -262,7 +286,7 @@ ClosePassage
   // are crushed.
   tmpargument = passage
   ClosePassage
-    tmpargument = 0
+    tmpargument = "Door closed..."
     SendMessage
 --------------------------------------------------------------------------------
 IfPassageOpen
@@ -299,7 +323,7 @@ IfHealed
 --------------------------------------------------------------------------------
 SendMessage
   // This function sends a message...  All players will see the message
-  tmpargument = MESSAGEDEATH
+  tmpargument = "Hello world!"
   SendMessage
 --------------------------------------------------------------------------------
 CallForHelp
@@ -487,7 +511,7 @@ IfTargetHasVulnerabilityID
   // This function proceeds if the target is vulnerable to the given IDSZ...
   tmpargument = [SILV]
   IfTargetHasVulnerabilityID
-    tmpargument = 0
+    tmpargument = "Ouch that hurts!"
     SendMessageNear
 --------------------------------------------------------------------------------
 CleanUp
@@ -578,7 +602,7 @@ GetDamageType
     tmpx = tmpargument
     tmpy = DAMAGESLASH
     IfXIsEqualToY
-      tmpargument = 0
+      tmpargument = "%t was hurt by slashing damage."
       SendMessageNear
 --------------------------------------------------------------------------------
 BecomeSpell
@@ -615,7 +639,7 @@ SetTargetToWhoeverWasHit
   IfScoredAHit
     SetTargetToWhoeverWasHit
     IfTargetIsOnSameTeam
-      tmpargument = 0
+      tmpargument = "Sorry %t!"
       SendMessageNear  // Sorry 'bout that...
 --------------------------------------------------------------------------------
 SetTargetToWideEnemy
@@ -650,7 +674,7 @@ IfTargetHasSpecialID
   // This function proceeds if the character has a special IDSZ ( in data.txt )
   tmpargument = [GOOD]
   IfTargetHasSpecialID
-    tmpargument = 0
+    tmpargument = "Wow you are good!"
     SendMessageNear
 --------------------------------------------------------------------------------
 PressTargetLatchButton
@@ -666,7 +690,7 @@ IfArmorIs
   // This function proceeds if the character's skin type equals tmpargument
   tmpargument = 1
   IfArmorIs
-    tmpargument = 0
+    tmpargument = "I have platemail!"
     SendMessageNear
 --------------------------------------------------------------------------------
 GetTargetGrogTime
@@ -827,7 +851,7 @@ CostTargetMana
   // if the target was able to pay the price...  The amounts are * 256
   tmpargument = 256 // Cost one point of mana
   CostTargetMana
-    tmpargument = 0
+    tmpargument = "Mana has been paid."
     SendMessageNear
 --------------------------------------------------------------------------------
 IfTargetHasAnyID
@@ -835,7 +859,7 @@ IfTargetHasAnyID
   // one
   tmpargument = [XFIR]
   IfTargetHasAnyID
-    tmpargument = 0
+    tmpargument = "The AI target has a [XFIR] IDSZ tag"
     SendMessageNear
 --------------------------------------------------------------------------------
 SetBumpSize
@@ -907,7 +931,7 @@ IfContentIs
   // This function proceeds if the content matches tmpargument
   tmpargument = 0
   IfContentIs
-    tmpargument = 1
+    tmpargument = "content is 0"
     SendMessageNear
 --------------------------------------------------------------------------------
 SetTurnModeToWatchTarget
@@ -918,7 +942,7 @@ IfStateIsNot
   // This function proceeds if the character's state does not equal tmpargument
   tmpargument = 0
   IfStateIsNot
-    tmpargument = 1
+    tmpargument = "state is not 0"
     SendMessageNear
 --------------------------------------------------------------------------------
 IfXIsEqualToY
@@ -937,7 +961,7 @@ BlackTarget
 --------------------------------------------------------------------------------
 SendMessageNear
   // This function sends a message to all nearby players
-  tmpargument = 0  // Message 0
+  tmpargument = "My name is %n..."
   SendMessageNear
 --------------------------------------------------------------------------------
 IfHitGround
@@ -1116,7 +1140,7 @@ IfTargetHasItemIDEquipped
   // This function proceeds if the target already wearing a matching item
   tmpargument = [RING]
   IfTargetHasItemIDEquipped
-    tmpargument = 0
+    tmpargument = "You already have a ring!"
     SendMessageNear
 --------------------------------------------------------------------------------
 SetOwnerToTarget
@@ -1427,13 +1451,12 @@ SpawnCharacterXYZ
 --------------------------------------------------------------------------------
 SpawnExactCharacterXYZ
   // This function spawns a character at a specific location, using a
-  // specific model type...  DON'T USE THIS FOR EXPORTABLE ITEMS OR CHARACTERS,
-  // AS THE MODEL SLOTS MAY VARY FROM MODULE TO MODULE...
-  tmpargument = 10           // The specific model slot
-  tmpx = selfx               // X position of the new character
-  tmpy = selfy               // Y position of the new character
-  tmpdistance = selfz + 200  // Altitude of the new character
-  tmpturn = selfturn         // facing of the new character
+  // specific model type...
+  tmpargument = "#lumpkin.obj" // The specific slot or object reference name
+  tmpx = selfx                 // X position of the new character
+  tmpy = selfy                 // Y position of the new character
+  tmpdistance = selfz + 200    // Altitude of the new character
+  tmpturn = selfturn           // facing of the new character
   SpawnExactCharacterXYZ
 -------------------------------------------------------------------------------- 
 ChangeTargetClass
@@ -1699,7 +1722,7 @@ TargetPayForArmor
     ChangeTargetArmor
   Else
     // Not enough money
-    tmpargument = 2
+    tmpargument = "Not enough money..."
     SendMessageNear
 --------------------------------------------------------------------------------
 JoinEvilTeam
@@ -1954,7 +1977,7 @@ GetTargetDamageType
     tmpx = tmpargument
     tmpy = DAMAGESLASH
     IfXIsEqualToY
-      tmpargument = 0
+      tmpargument = "It's super effective!"
       SendMessageNear
 --------------------------------------------------------------------------------
 IfTargetIsArcaneSpell
@@ -2051,8 +2074,9 @@ IfTargetIsFacingSelf
   IfBumped
     SetTargetToWhoeverBumped
     IfTargetIsFacingSelf
-      tmpargument = 5
+      tmpargument = "What are you looking at?!"
       SendMessage
+      tmpargument = 5
       PlayFullSound
 -------------------------------------------------------------------------------- 
 AddQuestAllPlayers
@@ -2306,15 +2330,6 @@ FXDAMAGE
 FXSLIPPY
   // These are map effects
 --------------------------------------------------------------------------------
-//These are constant used in combination with the FindPath function (Adjusting
-//speed, movement and turning accordingly)
-MOVEMELEE   //Standard melee position
-MOVERANGED   //Keep a distance away for use with ranged weapons
-MOVEDISTANCE   //Keep a short melee distance for weapons with long reach
-MOVERETREAT   //Run away from the target in full panic!
-MOVECHARGE   //Charge the target in full speed!
-MOVEFOLLOW   //Follow the target in group formation
---------------------------------------------------------------------------------
 //The different teams that a character can join using JoinTeam or TargetJoinTeam
 //Same as 0-23 (0 = TEAMA, 1 = TEAMB, etc.). Note that 24 is predefined as DAMAGETILE team
 TEAMA
@@ -2346,25 +2361,29 @@ TEAMZ
 
 
 
-VARIABLES
+==VARIABLES==
 --------------------------------------------------------------------------------
+// These variables are used as arguments to functions, and are the only
+// variables that can be written to...
 tmpx
 tmpy
 tmpdistance
 tmpturn
 tmpargument
-  // These variables are used as arguments to functions, and are the only
-  // variables that can be written to...
-  tmpx = tmpx + 50        // This is okay
-  tmpy = selfstate - 2          // This is okay
-  tmpturn = -640
-  tmpdistance = 99
-  tmpturn = rand & 255    // This is okay
-  tmpargument = tmpturn + tmpdistance - tmpx
-  selfx = 30              // !!!THIS IS WRONG, WRONG, WRONG!!!
+
+// Examples
+tmpx = tmpx + 50            // This is okay
+tmpy = selfstate - 2        // This is okay
+tmpargument = "Hello %t!"   // This is replaced by the appropiate message number at compile time
+tmpargument = "#sword.obj"  // This is replaced by the slot number of sword.obj at compile time
+tmpturn = -640
+tmpdistance = 99
+tmpturn = rand & 255        // This is okay
+tmpargument = tmpturn + tmpdistance - tmpx
+selfx = 30                  // !!!THIS IS WRONG, WRONG, WRONG!!!
 --------------------------------------------------------------------------------
 rand
-  // This variable is a random number between
+  // This variable is a random number between (see MATH section for more info)
 --------------------------------------------------------------------------------
 selfx
 selfy
@@ -2555,7 +2574,8 @@ difficulty
 --------------------------------------------------------------------------------
 
 
-MATH
+==MATH==
+--------------------------------------------------------------------------------
 
 Order of operations
 
@@ -2572,8 +2592,10 @@ Operators:
       -      Subtract
       >      Bitwise Left shift
       <      Bitwise Right shift
+      &      Bitwise AND
       *      Multiply
       /      Divide
+      %      Modulo
 
 
 
@@ -2583,7 +2605,7 @@ Random number generation
       Using the bitwise-and operator '&' is faster but is more or less restricted to using certain 
       numbers : 1, 2, 7, 15, 31, 63, 127, ... (2^n) - 1.
       Using the '%' operator allows you to select any range you want, but is more processor intensive. 
-      It is usually better to always use the OR operator (%).
+      It is usually better to always use the modulo operator (%).
 
       Examples:
             rand & 7 generates a number between 0 and 7
@@ -2593,4 +2615,3 @@ Random number generation
             rand & 31 generates all the numbers between 0 and 31
             rand & 30 generates the even numbers between 0 and 30 (we dropped the lowest order bit)
             rand & 30 + 1 generates all the odd numbers between 1 and 31
-            
