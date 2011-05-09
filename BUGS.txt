@@ -5,20 +5,25 @@ at: http://egoboo.sourceforge.net/forum/
 Thanks!
 
 UNCONFIRMED:
-I. The “restart module” tab simply freezes Egoboo.
-III. The cursor is not displayïng correctly; the mouse’s icon is a white square.
-V. Editing the “sneak” command is impossible to do in-game, I could not apply any keys to it.
+1. Frights (flaming skulls) will never be vanquished by “healing” them.
+2. The Paladin module seems to be missing the items it needs to be completed; neither the first or second rooms of the sarcophaguses contain keys!
+3. Swinging a weapon will cause your character to move slightly. I am un-sure if this is intended.
+4. It is almost impossible to get injured by ghouls. Sometimes jumping during their attacks can cause injury, however.
+5. Sometimes “Immune” pops up when idols are attacked. I find this misleading, as idols could still be destroyed with the same weapon used præviously.
+6. A Healer’s tip contains a typo: “Dont”. “Don’t” or “Do not” would be better.
+8. A tranch is missing from one of the first four idols of the Healer module.
+9. A tranch is missing in the second chest of the Sand Palace. Although the Sand Palace already has plenty of tranches anyway!
+11. Rug mimics are very hard to find because they are usually invisible unless they are attacking.
+12. The cursor is not displayïng correctly in specific texture filtering modes
+13 It also seems that all foes are more difficult to hit, as direct contact seems to be in-adæquate. Perhaps extensive testing is required.
 
 KNOWN BUGS:
 - Restart module removes controls
 - Ghouls cannot be harmed by (blunt) weapons, “healing” might be the only way to damage them now. That makes the Healer module considerably tædious.
 - The hints seem to be ‘cut’ off my screen, perhaps due to the font size, or my resolution.
 - Sometimes the avatars in the playër select will turn into books. Could any of you guess why that might be happening?
-- I once could not control my characters within Zippy Village, just alter the camera. Perhaps this occurs shortly after completing a playër module (maybe the Wizard’s).
 - Can't use command keys for input controls (shift ctrl, etc.)
-- MESHFX_WALL should become hillside and not impassable while MESH_FXSLIPPERY should become icy.
 - A rare random crash bug (NaN with some math operation)
-- Rework how identifying stuff works. Currently it doesn't work at all.
 - Tourist: one of the keys ( at platforms) always fell trough the platform to the pit. that makes this level unbeatable. 
 - "items falls through the floor" bug
 - Redo some of the Devil Door stuff (detect dead)
@@ -37,4 +42,9 @@ COSMETIC/TRIVIAL
 - Fix those black tile artifacts on the bottom of the camera.
 - SetFrame doesnt seem to work properly. (see mosquitoes, they are stuck in one frame)
 - Need magic sparks for the sporks attacks.
-- Backstab messages in the ticker are displayed twice. 
+- Backstab messages in the ticker are displayed twice.
+
+WISHLIST:
+- Add multiplayer networking
+- MESHFX_WALL should become hillside and not impassable while MESH_FXSLIPPERY should become icy.
+- Rework how identifying stuff works. Currently it doesn't work at all.

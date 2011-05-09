@@ -12,7 +12,7 @@ Level rating ( *, **, ***, ****, or ***** )  		: ***
 
 
 // Module summary ( Must be 8 lines...  Each line mush have at least an _ )
-:Sir_Keldorn,_the_infanous_anti-paladin,
+:Sir_Keldorn,_the_infamous_anti-paladin,
 :has_joined_forces_with_the_mysterious
 :necromancers_appearing_across_Lorule.
 :_
