@@ -71,14 +71,14 @@ DirtCOBOL:     NONE      36   12.5 18.5 0.0  N   3   0   0   100 0   F   F   Evi
 // Sleeping guards by map
 DirtCOBOL:     NONE      36   22.5 9.5  0.0  N   3   2   0   200 0   F   F   Evil
   KiteShield:  NONE      72   0    0    0    R   0   0   0   0   0   F   F   Null
-  Whip:    NONE      16   0    0    0    L   0   0   0   0   0   F   F   Null
+  Whip:    NONE      -1   0    0    0    L   0   0   0   0   0   F   F   Null
 DirtCOBOL:     NONE      36   22.5 12.5 0.0  S   2   2   0   100 0   F   F   Evil
   Cinquedea:    NONE      47   0    0    0    L   0   0   0   0   0   F   F   Null
 DirtCOBOL:     NONE      36   25.5 11.5 0.0  E   3   2   0   100 0   F   F   Evil
   Cinquedea:    NONE      47   0    0    0    R   0   0   0   0   0   F   F   Null
   KiteShield:  NONE      73   0    0    0    L   0   0   0   0   0   F   F   Null
 DirtCOBOL:     NONE      36   27.5 12.5 0.0  W   4   2   0   200 0   F   F   Evil
-  Whip:    NONE      16   0    0    0    R   0   0   0   0   0   F   F   Null
+  Whip:    NONE      -1   0    0    0    R   0   0   0   0   0   F   F   Null
 DirtCOBOL:     NONE      36   28.5 8.5  0.0  S   1   2   0   100 0   F   F   Evil
   Cinquedea:    NONE      47   0    0    0    R   0   0   0   0   0   F   F   Null
 
@@ -99,13 +99,13 @@ DirtCOBOL:     NONE      36   12.5 30.5 0.0  S   0   0   0   100 0   F   F   Evi
 DirtCOBOL:     NONE      36   26.5 25.5 0.0  N   1   0   0   100 0   F   F   Evil
   Cinquedea:    NONE      47   0    0    0    R   0   0   0   0   0   F   F   Null
 DirtCOBOL:     NONE      36   24.5 28.5 0.0  N   0   0   0   400 0   F   F   Evil
-  LBow:    NONE      11   0    0    0    R   0   0   0   0   0   F   F   Null
+  LBow:    NONE      -1   0    0    0    R   0   0   0   0   0   F   F   Null
   Cinquedea:    NONE      47   0    0    0    I   0   0   0   0   0   F   F   Null
 DirtCOBOL:     NONE      36   26.5 28.5 0.0  N   2   0   0   450 0   F   F   Evil
-  LBow:    NONE      11   0    0    0    R   0   0   0   0   0   F   F   Null
+  LBow:    NONE      -1   0    0    0    R   0   0   0   0   0   F   F   Null
   Cinquedea:    NONE      47   0    0    0    I   0   0   0   0   0   F   F   Null
 DirtCOBOL:     NONE      36   29.5 27.5 0.0  N   0   0   0   500 0   F   F   Evil
-  LBow:    NONE      11   0    0    0    R   0   0   0   0   0   F   F   Null
+  LBow:    NONE      -1   0    0    0    R   0   0   0   0   0   F   F   Null
   Cinquedea:    NONE      47   0    0    0    I   0   0   0   0   0   F   F   Null
 
 
@@ -126,10 +126,10 @@ DirtCOBOL:     NONE      36   29.5 53.5 0.0  N   3   1   0   400 0   F   F   Evi
   XBow:    NONE      48   0    0    0    R   0   0   0   0   0   F   F   Null
   Cinquedea:    NONE      47   0    0    0    I   0   0   0   0   0   F   F   Null
 DirtCOBOL:     NONE      36   27.5 57.5 0.0  N   2   0   0   450 0   F   F   Evil
-  LBow:    NONE      11   0    0    0    R   0   0   0   0   0   F   F   Null
+  LBow:    NONE      -1   0    0    0    R   0   0   0   0   0   F   F   Null
   Cinquedea:    NONE      47   0    0    0    I   0   0   0   0   0   F   F   Null
 DirtCOBOL:     NONE      36   31.5 57.5 0.0  N   1   0   0   500 0   F   F   Evil
-  LBow:    NONE      11   0    0    0    R   0   0   0   0   0   F   F   Null
+  LBow:    NONE      -1   0    0    0    R   0   0   0   0   0   F   F   Null
   Cinquedea:    NONE      47   0    0    0    I   0   0   0   0   0   F   F   Null
 
 
@@ -149,10 +149,10 @@ DirtCOBOL:     NONE      36   47.5 46.5 0.0  W   2   0   0   120 0   F   F   Evi
 
 // Treasure room mounted troops
 DirtCOBOL:     NONE      36   37.5 32.5 1.0  E   6   1   0   200 0   F   F   Evil
-  Whip:    NONE      16   0    0    0    R   0   0   0   0   0   F   F   Null
+  Whip:    NONE      -1   0    0    0    R   0   0   0   0   0   F   F   Null
 BULLWOLF:  NONE      37   37.5 32.5 0.0  E   0   0   0   0   0   F   F   Null
 DirtCOBOL:     NONE      36   40.5 31.5 1.0  E   6   1   0   200 0   F   F   Evil
-  Whip:    NONE      16   0    0    0    R   0   0   0   0   0   F   F   Null
+  Whip:    NONE      -1   0    0    0    R   0   0   0   0   0   F   F   Null
 BULLWOLF:  NONE      37   40.5 31.5 0.0  E   0   0   0   0   0   F   F   Null
 
 
@@ -228,7 +228,7 @@ PLAYER:    NONE      0    8.5  6.5  0.0  N   0   0   0   0   0   T   F   Good
 
 
 // The G'nome with the key
-G'nome:    K'nife    5    50.5 56.5 0    S   0   0   0   0   0   F   F   Good
+G'nome:    K'nife    56    50.5 56.5 0    S   0   0   0   0   0   F   F   Good
   KEYA:    NONE      46   0    0    0    I   0   0   0   0   0   F   F   Null
   Knife:   NONE      39   0    0    0    I   0   0   0   0   0   F   F   Null
   Incisor: NONE      40   0    0    0    I   0   0   0   0   0   F   F   Null
