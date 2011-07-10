@@ -1,17 +1,16 @@
 #include "cartman_gui.h"
 #include "cartman_input.h"
-#include "cartman_math.h"
+#include "cartman_math.inl"
 #include "cartman_gfx.h"
 
-#include "Font.h"
-#include "log.h"
+#include <egolib.h>
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
 window_t window_lst[MAXWIN];
 ui_state_t ui;
-Font * gFont = NULL;
+Font * gFont_ptr = NULL;
 
 SDL_Surface * bmpcursor = NULL;
 
@@ -67,9 +66,9 @@ void draw_slider( int tlx, int tly, int brx, int bry, int* pvalue, int minvalue,
 }
 
 //--------------------------------------------------------------------------------------------
-void show_name( const char *newloadname )
+void show_name( const char *newloadname, SDL_Color fnt_color )
 {
-    fnt_printf_OGL( gFont, 0, ui.scr.y - 16, newloadname );
+    fnt_drawText_OGL( gFont_ptr, fnt_color, 0, ui.scr.y - 16, NULL, newloadname );
 }
 
 //--------------------------------------------------------------------------------------------
@@ -77,7 +76,7 @@ void load_window( window_t * pwin, int id, char *loadname, int x, int y, int bx,
 {
     if ( NULL == pwin ) return;
 
-    if ( INVALID_TX_ID == glTexture_Load( GL_TEXTURE_2D, &( pwin->tex ), loadname, INVALID_KEY ) )
+    if ( INVALID_GL_ID == oglx_texture_Load( &( pwin->tex ), loadname, INVALID_KEY ) )
     {
         log_warning( "Cannot load \"%s\".\n", loadname );
     }

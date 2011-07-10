@@ -1,6 +1,26 @@
 #pragma once
 
-#include "egoboo_typedef.h"
+//********************************************************************************************
+//*
+//*    This file is part of Cartman.
+//*
+//*    Cartman is free software: you can redistribute it and/or modify it
+//*    under the terms of the GNU General Public License as published by
+//*    the Free Software Foundation, either version 3 of the License, or
+//*    (at your option) any later version.
+//*
+//*    Cartman is distributed in the hope that it will be useful, but
+//*    WITHOUT ANY WARRANTY; without even the implied warranty of
+//*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//*    General Public License for more details.
+//*
+//*    You should have received a copy of the GNU General Public License
+//*    along with Cartman.  If not, see <http://www.gnu.org/licenses/>.
+//*
+//********************************************************************************************
+
+
+#include <egolib.h>
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
@@ -54,10 +74,10 @@ void flatten_mesh( int y0 );
 void clear_mesh( Uint8 upper, Uint16 presser, Uint8 tx, Uint8 type );
 void three_e_mesh( Uint8 upper, Uint8 tx );
 
-int  fan_is_floor( int x, int y );
-void set_barrier_height( int x, int y, int bits );
-void fix_walls();
-void impass_edges( int amount );
+bool_t fan_is_floor( int x, int y );
+void   set_barrier_height( int x, int y, int bits );
+void   fix_walls();
+void   impass_edges( int amount );
 
 void mesh_replace_fx( Uint16 fx_bits, Uint16 fx_mask, Uint8 fx_new );
 void mesh_replace_tile( int xfan, int yfan, int onfan, Uint8 tx, Uint8 upper, Uint8 fx, Uint8 type, Uint16 presser, bool_t tx_only, bool_t at_floor_level );

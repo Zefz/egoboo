@@ -1,16 +1,33 @@
 #pragma once
 
-#include "egoboo_typedef.h"
+//********************************************************************************************
+//*
+//*    This file is part of Cartman.
+//*
+//*    Cartman is free software: you can redistribute it and/or modify it
+//*    under the terms of the GNU General Public License as published by
+//*    the Free Software Foundation, either version 3 of the License, or
+//*    (at your option) any later version.
+//*
+//*    Cartman is distributed in the hope that it will be useful, but
+//*    WITHOUT ANY WARRANTY; without even the implied warranty of
+//*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//*    General Public License for more details.
+//*
+//*    You should have received a copy of the GNU General Public License
+//*    along with Cartman.  If not, see <http://www.gnu.org/licenses/>.
+//*
+//********************************************************************************************
+
+
+#include <egolib.h>
 
 #include "cartman_mpd.h"
 
-#include "SDL_extensions.h"
-#include "ogl_texture.h"
-
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
-struct Font;
+struct s_Font;
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
@@ -37,7 +54,7 @@ typedef struct s_window window_t;
 //--------------------------------------------------------------------------------------------
 struct s_window
 {
-    glTexture         tex;      // Window images
+    oglx_texture_t    tex;      // Window images
     Uint8             on;       // Draw it?
     int               x;        // Window position
     int               y;        //
@@ -70,7 +87,7 @@ struct s_ui_state
 
 extern window_t window_lst[MAXWIN];
 extern ui_state_t ui;
-extern struct Font * gFont;
+extern struct s_Font * gFont_ptr;
 extern SDL_Surface * bmpcursor;         // Cursor image
 
 //--------------------------------------------------------------------------------------------
@@ -78,6 +95,6 @@ extern SDL_Surface * bmpcursor;         // Cursor image
 
 void do_cursor();
 void draw_slider( int tlx, int tly, int brx, int bry, int* pvalue, int minvalue, int maxvalue );
-void show_name( const char *newloadname );
+void show_name( const char *newloadname, SDL_Color fnt_color );
 void load_window( window_t * pwin, int id, char *loadname, int x, int y, int bx, int by, int sx, int sy, Uint16 mode );
 window_t * find_window( int x, int y );

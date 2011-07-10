@@ -2,8 +2,6 @@
 
 #define CLOCKRATE 14
 #define SECONDRATE 1000
-#define NUMRAND 16384
-#define RANDIE randie[entry]); entry=(entry+1)&(NUMRAND-1
 
 int     timclock = 0;
 int     dunframe = 0;
@@ -12,7 +10,6 @@ Uint8   lastsecframe = 0;
 volatile int    minsecframe = 10000;
 int     worldclock = 0;
 int     seed;
-Uint16  randie[NUMRAND];
 Uint16  entry;
 char        charread;
 FILE            *fileread;
@@ -65,7 +62,8 @@ void comment( void )
 //--------------------------------------------------------------------------------------------
 void show_info( void )
 {
-    printf( "%s - Version %01d.%02d\n", NAME, VERSION / 100, VERSION % 100 );
+    printf( "%s - %s\n", NAME, VERSION_STR );
+
     if ( timclock != 0 )
     {
         printf( "Seconds = %15f\n", ( timclock * CLOCKRATE ) / 1000.0 );
@@ -76,22 +74,6 @@ void show_info( void )
         }
     }
     printf( "\n\n" );
-
-    return;
-}
-
-//--------------------------------------------------------------------------------------------
-void make_randie( void )
-{
-    seed = time( NULL );
-    srand( seed );
-    entry = 0;
-    while ( entry < NUMRAND )
-    {
-        randie[entry] = rand();
-        entry++;
-    }
-    entry = rand() % NUMRAND;
 
     return;
 }

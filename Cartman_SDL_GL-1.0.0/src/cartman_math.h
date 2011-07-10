@@ -1,38 +1,28 @@
 #pragma once
 
-#include "egoboo_typedef.h"
+//********************************************************************************************
+//*
+//*    This file is part of Cartman.
+//*
+//*    Cartman is free software: you can redistribute it and/or modify it
+//*    under the terms of the GNU General Public License as published by
+//*    the Free Software Foundation, either version 3 of the License, or
+//*    (at your option) any later version.
+//*
+//*    Cartman is distributed in the hope that it will be useful, but
+//*    WITHOUT ANY WARRANTY; without even the implied warranty of
+//*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//*    General Public License for more details.
+//*
+//*    You should have received a copy of the GNU General Public License
+//*    along with Cartman.  If not, see <http://www.gnu.org/licenses/>.
+//*
+//********************************************************************************************
 
-#include <SDL.h>
-
-#include <math.h>
+#include <egolib.h>
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
-
-#ifndef TWO_PI
-#    define TWO_PI 3.1415926535897932384626433832795f
-#endif
-
-#ifndef ABS
-#    define ABS(X)  (((X) > 0) ? (X) : -(X))
-#endif
-
-#ifndef SGN
-#    define SGN(X)  (((X) >= 0) ? 1 : -1)
-#endif
-
-#ifndef MIN
-
-#    define MIN(x, y)  (((x) > (y)) ? (y) : (x))
-#endif
-
-#ifndef MAX
-#    define MAX(x, y)  (((x) > (y)) ? (x) : (y))
-#endif
-
-#ifndef CLIP
-#    define CLIP(A,B,C) MIN(MAX(A,B),C)
-#endif
 
 #ifndef HAS_BITS
 #    define HAS_BITS(A, B) ( 0 != ((A)&(B)) )

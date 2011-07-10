@@ -1,21 +1,13 @@
 #include "cartman.h"
 
-#include "Log.h"
-#include "Font.h"
-
-#include "egoboo_endian.h"
-#include "egoboo_setup.h"
-#include "egoboo_graphic.h"
-#include "egoboo_fileutil.h"
-
 #include "cartman_mpd.h"
 #include "cartman_functions.h"
 #include "cartman_input.h"
 #include "cartman_gui.h"
 #include "cartman_gfx.h"
-#include "cartman_math.h"
+#include "cartman_math.inl"
 
-#include "SDL_GL_extensions.h"
+#include <egolib.h>
 
 #include <stdio.h>          // For printf and such
 #include <fcntl.h>          // For fast file i/o
@@ -25,22 +17,11 @@
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
-struct s_mouse_data;
-typedef struct s_mouse_data mouse_data_t;
+struct s_cart_mouse_data;
+typedef struct s_cart_mouse_data cart_mouse_data_t;
 
 struct s_light;
 typedef struct s_light light_t;
-
-//--------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------
-
-#ifdef _WIN32
-#    define SLASH_STR "\\"
-#    define SLASH_CHR '\\'
-#else
-#    define SLASH_STR "/"
-#    define SLASH_CHR '/'
-#endif
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
@@ -54,7 +35,7 @@ struct s_light
 };
 
 //--------------------------------------------------------------------------------------------
-struct s_mouse_data
+struct s_cart_mouse_data
 {
     // click/drag window
     int     win_id;
@@ -82,26 +63,24 @@ struct s_mouse_data
     float   rect_y1;     //
 };
 
-static mouse_data_t * mouse_data_ctor( mouse_data_t * );
-static void mouse_data_toggle_fx( int fxmask );
+static cart_mouse_data_t * cart_mouse_data_ctor( cart_mouse_data_t * );
+static void cart_mouse_data_toggle_fx( int fxmask );
 
 // helper functions
-static void mouse_data_mesh_set_tile( Uint16 tiletoset );
-static void mouse_data_flatten_mesh();
-static void mouse_data_clear_mesh();
-static void mouse_data_three_e_mesh();
-static void mouse_data_mesh_replace_tile( bool_t tx_only, bool_t at_floor_level );
-static void mouse_data_mesh_set_fx();
-static void mouse_data_rect_select();
-static void mouse_data_rect_unselect();
-static void mouse_data_mesh_replace_fx();
+static void cart_mouse_data_mesh_set_tile( Uint16 tiletoset );
+static void cart_mouse_data_flatten_mesh();
+static void cart_mouse_data_clear_mesh();
+static void cart_mouse_data_three_e_mesh();
+static void cart_mouse_data_mesh_replace_tile( bool_t tx_only, bool_t at_floor_level );
+static void cart_mouse_data_mesh_set_fx();
+static void cart_mouse_data_rect_select();
+static void cart_mouse_data_rect_unselect();
+static void cart_mouse_data_mesh_replace_fx();
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
 STRING egoboo_path = { "" };
-
-config_data_t cfg;
 
 int     onscreen_count = 0;
 Uint32  onscreen_vert[MAXPOINTS];
@@ -109,9 +88,7 @@ Uint32  onscreen_vert[MAXPOINTS];
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
-static mouse_data_t mdata = { -1 };
-
-static ConfigFilePtr_t cfg_file;
+static cart_mouse_data_t mdata = { -1 };
 
 static float cartman_zoom_hrz = 1.0f;
 static float cartman_zoom_vrt = 1.0f;
@@ -175,9 +152,6 @@ static void draw_main( void );
 static void move_camera();
 static void bound_camera( void );
 
-// setup
-static void sdlinit( int argc, char **argv );
-
 // misc
 static void mesh_calc_vrta();
 static void fan_calc_vrta( int fan );
@@ -202,6 +176,9 @@ static void cartman_check_mouse_side( window_t * pwin, float zoom_hrz, float zoo
 static void cartman_check_mouse_tile( window_t * pwin, float zoom_hrz, float zoom_vrt );
 static void cartman_check_mouse_fx( window_t * pwin, float zoom_hrz, float zoom_vrt );
 static void cartman_check_mouse_vertex( window_t * pwin, float zoom_hrz, float zoom_vrt );
+
+// vfs support functions
+void setup_egoboo_paths_vfs();
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
@@ -237,8 +214,8 @@ void alter_light( int x, int y )
     if ( radius < MINRADIUS / cartman_zoom_hrz )  radius = MINRADIUS / cartman_zoom_hrz;
 
     light_lst[numlight].radius = radius;
-    if ( level > MAXLEVEL ) level = MAXLEVEL;
-    if ( level < MINLEVEL ) level = MINLEVEL;
+    if ( level > MAP_MAXLEVEL ) level = MAP_MAXLEVEL;
+    if ( level < MAP_MINLEVEL ) level = MAP_MINLEVEL;
     light_lst[numlight].level = level;
 
     numlight++;
@@ -352,7 +329,7 @@ void make_onscreen()
 void load_basic_textures( const char *modname )
 {
     // ZZ> This function loads the standard textures for a module
-    char newloadname[256];
+    STRING newloadname;
     SDL_Surface *bmptemp;       // A temporary bitmap
 
     make_newloadname( modname, SLASH_STR "gamedat" SLASH_STR "tile0.bmp", newloadname );
@@ -379,7 +356,7 @@ void load_basic_textures( const char *modname )
 //--------------------------------------------------------------------------------------------
 void load_module( const char *modname )
 {
-    char mod_path[256];
+    STRING mod_path;
 
     sprintf( mod_path, "%s" SLASH_STR "modules" SLASH_STR "%s", egoboo_path, modname );
 
@@ -399,7 +376,7 @@ void load_module( const char *modname )
 //--------------------------------------------------------------------------------------------
 void render_tile_window( window_t * pwin, float zoom_hrz, float zoom_vrt )
 {
-    glTexture * tx_tile;
+    oglx_texture_t * tx_tile;
     float x, y;
     int mapx, mapxstt, mapxend;
     int mapy, mapystt, mapyend;
@@ -472,7 +449,7 @@ void render_tile_window( window_t * pwin, float zoom_hrz, float zoom_vrt )
 //--------------------------------------------------------------------------------------------
 void render_fx_window( window_t * pwin, float zoom_hrz, float zoom_vrt )
 {
-    glTexture * tx_tile;
+    oglx_texture_t * tx_tile;
     float x, y;
     int mapx, mapxstt, mapxend;
     int mapy, mapystt, mapyend;
@@ -682,11 +659,6 @@ void render_window( window_t * pwin )
             render_tile_window( pwin, cartman_zoom_hrz, cartman_zoom_vrt );
         }
 
-        if ( HAS_BITS( pwin->mode, WINMODE_FX ) )
-        {
-            render_fx_window( pwin, cartman_zoom_hrz, cartman_zoom_vrt );
-        }
-
         if ( HAS_BITS( pwin->mode, WINMODE_VERTEX ) )
         {
             render_vertex_window( pwin, cartman_zoom_hrz, cartman_zoom_vrt );
@@ -695,6 +667,11 @@ void render_window( window_t * pwin )
         if ( HAS_BITS( pwin->mode, WINMODE_SIDE ) )
         {
             render_side_window( pwin, cartman_zoom_hrz, cartman_zoom_vrt );
+        }
+
+        if ( HAS_BITS( pwin->mode, WINMODE_FX ) )
+        {
+            render_fx_window( pwin, cartman_zoom_hrz, cartman_zoom_vrt );
         }
 
         draw_cursor_in_window( pwin );
@@ -722,7 +699,7 @@ void load_all_windows( void )
     for ( cnt = 0; cnt < MAXWIN; cnt++ )
     {
         window_lst[cnt].on = bfalse;
-        glTexture_Release( &( window_lst[cnt].tex ) );
+        oglx_texture_Release( &( window_lst[cnt].tex ) );
     }
 
     load_window( window_lst + 0, 0, "data" SLASH_STR "window.png", 180, 16,  7, 9, DEFAULT_WINDOW_W, DEFAULT_WINDOW_H, WINMODE_VERTEX );
@@ -785,7 +762,7 @@ void bound_camera( void )
 //--------------------------------------------------------------------------------------------
 void unbound_mouse()
 {
-    if( !mos.drag )
+    if ( !mos.drag )
     {
         mos.tlx = 0;
         mos.tly = 0;
@@ -910,7 +887,7 @@ void mesh_calc_vrta()
 //--------------------------------------------------------------------------------------------
 void move_camera()
 {
-    if ( (-1 != mdata.win_id) && ( MOUSE_PRESSED( SDL_BUTTON_MIDDLE ) || SDLKEYDOWN( SDLK_m ) ) )
+    if (( -1 != mdata.win_id ) && ( MOUSE_PRESSED( SDL_BUTTON_MIDDLE ) || CART_KEYDOWN( SDLK_m ) ) )
     {
         cam.x += mos.x - mos.x_old;
         cam.y += mos.y - mos.y_old;
@@ -1011,19 +988,19 @@ void cartman_check_mouse_side( window_t * pwin, float zoom_hrz, float zoom_vrt )
 
         if ( pwin->id == mdata.rect_done )
         {
-            if ( select_count() > 0 && !SDLKEYMOD( KMOD_ALT ) && !SDLKEYDOWN( SDLK_MODE ) &&
-                 !SDLKEYMOD( KMOD_LCTRL ) && !SDLKEYMOD( KMOD_RCTRL ) )
+            if ( select_count() > 0 && !CART_KEYMOD( KMOD_ALT ) && !CART_KEYDOWN( SDLK_MODE ) &&
+                 !CART_KEYMOD( KMOD_LCTRL ) && !CART_KEYMOD( KMOD_RCTRL ) )
             {
                 select_clear();
             }
 
-            if ( SDLKEYMOD( KMOD_ALT ) || SDLKEYDOWN( SDLK_MODE ) )
+            if ( CART_KEYMOD( KMOD_ALT ) || CART_KEYDOWN( SDLK_MODE ) )
             {
-                mouse_data_rect_unselect();
+                cart_mouse_data_rect_unselect();
             }
             else
             {
-                mouse_data_rect_select();
+                cart_mouse_data_rect_select();
             }
 
             mdata.rect_draw = bfalse;
@@ -1037,13 +1014,13 @@ void cartman_check_mouse_side( window_t * pwin, float zoom_hrz, float zoom_vrt )
             bound_mouse();
         }
 
-        if ( SDLKEYDOWN( SDLK_y ) )
+        if ( CART_KEYDOWN( SDLK_y ) )
         {
             move_select( 0, 0, -mos.cy / zoom_vrt );
             bound_mouse();
         }
 
-        if ( SDLKEYDOWN( SDLK_u ) )
+        if ( CART_KEYDOWN( SDLK_u ) )
         {
             if ( mdata.type >= ( MAXMESHTYPE >> 1 ) )
             {
@@ -1056,9 +1033,9 @@ void cartman_check_mouse_side( window_t * pwin, float zoom_hrz, float zoom_vrt )
             bound_mouse();
         }
 
-        if ( SDLKEYDOWN( SDLK_n ) )
+        if ( CART_KEYDOWN( SDLK_n ) )
         {
-            if ( SDLKEYDOWN( SDLK_RSHIFT ) )
+            if ( CART_KEYDOWN( SDLK_RSHIFT ) )
             {
                 // Move the first 16 up and down
                 move_mesh_z( -mos.cy / zoom_vrt, 0, 0xF0 );
@@ -1141,7 +1118,7 @@ void cartman_check_mouse_tile( window_t * pwin, float zoom_hrz, float zoom_vrt )
 
         if ( MOUSE_PRESSED( SDL_BUTTON_LEFT ) )
         {
-            mouse_data_mesh_replace_tile( SDLKEYDOWN( SDLK_t ), SDLKEYDOWN( SDLK_v ) );
+            cart_mouse_data_mesh_replace_tile( CART_KEYDOWN( SDLK_t ), CART_KEYDOWN( SDLK_v ) );
         }
 
         if ( MOUSE_PRESSED( SDL_BUTTON_RIGHT ) )
@@ -1163,13 +1140,13 @@ void cartman_check_mouse_tile( window_t * pwin, float zoom_hrz, float zoom_vrt )
             }
         }
 
-        if ( !SDLKEYDOWN( SDLK_k ) )
+        if ( !CART_KEYDOWN( SDLK_k ) )
         {
             addinglight = bfalse;
         }
-        if ( SDLKEYDOWN( SDLK_k ) && !addinglight )
+        if ( CART_KEYDOWN( SDLK_k ) && !addinglight )
         {
-            add_light( mdata.xpos, mdata.ypos, MINRADIUS / zoom_hrz, MAXLEVEL / zoom_hrz );
+            add_light( mdata.xpos, mdata.ypos, MINRADIUS / zoom_hrz, MAP_MAXLEVEL / zoom_hrz );
             addinglight = btrue;
         }
         if ( addinglight )
@@ -1247,13 +1224,13 @@ void cartman_check_mouse_fx( window_t * pwin, float zoom_hrz, float zoom_vrt )
 
         if ( MOUSE_PRESSED( SDL_BUTTON_LEFT ) )
         {
-            if( !SDLKEYDOWN( SDLK_LSHIFT ) )
+            if ( !CART_KEYDOWN( SDLK_LSHIFT ) )
             {
-                mouse_data_mesh_set_fx();
+                cart_mouse_data_mesh_set_fx();
             }
             else
             {
-                mouse_data_mesh_replace_fx();
+                cart_mouse_data_mesh_replace_fx();
             }
         }
 
@@ -1362,18 +1339,18 @@ void cartman_check_mouse_vertex( window_t * pwin, float zoom_hrz, float zoom_vrt
 
         if ( pwin->id == mdata.rect_done )
         {
-            if ( select_count() > 0 && !SDLKEYMOD( KMOD_ALT ) && !SDLKEYDOWN( SDLK_MODE ) &&
-                 !SDLKEYMOD( KMOD_LCTRL ) && !SDLKEYMOD( KMOD_RCTRL ) )
+            if ( select_count() > 0 && !CART_KEYMOD( KMOD_ALT ) && !CART_KEYDOWN( SDLK_MODE ) &&
+                 !CART_KEYMOD( KMOD_LCTRL ) && !CART_KEYMOD( KMOD_RCTRL ) )
             {
                 select_clear();
             }
-            if ( SDLKEYMOD( KMOD_ALT ) || SDLKEYDOWN( SDLK_MODE ) )
+            if ( CART_KEYMOD( KMOD_ALT ) || CART_KEYDOWN( SDLK_MODE ) )
             {
-                mouse_data_rect_unselect();
+                cart_mouse_data_rect_unselect();
             }
             else
             {
-                mouse_data_rect_select();
+                cart_mouse_data_rect_select();
             }
 
             mdata.rect_draw = bfalse;
@@ -1387,13 +1364,13 @@ void cartman_check_mouse_vertex( window_t * pwin, float zoom_hrz, float zoom_vrt
             bound_mouse();
         }
 
-        if ( SDLKEYDOWN( SDLK_f ) )
+        if ( CART_KEYDOWN( SDLK_f ) )
         {
             //    fix_corners(mdata.xpos>>7, mdata.ypos>>7);
             fix_vertices( floor( mdata.xpos / ( float )TILE_SIZE ), floor( mdata.ypos / ( float )TILE_SIZE ) );
         }
 
-        if ( SDLKEYDOWN( SDLK_p ) || ( MOUSE_PRESSED( SDL_BUTTON_RIGHT ) && 0 == select_count() ) )
+        if ( CART_KEYDOWN( SDLK_p ) || ( MOUSE_PRESSED( SDL_BUTTON_RIGHT ) && 0 == select_count() ) )
         {
             raise_mesh( onscreen_vert, onscreen_count, mdata.xpos, mdata.ypos, brushamount, brushsize );
         }
@@ -1454,125 +1431,125 @@ void ease_up_mesh( float zoom_vrt )
 //--------------------------------------------------------------------------------------------
 bool_t cartman_check_keys( const char * modname )
 {
-    if ( !check_keys(20) ) return bfalse;
+    if ( !check_keys( 20 ) ) return bfalse;
 
     // Hurt
-    if ( SDLKEYDOWN( SDLK_h ) )
+    if ( CART_KEYDOWN( SDLK_h ) )
     {
-        mouse_data_toggle_fx( MPDFX_DAMAGE );
+        cart_mouse_data_toggle_fx( MPDFX_DAMAGE );
         key.delay = KEYDELAY;
     }
     // Impassable
-    if ( SDLKEYDOWN( SDLK_i ) )
+    if ( CART_KEYDOWN( SDLK_i ) )
     {
-        mouse_data_toggle_fx( MPDFX_IMPASS );
+        cart_mouse_data_toggle_fx( MPDFX_IMPASS );
         key.delay = KEYDELAY;
     }
     // Barrier
-    if ( SDLKEYDOWN( SDLK_b ) )
+    if ( CART_KEYDOWN( SDLK_b ) )
     {
-        mouse_data_toggle_fx( MPDFX_WALL );
+        cart_mouse_data_toggle_fx( MPDFX_WALL );
         key.delay = KEYDELAY;
     }
     // Overlay
-    if ( SDLKEYDOWN( SDLK_o ) )
+    if ( CART_KEYDOWN( SDLK_o ) )
     {
-        mouse_data_toggle_fx( MPDFX_WATER );
+        cart_mouse_data_toggle_fx( MPDFX_WATER );
         key.delay = KEYDELAY;
     }
     // Reflective
-    if ( SDLKEYDOWN( SDLK_r ) )
+    if ( CART_KEYDOWN( SDLK_r ) )
     {
-        mouse_data_toggle_fx( MPDFX_SHA );
+        cart_mouse_data_toggle_fx( MPDFX_SHA );
         key.delay = KEYDELAY;
     }
     // Draw reflections
-    if ( SDLKEYDOWN( SDLK_d ) )
+    if ( CART_KEYDOWN( SDLK_d ) )
     {
-        mouse_data_toggle_fx( MPDFX_DRAWREF );
+        cart_mouse_data_toggle_fx( MPDFX_DRAWREF );
         key.delay = KEYDELAY;
     }
     // Animated
-    if ( SDLKEYDOWN( SDLK_a ) )
+    if ( CART_KEYDOWN( SDLK_a ) )
     {
-        mouse_data_toggle_fx( MPDFX_ANIM );
+        cart_mouse_data_toggle_fx( MPDFX_ANIM );
         key.delay = KEYDELAY;
     }
     // Slippy
-    if ( SDLKEYDOWN( SDLK_s ) )
+    if ( CART_KEYDOWN( SDLK_s ) )
     {
-        mouse_data_toggle_fx( MPDFX_SLIPPY );
+        cart_mouse_data_toggle_fx( MPDFX_SLIPPY );
         key.delay = KEYDELAY;
     }
-    if ( SDLKEYDOWN( SDLK_g ) )
+    if ( CART_KEYDOWN( SDLK_g ) )
     {
         fix_mesh();
         key.delay = KEYDELAY;
     }
-    if ( SDLKEYDOWN( SDLK_z ) )
+    if ( CART_KEYDOWN( SDLK_z ) )
     {
         if ( mdata.onfan >= 0 || mdata.onfan < MAXMESHFAN )
         {
             Uint16 tx_bits = mesh.tx_bits[mdata.onfan];
-            mouse_data_mesh_set_tile( tx_bits );
+            cart_mouse_data_mesh_set_tile( tx_bits );
         }
         key.delay = KEYDELAY;
     }
 
-    if (SDLKEYDOWN(SDLK_x))
+    if ( CART_KEYDOWN( SDLK_x ) )
     {
         if ( mdata.onfan >= 0 || mdata.onfan < MAXMESHFAN )
         {
             Uint8  type    = mesh.fantype[mdata.onfan];
             Uint16 tx_bits = mesh.tx_bits[mdata.onfan];
 
-            if (type >= (MAXMESHTYPE >> 1))
+            if ( type >= ( MAXMESHTYPE >> 1 ) )
             {
-                trim_mesh_tile(tx_bits, 0xC0);
+                trim_mesh_tile( tx_bits, 0xC0 );
             }
             else
             {
-                trim_mesh_tile(tx_bits, 0xF0);
+                trim_mesh_tile( tx_bits, 0xF0 );
             }
         }
 
         key.delay = KEYDELAY;
     }
 
-    if ( SDLKEYDOWN( SDLK_e ) )
+    if ( CART_KEYDOWN( SDLK_e ) )
     {
         ease_up_mesh( cartman_zoom_vrt );
     }
 
-    if ( SDLKEYDOWN( SDLK_LEFTBRACKET ) || SDLKEYDOWN( SDLK_RIGHTBRACKET ) )
+    if ( CART_KEYDOWN( SDLK_LEFTBRACKET ) || CART_KEYDOWN( SDLK_RIGHTBRACKET ) )
     {
         select_verts_connected();
     }
-    if ( SDLKEYDOWN( SDLK_8 ) )
+    if ( CART_KEYDOWN( SDLK_8 ) )
     {
-        mouse_data_three_e_mesh();
+        cart_mouse_data_three_e_mesh();
         key.delay = KEYDELAY;
     }
-    if ( SDLKEYDOWN( SDLK_j ) )
+    if ( CART_KEYDOWN( SDLK_j ) )
     {
         if ( 0 == select_count() ) { jitter_mesh(); }
         else { jitter_select(); }
         key.delay = KEYDELAY;
     }
 
-    if ( SDLKEYDOWN( SDLK_w ) )
+    if ( CART_KEYDOWN( SDLK_w ) )
     {
         //impass_edges(2);
         mesh_calc_vrta();
         cartman_save_mesh( modname );
         key.delay = KEYDELAY;
     }
-    if ( SDLKEYDOWN( SDLK_SPACE ) )
+    if ( CART_KEYDOWN( SDLK_SPACE ) )
     {
         weld_select();
         key.delay = KEYDELAY;
     }
-    if ( SDLKEYDOWN( SDLK_INSERT ) )
+    if ( CART_KEYDOWN( SDLK_INSERT ) )
     {
         mdata.type = ( mdata.type - 1 ) % MAXMESHTYPE;
         while ( 0 == mesh.numline[mdata.type] )
@@ -1581,7 +1558,7 @@ bool_t cartman_check_keys( const char * modname )
         }
         key.delay = KEYDELAY;
     }
-    if ( SDLKEYDOWN( SDLK_DELETE ) )
+    if ( CART_KEYDOWN( SDLK_DELETE ) )
     {
         mdata.type = ( mdata.type + 1 ) % MAXMESHTYPE;
         while ( 0 == mesh.numline[mdata.type] )
@@ -1590,46 +1567,46 @@ bool_t cartman_check_keys( const char * modname )
         }
         key.delay = KEYDELAY;
     }
-    if ( SDLKEYDOWN( SDLK_KP_PLUS ) )
+    if ( CART_KEYDOWN( SDLK_KP_PLUS ) )
     {
         mdata.tx = ( mdata.tx + 1 ) & 0xFF;
         key.delay = KEYDELAY;
     }
-    if ( SDLKEYDOWN( SDLK_KP_MINUS ) )
+    if ( CART_KEYDOWN( SDLK_KP_MINUS ) )
     {
         mdata.tx = ( mdata.tx - 1 ) & 0xFF;
         key.delay = KEYDELAY;
     }
 
-    if ( SDLKEYDOWN( SDLK_UP ) || SDLKEYDOWN( SDLK_LEFT ) || SDLKEYDOWN( SDLK_DOWN ) || SDLKEYDOWN( SDLK_RIGHT ) )
+    if ( CART_KEYDOWN( SDLK_UP ) || CART_KEYDOWN( SDLK_LEFT ) || CART_KEYDOWN( SDLK_DOWN ) || CART_KEYDOWN( SDLK_RIGHT ) )
     {
-        if ( SDLKEYDOWN( SDLK_RIGHT ) )
+        if ( CART_KEYDOWN( SDLK_RIGHT ) )
         {
             cam.x += 8 * CAMRATE;
         }
-        if ( SDLKEYDOWN( SDLK_LEFT ) )
+        if ( CART_KEYDOWN( SDLK_LEFT ) )
         {
             cam.x -= 8 * CAMRATE;
         }
 
         if ( WINMODE_SIDE == mdata.win_mode )
         {
-            if ( SDLKEYDOWN( SDLK_DOWN ) )
+            if ( CART_KEYDOWN( SDLK_DOWN ) )
             {
                 cam.z += 8 * CAMRATE * ( mesh.edgez / DEFAULT_Z_SIZE );
             }
-            if ( SDLKEYDOWN( SDLK_UP ) )
+            if ( CART_KEYDOWN( SDLK_UP ) )
             {
                 cam.z -= 8 * CAMRATE * ( mesh.edgez / DEFAULT_Z_SIZE );
             }
         }
         else
         {
-            if ( SDLKEYDOWN( SDLK_DOWN ) )
+            if ( CART_KEYDOWN( SDLK_DOWN ) )
             {
                 cam.y += 8 * CAMRATE;
             }
-            if ( SDLKEYDOWN( SDLK_UP ) )
+            if ( CART_KEYDOWN( SDLK_UP ) )
             {
                 cam.y -= 8 * CAMRATE;
             }
@@ -1637,8 +1614,7 @@ bool_t cartman_check_keys( const char * modname )
         bound_camera();
     }
 
-
-    if ( SDLKEYDOWN( SDLK_PLUS ) || SDLKEYDOWN( SDLK_EQUALS ) )
+    if ( CART_KEYDOWN( SDLK_PLUS ) || CART_KEYDOWN( SDLK_EQUALS ) )
     {
         cartman_zoom_hrz *= 2;
         if ( cartman_zoom_hrz > 4 )
@@ -1651,7 +1627,7 @@ bool_t cartman_check_keys( const char * modname )
         }
     }
 
-    if ( SDLKEYDOWN( SDLK_MINUS ) || SDLKEYDOWN( SDLK_UNDERSCORE ) )
+    if ( CART_KEYDOWN( SDLK_MINUS ) || CART_KEYDOWN( SDLK_UNDERSCORE ) )
     {
         cartman_zoom_hrz /= 2;
         if ( cartman_zoom_hrz < 0.25f )
@@ -1666,13 +1642,13 @@ bool_t cartman_check_keys( const char * modname )
 
     //------------------
     // from cartman_check_mouse_side() and cartman_check_mouse_tile() functions
-    if ( SDLKEYDOWN( SDLK_f ) )
+    if ( CART_KEYDOWN( SDLK_f ) )
     {
-        mouse_data_flatten_mesh();
+        cart_mouse_data_flatten_mesh();
         key.delay = KEYDELAY;
     }
 
-    if ( SDLKEYDOWN( SDLK_q ) )
+    if ( CART_KEYDOWN( SDLK_q ) )
     {
         fix_walls();
         key.delay = KEYDELAY;
@@ -1681,67 +1657,67 @@ bool_t cartman_check_keys( const char * modname )
     //------------------
     // "fixed" jeys
 
-    if ( SDLKEYDOWN( SDLK_5 ) )
+    if ( CART_KEYDOWN( SDLK_5 ) )
     {
         set_select_no_bound_z( -8000 * 4 );
         key.delay = KEYDELAY;
     }
 
-    if ( SDLKEYDOWN( SDLK_6 ) )
+    if ( CART_KEYDOWN( SDLK_6 ) )
     {
         set_select_no_bound_z( -127 * 4 );
         key.delay = KEYDELAY;
     }
 
-    if ( SDLKEYDOWN( SDLK_7 ) )
+    if ( CART_KEYDOWN( SDLK_7 ) )
     {
         set_select_no_bound_z( 127 * 4 );
         key.delay = KEYDELAY;
     }
 
-    if ( SDLKEYDOWN_MOD( SDLK_c, KMOD_SHIFT) )
+    if ( CART_KEYDOWN_MOD( SDLK_c, KMOD_SHIFT ) )
     {
-        mouse_data_clear_mesh();
+        cart_mouse_data_clear_mesh();
         key.delay = KEYDELAY;
     }
 
-    if ( SDLKEYDOWN_MOD( SDLK_l, KMOD_SHIFT) )
+    if ( CART_KEYDOWN_MOD( SDLK_l, KMOD_SHIFT ) )
     {
         level_vrtz();
     }
 
     // brush size
-    if ( SDLKEYDOWN( SDLK_END ) || SDLKEYDOWN( SDLK_KP1 ) )
+    if ( CART_KEYDOWN( SDLK_END ) || CART_KEYDOWN( SDLK_KP1 ) )
     {
         brushsize = 0;
     }
-    if ( SDLKEYDOWN( SDLK_PAGEDOWN ) || SDLKEYDOWN( SDLK_KP3 ) )
+    if ( CART_KEYDOWN( SDLK_PAGEDOWN ) || CART_KEYDOWN( SDLK_KP3 ) )
     {
         brushsize = 1;
     }
-    if ( SDLKEYDOWN( SDLK_HOME ) || SDLKEYDOWN( SDLK_KP7 ) )
+    if ( CART_KEYDOWN( SDLK_HOME ) || CART_KEYDOWN( SDLK_KP7 ) )
     {
         brushsize = 2;
     }
-    if ( SDLKEYDOWN( SDLK_PAGEUP ) || SDLKEYDOWN( SDLK_KP9 ) )
+    if ( CART_KEYDOWN( SDLK_PAGEUP ) || CART_KEYDOWN( SDLK_KP9 ) )
     {
         brushsize = 3;
     }
 
     // presser
-    if ( SDLKEYDOWN( SDLK_1 ) )
+    if ( CART_KEYDOWN( SDLK_1 ) )
     {
         mdata.presser = 0;
     }
-    if ( SDLKEYDOWN( SDLK_2 ) )
+    if ( CART_KEYDOWN( SDLK_2 ) )
     {
         mdata.presser = 1;
     }
-    if ( SDLKEYDOWN( SDLK_3 ) )
+    if ( CART_KEYDOWN( SDLK_3 ) )
     {
         mdata.presser = 2;
     }
-    if ( SDLKEYDOWN( SDLK_4 ) )
+    if ( CART_KEYDOWN( SDLK_4 ) )
     {
         mdata.presser = 3;
     }
@@ -1885,44 +1861,46 @@ void draw_lotsa_stuff( void )
 {
     int x, cnt, todo, tile, add;
 
+#if defined(_DEBUG)
     // Tell which tile we're in
-    fnt_printf_OGL( gFont, 0, 226,
-                    "X = %6.2f (%d)", debugx );
-    fnt_printf_OGL( gFont, 0, 234,
-                    "Y = %6.2f (%d)", debugy );
+    fnt_drawText_OGL( gFont_ptr, cart_white, 0, 226, NULL,
+                    "X = %6.2f", debugx );
+    fnt_drawText_OGL( gFont_ptr, cart_white, 0, 234, NULL,
+                    "Y = %6.2f", debugy );
+#endif
 
     // Tell user what keys are important
-    fnt_printf_OGL( gFont, 0, ui.scr.y - 120,
+    fnt_drawText_OGL( gFont_ptr, cart_white, 0, ui.scr.y - 120, NULL,
                     "O = Overlay (Water)" );
-    fnt_printf_OGL( gFont, 0, ui.scr.y - 112,
+    fnt_drawText_OGL( gFont_ptr, cart_white, 0, ui.scr.y - 112, NULL,
                     "R = Reflective" );
-    fnt_printf_OGL( gFont, 0, ui.scr.y - 104,
+    fnt_drawText_OGL( gFont_ptr, cart_white, 0, ui.scr.y - 104, NULL,
                     "D = Draw Reflection" );
-    fnt_printf_OGL( gFont, 0, ui.scr.y - 96,
+    fnt_drawText_OGL( gFont_ptr, cart_white, 0, ui.scr.y - 96, NULL,
                     "A = Animated" );
-    fnt_printf_OGL( gFont, 0, ui.scr.y - 88,
+    fnt_drawText_OGL( gFont_ptr, cart_white, 0, ui.scr.y - 88, NULL,
                     "B = Barrier (Slit)" );
-    fnt_printf_OGL( gFont, 0, ui.scr.y - 80,
+    fnt_drawText_OGL( gFont_ptr, cart_white, 0, ui.scr.y - 80, NULL,
                     "I = Impassable (Wall)" );
-    fnt_printf_OGL( gFont, 0, ui.scr.y - 72,
+    fnt_drawText_OGL( gFont_ptr, cart_white, 0, ui.scr.y - 72, NULL,
                     "H = Hurt" );
-    fnt_printf_OGL( gFont, 0, ui.scr.y - 64,
+    fnt_drawText_OGL( gFont_ptr, cart_white, 0, ui.scr.y - 64, NULL,
                     "S = Slippy" );
 
     // Vertices left
-    fnt_printf_OGL( gFont, 0, ui.scr.y - 56,
+    fnt_drawText_OGL( gFont_ptr, cart_white, 0, ui.scr.y - 56, NULL,
                     "Vertices %d", numfreevertices );
 
     // Misc data
-    fnt_printf_OGL( gFont, 0, ui.scr.y - 40,
+    fnt_drawText_OGL( gFont_ptr, cart_white, 0, ui.scr.y - 40, NULL,
                     "Ambient   %d", ambi );
-    fnt_printf_OGL( gFont, 0, ui.scr.y - 32,
+    fnt_drawText_OGL( gFont_ptr, cart_white, 0, ui.scr.y - 32, NULL,
                     "Ambicut   %d", ambicut );
-    fnt_printf_OGL( gFont, 0, ui.scr.y - 24,
+    fnt_drawText_OGL( gFont_ptr, cart_white, 0, ui.scr.y - 24, NULL,
                     "Direct    %d", direct );
-    fnt_printf_OGL( gFont, 0, ui.scr.y - 16,
+    fnt_drawText_OGL( gFont_ptr, cart_white, 0, ui.scr.y - 16, NULL,
                     "Brush amount %d", brushamount );
-    fnt_printf_OGL( gFont, 0, ui.scr.y - 8,
+    fnt_drawText_OGL( gFont_ptr, cart_white, 0, ui.scr.y - 8, NULL,
                     "Brush size   %d", brushsize );
 
     // Cursor
@@ -1976,18 +1954,18 @@ void draw_lotsa_stuff( void )
             tile += add;
         }
 
-        fnt_printf_OGL( gFont, 0, 32,
+        fnt_drawText_OGL( gFont_ptr, cart_white, 0, 32, NULL,
                         "Tile 0x%02x 0x%02x", mdata.upper, mdata.tx );
-        fnt_printf_OGL( gFont, 0, 40,
+        fnt_drawText_OGL( gFont_ptr, cart_white, 0, 40, NULL,
                         "Eats %d verts", mesh.command[mdata.type].numvertices );
         if ( mdata.type >= ( MAXMESHTYPE >> 1 ) )
         {
-            fnt_printf_OGL( gFont, 0, 56,
+            fnt_drawText_OGL( gFont_ptr, cart_white, 0, 56, NULL,
                             "63x63 Tile" );
         }
         else
         {
-            fnt_printf_OGL( gFont, 0, 56,
+            fnt_drawText_OGL( gFont_ptr, cart_white, 0, 56, NULL,
                             "31x31 Tile" );
         }
         draw_schematic( NULL, mdata.type, 0, 64 );
@@ -1998,12 +1976,15 @@ void draw_lotsa_stuff( void )
 
     if ( numattempt > 0 )
     {
-        fnt_printf_OGL( gFont, 0, 0,
+        fnt_drawText_OGL( gFont_ptr, cart_white, NULL, 0, 0,
                         "numwritten %d/%d", numwritten, numattempt );
     }
 
-    fnt_printf_OGL( gFont, 0, 0,
+#if defined(_DEBUG)
+    fnt_drawText_OGL( gFont_ptr, cart_white, NULL, 0, 0,
                     "<%f, %f>", mos.x, mos.y );
+#endif
+
 }
 
 //--------------------------------------------------------------------------------------------
@@ -2068,14 +2049,12 @@ int main( int argcnt, char* argtext[] )
     // construct some global variables
     mouse_ctor( &mos );
     keyboard_ctor( &key );
-    mouse_data_ctor( &mdata );
+    cart_mouse_data_ctor( &mdata );
 
-    // register the logging code
-    log_init();
-    log_setLoggingLevel( 2 );
-    atexit( log_shutdown );
+    // initial text for the console
+    show_info();
 
-    show_info();                        // Text title
+    // grab the egoboo directory and the module name from the command line
     if ( argcnt < 2 || argcnt > 3 )
     {
         printf( "USAGE: CARTMAN [PATH] MODULE ( without .MOD )\n\n" );
@@ -2099,17 +2078,26 @@ int main( int argcnt, char* argtext[] )
         sprintf( modulename, "%s.mod", argtext[2] );
     }
 
-    sprintf( fname, "%s" SLASH_STR "setup.txt", egoboo_path );
-    cfg_file = setup_read( fname );
-    if ( NULL == cfg_file )
+    // initialize the virtual file system
+    vfs_init( egoboo_path );
+    setup_egoboo_paths_vfs();
+
+    // register the logging code
+    log_init( vfs_resolveWriteFilename( "/debug/log.txt" ) );
+    log_setLoggingLevel( 2 );
+    atexit( log_shutdown );
+
+    if ( !setup_read_vfs() )
     {
         log_error( "Cannot load the setup file \"%s\".\n", fname );
     }
-    setup_download( cfg_file, &cfg );
+    setup_download( &cfg );
 
     // initialize the SDL elements
-    sdlinit( argcnt, argtext );
-    gFont = fnt_loadFont( "data" SLASH_STR "pc8x8.fon", 12 );
+    cartman_init_SDL_base();
+    gfx_system_begin();
+
+    gFont_ptr = fnt_loadFont( "data" SLASH_STR "pc8x8.fon", 12 );
 
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 
@@ -2127,7 +2115,7 @@ int main( int argcnt, char* argtext[] )
     timclock   = 0;
     while ( btrue )  // Main loop
     {
-        if ( SDLKEYDOWN( SDLK_ESCAPE ) || SDLKEYDOWN( SDLK_F1 ) ) break;
+        if ( CART_KEYDOWN( SDLK_ESCAPE ) || CART_KEYDOWN( SDLK_F1 ) ) break;
 
         cartman_check_input( modulename );
 
@@ -2142,14 +2130,17 @@ int main( int argcnt, char* argtext[] )
     exit( 0 );                      // End
 }
 
+static bool_t _sdl_initialized_base = bfalse;
+
 //--------------------------------------------------------------------------------------------
-void sdlinit( int argc, char **argv )
+void cartman_init_SDL_base()
 {
+    if ( _sdl_initialized_base ) return;
 
     log_info( "Initializing SDL version %d.%d.%d... ", SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_PATCHLEVEL );
     if ( SDL_Init( 0 ) < 0 )
     {
-        log_message( "Failed!\n" );
+        log_message( "Failure!\n" );
         log_error( "Unable to initialize SDL: %s\n", SDL_GetError() );
     }
     else
@@ -2163,18 +2154,7 @@ void sdlinit( int argc, char **argv )
         _sdl_atexit_registered = bfalse;
     }
 
-    log_info( "INFO: Initializing SDL video... " );
-    if ( SDL_InitSubSystem( SDL_INIT_VIDEO ) < 0 )
-    {
-        log_message( "Failed!\n" );
-        log_error( "SDL error == \"%s\"\n", SDL_GetError() );
-    }
-    else
-    {
-        log_message( "Success!\n" );
-    }
-
-    log_info( "Initializing SDL timer services... " );
+    log_info( "Intializing SDL Timing Services... " );
     if ( SDL_InitSubSystem( SDL_INIT_TIMER ) < 0 )
     {
         log_message( "Failed!\n" );
@@ -2193,118 +2173,10 @@ void sdlinit( int argc, char **argv )
     }
     else
     {
-        log_message( "Succeess!\n" );
-    }
-
-    // initialize the font handler
-    log_info( "Initializing the SDL_ttf font handler... " );
-    if ( TTF_Init() < 0 )
-    {
-        log_message( "Failed! Unable to load the font handler: %s\n", SDL_GetError() );
-        exit( -1 );
-    }
-    else
-    {
         log_message( "Success!\n" );
-        if ( !_ttf_atexit_registered )
-        {
-            _ttf_atexit_registered = btrue;
-            atexit( TTF_Quit );
-        }
     }
 
-#ifdef __unix__
-
-    // GLX doesn't differentiate between 24 and 32 bpp, asking for 32 bpp
-    // will cause SDL_SetVideoMode to fail with:
-    // Unable to set video mode: Couldn't find matching GLX visual
-    if ( cfg.scr.d == 32 ) cfg.scr.d = 24;
-
-#endif
-
-    // the flags to pass to SDL_SetVideoMode
-    sdl_vparam.flags          = SDL_OPENGLBLIT;                // enable SDL blitting operations in OpenGL (for the moment)
-    sdl_vparam.opengl         = SDL_TRUE;
-    sdl_vparam.doublebuffer   = SDL_TRUE;
-    sdl_vparam.glacceleration = GL_FALSE;
-    sdl_vparam.width          = MIN( 640, cfg.scr.x );
-    sdl_vparam.height         = MIN( 480, cfg.scr.y );
-    sdl_vparam.depth          = cfg.scr.d;
-
-    ogl_vparam.dither         = GL_FALSE;
-    ogl_vparam.antialiasing   = GL_TRUE;
-    ogl_vparam.perspective    = GL_FASTEST;
-    ogl_vparam.shading        = GL_SMOOTH;
-    ogl_vparam.userAnisotropy = cfg.texturefilter > TX_TRILINEAR_2;
-
-    // Get us a video mode
-    if ( NULL == SDL_GL_set_mode( NULL, &sdl_vparam, &ogl_vparam ) )
-    {
-        log_info( "I can't get SDL to set any video mode: %s\n", SDL_GetError() );
-        exit( -1 );
-    }
-
-    glEnable( GL_LINE_SMOOTH );
-    glEnable( GL_BLEND );
-    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-    glHint( GL_LINE_SMOOTH_HINT, GL_DONT_CARE );
-    glLineWidth( 1.5f );
-
-    //  SDL_WM_SetIcon(tmp_surface, NULL);
-    SDL_WM_SetCaption( "Egoboo", "Egoboo" );
-
-    if ( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK ) < 0 )
-    {
-        log_error( "Unable to initialize SDL: %s\n", SDL_GetError() );
-    }
-    atexit( SDL_Quit );
-
-    // start the font handler
-    if ( TTF_Init() < 0 )
-    {
-        log_error( "Unable to load the font handler: %s\n", SDL_GetError() );
-    }
-    atexit( TTF_Quit );
-
-#ifdef __unix__
-    /* GLX doesn't differentiate between 24 and 32 bpp, asking for 32 bpp
-    will cause SDL_SetVideoMode to fail with:
-    "Unable to set video mode: Couldn't find matching GLX visual" */
-    if ( cfg.scr.d == 32 ) cfg.scr.d = 24;
-#endif
-
-#ifndef __APPLE__
-    {
-        SDL_Surface * tmp_icon;
-        /* Setup the cute windows manager icon */
-        tmp_icon = SDL_LoadBMP( "data" SLASH_STR "egomap_icon.bmp" );
-        if ( tmp_icon == NULL )
-        {
-            log_warning( "Unable to load icon (data" SLASH_STR "egomap_icon.bmp)\n" );
-        }
-        else
-        {
-            SDL_WM_SetIcon( tmp_icon, NULL );
-        }
-    }
-#endif
-
-    SDLX_Get_Screen_Info( &( ui.scr ), ( SDL_bool )bfalse );
-
-    theSurface = SDL_GetVideoSurface();
-
-    // Set the window name
-    SDL_WM_SetCaption( NAME, NAME );
-
-    if ( ui.GrabMouse )
-    {
-        SDL_WM_GrabInput( SDL_GRAB_ON );
-    }
-
-    if ( ui.HideMouse )
-    {
-        SDL_ShowCursor( 0 );  // Hide the mouse cursor
-    }
+    _sdl_initialized_base = btrue;
 }
 
 //--------------------------------------------------------------------------------------------
@@ -2371,7 +2243,7 @@ void cartman_save_mesh( const char * modname )
 
     save_mesh( modname );
 
-    show_name( newloadname );
+    show_name( newloadname, cart_white );
 }
 
 //--------------------------------------------------------------------------------------------
@@ -2388,7 +2260,7 @@ void cartman_check_input( const char * modulename )
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
-mouse_data_t * mouse_data_ctor( mouse_data_t * ptr )
+cart_mouse_data_t * cart_mouse_data_ctor( cart_mouse_data_t * ptr )
 {
     if ( NULL == ptr ) return NULL;
 
@@ -2409,61 +2281,61 @@ mouse_data_t * mouse_data_ctor( mouse_data_t * ptr )
 }
 
 //--------------------------------------------------------------------------------------------
-void mouse_data_mesh_set_tile( Uint16 tiletoset )
+void cart_mouse_data_mesh_set_tile( Uint16 tiletoset )
 {
     mesh_set_tile( tiletoset, mdata.upper, mdata.presser, mdata.tx );
 }
 
 //--------------------------------------------------------------------------------------------
-void mouse_data_flatten_mesh()
+void cart_mouse_data_flatten_mesh()
 {
     flatten_mesh( mdata.ypos );
 }
 
 //--------------------------------------------------------------------------------------------
-void mouse_data_clear_mesh()
+void cart_mouse_data_clear_mesh()
 {
     clear_mesh( mdata.upper, mdata.presser, mdata.tx, mdata.type );
 }
 
 //--------------------------------------------------------------------------------------------
-void mouse_data_three_e_mesh()
+void cart_mouse_data_three_e_mesh()
 {
     three_e_mesh( mdata.upper, mdata.tx );
 }
 
 //--------------------------------------------------------------------------------------------
-void mouse_data_mesh_replace_tile( bool_t tx_only, bool_t at_floor_level )
+void cart_mouse_data_mesh_replace_tile( bool_t tx_only, bool_t at_floor_level )
 {
     mesh_replace_tile( mdata.xfan, mdata.yfan, mdata.onfan, mdata.tx, mdata.upper, mdata.fx, mdata.type, mdata.presser, tx_only, at_floor_level );
 }
 
 //--------------------------------------------------------------------------------------------
-void mouse_data_mesh_set_fx()
+void cart_mouse_data_mesh_set_fx()
 {
     mesh_set_fx( mdata.onfan, mdata.fx );
 }
 
 //--------------------------------------------------------------------------------------------
-void mouse_data_toggle_fx( int fxmask )
+void cart_mouse_data_toggle_fx( int fxmask )
 {
     mdata.fx ^= fxmask;
 }
 
 //--------------------------------------------------------------------------------------------
-void mouse_data_rect_select()
+void cart_mouse_data_rect_select()
 {
     select_add_rect( mdata.rect_x0, mdata.rect_y0, mdata.rect_x1, mdata.rect_y1, mdata.win_mode );
 }
 
 //--------------------------------------------------------------------------------------------
-void mouse_data_rect_unselect()
+void cart_mouse_data_rect_unselect()
 {
     select_add_rect( mdata.rect_x0, mdata.rect_y0, mdata.rect_x1, mdata.rect_y1, mdata.win_mode );
 }
 
 //--------------------------------------------------------------------------------------------
-void mouse_data_mesh_replace_fx()
+void cart_mouse_data_mesh_replace_fx()
 {
     Uint8  type;
     Uint16 tx_bits;
@@ -2471,7 +2343,7 @@ void mouse_data_mesh_replace_fx()
     if ( mdata.onfan < 0 || mdata.onfan >= MAXMESHFAN ) return;
 
     type = mesh.fantype[mdata.onfan];
-    if( type >= MAXMESHTYPE ) return;
+    if ( type >= MAXMESHTYPE ) return;
 
     tx_bits = mesh.tx_bits[mdata.onfan];
     if ( TILE_IS_FANOFF( tx_bits ) ) return;
@@ -2486,3 +2358,200 @@ void mouse_data_mesh_replace_fx()
     }
 }
 
+//--------------------------------------------------------------------------------------------
+void setup_egoboo_paths_vfs()
+{
+    /// @details BB@> set the basic mount points used by the main program
+
+    //---- tell the vfs to add the basic search paths
+    vfs_set_base_search_paths();
+
+    //---- mount all of the default global directories
+
+    // mount the global basicdat directory t the beginning of the list
+    vfs_add_mount_point( fs_getDataDirectory(), "basicdat", "mp_data", 1 );
+
+    // Create a mount point for the /user/modules directory
+    vfs_add_mount_point( fs_getUserDirectory(), "modules", "mp_modules", 1 );
+
+    // Create a mount point for the /data/modules directory
+    vfs_add_mount_point( fs_getDataDirectory(), "modules", "mp_modules", 1 );
+
+    // Create a mount point for the /user/players directory
+    vfs_add_mount_point( fs_getUserDirectory(), "players", "mp_players", 1 );
+
+    // Create a mount point for the /data/players directory
+    //vfs_add_mount_point( fs_getDataDirectory(), "players", "mp_players", 1 );     //ZF> Let's remove the local players folder since it caused so many problems for people
+
+    // Create a mount point for the /user/remote directory
+    vfs_add_mount_point( fs_getUserDirectory(), "import", "mp_import", 1 );
+
+    // Create a mount point for the /user/remote directory
+    vfs_add_mount_point( fs_getUserDirectory(), "remote", "mp_remote", 1 );
+}
+
+////--------------------------------------------------------------------------------------------
+//void sdlinit( int argc, char **argv )
+//{
+//
+//    log_info( "Initializing SDL version %d.%d.%d... ", SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_PATCHLEVEL );
+//    if ( SDL_Init( 0 ) < 0 )
+//    {
+//        log_message( "Failed!\n" );
+//        log_error( "Unable to initialize SDL: %s\n", SDL_GetError() );
+//    }
+//    else
+//    {
+//        log_message( "Success!\n" );
+//    }
+//
+//    if ( !_sdl_atexit_registered )
+//    {
+//        atexit( SDL_Quit );
+//        _sdl_atexit_registered = bfalse;
+//    }
+//
+//    log_info( "INFO: Initializing SDL video... " );
+//    if ( SDL_InitSubSystem( SDL_INIT_VIDEO ) < 0 )
+//    {
+//        log_message( "Failed!\n" );
+//        log_error( "SDL error == \"%s\"\n", SDL_GetError() );
+//    }
+//    else
+//    {
+//        log_message( "Success!\n" );
+//    }
+//
+//    log_info( "Initializing SDL timer services... " );
+//    if ( SDL_InitSubSystem( SDL_INIT_TIMER ) < 0 )
+//    {
+//        log_message( "Failed!\n" );
+//        log_warning( "SDL error == \"%s\"\n", SDL_GetError() );
+//    }
+//    else
+//    {
+//        log_message( "Success!\n" );
+//    }
+//
+//    log_info( "Intializing SDL Event Threading... " );
+//    if ( SDL_InitSubSystem( SDL_INIT_EVENTTHREAD ) < 0 )
+//    {
+//        log_message( "Failed!\n" );
+//        log_warning( "SDL error == \"%s\"\n", SDL_GetError() );
+//    }
+//    else
+//    {
+//        log_message( "Succeess!\n" );
+//    }
+//
+//    // initialize the font handler
+//    log_info( "Initializing the SDL_ttf font handler... " );
+//    if ( TTF_Init() < 0 )
+//    {
+//        log_message( "Failed! Unable to load the font handler: %s\n", SDL_GetError() );
+//        exit( -1 );
+//    }
+//    else
+//    {
+//        log_message( "Success!\n" );
+//        if ( !_ttf_atexit_registered )
+//        {
+//            _ttf_atexit_registered = btrue;
+//            atexit( TTF_Quit );
+//        }
+//    }
+//
+//#ifdef __unix__
+//
+//    // GLX doesn't differentiate between 24 and 32 bpp, asking for 32 bpp
+//    // will cause SDL_SetVideoMode to fail with:
+//    // Unable to set video mode: Couldn't find matching GLX visual
+//    if ( cfg.scr.d == 32 ) cfg.scr.d = 24;
+//
+//#endif
+//
+//    // the flags to pass to SDL_SetVideoMode
+//    sdl_vparam.flags          = SDL_OPENGLBLIT;                // enable SDL blitting operations in OpenGL (for the moment)
+//    sdl_vparam.opengl         = SDL_TRUE;
+//    sdl_vparam.doublebuffer   = SDL_TRUE;
+//    sdl_vparam.glacceleration = GL_FALSE;
+//    sdl_vparam.width          = MIN( 640, cfg.scrx_req );
+//    sdl_vparam.height         = MIN( 480, cfg.scry_req );
+//    sdl_vparam.depth          = cfg.scrd_req;
+//
+//    ogl_vparam.dither         = GL_FALSE;
+//    ogl_vparam.antialiasing   = GL_TRUE;
+//    ogl_vparam.perspective    = GL_FASTEST;
+//    ogl_vparam.shading        = GL_SMOOTH;
+//    ogl_vparam.userAnisotropy = cfg.texturefilter > TX_TRILINEAR_2;
+//
+//    // Get us a video mode
+//    if ( NULL == SDL_GL_set_mode( NULL, &sdl_vparam, &ogl_vparam ) )
+//    {
+//        log_info( "I can't get SDL to set any video mode: %s\n", SDL_GetError() );
+//        exit( -1 );
+//    }
+//
+//    glEnable( GL_LINE_SMOOTH );
+//    glEnable( GL_BLEND );
+//    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+//    glHint( GL_LINE_SMOOTH_HINT, GL_DONT_CARE );
+//    glLineWidth( 1.5f );
+//
+//    //  SDL_WM_SetIcon(tmp_surface, NULL);
+//    SDL_WM_SetCaption( "Egoboo", "Egoboo" );
+//
+//    if ( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK ) < 0 )
+//    {
+//        log_error( "Unable to initialize SDL: %s\n", SDL_GetError() );
+//    }
+//    atexit( SDL_Quit );
+//
+//    // start the font handler
+//    if ( TTF_Init() < 0 )
+//    {
+//        log_error( "Unable to load the font handler: %s\n", SDL_GetError() );
+//    }
+//    atexit( TTF_Quit );
+//
+//#ifdef __unix__
+//    /* GLX doesn't differentiate between 24 and 32 bpp, asking for 32 bpp
+//    will cause SDL_SetVideoMode to fail with:
+//    "Unable to set video mode: Couldn't find matching GLX visual" */
+//    if ( cfg.scr.d == 32 ) cfg.scr.d = 24;
+//#endif
+//
+//#ifndef __APPLE__
+//    {
+//        SDL_Surface * tmp_icon;
+//        /* Setup the cute windows manager icon */
+//        tmp_icon = SDL_LoadBMP( "data" SLASH_STR "egomap_icon.bmp" );
+//        if ( tmp_icon == NULL )
+//        {
+//            log_warning( "Unable to load icon (data" SLASH_STR "egomap_icon.bmp)\n" );
+//        }
+//        else
+//        {
+//            SDL_WM_SetIcon( tmp_icon, NULL );
+//        }
+//    }
+//#endif
+//
+//    SDLX_Get_Screen_Info( &( ui.scr ), ( SDL_bool )bfalse );
+//
+//    theSurface = SDL_GetVideoSurface();
+//
+//    // Set the window name
+//    SDL_WM_SetCaption( NAME, NAME );
+//
+//    if ( ui.GrabMouse )
+//    {
+//        SDL_WM_GrabInput( SDL_GRAB_ON );
+//    }
+//
+//    if ( ui.HideMouse )
+//    {
+//        SDL_ShowCursor( 0 );  // Hide the mouse cursor
+//    }
+//}
+//

@@ -1,7 +1,7 @@
 #include "cartman_input.h"
 
 #include "cartman_gui.h"
-#include "cartman_math.h"
+#include "cartman_math.inl"
 
 #include <SDL.h>
 

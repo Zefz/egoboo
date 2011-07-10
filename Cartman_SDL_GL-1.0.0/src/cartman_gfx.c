@@ -1,22 +1,33 @@
 #include "cartman_gfx.h"
 
-#include "Log.h"
-
-#include "egoboo_graphic.h"
-
 #include "cartman.h"
 #include "cartman_mpd.h"
 #include "cartman_gui.h"
 #include "cartman_functions.h"
-#include "cartman_math.h"
+#include "cartman_math.inl"
 
 #include "SDL_Pixel.h"
 
-#include <SDL.h>
+#include <egolib.h>
+
 #include <SDL_image.h>
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
+
+static SDL_bool  _sdl_initialized_graphics = SDL_FALSE;
+static GLboolean _ogl_initialized = GL_FALSE;
+
+//--------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------
+
+const SDL_Color cart_white = { 0xFF, 0xFF, 0xFF, 0xFF };
+const SDL_Color cart_black = { 0x00, 0x00, 0x00, 0xFF };
+
+//--------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------
+
+camera_t cam;
 
 Sint16          damagetileparttype;
 short           damagetilepartand;
@@ -39,30 +50,52 @@ oglx_video_parameters_t ogl_vparam;
 SDL_Surface * theSurface = NULL;
 SDL_Surface * bmphitemap = NULL;        // Heightmap image
 
-glTexture     tx_point;      // Vertex image
-glTexture     tx_pointon;    // Vertex image ( select_vertsed )
-glTexture     tx_ref;        // Meshfx images
-glTexture     tx_drawref;    //
-glTexture     tx_anim;       //
-glTexture     tx_water;      //
-glTexture     tx_wall;       //
-glTexture     tx_impass;     //
-glTexture     tx_damage;     //
-glTexture     tx_slippy;     //
+oglx_texture_t     tx_point;      // Vertex image
+oglx_texture_t     tx_pointon;    // Vertex image ( select_vertsed )
+oglx_texture_t     tx_ref;        // Meshfx images
+oglx_texture_t     tx_drawref;    //
+oglx_texture_t     tx_anim;       //
+oglx_texture_t     tx_water;      //
+oglx_texture_t     tx_wall;       //
+oglx_texture_t     tx_impass;     //
+oglx_texture_t     tx_damage;     //
+oglx_texture_t     tx_slippy;     //
 
-glTexture     tx_smalltile[MAXTILE]; // Tiles
-glTexture     tx_bigtile[MAXTILE];   //
-glTexture     tx_tinysmalltile[MAXTILE]; // Plan tiles
-glTexture     tx_tinybigtile[MAXTILE];   //
+oglx_texture_t     tx_smalltile[MAXTILE]; // Tiles
+oglx_texture_t     tx_bigtile[MAXTILE];   //
+oglx_texture_t     tx_tinysmalltile[MAXTILE]; // Plan tiles
+oglx_texture_t     tx_tinybigtile[MAXTILE];   //
 
 int     numsmalltile = 0;   //
 int     numbigtile = 0;     //
+
+int GFX_WIDTH  = 800;
+int GFX_HEIGHT = 600;
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
 static void get_small_tiles( SDL_Surface* bmpload );
 static void get_big_tiles( SDL_Surface* bmpload );
+static void gfx_init_SDL_graphics();
+static int  gfx_init_ogl();
+
+//--------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------
+
+void gfx_system_begin()
+{
+    // set the graphics state
+    gfx_init_SDL_graphics();
+    gfx_init_ogl();
+
+    theSurface = SDL_GetVideoSurface();
+}
+
+//--------------------------------------------------------------------------------------------
+void gfx_system_end()
+{
+}
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
@@ -79,7 +112,7 @@ SDL_Color MAKE_SDLCOLOR( Uint8 BB, Uint8 RR, Uint8 GG )
 }
 
 //--------------------------------------------------------------------------------------------
-glTexture * tiny_tile_at( int x, int y )
+oglx_texture_t * tiny_tile_at( int x, int y )
 {
     Uint16 tx_bits, basetile;
     Uint8 fantype, fx;
@@ -138,7 +171,7 @@ glTexture * tiny_tile_at( int x, int y )
 }
 
 //--------------------------------------------------------------------------------------------
-glTexture *tile_at( int fan )
+oglx_texture_t *tile_at( int fan )
 {
     Uint16 tx_bits, basetile;
     Uint8 fantype, fx;
@@ -242,7 +275,7 @@ void make_planmap( void )
         putx = 0;
         for ( x = 0; x < mesh.tiles_x; x++ )
         {
-            glTexture * tx_tile;
+            oglx_texture_t * tx_tile;
             tx_tile = tiny_tile_at( x, y );
 
             if ( NULL != tx_tile )
@@ -331,7 +364,7 @@ void draw_top_fan( window_t * pwin, int fan, float zoom_hrz )
 
         if ( point_size > 0 )
         {
-            glTexture * tx_tmp;
+            oglx_texture_t * tx_tmp;
 
             if ( select_has_vert( vert ) )
             {
@@ -411,7 +444,7 @@ void draw_side_fan( window_t * pwin, int fan, float zoom_hrz, float zoom_vrt )
 
     for ( cnt = 0; cnt < mesh.command[fantype].numvertices; cnt++ )
     {
-        glTexture * tx_tmp = NULL;
+        oglx_texture_t * tx_tmp = NULL;
 
         vert = faketoreal[cnt];
 
@@ -468,7 +501,7 @@ void draw_schematic( window_t * pwin, int fantype, int x, int y )
 }
 
 //--------------------------------------------------------------------------------------------
-void draw_top_tile( float x0, float y0, int fan, glTexture * tx_tile, bool_t draw_tile )
+void draw_top_tile( float x0, float y0, int fan, oglx_texture_t * tx_tile, bool_t draw_tile )
 {
     int cnt;
     Uint32 vert;
@@ -482,13 +515,13 @@ void draw_top_tile( float x0, float y0, int fan, glTexture * tx_tile, bool_t dra
 
     if ( NULL == tx_tile ) return;
 
-    glTexture_Bind( tx_tile );
+    oglx_texture_Bind( tx_tile );
 
     min_s = dst;
     min_t = dst;
 
-    max_s = -dst + ( float ) glTexture_GetImageWidth( tx_tile )  / ( float ) glTexture_GetTextureWidth( tx_tile );
-    max_t = -dst + ( float ) glTexture_GetImageHeight( tx_tile )  / ( float ) glTexture_GetTextureHeight( tx_tile );
+    max_s = -dst + ( float ) oglx_texture_GetImageWidth( tx_tile )  / ( float ) oglx_texture_GetTextureWidth( tx_tile );
+    max_t = -dst + ( float ) oglx_texture_GetImageHeight( tx_tile )  / ( float ) oglx_texture_GetTextureHeight( tx_tile );
 
     // set the texture coordinates
     vrt[0].s = min_s;
@@ -680,7 +713,7 @@ void draw_tile_fx( float x, float y, Uint8 fx, float scale )
 }
 
 //--------------------------------------------------------------------------------------------
-void ogl_draw_sprite_2d( glTexture * img, float x, float y, float width, float height )
+void ogl_draw_sprite_2d( oglx_texture_t * img, float x, float y, float width, float height )
 {
     float w, h;
     float min_s, max_s, min_t, max_t;
@@ -694,15 +727,15 @@ void ogl_draw_sprite_2d( glTexture * img, float x, float y, float width, float h
     {
         if ( width == 0 || height == 0 )
         {
-            w = glTexture_GetTextureWidth( img );
-            h = glTexture_GetTextureHeight( img );
+            w = oglx_texture_GetTextureWidth( img );
+            h = oglx_texture_GetTextureHeight( img );
         }
 
         min_s = dst;
         min_t = dst;
 
-        max_s = -dst + ( float ) glTexture_GetImageWidth( img )  / ( float ) glTexture_GetTextureWidth( img );
-        max_t = -dst + ( float ) glTexture_GetImageHeight( img )  / ( float ) glTexture_GetTextureHeight( img );
+        max_s = -dst + ( float ) oglx_texture_GetImageWidth( img )  / ( float ) oglx_texture_GetTextureWidth( img );
+        max_t = -dst + ( float ) oglx_texture_GetImageHeight( img )  / ( float ) oglx_texture_GetTextureHeight( img );
     }
     else
     {
@@ -714,7 +747,7 @@ void ogl_draw_sprite_2d( glTexture * img, float x, float y, float width, float h
     }
 
     // Draw the image
-    glTexture_Bind( img );
+    oglx_texture_Bind( img );
 
     glColor4f( 1, 1, 1, 1 );
 
@@ -729,7 +762,7 @@ void ogl_draw_sprite_2d( glTexture * img, float x, float y, float width, float h
 }
 
 //--------------------------------------------------------------------------------------------
-void ogl_draw_sprite_3d( glTexture * img, cart_vec_t pos, cart_vec_t vup, cart_vec_t vright, float width, float height )
+void ogl_draw_sprite_3d( oglx_texture_t * img, cart_vec_t pos, cart_vec_t vup, cart_vec_t vright, float width, float height )
 {
     float w, h;
     float min_s, max_s, min_t, max_t;
@@ -744,15 +777,15 @@ void ogl_draw_sprite_3d( glTexture * img, cart_vec_t pos, cart_vec_t vup, cart_v
     {
         if ( width == 0 || height == 0 )
         {
-            w = glTexture_GetTextureWidth( img );
-            h = glTexture_GetTextureHeight( img );
+            w = oglx_texture_GetTextureWidth( img );
+            h = oglx_texture_GetTextureHeight( img );
         }
 
         min_s = dst;
         min_t = dst;
 
-        max_s = -dst + ( float ) glTexture_GetImageWidth( img )  / ( float ) glTexture_GetTextureWidth( img );
-        max_t = -dst + ( float ) glTexture_GetImageHeight( img )  / ( float ) glTexture_GetTextureHeight( img );
+        max_s = -dst + ( float ) oglx_texture_GetImageWidth( img )  / ( float ) oglx_texture_GetTextureWidth( img );
+        max_t = -dst + ( float ) oglx_texture_GetImageHeight( img )  / ( float ) oglx_texture_GetTextureHeight( img );
     }
     else
     {
@@ -764,7 +797,7 @@ void ogl_draw_sprite_3d( glTexture * img, cart_vec_t pos, cart_vec_t vup, cart_v
     }
 
     // Draw the image
-    glTexture_Bind( img );
+    oglx_texture_Bind( img );
 
     glColor4f( 1, 1, 1, 1 );
 
@@ -1083,52 +1116,52 @@ void create_imgcursor( void )
 //--------------------------------------------------------------------------------------------
 void load_img( void )
 {
-    if ( INVALID_TX_ID == glTexture_Load( GL_TEXTURE_2D, &tx_point, "data" SLASH_STR "point.png", INVALID_KEY ) )
+    if ( INVALID_GL_ID == oglx_texture_Load( &tx_point, "data" SLASH_STR "point.png", INVALID_KEY ) )
     {
         log_warning( "Cannot load image \"%s\".\n", "point.png" );
     }
 
-    if ( INVALID_TX_ID == glTexture_Load( GL_TEXTURE_2D, &tx_pointon, "data" SLASH_STR "pointon.png", INVALID_KEY ) )
+    if ( INVALID_GL_ID == oglx_texture_Load( &tx_pointon, "data" SLASH_STR "pointon.png", INVALID_KEY ) )
     {
         log_warning( "Cannot load image \"%s\".\n", "pointon.png" );
     }
 
-    if ( INVALID_TX_ID == glTexture_Load( GL_TEXTURE_2D, &tx_ref, "data" SLASH_STR "ref.png", INVALID_KEY ) )
+    if ( INVALID_GL_ID == oglx_texture_Load( &tx_ref, "data" SLASH_STR "ref.png", INVALID_KEY ) )
     {
         log_warning( "Cannot load image \"%s\".\n", "ref.png" );
     }
 
-    if ( INVALID_TX_ID == glTexture_Load( GL_TEXTURE_2D, &tx_drawref, "data" SLASH_STR "drawref.png", INVALID_KEY ) )
+    if ( INVALID_GL_ID == oglx_texture_Load( &tx_drawref, "data" SLASH_STR "drawref.png", INVALID_KEY ) )
     {
         log_warning( "Cannot load image \"%s\".\n", "drawref.png" );
     }
 
-    if ( INVALID_TX_ID == glTexture_Load( GL_TEXTURE_2D, &tx_anim, "data" SLASH_STR "anim.png", INVALID_KEY ) )
+    if ( INVALID_GL_ID == oglx_texture_Load( &tx_anim, "data" SLASH_STR "anim.png", INVALID_KEY ) )
     {
         log_warning( "Cannot load image \"%s\".\n", "anim.png" );
     }
 
-    if ( INVALID_TX_ID == glTexture_Load( GL_TEXTURE_2D, &tx_water, "data" SLASH_STR "water.png", INVALID_KEY ) )
+    if ( INVALID_GL_ID == oglx_texture_Load( &tx_water, "data" SLASH_STR "water.png", INVALID_KEY ) )
     {
         log_warning( "Cannot load image \"%s\".\n", "water.png" );
     }
 
-    if ( INVALID_TX_ID == glTexture_Load( GL_TEXTURE_2D, &tx_wall, "data" SLASH_STR "slit.png", INVALID_KEY ) )
+    if ( INVALID_GL_ID == oglx_texture_Load( &tx_wall, "data" SLASH_STR "slit.png", INVALID_KEY ) )
     {
         log_warning( "Cannot load image \"%s\".\n", "slit.png" );
     }
 
-    if ( INVALID_TX_ID == glTexture_Load( GL_TEXTURE_2D, &tx_impass, "data" SLASH_STR "impass.png", INVALID_KEY ) )
+    if ( INVALID_GL_ID == oglx_texture_Load( &tx_impass, "data" SLASH_STR "impass.png", INVALID_KEY ) )
     {
         log_warning( "Cannot load image \"%s\".\n", "impass.png" );
     }
 
-    if ( INVALID_TX_ID == glTexture_Load( GL_TEXTURE_2D, &tx_damage, "data" SLASH_STR "damage.png", INVALID_KEY ) )
+    if ( INVALID_GL_ID == oglx_texture_Load( &tx_damage, "data" SLASH_STR "damage.png", INVALID_KEY ) )
     {
         log_warning( "Cannot load image \"%s\".\n", "damage.png" );
     }
 
-    if ( INVALID_TX_ID == glTexture_Load( GL_TEXTURE_2D, &tx_slippy, "data" SLASH_STR "slippy.png", INVALID_KEY ) )
+    if ( INVALID_GL_ID == oglx_texture_Load( &tx_slippy, "data" SLASH_STR "slippy.png", INVALID_KEY ) )
     {
         log_warning( "Cannot load image \"%s\".\n", "slippy.png" );
     }
@@ -1158,13 +1191,13 @@ void get_small_tiles( SDL_Surface* bmpload )
         {
             SDL_Rect src1 = { x, y, ( step_x - 1 ), ( step_y - 1 ) };
 
-            glTexture_new( tx_smalltile + numsmalltile );
+            oglx_texture_ctor( tx_smalltile + numsmalltile );
 
             image = cartman_CreateSurface( SMALLXY, SMALLXY );
             SDL_FillRect( image, NULL, MAKE_BGR( image, 0, 0, 0 ) );
             SDL_SoftStretch( bmpload, &src1, image, NULL );
 
-            glTexture_Convert( GL_TEXTURE_2D, tx_smalltile + numsmalltile, image, INVALID_KEY );
+            oglx_texture_Convert( tx_smalltile + numsmalltile, image, INVALID_KEY );
 
             numsmalltile++;
             x += step_x;
@@ -1212,14 +1245,14 @@ void get_big_tiles( SDL_Surface* bmpload )
             src1.w = wid;
             src1.h = hgt;
 
-            glTexture_new( tx_bigtile + numbigtile );
+            oglx_texture_ctor( tx_bigtile + numbigtile );
 
             image = cartman_CreateSurface( SMALLXY, SMALLXY );
             SDL_FillRect( image, NULL, MAKE_BGR( image, 0, 0, 0 ) );
 
             SDL_SoftStretch( bmpload, &src1, image, NULL );
 
-            glTexture_Convert( GL_TEXTURE_2D, tx_bigtile + numbigtile, image, INVALID_KEY );
+            oglx_texture_Convert( tx_bigtile + numbigtile, image, INVALID_KEY );
 
             numbigtile++;
             x += step_x;
@@ -1251,3 +1284,150 @@ SDL_Surface * cartman_CreateSurface( int w, int h )
     return SDL_CreateRGBSurface( SDL_SWSURFACE, w, h, tmpformat.BitsPerPixel, tmpformat.Rmask, tmpformat.Gmask, tmpformat.Bmask, tmpformat.Amask );
 }
 
+//--------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------
+void gfx_init_SDL_graphics()
+{
+    if ( _sdl_initialized_graphics ) return;
+
+    cartman_init_SDL_base();
+
+    log_info( "Intializing SDL Video... " );
+    if ( SDL_InitSubSystem( SDL_INIT_VIDEO ) < 0 )
+    {
+        log_message( "Failed!\n" );
+        log_warning( "SDL error == \"%s\"\n", SDL_GetError() );
+    }
+    else
+    {
+        log_message( "Success!\n" );
+    }
+
+#if !defined(__APPLE__)
+    {
+        //Setup the cute windows manager icon, don't do this on Mac
+        SDL_Surface *theSurface;
+        const char * fname = "icon.bmp";
+        STRING fileload;
+
+        snprintf( fileload, SDL_arraysize( fileload ), "mp_data/%s", fname );
+
+        theSurface = IMG_Load( vfs_resolveReadFilename( fileload ) );
+        if ( NULL == theSurface )
+        {
+            log_warning( "Unable to load icon (%s)\n", fname );
+        }
+        else
+        {
+            SDL_WM_SetIcon( theSurface, NULL );
+        }
+    }
+#endif
+
+    // Set the window name
+    SDL_WM_SetCaption( NAME " " VERSION_STR, NAME );
+
+#if defined(__unix__)
+
+    // GLX doesn't differentiate between 24 and 32 bpp, asking for 32 bpp
+    // will cause SDL_SetVideoMode to fail with:
+    // "Unable to set video mode: Couldn't find matching GLX visual"
+    if ( 32 == cfg.scrd_req ) cfg.scrd_req = 24;
+    if ( 32 == cfg.scrz_req ) cfg.scrz_req = 24;
+
+#endif
+
+    // the flags to pass to SDL_SetVideoMode
+    sdl_vparam.width                     = cfg.scrx_req;
+    sdl_vparam.height                    = cfg.scry_req;
+    sdl_vparam.depth                     = cfg.scrd_req;
+
+    sdl_vparam.flags.opengl              = SDL_TRUE;
+    sdl_vparam.flags.double_buf          = SDL_TRUE;
+    sdl_vparam.flags.full_screen         = cfg.fullscreen_req;
+
+    sdl_vparam.gl_att.buffer_size        = cfg.scrd_req;
+    sdl_vparam.gl_att.depth_size         = cfg.scrz_req;
+    sdl_vparam.gl_att.multi_buffers      = ( cfg.multisamples > 1 ) ? 1 : 0;
+    sdl_vparam.gl_att.multi_samples      = cfg.multisamples;
+    sdl_vparam.gl_att.accelerated_visual = GL_TRUE;
+
+    ogl_vparam.dither         = cfg.use_dither ? GL_TRUE : GL_FALSE;
+    ogl_vparam.antialiasing   = GL_TRUE;
+    ogl_vparam.perspective    = cfg.use_perspective ? GL_NICEST : GL_FASTEST;
+    ogl_vparam.shading        = GL_SMOOTH;
+    ogl_vparam.userAnisotropy = 16.0f * MAX( 0, cfg.texturefilter_req - TX_TRILINEAR_2 );
+
+    log_info( "Opening SDL Video Mode...\n" );
+
+    // redirect the output of the SDL_GL_* debug functions
+    SDL_GL_set_stdout( log_get_file() );
+
+    // actually set the video mode
+    if ( NULL == SDL_GL_set_mode( NULL, &sdl_vparam, &ogl_vparam, _sdl_initialized_graphics ) )
+    {
+        log_message( "Failed!\n" );
+        log_error( "I can't get SDL to set any video mode: %s\n", SDL_GetError() );
+    }
+    else
+    {
+        GFX_WIDTH = ( float )GFX_HEIGHT / ( float )sdl_vparam.height * ( float )sdl_vparam.width;
+        log_message( "Success!\n" );
+    }
+
+    _sdl_initialized_graphics = SDL_TRUE;
+}
+
+//--------------------------------------------------------------------------------------------
+int gfx_init_ogl()
+{
+    gfx_init_SDL_graphics();
+
+    // GL_DEBUG(glClear)) stuff
+    GL_DEBUG( glClearColor )( 0.0f, 0.0f, 0.0f, 0.0f ); // Set the background black
+    GL_DEBUG( glClearDepth )( 1.0f );
+
+    // depth buffer stuff
+    GL_DEBUG( glClearDepth )( 1.0f );
+    GL_DEBUG( glDepthMask )( GL_TRUE );
+
+    // do not draw hidden surfaces
+    GL_DEBUG( glEnable )( GL_DEPTH_TEST );
+    GL_DEBUG( glDepthFunc )( GL_LESS );
+
+    // alpha stuff
+    GL_DEBUG( glDisable )( GL_BLEND );
+
+    // do not display the completely transparent portion
+    GL_DEBUG( glEnable )( GL_ALPHA_TEST );
+    GL_DEBUG( glAlphaFunc )( GL_GREATER, 0.0f );
+
+    /// @todo Including backface culling here prevents the mesh from getting rendered
+    // backface culling
+    // oglx_begin_culling( GL_BACK, GL_CW );            // GL_ENABLE_BIT | GL_POLYGON_BIT
+
+    // disable OpenGL lighting
+    GL_DEBUG( glDisable )( GL_LIGHTING );
+
+    // fill mode
+    GL_DEBUG( glPolygonMode )( GL_FRONT, GL_FILL );
+    GL_DEBUG( glPolygonMode )( GL_BACK,  GL_FILL );
+
+    // ?Need this for color + lighting?
+    GL_DEBUG( glEnable )( GL_COLOR_MATERIAL );  // Need this for color + lighting
+
+    // set up environment mapping
+    GL_DEBUG( glTexGeni )( GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP );  // Set The Texture Generation Mode For S To Sphere Mapping (NEW)
+    GL_DEBUG( glTexGeni )( GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP );  // Set The Texture Generation Mode For T To Sphere Mapping (NEW)
+
+    //Initialize the motion blur buffer
+    GL_DEBUG( glClearAccum )( 0.0f, 0.0f, 0.0f, 1.0f );
+    GL_DEBUG( glClear )( GL_ACCUM_BUFFER_BIT );
+
+    // Load the current graphical settings
+    // load_graphics();
+
+    _ogl_initialized = btrue;
+
+    return _ogl_initialized && _sdl_initialized_graphics;
+}

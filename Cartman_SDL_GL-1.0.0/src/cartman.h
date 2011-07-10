@@ -1,10 +1,26 @@
 #pragma once
 
-#include <SDL_opengl.h>
+//********************************************************************************************
+//*
+//*    This file is part of Cartman.
+//*
+//*    Cartman is free software: you can redistribute it and/or modify it
+//*    under the terms of the GNU General Public License as published by
+//*    the Free Software Foundation, either version 3 of the License, or
+//*    (at your option) any later version.
+//*
+//*    Cartman is distributed in the hope that it will be useful, but
+//*    WITHOUT ANY WARRANTY; without even the implied warranty of
+//*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//*    General Public License for more details.
+//*
+//*    You should have received a copy of the GNU General Public License
+//*    along with Cartman.  If not, see <http://www.gnu.org/licenses/>.
+//*
+//********************************************************************************************
 
-#include "SDL_extensions.h"
-#include "ogl_extensions.h"
-#include "egoboo_setup.h"
+
+#include <egolib.h>
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
@@ -18,6 +34,10 @@ typedef struct s_ogl_surface ogl_surface;
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
+#define NAME "Cartman"          // Program name
+#define VERSION_STR "1.0.0"
+#define YEAR 2011               // Year
+
 #define MAXMESSAGE          6                       // Number of messages
 #define TOTALMAXDYNA                    64          // Absolute max number of dynamic lights
 #define TOTALMAXPRT             2048                // True max number of particles
@@ -25,12 +45,9 @@ typedef struct s_ogl_surface ogl_surface;
 #define MAXLIGHT 100
 #define MAXRADIUS ( 500 * FOURNUM )
 #define MINRADIUS ( 50 * FOURNUM )
-#define MAXLEVEL 255
-#define MINLEVEL 50
+#define MAP_MAXLEVEL 255
+#define MAP_MINLEVEL 50
 
-#define VERSION 005             // Version number
-#define YEAR 1999               // Year
-#define NAME "Cartman"          // Program name
 #define KEYDELAY 12             // Delay for keyboard
 #define CAMRATE 8               // Arrow key movement rate
 
@@ -45,14 +62,10 @@ typedef struct s_ogl_surface ogl_surface;
 //#define ONSIZE 600            // Max size of raise mesh
 #define ONSIZE 264          // Max size of raise mesh
 
-enum { kX, kY, kZ };
-
 #define MAXPOINTS 20480         // Max number of points to draw
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
-
-extern config_data_t cfg;
 
 extern STRING egoboo_path;
 
@@ -60,3 +73,8 @@ extern int     timclock;
 
 extern int     onscreen_count;
 extern Uint32  onscreen_vert[MAXPOINTS];
+
+//--------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------
+
+void cartman_init_SDL_base();

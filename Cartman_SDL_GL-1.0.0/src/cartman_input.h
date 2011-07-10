@@ -1,8 +1,25 @@
 #pragma once
 
-#include "egoboo_typedef.h"
+//********************************************************************************************
+//*
+//*    This file is part of Cartman.
+//*
+//*    Cartman is free software: you can redistribute it and/or modify it
+//*    under the terms of the GNU General Public License as published by
+//*    the Free Software Foundation, either version 3 of the License, or
+//*    (at your option) any later version.
+//*
+//*    Cartman is distributed in the hope that it will be useful, but
+//*    WITHOUT ANY WARRANTY; without even the implied warranty of
+//*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//*    General Public License for more details.
+//*
+//*    You should have received a copy of the GNU General Public License
+//*    along with Cartman.  If not, see <http://www.gnu.org/licenses/>.
+//*
+//********************************************************************************************
 
-#include <SDL.h>
+#include <egolib.h>
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
@@ -61,18 +78,18 @@ struct s_keyboard
 
 keyboard_t * keyboard_ctor( keyboard_t * );
 
-//KMOD_NONE No modifiers applicable 
-//KMOD_NUM Numlock is down 
-//KMOD_CAPS Capslock is down 
-//KMOD_LCTRL Left Control is down 
-//KMOD_RCTRL Right Control is down 
-//KMOD_RSHIFT Right Shift is down 
-//KMOD_LSHIFT Left Shift is down 
-//KMOD_RALT Right Alt is down 
-//KMOD_LALT Left Alt is down 
-//KMOD_CTRL A Control key is down 
-//KMOD_SHIFT A Shift key is down 
-//KMOD_ALT An Alt key is down 
+//KMOD_NONE No modifiers applicable
+//KMOD_NUM Numlock is down
+//KMOD_CAPS Capslock is down
+//KMOD_LCTRL Left Control is down
+//KMOD_RCTRL Right Control is down
+//KMOD_RSHIFT Right Shift is down
+//KMOD_LSHIFT Left Shift is down
+//KMOD_RALT Right Alt is down
+//KMOD_LALT Left Alt is down
+//KMOD_CTRL A Control key is down
+//KMOD_SHIFT A Shift key is down
+//KMOD_ALT An Alt key is down
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
@@ -83,9 +100,9 @@ extern keyboard_t   key;
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
-#define SDLKEYDOWN(k)  ( (!key.on || (k >= key.count) || (NULL == key.sdlbuffer)) ? bfalse : (0 != key.sdlbuffer[k]))     // Helper for gettin' em
-#define SDLKEYMOD(m)   ( key.on && (NULL != key.sdlbuffer) && (0 != (key.state & (m))) )
-#define SDLKEYDOWN_MOD(k,m) ( SDLKEYDOWN(k) && (0 != (key.state & (m))) )
+#define CART_KEYDOWN(k)       ( (!key.on || (k >= key.count) || (NULL == key.sdlbuffer)) ? bfalse : (0 != key.sdlbuffer[k]))     // Helper for gettin' em
+#define CART_KEYMOD(m)        ( key.on && (NULL != key.sdlbuffer) && (0 != (key.state & (m))) )
+#define CART_KEYDOWN_MOD(k,m) ( CART_KEYDOWN(k) && (0 != (key.state & (m))) )
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------

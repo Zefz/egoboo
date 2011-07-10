@@ -1,9 +1,26 @@
-#include <SDL.h>
+#pragma once
 
-#include "SDL_extensions.h"
-#include "ogl_extensions.h"
+//********************************************************************************************
+//*
+//*    This file is part of Cartman.
+//*
+//*    Cartman is free software: you can redistribute it and/or modify it
+//*    under the terms of the GNU General Public License as published by
+//*    the Free Software Foundation, either version 3 of the License, or
+//*    (at your option) any later version.
+//*
+//*    Cartman is distributed in the hope that it will be useful, but
+//*    WITHOUT ANY WARRANTY; without even the implied warranty of
+//*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//*    General Public License for more details.
+//*
+//*    You should have received a copy of the GNU General Public License
+//*    along with Cartman.  If not, see <http://www.gnu.org/licenses/>.
+//*
+//********************************************************************************************
 
-#include "ogl_texture.h"
+
+#include <egolib.h>
 
 #include "cartman_math.h"
 
@@ -11,7 +28,15 @@
 //--------------------------------------------------------------------------------------------
 
 struct s_window;
+
+//--------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------
+
 struct s_camera;
+typedef struct s_camera camera_t;
+
+struct s_simple_vertex;
+typedef struct s_simple_vertex simple_vertex_t;
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
@@ -22,28 +47,37 @@ struct s_ogl_surface
 };
 
 //--------------------------------------------------------------------------------------------
+
+struct s_camera
+{
+    float x;       // the position of the center of the window
+    float y;       //
+    float z;
+
+    float w;       // the size of the window
+    float h;       //
+    float d;       //
+};
+
+//--------------------------------------------------------------------------------------------
+struct s_simple_vertex
+{
+    GLfloat x, y, z;
+    GLfloat s, t;
+    GLfloat r, g, b, a;
+
+    GLfloat l;
+};
+
+//--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
 #define MAXTILE 256             //
 
 #define DAMAGENULL          255                        //
 
-enum e_damage_type
-{
-    DAMAGE_SLASH = 0,                        //
-    DAMAGE_CRUSH,                            //
-    DAMAGE_POKE,                             //
-    DAMAGE_HOLY,                             // (Most invert Holy damage )
-    DAMAGE_EVIL,                             //
-    DAMAGE_FIRE,                             //
-    DAMAGE_ICE,                              //
-    DAMAGE_ZAP,                              //
-    DAMAGE_COUNT                             // Damage types
-};
 
-#define DAMAGECHARGE        8                       // 0000x000 Converts damage to mana
-#define DAMAGEINVERT        4                       // 00000x00 Makes damage heal
-#define DAMAGESHIFT         3                       // 000000xx Resistance ( 1 is common )
+
 #define DAMAGETILETIME      32                      // Invincibility time
 #define DAMAGETIME          16                      // Invincibility time
 #define DEFENDTIME          16                      // Invincibility time
@@ -62,24 +96,26 @@ enum e_damage_type
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
+extern camera_t cam;
+
 extern SDL_Surface * theSurface;
 extern SDL_Surface * bmphitemap;        // Heightmap image
 
-extern glTexture     tx_point;      // Vertex image
-extern glTexture     tx_pointon;    // Vertex image ( select_vertsed )
-extern glTexture     tx_ref;        // Meshfx images
-extern glTexture     tx_drawref;    //
-extern glTexture     tx_anim;       //
-extern glTexture     tx_water;      //
-extern glTexture     tx_wall;       //
-extern glTexture     tx_impass;     //
-extern glTexture     tx_damage;     //
-extern glTexture     tx_slippy;     //
+extern oglx_texture_t     tx_point;      // Vertex image
+extern oglx_texture_t     tx_pointon;    // Vertex image ( select_vertsed )
+extern oglx_texture_t     tx_ref;        // Meshfx images
+extern oglx_texture_t     tx_drawref;    //
+extern oglx_texture_t     tx_anim;       //
+extern oglx_texture_t     tx_water;      //
+extern oglx_texture_t     tx_wall;       //
+extern oglx_texture_t     tx_impass;     //
+extern oglx_texture_t     tx_damage;     //
+extern oglx_texture_t     tx_slippy;     //
 
-extern glTexture     tx_smalltile[MAXTILE]; // Tiles
-extern glTexture     tx_bigtile[MAXTILE];   //
-extern glTexture     tx_tinysmalltile[MAXTILE]; // Plan tiles
-extern glTexture     tx_tinybigtile[MAXTILE];   //
+extern oglx_texture_t     tx_smalltile[MAXTILE]; // Tiles
+extern oglx_texture_t     tx_bigtile[MAXTILE];   //
+extern oglx_texture_t     tx_tinysmalltile[MAXTILE]; // Plan tiles
+extern oglx_texture_t     tx_tinybigtile[MAXTILE];   //
 
 extern int     numsmalltile;   //
 extern int     numbigtile;     //
@@ -102,6 +138,12 @@ extern Uint16 damagetilemindistance;
 extern int    damagetileamount;                           // Amount of damage
 extern Uint8  damagetiletype;                      // Type of damage
 
+extern int GFX_WIDTH;
+extern int GFX_HEIGHT;
+
+extern const SDL_Color cart_white;
+extern const SDL_Color cart_black;
+
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
@@ -116,12 +158,12 @@ void make_planmap( void );
 void draw_top_fan( struct s_window * pwin, int fan, float zoom_hrz );
 void draw_side_fan( struct s_window * pwin, int fan, float zoom_hrz, float zoom_vrt );
 void draw_schematic( struct s_window * pwin, int fantype, int x, int y );
-void draw_top_tile( float x0, float y0, int fan, glTexture * tx_tile, bool_t draw_tile );
+void draw_top_tile( float x0, float y0, int fan, oglx_texture_t * tx_tile, bool_t draw_tile );
 void draw_tile_fx( float x, float y, Uint8 fx, float scale );
 
 // ogl routines
-void ogl_draw_sprite_2d( glTexture * img, float x, float y, float width, float height );
-void ogl_draw_sprite_3d( glTexture * img, cart_vec_t pos, cart_vec_t vup, cart_vec_t vright, float width, float height );
+void ogl_draw_sprite_2d( oglx_texture_t * img, float x, float y, float width, float height );
+void ogl_draw_sprite_3d( oglx_texture_t * img, cart_vec_t pos, cart_vec_t vup, cart_vec_t vright, float width, float height );
 void ogl_draw_box( float x, float y, float w, float h, float color[] );
 void ogl_beginFrame();
 void ogl_endFrame();
@@ -144,5 +186,9 @@ void load_img( void );
 void get_tiles( SDL_Surface* bmpload );
 
 // misc
-glTexture * tiny_tile_at( int x, int y );
-glTexture * tile_at( int fan );
+oglx_texture_t * tiny_tile_at( int x, int y );
+oglx_texture_t * tile_at( int fan );
+
+// initialization
+void gfx_system_begin();
+void gfx_system_end();

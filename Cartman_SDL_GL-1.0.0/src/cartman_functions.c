@@ -2,7 +2,8 @@
 
 #include "cartman.h"
 #include "cartman_mpd.h"
-#include "cartman_math.h"
+
+#include "cartman_math.inl"
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
@@ -868,7 +869,7 @@ void three_e_mesh( Uint8 upper, Uint8 tx )
             fan = mesh_get_fan( x, y );
             if ( -1 == fan ) continue;
 
-            if ( 0x3F == mesh.tx_bits[fan] )  
+            if ( 0x3F == mesh.tx_bits[fan] )
             {
                 mesh.tx_bits[fan] = 0x3E;
             }
@@ -877,12 +878,12 @@ void three_e_mesh( Uint8 upper, Uint8 tx )
 }
 
 //--------------------------------------------------------------------------------------------
-int fan_is_floor( int x, int y )
+bool_t fan_is_floor( int x, int y )
 {
     int fan = mesh_get_fan( x, y );
-    if ( -1 == fan ) return 0;
+    if ( -1 == fan ) return bfalse;
 
-    return !HAS_BITS( mesh.fx[fan], (MPDFX_WALL | MPDFX_IMPASS) );
+    return !HAS_BITS( mesh.fx[fan], ( MPDFX_WALL | MPDFX_IMPASS ) );
 }
 
 //--------------------------------------------------------------------------------------------

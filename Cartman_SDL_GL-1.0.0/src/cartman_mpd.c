@@ -1,11 +1,9 @@
 #include "cartman_mpd.h"
 
-#include "log.h"
-#include "egoboo_endian.h"
-#include "egoboo_fileutil.h"
+#include <egolib.h>
 
 #include "cartman.h"
-#include "cartman_math.h"
+#include "cartman_math.inl"
 
 #include <assert.h>
 #include <math.h>
@@ -34,7 +32,7 @@ void load_mesh_fans()
     int numcommand, command, command_size;
     int itmp;
     float ftmp;
-    FILE* fileread;
+    vfs_FILE* fileread;
     STRING fname;
 
     // Initialize all mesh types to 0
@@ -46,33 +44,33 @@ void load_mesh_fans()
 
     // Open the file and go to it
     sprintf( fname, "%s" SLASH_STR "basicdat" SLASH_STR "fans.txt", egoboo_path );
-    fileread = fopen( fname, "r" );
+    fileread = vfs_openRead( fname );
     if ( NULL == fileread )
     {
         log_error( "load_mesh_fans() - Cannot find fans.txt file\n" );
     }
 
-    goto_colon( fileread );
-    fscanf( fileread, "%d", &numfantype );
+    goto_colon( NULL, fileread, bfalse );
+    vfs_scanf( fileread, "%d", &numfantype );
 
     for ( fantype = 0, bigfantype = MAXMESHTYPE / 2; fantype < numfantype; fantype++, bigfantype++ )
     {
-        goto_colon( fileread );
-        fscanf( fileread, "%d", &vertices );
+        goto_colon( NULL, fileread, bfalse );
+        vfs_scanf( fileread, "%d", &vertices );
         mesh.command[fantype].numvertices = vertices;
         mesh.command[fantype+MAXMESHTYPE/2].numvertices = vertices;  // DUPE
 
         for ( cnt = 0; cnt < vertices; cnt++ )
         {
             // lighting "ref" data
-            goto_colon( fileread );
-            fscanf( fileread, "%d", &itmp );
+            goto_colon( NULL, fileread, bfalse );
+            vfs_scanf( fileread, "%d", &itmp );
             mesh.command[fantype].ref[cnt] = itmp;
             mesh.command[fantype+MAXMESHTYPE/2].ref[cnt] = itmp;  // DUPE
 
             // texure u data and mesh x data
-            goto_colon( fileread );
-            fscanf( fileread, "%f", &ftmp );
+            goto_colon( NULL, fileread, bfalse );
+            vfs_scanf( fileread, "%f", &ftmp );
 
             mesh.command[fantype].u[cnt] = ftmp;
             mesh.command[fantype+MAXMESHTYPE/2].u[cnt] = ftmp;  // DUPE
@@ -81,8 +79,8 @@ void load_mesh_fans()
             mesh.command[fantype+MAXMESHTYPE/2].x[cnt] = ( ftmp ) * 128;  // DUPE
 
             // texure v data and mesh y data
-            goto_colon( fileread );
-            fscanf( fileread, "%f", &ftmp );
+            goto_colon( NULL, fileread, bfalse );
+            vfs_scanf( fileread, "%f", &ftmp );
             mesh.command[fantype].v[cnt] = ftmp;
             mesh.command[fantype+MAXMESHTYPE/2].v[cnt] = ftmp;  // DUPE
 
@@ -91,8 +89,8 @@ void load_mesh_fans()
         }
 
         // Get the vertex connections
-        goto_colon( fileread );
-        fscanf( fileread, "%d", &numcommand );
+        goto_colon( NULL, fileread, bfalse );
+        vfs_scanf( fileread, "%d", &numcommand );
         mesh.command[fantype].count = numcommand;
         mesh.command[bigfantype].count = numcommand;  // Dupe
 
@@ -100,22 +98,22 @@ void load_mesh_fans()
         for ( command = 0; command < numcommand; command++ )
         {
             // grab the fan vertex data
-            goto_colon( fileread );
-            fscanf( fileread, "%d", &command_size );
+            goto_colon( NULL, fileread, bfalse );
+            vfs_scanf( fileread, "%d", &command_size );
             mesh.command[fantype].size[command] = command_size;
             mesh.command[bigfantype].size[command] = command_size;  // Dupe
 
             for ( cnt = 0; cnt < command_size; cnt++ )
             {
-                goto_colon( fileread );
-                fscanf( fileread, "%d", &itmp );
+                goto_colon( NULL, fileread, bfalse );
+                vfs_scanf( fileread, "%d", &itmp );
                 mesh.command[fantype].vrt[entry] = itmp;
                 mesh.command[bigfantype].vrt[entry] = itmp;  // Dupe
                 entry++;
             }
         }
     }
-    fclose( fileread );
+    vfs_close( fileread );
 
     for ( fantype = 0, bigfantype = MAXMESHTYPE / 2; fantype < numfantype; fantype++, bigfantype++ )
     {
@@ -237,8 +235,8 @@ void create_mesh( mesh_info_t * pinfo )
 //--------------------------------------------------------------------------------------------
 int load_mesh( const char *modname )
 {
-    FILE* fileread;
-    char  newloadname[256];
+    vfs_FILE* fileread;
+    STRING  newloadname;
     Uint32  uiTmp32;
     Sint32   iTmp32;
     Uint8  uiTmp8;
@@ -251,7 +249,7 @@ int load_mesh( const char *modname )
 
     sprintf( newloadname, "%s" SLASH_STR "gamedat" SLASH_STR "level.mpd", modname );
 
-    fileread = fopen( newloadname, "rb" );
+    fileread = vfs_openReadB( newloadname );
     if ( NULL == fileread )
     {
         log_warning( "load_mesh() - Cannot find mesh for module \"%s\"\n", modname );
@@ -261,10 +259,10 @@ int load_mesh( const char *modname )
     {
         free_vertices();
 
-        fread( &uiTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32( uiTmp32 ); if ( uiTmp32 != MAPID ) return bfalse;
-        fread( &uiTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32( iTmp32 ); numvert = uiTmp32;
-        fread( &iTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32( iTmp32 ); mesh.tiles_x = iTmp32;
-        fread( &iTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32( iTmp32 ); mesh.tiles_y = iTmp32;
+        vfs_read( &uiTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32( uiTmp32 ); if ( uiTmp32 != MAPID ) return bfalse;
+        vfs_read( &uiTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32( iTmp32 ); numvert = uiTmp32;
+        vfs_read( &iTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32( iTmp32 ); mesh.tiles_x = iTmp32;
+        vfs_read( &iTmp32, 4, 1, fileread );  iTmp32 = ENDIAN_INT32( iTmp32 ); mesh.tiles_y = iTmp32;
 
         numfan = mesh.tiles_x * mesh.tiles_y;
         mesh.edgex = mesh.tiles_x * TILE_SIZE;
@@ -276,7 +274,7 @@ int load_mesh( const char *modname )
         fan = 0;
         while ( fan < numfan )
         {
-            fread( &uiTmp32, 4, 1, fileread );
+            vfs_read( &uiTmp32, 4, 1, fileread );
             uiTmp32 = ENDIAN_INT32( uiTmp32 );
 
             mesh.fantype[fan] = ( uiTmp32 >> 24 ) & 0x00FF;
@@ -291,7 +289,7 @@ int load_mesh( const char *modname )
         fan = 0;
         while ( fan < numfan )
         {
-            fread( &uiTmp8, 1, 1, fileread );
+            vfs_read( &uiTmp8, 1, 1, fileread );
             mesh.twist[fan] = uiTmp8;
 
             fan++;
@@ -301,7 +299,7 @@ int load_mesh( const char *modname )
         cnt = 0;
         while ( cnt < numvert )
         {
-            fread( &ftmp, 4, 1, fileread ); ftmp = ENDIAN_FLOAT( ftmp );
+            vfs_read( &ftmp, 4, 1, fileread ); ftmp = ENDIAN_FLOAT( ftmp );
             mesh.vrtx[cnt] = ftmp;
             cnt++;
         }
@@ -310,7 +308,7 @@ int load_mesh( const char *modname )
         cnt = 0;
         while ( cnt < numvert )
         {
-            fread( &ftmp, 4, 1, fileread ); ftmp = ENDIAN_FLOAT( ftmp );
+            vfs_read( &ftmp, 4, 1, fileread ); ftmp = ENDIAN_FLOAT( ftmp );
             mesh.vrty[cnt] = ftmp;
             cnt++;
         }
@@ -319,7 +317,7 @@ int load_mesh( const char *modname )
         cnt = 0;
         while ( cnt < numvert )
         {
-            fread( &ftmp, 4, 1, fileread ); ftmp = ENDIAN_FLOAT( ftmp );
+            vfs_read( &ftmp, 4, 1, fileread ); ftmp = ENDIAN_FLOAT( ftmp );
             mesh.vrtz[cnt] = ftmp;
 
             if ( ftmp > 0 &&  mesh.edgez < 2.0f * ftmp )
@@ -338,7 +336,7 @@ int load_mesh( const char *modname )
         cnt = 0;
         while ( cnt < numvert )
         {
-            fread( &uiTmp8, 1, 1, fileread );
+            vfs_read( &uiTmp8, 1, 1, fileread );
             mesh.vrta[cnt] = CLIP( uiTmp8, 1, 255 );  // VERTEXUNUSED == unused
             cnt++;
         }
@@ -387,11 +385,11 @@ int load_mesh( const char *modname )
 //--------------------------------------------------------------------------------------------
 void save_mesh( const char *modname )
 {
-#define ISAVE(VAL) numwritten += fwrite(&VAL, sizeof(Uint32), 1, filewrite); numattempt++
-#define FSAVE(VAL) numwritten += fwrite(&VAL, sizeof(float), 1, filewrite); numattempt++
+#define ISAVE(VAL) numwritten += vfs_write(&VAL, sizeof(Uint32), 1, filewrite); numattempt++
+#define FSAVE(VAL) numwritten += vfs_write(&VAL, sizeof(float), 1, filewrite); numattempt++
 
-    FILE* filewrite;
-    char newloadname[256];
+    vfs_FILE* filewrite;
+    STRING newloadname;
     int itmp;
     float ftmp;
     int fan, x, y, cnt, num;
@@ -402,7 +400,7 @@ void save_mesh( const char *modname )
 
     sprintf( newloadname, "%s" SLASH_STR "modules" SLASH_STR "%s" SLASH_STR "gamedat" SLASH_STR "level.mpd", egoboo_path, modname );
 
-    filewrite = fopen( newloadname, "wb" );
+    filewrite = vfs_openWriteB( newloadname );
     if ( filewrite )
     {
         itmp = MAPID;             ISAVE( itmp );
@@ -437,7 +435,8 @@ void save_mesh( const char *modname )
                 fan = mesh_get_fan( x, y );
                 if ( -1 != fan )
                 {
-                    ctmp = mesh.twist[fan];  numwritten += fwrite( &ctmp, 1, 1, filewrite );
+                    ctmp = mesh.twist[fan];
+                    numwritten += vfs_write( &ctmp, 1, 1, filewrite );
                 }
                 numattempt++;
                 x++;
@@ -534,7 +533,7 @@ void save_mesh( const char *modname )
                           cnt++, vert = mesh.vrtnext[vert] )
                     {
                         ctmp = mesh.vrta[vert];
-                        numwritten += fwrite( &ctmp, 1, 1, filewrite );
+                        numwritten += vfs_write( &ctmp, 1, 1, filewrite );
                         numattempt++;
                     }
                 }
