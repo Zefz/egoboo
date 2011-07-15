@@ -19,8 +19,12 @@
 //*
 //********************************************************************************************
 
-
 #include <egolib.h>
+
+//--------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------
+
+struct s_cartman_mpd;
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
@@ -34,58 +38,58 @@
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
-float dist_from_border( float x, float y );
-int dist_from_edge( int x, int y );
-int nearest_vertex( int x, int y, float nearx, float neary );
+float dist_from_border( struct s_cartman_mpd * pmesh, float x, float y );
+int dist_from_edge( struct s_cartman_mpd * pmesh, int x, int y );
+int nearest_vertex( struct s_cartman_mpd * pmesh, int x, int y, float nearx, float neary );
 
-void fix_mesh( void );
-void fix_vertices( int x, int y );
-void fix_corners( int x, int y );
+void fix_mesh( struct s_cartman_mpd * pmesh );
+void fix_vertices( struct s_cartman_mpd * pmesh, int x, int y );
+void fix_corners( struct s_cartman_mpd * pmesh, int x, int y );
 
-void weld_0( int x, int y );
-void weld_1( int x, int y );
-void weld_2( int x, int y );
-void weld_3( int x, int y );
-void weld_cnt( int x, int y, int cnt, Uint32 fan );
+void weld_0( struct s_cartman_mpd * pmesh, int x, int y );
+void weld_1( struct s_cartman_mpd * pmesh, int x, int y );
+void weld_2( struct s_cartman_mpd * pmesh, int x, int y );
+void weld_3( struct s_cartman_mpd * pmesh, int x, int y );
+void weld_cnt( struct s_cartman_mpd * pmesh, int x, int y, int cnt, Uint32 fan );
 
 // selection functions
-void weld_select();
-void move_select( int x, int y, int z );
-void set_select_no_bound_z( int z );;
-void jitter_select();
-void select_verts_connected();
+void weld_select( struct s_cartman_mpd * pmesh );
+void move_select( struct s_cartman_mpd * pmesh, float x, float y, float z );
+void set_select_no_bound_z( struct s_cartman_mpd * pmesh, float z );
+void jitter_select( struct s_cartman_mpd * pmesh );
+void select_verts_connected( struct s_cartman_mpd * pmesh );
 
 // vertex selection functions
-void select_add( int vert );
-void select_clear( void );
-void select_remove( int vert );
-void select_add_rect( float tlx, float tly, float brx, float bry, int mode );
-void select_remove_rect( float tlx, float tly, float brx, float bry, int mode );
+void select_clear();
 int  select_count();
+void select_add( int vert );
+void select_remove( int vert );
 int  select_has_vert( int vert );
+void select_add_rect( struct s_cartman_mpd * pmesh, float tlx, float tly, float brx, float bry, int mode );
+void select_remove_rect( struct s_cartman_mpd * pmesh, float tlx, float tly, float brx, float bry, int mode );
 
-void mesh_set_tile( Uint16 tiletoset, Uint8 upper, Uint16 presser, Uint8 tx );
-void move_mesh_z( int z, Uint16 tiletype, Uint16 tileand );
-void move_vert( int vert, float x, float y, float z );
-void raise_mesh( Uint32 point_lst[], size_t point_count, float x, float y, int amount, int size );
-void level_vrtz();
-void jitter_mesh();
-void flatten_mesh( int y0 );
-void clear_mesh( Uint8 upper, Uint16 presser, Uint8 tx, Uint8 type );
-void three_e_mesh( Uint8 upper, Uint8 tx );
+void mesh_set_tile( struct s_cartman_mpd * pmesh, Uint16 tiletoset, Uint8 upper, Uint16 presser, Uint8 tx );
+void move_mesh_z( struct s_cartman_mpd * pmesh, int z, Uint16 tiletype, Uint16 tileand );
+void move_vert( struct s_cartman_mpd * pmesh, int vert, float x, float y, float z );
+void raise_mesh( struct s_cartman_mpd * pmesh, Uint32 point_lst[], size_t point_count, float x, float y, int amount, int size );
+void level_vrtz( struct s_cartman_mpd * pmesh );
+void jitter_mesh( struct s_cartman_mpd * pmesh );
+void flatten_mesh( struct s_cartman_mpd * pmesh, int y0 );
+void clear_mesh( struct s_cartman_mpd * pmesh, Uint8 upper, Uint16 presser, Uint8 tx, Uint8 type );
+void three_e_mesh( struct s_cartman_mpd * pmesh, Uint8 upper, Uint8 tx );
 
-bool_t fan_is_floor( int x, int y );
-void   set_barrier_height( int x, int y, int bits );
-void   fix_walls();
-void   impass_edges( int amount );
+bool_t fan_is_floor( struct s_cartman_mpd * pmesh, int x, int y );
+void   set_barrier_height( struct s_cartman_mpd * pmesh, int x, int y, int bits );
+void   fix_walls( struct s_cartman_mpd * pmesh );
+void   impass_edges( struct s_cartman_mpd * pmesh, int amount );
 
-void mesh_replace_fx( Uint16 fx_bits, Uint16 fx_mask, Uint8 fx_new );
-void mesh_replace_tile( int xfan, int yfan, int onfan, Uint8 tx, Uint8 upper, Uint8 fx, Uint8 type, Uint16 presser, bool_t tx_only, bool_t at_floor_level );
-void mesh_set_fx( int fan, Uint8 fx );
-void mesh_move( float dx, float dy, float dz );
+void mesh_replace_fx( struct s_cartman_mpd * pmesh, Uint16 fx_bits, Uint16 fx_mask, Uint8 fx_new );
+void mesh_replace_tile( struct s_cartman_mpd * pmesh, int xfan, int yfan, int onfan, Uint8 tx, Uint8 upper, Uint8 fx, Uint8 type, Uint16 presser, bool_t tx_only, bool_t at_floor_level );
+void mesh_set_fx( struct s_cartman_mpd * pmesh, int fan, Uint8 fx );
+void mesh_move( struct s_cartman_mpd * pmesh, float dx, float dy, float dz );
 
 // indecipherable legacy code
-Uint8  tile_is_different( int fan_x, int fan_y, Uint16 fx_bits, Uint16 fx_mask );
-Uint16 trim_code( int x, int y, Uint16 fx_bits );
-Uint16 wall_code( int x, int y, Uint16 fx_bits );
-void   trim_mesh_tile( Uint16 fx_bits, Uint16 fx_mask );
+Uint8  tile_is_different( struct s_cartman_mpd * pmesh, int fan_x, int fan_y, Uint16 fx_bits, Uint16 fx_mask );
+Uint16 trim_code( struct s_cartman_mpd * pmesh, int x, int y, Uint16 fx_bits );
+Uint16 wall_code( struct s_cartman_mpd * pmesh, int x, int y, Uint16 fx_bits );
+void   trim_mesh_tile( struct s_cartman_mpd * pmesh, Uint16 fx_bits, Uint16 fx_mask );

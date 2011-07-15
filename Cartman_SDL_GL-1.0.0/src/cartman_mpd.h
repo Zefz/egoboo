@@ -24,46 +24,40 @@
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
-struct s_line_data;
-typedef struct s_line_data line_data_t;
-
-struct s_command;
-typedef struct s_command command_t;
-
-struct s_mesh;
-typedef struct s_mesh mesh_t;
-
-struct s_mesh_info;
-typedef struct s_mesh_info mesh_info_t;
+struct s_mpd;
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
-#define MAXMESHTYPE                     64          // Number of mesh types
-#define MAXMESHLINE                     64          // Number of lines in a fan schematic
-#define MAXMESHVERTICES                 16      // Max number of vertices in a fan
-#define MAXMESHFAN                      (512*512)        // Size of map in fans
-#define MAXTOTALMESHVERTICES            (MAXMESHFAN*MAXMESHVERTICES)
-#define MAXMESHTILEY                    1024       // Max fans in y direction
-#define MAXMESHBLOCKY                   (( MAXMESHTILEY >> 2 )+1)  // max blocks in the y direction
-#define MAXMESHCOMMAND                  4             // Draw up to 4 fans
-#define MAXMESHCOMMANDENTRIES           32            // Fansquare command list size
-#define MAXMESHCOMMANDSIZE              32            // Max trigs in each command
+struct s_tile_line_data;
+typedef struct s_tile_line_data tile_line_data_t;
 
-#define FANOFF   0xFFFF         // Don't draw
+struct s_cartman_gl_command;
+typedef struct s_cartman_gl_command cartman_gl_command_t;
+
+struct s_cartman_mpd;
+typedef struct s_cartman_mpd cartman_mpd_t;
+
+struct s_cartman_mpd_create_info;
+typedef struct s_cartman_mpd_create_info cartman_mpd_create_info_t;
+
+struct s_tile_dictionary_lines;
+typedef struct s_tile_dictionary_lines tile_dictionary_lines_t;
+
+struct s_cartman_mpd_info;
+typedef struct s_cartman_mpd_info cartman_mpd_info_t;
+
+struct s_cartman_mpd_vertex;
+typedef struct s_cartman_mpd_vertex cartman_mpd_vertex_t;
+
+struct s_cartman_mpd_tile;
+typedef struct s_cartman_mpd_tile cartman_mpd_tile_t;
+
+//--------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------
+
 #define CHAINEND 0xFFFFFFFF     // End of vertex chain
-
 #define VERTEXUNUSED 0          // Check mesh.vrta to see if used
-
-#define MPDFX_REF 0            // MeshFX
-#define MPDFX_SHA 1            //
-#define MPDFX_DRAWREF 2      //
-#define MPDFX_ANIM 4             //
-#define MPDFX_WATER 8            //
-#define MPDFX_WALL 16            //
-#define MPDFX_IMPASS 32         //
-#define MPDFX_DAMAGE 64         //
-#define MPDFX_SLIPPY 128        //
 
 #define INVALID_BLOCK ((Uint32)(~0))
 #define INVALID_TILE  ((Uint32)(~0))
@@ -71,7 +65,6 @@ typedef struct s_mesh_info mesh_info_t;
 #define TINYXY   4              // Plan tiles
 #define SMALLXY 32              // Small tiles
 #define BIGXY   (2 * SMALLXY)   // Big tiles
-#define MAPID     0x4470614d        // The string... MapD
 
 #define FIXNUM    4 // 4.129           // 4.150
 #define TILE_SIZE 128
@@ -79,9 +72,10 @@ typedef struct s_mesh_info mesh_info_t;
 
 #define DEFAULT_TILE 62
 
+#define TWIST_FLAT                      119
 #define SLOPE 50            // Twist stuff
 
-#define TILE_IS_FANOFF(XX)              ( FANOFF == (XX) )
+#define TILE_IS_FANOFF(XX)              ( MPD_FANOFF == (XX) )
 
 // handle the upper and lower bits for the tile image
 #define TILE_UPPER_SHIFT                8
@@ -96,105 +90,146 @@ typedef struct s_mesh_info mesh_info_t;
 
 #define TILE_HAS_INVALID_IMAGE(XX)      HAS_SOME_BITS( TILE_UPPER_MASK, (XX).img )
 
+#define DEFAULT_Z_SIZE ( 180 << 4 )
+
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
-struct s_mesh_info
+struct s_cartman_mpd_create_info
 {
     int tiles_x, tiles_y;
 };
 
 //--------------------------------------------------------------------------------------------
-struct s_command
+struct s_cartman_gl_command
 {
     Uint8   numvertices;                // Number of vertices
 
-    Uint8   ref[MAXMESHVERTICES];       // Lighting references
+    Uint8   ref[MPD_FAN_VERTICES_MAX];       // Lighting references
 
-    int     x[MAXMESHVERTICES];         // Vertex texture posi
-    int     y[MAXMESHVERTICES];         //
+    int     x[MPD_FAN_VERTICES_MAX];         // Vertex texture posi
+    int     y[MPD_FAN_VERTICES_MAX];         //
 
-    float   u[MAXMESHVERTICES];         // Vertex texture posi
-    float   v[MAXMESHVERTICES];         //
+    float   u[MPD_FAN_VERTICES_MAX];         // Vertex texture posi
+    float   v[MPD_FAN_VERTICES_MAX];         //
 
     int     count;                      // how many commands
-    int     size[MAXMESHCOMMAND];      // how many command entries
-    int     vrt[MAXMESHCOMMANDENTRIES];       // which vertex for each command entry
+    int     size[MPD_FAN_MAX];      // how many command entries
+    int     vrt[MPD_FAN_ENTRIES_MAX];       // which vertex for each command entry
 };
 
 //--------------------------------------------------------------------------------------------
-struct s_line_data
+struct s_tile_line_data
 {
-    Uint8     start[MAXMESHTYPE];
-    Uint8     end[MAXMESHTYPE];
+    Uint32    count;
+    Uint8     start[MPD_FAN_TYPE_MAX];
+    Uint8     end[MPD_FAN_TYPE_MAX];
 };
 
 //--------------------------------------------------------------------------------------------
-struct s_mesh
+struct s_cartman_mpd_info
 {
-    bool_t exploremode;
-
     int     tiles_x;                  // Size of mesh
     int     tiles_y;                  //
-    Uint32  fanstart[MAXMESHTILEY];   // Y to fan number
-
-    int     blocks_x;
-    int     blocks_y;
-    Uint32  blockstart[MAXMESHTILEY >> 2];
+    size_t  tiles_count;
+    size_t  vertex_count;
 
     float   edgex;            // Borders of mesh
     float   edgey;            //
     float   edgez;            //
-
-    Uint8   fantype[MAXMESHFAN];        // Tile fan type
-    Uint8   fx[MAXMESHFAN];             // Rile special effects flags
-    Uint16  tx_bits[MAXMESHFAN];        // Tile texture bits and special tile bits
-    Uint8   twist[MAXMESHFAN];          // Surface normal
-
-    Uint32  vrtstart[MAXMESHFAN];     // Which vertex to start at
-    Uint32  vrtnext[MAXTOTALMESHVERTICES];   // Next vertex in fan
-
-    float   vrtx[MAXTOTALMESHVERTICES];      // Vertex position
-    float   vrty[MAXTOTALMESHVERTICES];      //
-    float   vrtz[MAXTOTALMESHVERTICES];      // Vertex elevation
-    Uint8   vrta[MAXTOTALMESHVERTICES];      // Vertex base light, VERTEXUNUSED == unused
-
-    Uint32       numline[MAXMESHTYPE];       // Number of lines to draw
-    line_data_t  line[MAXMESHLINE];
-    command_t    command[MAXMESHTYPE];
 };
 
+cartman_mpd_info_t * cartman_mpd_info_ctor( cartman_mpd_info_t * );
+cartman_mpd_info_t * cartman_mpd_info_dtor( cartman_mpd_info_t * );
+
+bool_t cartman_mpd_info_init( cartman_mpd_info_t * pinfo, int vert_count, size_t tiles_x, size_t tiles_y );
+
+//--------------------------------------------------------------------------------------------
+struct s_cartman_mpd_vertex
+{
+    Uint32  next;   // Next vertex in fan
+    float   x;      // Vertex position
+    float   y;      //
+    float   z;      // Vertex elevation
+    Uint8   a;      // Vertex base light, VERTEXUNUSED == unused
+};
+
+cartman_mpd_vertex_t * cartman_mpd_vertex_ctor( cartman_mpd_vertex_t * );
+cartman_mpd_vertex_t * cartman_mpd_vertex_dtor( cartman_mpd_vertex_t * );
+
+bool_t cartman_mpd_vertex_ary_ctor( cartman_mpd_vertex_t ary[], size_t size );
+bool_t cartman_mpd_vertex_ary_dtor( cartman_mpd_vertex_t ary[], size_t size );
+
+//--------------------------------------------------------------------------------------------
+struct s_cartman_mpd_tile
+{
+    Uint8   type;        // Tile fan type
+    Uint8   fx;             // Rile special effects flags
+    Uint16  tx_bits;        // Tile texture bits and special tile bits
+    Uint8   twist;          // Surface normal
+    Uint32  vrtstart;       // Which vertex to start at
+};
+
+cartman_mpd_tile_t * cartman_mpd_tile_ctor( cartman_mpd_tile_t * );
+cartman_mpd_tile_t * cartman_mpd_tile_dtor( cartman_mpd_tile_t * );
+
+bool_t cartman_mpd_tile_ary_ctor( cartman_mpd_tile_t ary[], size_t size );
+bool_t cartman_mpd_tile_ary_dtor( cartman_mpd_tile_t ary[], size_t size );
+
+//--------------------------------------------------------------------------------------------
+struct s_cartman_mpd
+{
+    Uint32               vrt_free;                        // Number of free vertices
+    Uint32               vrt_at;                          // Current vertex check for new
+    cartman_mpd_vertex_t vrt[MPD_VERTICES_MAX];
+
+    cartman_mpd_info_t   info;
+    cartman_mpd_tile_t   fan[MPD_TILE_MAX];
+
+    Uint32               fanstart[MPD_TILEY_MAX];   // Y to fan number
+};
+
+cartman_mpd_t * cartman_mpd_ctor( cartman_mpd_t * );
+cartman_mpd_t * cartman_mpd_dtor( cartman_mpd_t * );
+cartman_mpd_t * cartman_mpd_renew( cartman_mpd_t * );
+
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
-extern mesh_t mesh;
+extern cartman_mpd_t mesh;
+
 extern size_t numwritten;
 extern size_t numattempt;
-extern Uint32 numfreevertices;        // Number of free vertices
+
+extern tile_line_data_t tile_dict_lines[MPD_FAN_TYPE_MAX];
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
-void create_mesh( mesh_info_t * pinfo );
-int  load_mesh( const char *modname );
-void save_mesh( const char *modname );
+// loading/saving
+cartman_mpd_t * cartman_mpd_load( const char *modname, cartman_mpd_t * pmesh );
+cartman_mpd_t * cartman_mpd_save( const char *modname, cartman_mpd_t * pmesh );
+cartman_mpd_t * cartman_mpd_create( cartman_mpd_t * pmesh, int tiles_x, int tiles_y );
 
-void make_twist();
-void load_mesh_fans();
-void make_fanstart();
+void cartman_mpd_make_twist();
+void cartman_mpd_make_fanstart( cartman_mpd_t * pmesh );
 
-int  mesh_get_fan( int x, int y );
-void num_free_vertex();
-int  count_vertices();
-void add_line( int fantype, int start, int end );
+void cartman_mpd_free_vertex_count( cartman_mpd_t * pmesh );
+int  cartman_mpd_count_vertices( cartman_mpd_t * pmesh );
 
-void free_vertices();
-int get_free_vertex();
+void cartman_mpd_free_vertices( cartman_mpd_t * pmesh );
+int cartman_mpd_find_free_vertex( cartman_mpd_t * pmesh );
+bool_t cartman_mpd_link_vertex( cartman_mpd_t * pmesh, int iparent, int child );
 
-Uint8 get_twist( int x, int y );
-Uint8 get_fan_twist( Uint32 fan );
-int get_level( int x, int y );
-int get_vertex( int x, int y, int num );
-int fan_at( int x, int y );
+Uint8 cartman_mpd_get_fan_twist( cartman_mpd_t * pmesh, Uint32 fan );
+int cartman_mpd_get_level( cartman_mpd_t * pmesh, int x, int y );
+int cartman_mpd_get_vertex( cartman_mpd_t * pmesh, int x, int y, int num );
+int cartman_mpd_get_fan( cartman_mpd_t * pmesh, int x, int y );
 
-void remove_fan( int fan );
-int add_fan( int fan, float x, float y );
+void cartman_mpd_remove_fan( cartman_mpd_t * pmesh, int fan );
+int cartman_mpd_add_fan( cartman_mpd_t * pmesh, int fan, float x, float y );
+
+void tile_dict_lines_add( int fantype, int start, int end );
+void cartman_tile_dictionary_load_vfs();
+
+// utility
+Uint8 cartman_mpd_calc_twist( int x, int y );
