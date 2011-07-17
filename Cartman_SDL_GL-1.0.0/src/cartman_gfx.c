@@ -24,6 +24,8 @@ static GLboolean _ogl_initialized = GL_FALSE;
 const SDL_Color cart_white = { 0xFF, 0xFF, 0xFF, 0xFF };
 const SDL_Color cart_black = { 0x00, 0x00, 0x00, 0xFF };
 
+Font * gfx_font_ptr = NULL;
+
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
@@ -90,6 +92,8 @@ void gfx_system_begin()
     gfx_init_ogl();
 
     theSurface = SDL_GetVideoSurface();
+
+    gfx_font_ptr = fnt_loadFont( "data" SLASH_STR "pc8x8.fon", 12 );
 }
 
 //--------------------------------------------------------------------------------------------
@@ -118,6 +122,8 @@ oglx_texture_t * tiny_tile_at( cartman_mpd_t * pmesh, int x, int y )
     Uint8 fantype, fx;
     int fan;
 
+    if ( NULL == pmesh ) pmesh = &mesh;
+
     if ( x < 0 || x >= pmesh->info.tiles_x || y < 0 || y >= pmesh->info.tiles_y )
     {
         return NULL;
@@ -127,7 +133,7 @@ oglx_texture_t * tiny_tile_at( cartman_mpd_t * pmesh, int x, int y )
     fantype = 0;
     fx = 0;
     fan = cartman_mpd_get_fan( pmesh, x, y );
-    if ( -1 != fan )
+    if ( fan >= 0 && fan < MPD_TILE_MAX )
     {
         if ( TILE_IS_FANOFF( pmesh->fan[fan].tx_bits ) )
         {
@@ -176,6 +182,8 @@ oglx_texture_t *tile_at( cartman_mpd_t * pmesh, int fan )
     Uint16 tx_bits, basetile;
     Uint8 fantype, fx;
 
+    if ( NULL == pmesh ) pmesh = &mesh;
+
     if ( fan == -1 || TILE_IS_FANOFF( pmesh->fan[fan].tx_bits ) )
     {
         return NULL;
@@ -221,6 +229,8 @@ void make_hitemap( cartman_mpd_t * pmesh )
 {
     int x, y, pixx, pixy, level, fan;
 
+    if ( NULL == pmesh ) pmesh = &mesh;
+
     if ( bmphitemap ) SDL_FreeSurface( bmphitemap );
 
     bmphitemap = cartman_CreateSurface( pmesh->info.tiles_x << 2, pmesh->info.tiles_y << 2 );
@@ -236,15 +246,16 @@ void make_hitemap( cartman_mpd_t * pmesh )
         {
             level = ( cartman_mpd_get_level( pmesh, x, y ) * 255 / pmesh->info.edgez );  // level is 0 to 255
             if ( level > 252 ) level = 252;
+
             fan = cartman_mpd_get_fan( pmesh,  pixx >> 2, pixy );
-            level = 255;
-            if ( -1 != fan )
+            if ( fan >= 0 && fan < MPD_TILE_MAX )
             {
                 if ( HAS_BITS( pmesh->fan[fan].fx, MPDFX_WALL ) ) level = 253;  // Wall
                 if ( HAS_BITS( pmesh->fan[fan].fx, MPDFX_IMPASS ) ) level = 254;   // Impass
                 if ( HAS_BITS( pmesh->fan[fan].fx, MPDFX_WALL ) &&
                      HAS_BITS( pmesh->fan[fan].fx, MPDFX_IMPASS ) ) level = 255;   // Both
             }
+
             SDL_PutPixel( bmphitemap, pixx, pixy, level );
             x += 32;
             pixx++;
@@ -262,6 +273,8 @@ void make_planmap( cartman_mpd_t * pmesh )
 
     //bmptemp = cartman_CreateSurface(64, 64);
     //if(NULL != bmptemp)  return;
+
+    if ( NULL == pmesh ) pmesh = &mesh;
 
     if ( NULL == bmphitemap ) SDL_FreeSurface( bmphitemap );
     bmphitemap = cartman_CreateSurface( pmesh->info.tiles_x * TINYXY, pmesh->info.tiles_y * TINYXY );
@@ -296,13 +309,13 @@ void make_planmap( cartman_mpd_t * pmesh )
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
-void draw_top_fan( window_t * pwin, int fan, float zoom_hrz, cartman_mpd_t * pmesh )
+void draw_top_fan( window_t * pwin, int fan, float zoom_hrz )
 {
     // ZZ> This function draws the line drawing preview of the tile type...
     //     A wireframe tile from a vertex connection window
-    Uint32 faketoreal[MPD_FAN_VERTICES_MAX];
 
-    int fantype;
+    static Uint32 faketoreal[MPD_FAN_VERTICES_MAX];
+
     int cnt, stt, end, vert;
     float color[4];
     float size;
@@ -311,19 +324,36 @@ void draw_top_fan( window_t * pwin, int fan, float zoom_hrz, cartman_mpd_t * pme
     cart_vec_t vright = { -1, 0, 0};
     cart_vec_t vpos;
 
-    if ( -1 == fan ) return;
+    // aliases
+    tile_definition_t    * pdef   = NULL;
+    cartman_mpd_tile_t   * pfan   = NULL;
+    cartman_mpd_vertex_t * vlst   = NULL;
+    tile_line_data_t     * plines = NULL;
 
-    fantype = pmesh->fan[fan].type;
+    if ( NULL == pwin->pmesh ) pwin->pmesh = &mesh;
+    vlst = pwin->pmesh->vrt;
+
+    if ( fan < 0 || fan >= MPD_TILE_MAX ) return;
+    pfan = pwin->pmesh->fan + fan;
+
+    if ( pfan->type >= MPD_FAN_TYPE_MAX )
+    {
+        return;
+    }
+    pdef = tile_dict + pfan->type;
+    plines = tile_dict_lines + pfan->type;
+
+    if ( 0 == pdef->numvertices || pdef->numvertices > MPD_FAN_VERTICES_MAX ) return;
 
     OGL_MAKE_COLOR_4( color, 32, 16, 16, 31 );
-    if ( fantype >= MPD_FAN_TYPE_MAX / 2 )
+    if ( pfan->type >= MPD_FAN_TYPE_MAX / 2 )
     {
         OGL_MAKE_COLOR_4( color, 32, 31, 16, 16 );
     }
 
-    for ( cnt = 0, vert = pmesh->fan[fan].vrtstart;
-          cnt < tile_dict[fantype].numvertices && CHAINEND != vert;
-          cnt++, vert = pmesh->vrt[vert].next )
+    for ( cnt = 0, vert = pfan->vrtstart;
+          cnt < pdef->numvertices && CHAINEND != vert;
+          cnt++, vert = vlst[vert].next )
     {
         faketoreal[cnt] = vert;
     }
@@ -335,27 +365,27 @@ void draw_top_fan( window_t * pwin, int fan, float zoom_hrz, cartman_mpd_t * pme
 
         glBegin( GL_LINES );
         {
-            for ( cnt = 0; cnt < tile_dict_lines[fantype].count; cnt++ )
+            for ( cnt = 0; cnt < plines->count; cnt++ )
             {
-                stt = faketoreal[tile_dict_lines[fantype].start[cnt]];
-                end = faketoreal[tile_dict_lines[fantype].end[cnt]];
+                stt = faketoreal[plines->start[cnt]];
+                end = faketoreal[plines->end[cnt]];
 
-                glVertex3f( pmesh->vrt[stt].x, pmesh->vrt[stt].y, pmesh->vrt[stt].z );
-                glVertex3f( pmesh->vrt[end].x, pmesh->vrt[end].y, pmesh->vrt[end].z );
+                glVertex3f( vlst[stt].x, vlst[stt].y, vlst[stt].z );
+                glVertex3f( vlst[end].x, vlst[end].y, vlst[end].z );
             }
         }
         glEnd();
     }
     glPopAttrib();
 
-    glColor4f( 1, 1, 1, 1 );
-    for ( cnt = 0; cnt < tile_dict[fantype].numvertices; cnt++ )
+    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+    for ( cnt = 0; cnt < pdef->numvertices; cnt++ )
     {
         int point_size;
 
         vert = faketoreal[cnt];
 
-        size = MAXPOINTSIZE * pmesh->vrt[vert].z / ( float ) pmesh->info.edgez;
+        size = MAXPOINTSIZE * vlst[vert].z / ( float ) pwin->pmesh->info.edgez;
         if ( size < 0.0f ) size = 0.0f;
         if ( size > MAXPOINTSIZE ) size = MAXPOINTSIZE;
 
@@ -374,9 +404,9 @@ void draw_top_fan( window_t * pwin, int fan, float zoom_hrz, cartman_mpd_t * pme
                 tx_tmp = &tx_point;
             }
 
-            vpos[kX] = pmesh->vrt[vert].x;
-            vpos[kY] = pmesh->vrt[vert].y;
-            vpos[kZ] = pmesh->vrt[vert].z;
+            vpos[kX] = vlst[vert].x;
+            vpos[kY] = vlst[vert].y;
+            vpos[kZ] = vlst[vert].z;
 
             ogl_draw_sprite_3d( tx_tmp, vpos, vup, vright, point_size, point_size );
         }
@@ -384,33 +414,47 @@ void draw_top_fan( window_t * pwin, int fan, float zoom_hrz, cartman_mpd_t * pme
 }
 
 //--------------------------------------------------------------------------------------------
-void draw_side_fan( window_t * pwin, int fan, float zoom_hrz, float zoom_vrt, cartman_mpd_t * pmesh )
+void draw_side_fan( window_t * pwin, int fan, float zoom_hrz, float zoom_vrt )
 {
     // ZZ> This function draws the line drawing preview of the tile type...
     //     A wireframe tile from a vertex connection window ( Side view )
-    Uint32 faketoreal[MPD_FAN_VERTICES_MAX];
-    int fantype;
-    int cnt, stt, end, vert;
-    float color[4];
-    float size;
-    float point_size;
+
+    static Uint32 faketoreal[MPD_FAN_VERTICES_MAX];
 
     cart_vec_t vup    = { 0, 0, 1};
     cart_vec_t vright = { 1, 0, 0};
     cart_vec_t vpos;
 
-    fantype = pmesh->fan[fan].type;
-    if ( fantype > MPD_FAN_TYPE_MAX ) return;
+    int cnt, stt, end, vert;
+    float color[4];
+    float size;
+    float point_size;
+
+    // aliases
+    tile_definition_t    * pdef   = NULL;
+    cartman_mpd_tile_t   * pfan   = NULL;
+    cartman_mpd_vertex_t * vlst   = NULL;
+    tile_line_data_t     * plines = NULL;
+
+    if ( NULL == pwin->pmesh ) pwin->pmesh = &mesh;
+    vlst = pwin->pmesh->vrt;
+
+    if ( fan < 0 || fan >= MPD_TILE_MAX ) return;
+    pfan = pwin->pmesh->fan + fan;
+
+    if ( pfan->type >= MPD_FAN_TYPE_MAX ) return;
+    pdef = tile_dict + pfan->type;
+    plines = tile_dict_lines + pfan->type;
 
     OGL_MAKE_COLOR_4( color, 32, 16, 16, 31 );
-    if ( fantype >= MPD_FAN_TYPE_MAX / 2 )
+    if ( pfan->type >= MPD_FAN_TYPE_MAX / 2 )
     {
         OGL_MAKE_COLOR_4( color, 32, 31, 16, 16 );
     }
 
-    for ( cnt = 0, vert = pmesh->fan[fan].vrtstart;
-          cnt < tile_dict[fantype].numvertices && CHAINEND != vert;
-          cnt++, vert = pmesh->vrt[vert].next )
+    for ( cnt = 0, vert = pfan->vrtstart;
+          cnt < pdef->numvertices && CHAINEND != vert;
+          cnt++, vert = vlst[vert].next )
     {
         faketoreal[cnt] = vert;
     }
@@ -422,13 +466,13 @@ void draw_side_fan( window_t * pwin, int fan, float zoom_hrz, float zoom_vrt, ca
 
         glBegin( GL_LINES );
         {
-            for ( cnt = 0; cnt < tile_dict_lines[fantype].count; cnt++ )
+            for ( cnt = 0; cnt < plines->count; cnt++ )
             {
-                stt = faketoreal[tile_dict_lines[fantype].start[cnt]];
-                end = faketoreal[tile_dict_lines[fantype].end[cnt]];
+                stt = faketoreal[plines->start[cnt]];
+                end = faketoreal[plines->end[cnt]];
 
-                glVertex3f( pmesh->vrt[stt].x, pmesh->vrt[stt].y, pmesh->vrt[stt].z );
-                glVertex3f( pmesh->vrt[end].x, pmesh->vrt[end].y, pmesh->vrt[end].z );
+                glVertex3f( vlst[stt].x, vlst[stt].y, vlst[stt].z );
+                glVertex3f( vlst[end].x, vlst[end].y, vlst[end].z );
             }
         }
         glEnd();
@@ -438,9 +482,9 @@ void draw_side_fan( window_t * pwin, int fan, float zoom_hrz, float zoom_vrt, ca
     size = 7;
     point_size = 4.0f * POINT_SIZE( size ) / zoom_hrz;
 
-    glColor4f( 1, 1, 1, 1 );
+    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
 
-    for ( cnt = 0; cnt < tile_dict[fantype].numvertices; cnt++ )
+    for ( cnt = 0; cnt < pdef->numvertices; cnt++ )
     {
         oglx_texture_t * tx_tmp = NULL;
 
@@ -455,9 +499,9 @@ void draw_side_fan( window_t * pwin, int fan, float zoom_hrz, float zoom_vrt, ca
             tx_tmp = &tx_point;
         }
 
-        vpos[kX] = pmesh->vrt[vert].x;
-        vpos[kY] = pmesh->vrt[vert].y;
-        vpos[kZ] = pmesh->vrt[vert].z;
+        vpos[kX] = vlst[vert].x;
+        vpos[kY] = vlst[vert].y;
+        vpos[kZ] = vlst[vert].z;
 
         ogl_draw_sprite_3d( tx_tmp, vpos, vup, vright, point_size, point_size );
     }
@@ -468,8 +512,17 @@ void draw_schematic( window_t * pwin, int fantype, int x, int y )
 {
     // ZZ> This function draws the line drawing preview of the tile type...
     //     The wireframe on the left side of the theSurface.
+
     int cnt, stt, end;
     float color[4];
+
+    // aliases
+    tile_line_data_t     * plines = NULL;
+    tile_definition_t    * pdef   = NULL;
+
+    if ( fantype < 0 || fantype >= MPD_FAN_TYPE_MAX ) return;
+    plines = tile_dict_lines + fantype;
+    pdef   = tile_dict + fantype;
 
     OGL_MAKE_COLOR_4( color, 32, 16, 16, 31 );
     if ( fantype >= MPD_FAN_TYPE_MAX / 2 )
@@ -484,13 +537,13 @@ void draw_schematic( window_t * pwin, int fantype, int x, int y )
 
         glBegin( GL_LINES );
         {
-            for ( cnt = 0; cnt < tile_dict_lines[fantype].count; cnt++ )
+            for ( cnt = 0; cnt < plines->count; cnt++ )
             {
-                stt = tile_dict_lines[fantype].start[cnt];
-                end = tile_dict_lines[fantype].end[cnt];
+                stt = plines->start[cnt];
+                end = plines->end[cnt];
 
-                glVertex2i(( int )( tile_dict[fantype].u[stt] * 128 ) + x, ( int )( tile_dict[fantype].v[stt] * 128 ) + y );
-                glVertex2i(( int )( tile_dict[fantype].u[end] * 128 ) + x, ( int )( tile_dict[fantype].v[end] * 128 ) + y );
+                glVertex2f( pdef->u[stt] * TILE_FSIZE + x, pdef->v[stt] * TILE_FSIZE + y );
+                glVertex2f( pdef->u[end] * TILE_FSIZE + x, pdef->v[end] * TILE_FSIZE + y );
             }
         }
         glEnd();
@@ -501,18 +554,29 @@ void draw_schematic( window_t * pwin, int fantype, int x, int y )
 //--------------------------------------------------------------------------------------------
 void draw_top_tile( float x0, float y0, int fan, oglx_texture_t * tx_tile, bool_t draw_tile, cartman_mpd_t * pmesh )
 {
-    int cnt;
-    Uint32 vert;
-    float min_s, min_t, max_s, max_t;
+    static simple_vertex_t loc_vrt[4];
 
     const float dst = 1.0f / 64.0f;
 
-    simple_vertex_t vrt[4];
+    int cnt;
+    Uint32 ivrt;
+    float min_s, min_t, max_s, max_t;
 
-    if ( -1 == fan || TILE_IS_FANOFF( fan ) ) return;
+    // aliases
+    cartman_mpd_tile_t   * pfan   = NULL;
+    cartman_mpd_vertex_t * vlst   = NULL;
 
+    if ( NULL == pmesh ) pmesh = &mesh;
+    vlst = pmesh->vrt;
+
+    if ( fan < 0 || fan >= MPD_TILE_MAX ) return;
+    pfan = pmesh->fan + fan;
+
+    // don't draw FANOFF
+    if ( TILE_IS_FANOFF( pfan->tx_bits ) ) return;
+
+    // don't draw if there is no texture
     if ( NULL == tx_tile ) return;
-
     oglx_texture_Bind( tx_tile );
 
     min_s = dst;
@@ -522,51 +586,51 @@ void draw_top_tile( float x0, float y0, int fan, oglx_texture_t * tx_tile, bool_
     max_t = -dst + ( float ) oglx_texture_GetImageHeight( tx_tile )  / ( float ) oglx_texture_GetTextureHeight( tx_tile );
 
     // set the texture coordinates
-    vrt[0].s = min_s;
-    vrt[0].t = min_t;
+    loc_vrt[0].s = min_s;
+    loc_vrt[0].t = min_t;
 
-    vrt[1].s = max_s;
-    vrt[1].t = min_t;
+    loc_vrt[1].s = max_s;
+    loc_vrt[1].t = min_t;
 
-    vrt[2].s = max_s;
-    vrt[2].t = max_t;
+    loc_vrt[2].s = max_s;
+    loc_vrt[2].t = max_t;
 
-    vrt[3].s = min_s;
-    vrt[3].t = max_t;
+    loc_vrt[3].s = min_s;
+    loc_vrt[3].t = max_t;
 
     // set the tile corners
     if ( draw_tile )
     {
         // draw the tile on a 31x31 grix, using the values of x0,y0
 
-        vert = pmesh->fan[fan].vrtstart;
+        ivrt = pfan->vrtstart;
 
         // Top Left
-        vrt[0].x = x0;
-        vrt[0].y = y0;
-        vrt[0].z = 0;
-        vrt[0].l = pmesh->vrt[vert].a / 255.0f;
-        vert = pmesh->vrt[vert].next;
+        loc_vrt[0].x = x0;
+        loc_vrt[0].y = y0;
+        loc_vrt[0].z = 0;
+        loc_vrt[0].l = vlst[ivrt].a / 255.0f;
+        ivrt = vlst[ivrt].next;
 
         // Top Right
-        vrt[1].x = x0 + TILE_SIZE;
-        vrt[1].y = y0;
-        vrt[1].z = 0;
-        vrt[1].l = pmesh->vrt[vert].a / 255.0f;
-        vert = pmesh->vrt[vert].next;
+        loc_vrt[1].x = x0 + TILE_FSIZE;
+        loc_vrt[1].y = y0;
+        loc_vrt[1].z = 0;
+        loc_vrt[1].l = vlst[ivrt].a / 255.0f;
+        ivrt = vlst[ivrt].next;
 
         // Bottom Right
-        vrt[2].x = x0 + TILE_SIZE;
-        vrt[2].y = y0 + TILE_SIZE;
-        vrt[2].z = 0;
-        vrt[2].l = pmesh->vrt[vert].a / 255.0f;
-        vert = pmesh->vrt[vert].next;
+        loc_vrt[2].x = x0 + TILE_FSIZE;
+        loc_vrt[2].y = y0 + TILE_FSIZE;
+        loc_vrt[2].z = 0;
+        loc_vrt[2].l = vlst[ivrt].a / 255.0f;
+        ivrt = vlst[ivrt].next;
 
         // Bottom Left
-        vrt[3].x = x0;
-        vrt[3].y = y0 + TILE_SIZE;
-        vrt[3].z = 0;
-        vrt[3].l = pmesh->vrt[vert].a / 255.0f;
+        loc_vrt[3].x = x0;
+        loc_vrt[3].y = y0 + TILE_FSIZE;
+        loc_vrt[3].z = 0;
+        loc_vrt[3].l = vlst[ivrt].a / 255.0f;
     }
     else
     {
@@ -574,15 +638,15 @@ void draw_top_tile( float x0, float y0, int fan, oglx_texture_t * tx_tile, bool_
 
         int cnt;
 
-        vert = pmesh->fan[fan].vrtstart;
+        ivrt = pfan->vrtstart;
         for ( cnt = 0;
-              cnt < 4 && CHAINEND != vert;
-              cnt++, vert = pmesh->vrt[vert].next )
+              cnt < 4 && CHAINEND != ivrt;
+              cnt++, ivrt = vlst[ivrt].next )
         {
-            vrt[cnt].x = pmesh->vrt[vert].x;
-            vrt[cnt].y = pmesh->vrt[vert].y;
-            vrt[cnt].z = pmesh->vrt[vert].z;
-            vrt[cnt].l = pmesh->vrt[vert].a / 255.0f;
+            loc_vrt[cnt].x = vlst[ivrt].x;
+            loc_vrt[cnt].y = vlst[ivrt].y;
+            loc_vrt[cnt].z = vlst[ivrt].z;
+            loc_vrt[cnt].l = vlst[ivrt].a / 255.0f;
         }
     }
 
@@ -594,9 +658,9 @@ void draw_top_tile( float x0, float y0, int fan, oglx_texture_t * tx_tile, bool_
 
         for ( cnt = 0; cnt < 4; cnt++ )
         {
-            glColor3f( vrt[cnt].l,  vrt[cnt].l,  vrt[cnt].l );
-            glTexCoord2f( vrt[cnt].s, vrt[cnt].t );
-            glVertex3f( vrt[cnt].x, vrt[cnt].y, vrt[cnt].z );
+            glColor3f( loc_vrt[cnt].l,  loc_vrt[cnt].l,  loc_vrt[cnt].l );
+            glTexCoord2f( loc_vrt[cnt].s, loc_vrt[cnt].t );
+            glVertex3f( loc_vrt[cnt].x, loc_vrt[cnt].y, loc_vrt[cnt].z );
         };
     }
     glEnd();
@@ -605,8 +669,8 @@ void draw_top_tile( float x0, float y0, int fan, oglx_texture_t * tx_tile, bool_
 //--------------------------------------------------------------------------------------------
 void draw_tile_fx( float x, float y, Uint8 fx, float scale )
 {
-    const int ioff_0 = TILE_SIZE >> 3;
-    const int ioff_1 = TILE_SIZE >> 4;
+    const int ioff_0 = TILE_ISIZE >> 3;
+    const int ioff_1 = TILE_ISIZE >> 4;
 
     const float foff_0 = ioff_0 * scale;
     const float foff_1 = ioff_1 * scale;
@@ -747,7 +811,7 @@ void ogl_draw_sprite_2d( oglx_texture_t * img, float x, float y, float width, fl
     // Draw the image
     oglx_texture_Bind( img );
 
-    glColor4f( 1, 1, 1, 1 );
+    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
 
     glBegin( GL_TRIANGLE_STRIP );
     {
@@ -797,7 +861,7 @@ void ogl_draw_sprite_3d( oglx_texture_t * img, cart_vec_t pos, cart_vec_t vup, c
     // Draw the image
     oglx_texture_Bind( img );
 
-    glColor4f( 1, 1, 1, 1 );
+    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
 
     bboard[0][kX] = pos[kX] - w / 2 * vright[kX] + h / 2 * vup[kX];
     bboard[0][kY] = pos[kY] - w / 2 * vright[kY] + h / 2 * vup[kY];
@@ -985,8 +1049,8 @@ void cartman_begin_ortho_camera_hrz( window_t * pwin, camera_t * pcam, float zoo
     float aspect;
     float left, right, bottom, top, front, back;
 
-    w = ( float )DEFAULT_RESOLUTION * ( float )TILE_SIZE * (( float )pwin->surfacex / ( float )DEFAULT_WINDOW_W ) / zoom_x;
-    h = ( float )DEFAULT_RESOLUTION * ( float )TILE_SIZE * (( float )pwin->surfacey / ( float )DEFAULT_WINDOW_H ) / zoom_y;
+    w = ( float )DEFAULT_RESOLUTION * TILE_FSIZE * (( float )pwin->surfacex / ( float )DEFAULT_WINDOW_W ) / zoom_x;
+    h = ( float )DEFAULT_RESOLUTION * TILE_FSIZE * (( float )pwin->surfacey / ( float )DEFAULT_WINDOW_H ) / zoom_y;
     d = DEFAULT_Z_SIZE;
 
     pcam->w = w;
@@ -1032,9 +1096,9 @@ void cartman_begin_ortho_camera_vrt( window_t * pwin, camera_t * pcam, float zoo
     float aspect;
     float left, right, bottom, top, back, front;
 
-    w = pwin->surfacex * ( float )DEFAULT_RESOLUTION * ( float )TILE_SIZE / ( float )DEFAULT_WINDOW_W / zoom_x;
+    w = pwin->surfacex * ( float )DEFAULT_RESOLUTION * TILE_FSIZE / ( float )DEFAULT_WINDOW_W / zoom_x;
     h = w;
-    d = pwin->surfacey * ( float )DEFAULT_RESOLUTION * ( float )TILE_SIZE / ( float )DEFAULT_WINDOW_H / zoom_z;
+    d = pwin->surfacey * ( float )DEFAULT_RESOLUTION * TILE_FSIZE / ( float )DEFAULT_WINDOW_H / zoom_z;
 
     pcam->w = w;
     pcam->h = h;

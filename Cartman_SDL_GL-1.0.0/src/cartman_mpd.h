@@ -67,8 +67,12 @@ typedef struct s_cartman_mpd_tile cartman_mpd_tile_t;
 #define BIGXY   (2 * SMALLXY)   // Big tiles
 
 #define FIXNUM    4 // 4.129           // 4.150
-#define TILE_SIZE 128
-#define FOURNUM   ( (float)TILE_SIZE / (float)SMALLXY )          // Magic number
+
+#define TILE_BITS   7
+#define TILE_ISIZE (1<<TILE_BITS)
+#define TILE_MASK  (TILE_ISIZE - 1)
+#define TILE_FSIZE ((float)TILE_ISIZE)
+#define FOURNUM   ( TILE_FSIZE / (float)SMALLXY )          // Magic number
 
 #define DEFAULT_TILE 62
 
@@ -206,8 +210,8 @@ extern tile_line_data_t tile_dict_lines[MPD_FAN_TYPE_MAX];
 //--------------------------------------------------------------------------------------------
 
 // loading/saving
-cartman_mpd_t * cartman_mpd_load( const char *modname, cartman_mpd_t * pmesh );
-cartman_mpd_t * cartman_mpd_save( const char *modname, cartman_mpd_t * pmesh );
+cartman_mpd_t * cartman_mpd_load_vfs( /* const char *modname, */ cartman_mpd_t * pmesh );
+cartman_mpd_t * cartman_mpd_save_vfs( /*const char *modname,*/ cartman_mpd_t * pmesh );
 cartman_mpd_t * cartman_mpd_create( cartman_mpd_t * pmesh, int tiles_x, int tiles_y );
 
 void cartman_mpd_make_twist();
@@ -221,7 +225,7 @@ int cartman_mpd_find_free_vertex( cartman_mpd_t * pmesh );
 bool_t cartman_mpd_link_vertex( cartman_mpd_t * pmesh, int iparent, int child );
 
 Uint8 cartman_mpd_get_fan_twist( cartman_mpd_t * pmesh, Uint32 fan );
-int cartman_mpd_get_level( cartman_mpd_t * pmesh, int x, int y );
+float cartman_mpd_get_level( cartman_mpd_t * pmesh, float x, float y );
 int cartman_mpd_get_vertex( cartman_mpd_t * pmesh, int x, int y, int num );
 int cartman_mpd_get_fan( cartman_mpd_t * pmesh, int x, int y );
 

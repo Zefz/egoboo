@@ -46,23 +46,33 @@ typedef struct s_window window_t;
 #define DEFAULT_WINDOW_H 200
 #define DEFAULT_RESOLUTION 8
 
-#define SCREEN_TO_REAL(VAL,CAM,ZOOM) ( VAL * (float)DEFAULT_RESOLUTION * (float)TILE_SIZE  / (float)DEFAULT_WINDOW_W / ZOOM + CAM );
-#define REAL_TO_SCREEN(VAL,CAM,ZOOM) ( ( VAL - CAM ) / (float)DEFAULT_RESOLUTION / (float)TILE_SIZE * (float)DEFAULT_WINDOW_W * ZOOM  );
+#define SCREEN_TO_REAL(VAL,CAM,ZOOM) ( VAL * (float)DEFAULT_RESOLUTION * TILE_FSIZE  / (float)DEFAULT_WINDOW_W / ZOOM + CAM );
+#define REAL_TO_SCREEN(VAL,CAM,ZOOM) ( ( VAL - CAM ) / (float)DEFAULT_RESOLUTION / TILE_FSIZE * (float)DEFAULT_WINDOW_W * ZOOM  );
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 struct s_window
 {
-    oglx_texture_t    tex;      // Window images
     Uint8             on;       // Draw it?
-    int               x;        // Window position
-    int               y;        //
-    int               borderx;  // Window border size
-    int               bordery;  //
-    int               surfacex; // Window surface size
-    int               surfacey; //
-    Uint16            mode;     // Window display mode
-    int               id;
+
+    oglx_texture_t    tex;      // Window images
+
+    // Window position
+    int               x;
+    int               y;
+
+    // Window border size
+    int               borderx;
+    int               bordery;
+
+    // Window surface size
+    int               surfacex;
+    int               surfacey;
+
+    // window data
+    int               id;       // unique window id
+    Uint16            mode;     // display mode bits
+    cartman_mpd_t   * pmesh;    // which mesh
 };
 
 //--------------------------------------------------------------------------------------------
@@ -75,8 +85,6 @@ struct s_ui_state
     bool_t clicked;                //
     bool_t pending_click;
 
-    SDLX_screen_info_t scr;
-
     bool_t GrabMouse;
     bool_t HideMouse;
 };
@@ -86,7 +94,6 @@ struct s_ui_state
 
 extern window_t window_lst[MAXWIN];
 extern ui_state_t ui;
-extern struct s_Font * gFont_ptr;
 extern SDL_Surface * bmpcursor;         // Cursor image
 
 //--------------------------------------------------------------------------------------------
@@ -95,5 +102,5 @@ extern SDL_Surface * bmpcursor;         // Cursor image
 void do_cursor();
 void draw_slider( int tlx, int tly, int brx, int bry, int* pvalue, int minvalue, int maxvalue );
 void show_name( const char *newloadname, SDL_Color fnt_color );
-void load_window( window_t * pwin, int id, char *loadname, int x, int y, int bx, int by, int sx, int sy, Uint16 mode );
+void load_window( window_t * pwin, int id, char *loadname, int x, int y, int bx, int by, int sx, int sy, Uint16 mode, cartman_mpd_t * pmesh );
 window_t * find_window( int x, int y );

@@ -53,10 +53,10 @@ void weld_3( struct s_cartman_mpd * pmesh, int x, int y );
 void weld_cnt( struct s_cartman_mpd * pmesh, int x, int y, int cnt, Uint32 fan );
 
 // selection functions
-void weld_select( struct s_cartman_mpd * pmesh );
+void mesh_select_weld( struct s_cartman_mpd * pmesh );
 void move_select( struct s_cartman_mpd * pmesh, float x, float y, float z );
-void set_select_no_bound_z( struct s_cartman_mpd * pmesh, float z );
-void jitter_select( struct s_cartman_mpd * pmesh );
+void mesh_select_set_z_no_bound( struct s_cartman_mpd * pmesh, float z );
+void mesh_select_jitter( struct s_cartman_mpd * pmesh );
 void select_verts_connected( struct s_cartman_mpd * pmesh );
 
 // vertex selection functions
@@ -64,7 +64,7 @@ void select_clear();
 int  select_count();
 void select_add( int vert );
 void select_remove( int vert );
-int  select_has_vert( int vert );
+bool_t select_has_vert( int vert );
 void select_add_rect( struct s_cartman_mpd * pmesh, float tlx, float tly, float brx, float bry, int mode );
 void select_remove_rect( struct s_cartman_mpd * pmesh, float tlx, float tly, float brx, float bry, int mode );
 

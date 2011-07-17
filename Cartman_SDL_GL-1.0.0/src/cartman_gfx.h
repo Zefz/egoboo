@@ -28,6 +28,7 @@
 
 struct s_window;
 struct s_cartman_mpd;
+struct s_Font;
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
@@ -134,6 +135,8 @@ extern int GFX_HEIGHT;
 extern const SDL_Color cart_white;
 extern const SDL_Color cart_black;
 
+extern struct s_Font * gfx_font_ptr;
+
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
@@ -145,8 +148,8 @@ void make_hitemap( struct s_cartman_mpd * pmesh );
 void make_planmap( struct s_cartman_mpd * pmesh );
 
 // tile rendering routines
-void draw_top_fan( struct s_window * pwin, int fan, float zoom_hrz, struct s_cartman_mpd * pmesh );
-void draw_side_fan( struct s_window * pwin, int fan, float zoom_hrz, float zoom_vrt, struct s_cartman_mpd * pmesh );
+void draw_top_fan( struct s_window * pwin, int fan, float zoom_hrz );
+void draw_side_fan( struct s_window * pwin, int fan, float zoom_hrz, float zoom_vrt );
 void draw_schematic( struct s_window * pwin, int fantype, int x, int y );
 void draw_top_tile( float x0, float y0, int fan, oglx_texture_t * tx_tile, bool_t draw_tile, struct s_cartman_mpd * pmesh );
 void draw_tile_fx( float x, float y, Uint8 fx, float scale );

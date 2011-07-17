@@ -52,7 +52,6 @@ float           indextoenvirox[MD2LIGHTINDICES];                    // Environme
 float           lighttoenviroy[256];                                // Environment map
 Uint32           lighttospek[MAXSPEKLEVEL][256];                     //
 
-
 float kMd2Normals[][3] =
 {
 #include "id_normals.inc"
@@ -73,7 +72,6 @@ GLenum shading      = GL_SMOOTH;
 float sinlut[MAXLIGHTROTATION];
 float coslut[MAXLIGHTROTATION];
 
-
 bool_t                  fogallowed  = btrue;        //
 bool_t                  fogon  = bfalse;            // Do ground fog?
 float                   fogbottom  = 0.0f;          //
@@ -83,7 +81,6 @@ Uint8                   fogred  = 255;             //  Fog collour
 Uint8                   foggrn  = 255;             //
 Uint8                   fogblu  = 255;             //
 Uint8                   fogaffectswater;
-
 
 float           hillslide      =  1.00f;           //
 // Friction
@@ -124,7 +121,6 @@ float   waterlayerdisty[MAXWATERLAYER];         //
 Uint32  waterspek[256];             // Specular highlights
 float   foregroundrepeat  = 1;     //
 float   backgroundrepeat  = 1;     //
-
 
 void make_lighttable( float lx, float ly, float lz, float ambi );
 void make_lighttospek( void );
@@ -448,7 +444,6 @@ float light_for_normal( int rotation, int normal, float lx, float ly, float lz, 
 //    }
 //}
 //
-
 
 ////---------------------------------------------------------------------------------------------
 //float get_level( float x, float y, bool_t waterwalk )
@@ -1059,7 +1054,6 @@ void read_wawalite( char *modname )
     make_lighttable( lx, ly, lz, la );
     make_lighttospek();
     make_water();
-
 
 }
 
@@ -1746,14 +1740,12 @@ void render_water()
     }
 }
 
-
 //--------------------------------------------------------------------------------------------
 void draw_scene_sadreflection()
 {
     // ZZ> This function draws 3D objects
     Uint16 cnt, tnc;
     Uint8 trans;
-
 
     // ZB> Clear the z-buffer
     glClear( GL_DEPTH_BUFFER_BIT );
@@ -2173,7 +2165,6 @@ Uint32 mesh_get_tile( float pos_x, float pos_y )
     return tile;
 }
 
-
 //--------------------------------------------------------------------------------------------
 void draw_scene()
 {
@@ -2410,7 +2401,6 @@ void make_lighttospek( void )
         }
     }
 }
-
 
 //--------------------------------------------------------------------------------------------
 void make_water()
