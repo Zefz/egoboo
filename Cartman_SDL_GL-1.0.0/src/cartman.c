@@ -695,7 +695,7 @@ void render_window( window_t * pwin )
         glEnable( GL_SCISSOR_TEST );
         glScissor( pwin->x, sdl_scr.y - ( pwin->y + pwin->surfacey ), pwin->surfacex, pwin->surfacey );
 
-        make_onscreen();
+        make_onscreen( pwin->pmesh );
 
         if ( HAS_BITS( pwin->mode, WINMODE_TILE ) )
         {
