@@ -195,7 +195,7 @@
 				RelativePath=".\cartman_mpd.h">
 			</File>
 			<File
-				RelativePath=".\res\resource1.h">
+				RelativePath=".\res\resource1_vs9.h">
 			</File>
 		</Filter>
 		<Filter
@@ -221,7 +221,7 @@
 				RelativePath="..\data\bestpal.pcx">
 			</File>
 			<File
-				RelativePath=".\res\Cartman_SDL_GL.rc">
+				RelativePath=".\res\Cartman_SDL_GL_vs9.rc">
 			</File>
 			<File
 				RelativePath="..\data\damage.pcx">

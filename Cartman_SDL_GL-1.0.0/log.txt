@@ -1,5 +1,0 @@
-INFO: Initializing SDL version 1.2.13... Success!
-INFO: INFO: Initializing SDL video... Success!
-INFO: Initializing SDL timer services... Success!
-INFO: Intializing SDL Event Threading... Succeess!
-INFO: Initializing the SDL_ttf font handler... Success!
