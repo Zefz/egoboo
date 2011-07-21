@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="Cartman_SDL_GL"
+	Name="cartman"
 	ProjectGUID="{87DFC5F5-A78E-4BE2-AEB7-AFB8DA3DBD63}"
 	Keyword="Win32Proj">
 	<Platforms>
@@ -221,7 +221,7 @@
 				RelativePath="..\data\bestpal.pcx">
 			</File>
 			<File
-				RelativePath=".\res\Cartman_SDL_GL_vs7.rc">
+				RelativePath=".\res\cartman_vs7.rc">
 			</File>
 			<File
 				RelativePath="..\data\damage.pcx">
