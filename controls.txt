@@ -51,7 +51,7 @@ Right Hand Use		 : MOS_RIGHT
 Right Hand Get/Drop	 : MOS_LEFT_AND_MIDDLE
 Right Hand Inventory : KEY_INSERT
 Sneak                 : MOS_FOURTH
-Camera Control      : MOS_LEFT_AND_RIGHT
+Camera Control Mode      : MOS_LEFT_AND_RIGHT
 
 
 PLAYER 3
