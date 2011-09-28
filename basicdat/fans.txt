@@ -32,7 +32,7 @@ Number of Fan Types: 26
         Ref: 3    U: 1.00    V: 0.00
         Ref: 15   U: 1.00    V: 1.00
         Ref: 12   U: 0.00    V: 1.00
-        Ref: 5    U: 0.50    V: 0.50
+        Ref: 48   U: 0.50    V: 0.50
       Commands: 1
         Command Size: 6
           Vrt: 4
@@ -48,11 +48,11 @@ Number of Fan Types: 26
         Ref: 3    U: 1.00    V: 0.00
         Ref: 15   U: 1.00    V: 1.00
         Ref: 12   U: 0.00    V: 1.00
-        Ref: 2    U: 0.50    V: 0.00
-        Ref: 11   U: 1.00    V: 0.50
-        Ref: 13   U: 0.50    V: 1.00
-        Ref: 4    U: 0.00    V: 0.50
-        Ref: 5    U: 0.50    V: 0.50
+        Ref: 16   U: 0.50    V: 0.00
+        Ref: 35   U: 1.00    V: 0.50
+        Ref: 28   U: 0.50    V: 1.00
+        Ref: 32   U: 0.00    V: 0.50
+        Ref: 48   U: 0.50    V: 0.50
       Commands: 1
         Command Size: 10
           Vrt: 8
@@ -586,16 +586,16 @@ Number of Fan Types: 26
         Ref: 3    U: 1.00    V: 0.00
         Ref: 15   U: 1.00    V: 1.00
         Ref: 12   U: 0.00    V: 1.00
-        Ref: 1    U: 0.16    V: 0.00
-        Ref: 2    U: 0.33    V: 0.00
-        Ref: 2    U: 0.50    V: 0.00
-        Ref: 3    U: 0.66    V: 0.00
-        Ref: 3    U: 0.83    V: 0.00
+        Ref: 0    U: 0.16    V: 0.00
+        Ref: 1    U: 0.33    V: 0.00
+        Ref: 1    U: 0.50    V: 0.00
+        Ref: 2    U: 0.66    V: 0.00
+        Ref: 2    U: 0.83    V: 0.00
         Ref: 14   U: 0.83    V: 1.00
         Ref: 14   U: 0.66    V: 1.00
-        Ref: 13   U: 0.50    V: 1.00
-        Ref: 13   U: 0.33    V: 1.00
-        Ref: 12   U: 0.16    V: 1.00
+        Ref: 13    U: 0.50    V: 1.00
+        Ref: 13    U: 0.33    V: 1.00
+        Ref: 12    U: 0.16    V: 1.00
       Commands: 3
         Command Size: 6
           Vrt: 13
