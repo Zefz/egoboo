@@ -1,4 +1,4 @@
-Version 2.8.2b BETA (??.06.2011)
+Version 2.9.0 BETA (??.??.2011)
 - New Feature: Implemented A* pathfinding for much smarter AI movements. This means monsters and helpers
   can now move around corners, navigate mazes, etc.
 - New Feature: Added a new more user friendly inventory system.
@@ -11,6 +11,7 @@ Version 2.8.2b BETA (??.06.2011)
 - Bugfix: Fixed lamps not working.
 - Bugfix: Fixed some tiles not always rendering on the bottom of the camera view.
 - Bugfix: Various other issues resolved.
+- Bugfix: Improved game stability.
 
 
 Version 2.8.2 BETA (04.03.2011)

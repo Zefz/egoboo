@@ -214,7 +214,7 @@ IfOrdered
 IfBumped
   // Can they open the chest?
   SetTargetToWhoeverBumped
-  IfTargetCanOpenStuff
+  IfTargetIsAPlayer
     IfFacingTarget
       // Is it closed?
       tmpargument = 0
