@@ -1,15 +1,15 @@
 IfSpawned
   tmpargument = 50
-  SetTime  
-  
+  SetTime
+
   tmpargument = 0
   PlaySoundLooped
-    
+
   tmpargument = ACTIONMJ
   DoAction
   KeepAction
-  
-  //So that orders are properly issued
+
+  // So that orders are properly issued
   JoinNullTeam
 
 IfBumped

@@ -1,7 +1,7 @@
 IfHealed
   tmpargument = rand & 1
   PlaySound
-  
+
 IfBumped
   SetTargetToWhoeverBumped
   tmpargument = [CARR]
@@ -25,10 +25,12 @@ IfBumped
     // Make a bump sound, because there's only one car
     tmpargument = 2
     PlaySound
-    
+
 tmpx = selfx
 tmpy = selfy
 ClearWaypoints
 AddWaypoint
 
-End					// Finished with this character
+// Finished with this character
+End
+

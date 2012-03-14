@@ -11,7 +11,7 @@ IfTimeOut
 IfAttacked
   GetContent
   tmpargument = 0
-  //GetState
+  // GetState
   BeatModule
   EnableExport
   // Fix the end text
@@ -20,4 +20,6 @@ IfAttacked
   AddEndMessage
   EndModule
 
-End				// Finished with this character
+// Finished with this character
+End
+

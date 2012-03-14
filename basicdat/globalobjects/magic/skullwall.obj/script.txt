@@ -9,16 +9,16 @@ IfSpawned
     // It's a falling skull
     MakeNameUnknown
     NotAnItem
-    
-    //Make it damage whatever it hits
-    //tmpargument = 0
-    //tmpdistance = SPAWNLAST
-    //SpawnAttachedParticle
-    
-    //Life time
+
+    // Make it damage whatever it hits
+    // tmpargument = 0
+    // tmpdistance = SPAWNLAST
+    // SpawnAttachedParticle
+
+    // Life time
     tmpargument = selfstate < 4 + 1000
     SetTime
-    
+
     // Spawn another skull?
     tmpargument = 1
     IfStateIsNot
@@ -29,10 +29,10 @@ IfSpawned
       Compass
       tmpdistance = selfz + 100
       SpawnCharacterXYZ
-        tmpargument = selfstate - 1	// Child will spawn more skulls
+        tmpargument = selfstate - 1    // Child will spawn more skulls
         SetChildState
-    
-    //Move it a little further out so it doesnt hit the caster
+
+    // Move it a little further out so it doesnt hit the caster
     tmpx = selfx
     tmpy = selfy
     tmpdistance = 150
@@ -46,9 +46,9 @@ IfSpawned
     tmpturn = selfturn + 8000
     Compass
     tmpdistance = selfz
-    tmpturn = selfturn - 16000        //also, face outwards!
+    tmpturn = selfturn - 16000        // also, face outwards!
     TeleportTarget
-    
+
 IfChanged
   // It's a spell in hand
   tmpargument = 0
@@ -57,18 +57,19 @@ IfChanged
 
 // Skull AI
 tmpargument = 0
+
 IfStateIsNot
-  
+
   IfTimeOut
     tmpargument = ACTIONKA
     DoAction
     tmpargument = 300
     SetTime
-    
+
   IfHitGround
     tmpargument = 1
     PlaySound
-    
+
   IfOrdered
     tmpx = selforder
     tmpy = [ESKU]
@@ -77,7 +78,6 @@ IfStateIsNot
       DoAction
       tmpargument = 300
       SetTime
-  
 
 // Spell AI
 IfStateIs0
@@ -91,9 +91,9 @@ IfStateIs0
         IfNameIsKnown
           tmpargument = 2
         SendMessageNear
-        
+
   // Allow it to be used
-  IfUsed    
+  IfUsed
     SetTargetToWhoeverIsHolding
     tmpargument = [WMAG]
     IfTargetHasSkillID
@@ -122,7 +122,7 @@ IfStateIs0
         CorrectActionForHand
         TargetDoAction
 
-        //Dispel any existing wall first
+        // Dispel any existing wall first
         tmpargument = [ESKU]
         tmpdistance = [ESKU]
         OrderSpecialID
@@ -138,7 +138,7 @@ IfStateIs0
         tmpturn = targetturn + 16000
         SpawnCharacterXYZ
           // Set starting state
-          tmpargument = selfcontent > 7 + 2	// Child will spawn more skulls
+          tmpargument = selfcontent > 7 + 2    // Child will spawn more skulls
           SetChildState
 
           // Identify stuff

@@ -1,4 +1,4 @@
-//Magic sparks
+// Magic sparks
 IfTimeOut
   tmpargument = 2
   tmpx = selfx
@@ -16,11 +16,14 @@ IfSpawned
   DoAction
   KeepAction
   MakeCrushValid
+
 IfDropped
   KeepAction
+
 IfHitGround
   tmpargument = 0
   PlaySound
+
 IfGrabbed
   SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer

@@ -1,23 +1,23 @@
-//The diffrent States
-//State 0: Talk
-//State 1: Remain Silent
-//State 2: Walk around
-//State 3: Wait before walking again
-//State 4: Sleeping
-//State 5: Looking for trouble
-//State 6: In combat
+// The diffrent States
+// State 0: Talk
+// State 1: Remain Silent
+// State 2: Walk around
+// State 3: Wait before walking again
+// State 4: Sleeping
+// State 5: Looking for trouble
+// State 6: In combat
 
 //------------------------------------------------------
-//Handle behaviour
+// Handle behaviour
 IfSpawned
   tmpargument = 0
   IfContentIs
-    tmpargument = 2	//Character is walking around
+    tmpargument = 2    // Character is walking around
     SetState
 
   tmpargument = 2
   IfContentIs
-    tmpargument = 4	//Character is sleeping
+    tmpargument = 4    // Character is sleeping
     SetState
 
 IfBumped
@@ -25,7 +25,7 @@ IfBumped
   IfTargetIsAPlayer
     IfStateIs0
       tmpargument = rand % 3
-      SendMessageNear	//Say something random
+      SendMessageNear    // Say something random
       PlaySound
       tmpargument = 1
       SetState
@@ -34,7 +34,7 @@ IfBumped
 
     IfStateIs2
       tmpargument = rand & 3
-      SendMessageNear	//Say something random
+      SendMessageNear    // Say something random
       PlaySound
       tmpargument = 3
       SetState
@@ -43,42 +43,43 @@ IfBumped
       tmpargument = 2
       SetState
       tmpargument = 5
-      SendMessageNear	//Tell the players the pirate woke up
+      SendMessageNear    // Tell the players the pirate woke up
       tmpargument = 0
       PlaySound
       tmpargument = 40
       SetTime
 
-IfTimeOut		//Actions when timeout
-			      // Change to combat mode
-  //PIRATE CAN TALK AGAIN
+// Actions when timeout
+IfTimeOut
+                  // Change to combat mode
+  // PIRATE CAN TALK AGAIN
   IfStateIs1
     tmpargument = 0
     SetState
 
-  //WANDER AROUND
+  // WANDER AROUND
   IfStateIs2
     tmpx = rand & 511 + selfx - 256
     tmpy = rand & 511 + selfy - 256
     ClearWaypoints
     AddWaypoint
-    tmpargument = 3	//Wait before walking around again
+    tmpargument = 3    // Wait before walking around again
     SetState
     tmpargument = 200
     SetTime
 
-  //WANDER AROUND
+  // WANDER AROUND
   IfStateIs3
     tmpx = rand & 511 + selfx - 256
     tmpy = rand & 511 + selfy - 256
     ClearWaypoints
     AddWaypoint
-    tmpargument = 2	//Wait before walking around again
+    tmpargument = 2    // Wait before walking around again
     SetState
     tmpargument = 200
     SetTime
 
-  //SLEEPING
+  // SLEEPING
   IfStateIs4
     tmpdistance = SPAWNORIGIN
     tmpargument = 2
@@ -92,18 +93,18 @@ IfTimeOut		//Actions when timeout
     tmpargument = 300
     SetTime
 
-    //LOOKING FOR TROUBLE
+    // LOOKING FOR TROUBLE
   IfStateIs5
     SetTargetToWideEnemy
-      tmpargument = 6	    //Enemy found, enter combat
+      tmpargument = 6        // Enemy found, enter combat
       SetState
 
-        //Draw weapon
-      IfUnarmed	                      //Armed?
-        tmpargument = LATCHPACKRIGHT  //Nop, draw weapon
+        // Draw weapon
+      IfUnarmed                          // Armed?
+        tmpargument = LATCHPACKRIGHT  // Nop, draw weapon
         PressLatchButton
     Else
-      tmpx = rand & 511 + selfx - 256	//No enemies, wander around
+      tmpx = rand & 511 + selfx - 256    // No enemies, wander around
       tmpy = rand & 511 + selfy - 256
       Compass
       ClearWaypoints
@@ -111,13 +112,13 @@ IfTimeOut		//Actions when timeout
       tmpargument = rand % 60 + 20
       SetTime
       IfHoldingMeleeWeapon
-        tmpargument = LATCHPACKRIGHT  //Seathe weapon
+        tmpargument = LATCHPACKRIGHT  // Seathe weapon
         PressLatchButton
 
-  //IN COMBAT
+  // IN COMBAT
   IfStateIs6
     IfUnarmed
-      tmpargument = LATCHPACKRIGHT	//Draw weapon
+      tmpargument = LATCHPACKRIGHT    // Draw weapon
       PressLatchButton
     tmpargument = 40
     SetTime
@@ -140,7 +141,7 @@ IfTimeOut		//Actions when timeout
       tmpargument = 5
       SetState
 
-//Jumping
+// Jumping
 IfBumped
   SetTargetToWhoeverBumped
   tmpargument = [CHES]
@@ -152,7 +153,7 @@ IfBumped
       IfTargetIsAlive
         tmpargument = LATCHRIGHT
         PressLatchButton
-  Else					//Dont flock
+  Else                    // Dont flock
     tmpx = rand & 511 + targetx - 256
     tmpy = rand & 511 + targety - 256
     tmpturn = selfturn
@@ -163,22 +164,22 @@ IfBumped
     tmpargument = rand % 40 + 20
     SetTime
 
-//What to do if killed
+// What to do if killed
 IfKilled
   tmpargument = TEAME
   TargetJoinTeam
-  
-  //Play a sound when killed
+
+  // Play a sound when killed
   tmpargument = 6
-  PlaySound			
-  
-  //Drop yer booty!
+  PlaySound
+
+  // Drop yer booty!
   tmpargument = selfmoney
-  DropMoney			
+  DropMoney
   DropKeys
   DropItems
-  
-  //Make body
+
+  // Make body
   tmpargument = 45
   SetBumpHeight
 
@@ -201,4 +202,6 @@ IfCalledForHelp
     tmpargument = 5
     SetState
 
-End	//The end
+// The end
+End
+

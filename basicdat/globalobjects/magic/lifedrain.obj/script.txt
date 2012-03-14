@@ -24,7 +24,7 @@ IfUsed
   SetTargetToWhoeverIsHolding
     tmpx = targetmana
     tmpy = 255
-    IfXIsMoreThanY                  //Need 1 mana to cast
+    IfXIsMoreThanY                  // Need 1 mana to cast
 
       // Give experience...
       IfTargetIsAPlayer
@@ -36,16 +36,16 @@ IfUsed
           tmpargument = 30
           tmpdistance = EXPSECRET
           GiveExperienceToTarget
-          
-      //Slow them
+
+      // Slow them
       StopTargetMovement
 
       // Do the effect
-      tmpargument = 310   //1.2 mana
+      tmpargument = 310   // 1.2 mana
       CostTargetMana
         tmpargument = [UNDE]
         tmpdistance = BLAHENEMIES + BLAHINVERTID
-        SetTargetToWideBlahID                       //Found living enemy that is not undead
+        SetTargetToWideBlahID                       // Found living enemy that is not undead
           tmpdistance = 1
         Else
           tmpdistance = 0
@@ -53,41 +53,41 @@ IfUsed
             tmpx = targetdistance
             tmpy = 250
             IfXIsLessThanY
-              tmpdistance = 1         //Allow friends to be hit too!
-              
-        //Did we hit?
+              tmpdistance = 1         // Allow friends to be hit too!
+
+        // Did we hit?
         tmpturn = 0
-        IfDistanceIsMoreThanTurn       //If proceeds then found a target  
+        IfDistanceIsMoreThanTurn       // If proceeds then found a target
           IfFacingTarget
             tmpx = targetdistance
             tmpy = 325
             IfXIsLessThanY
               SetTargetToWhoeverIsHolding
-              tmpargument = 256 //Heal 1 hp
-              HealTarget                    //heal caster
-        
-        //Spawn the spell effect              
+              tmpargument = 256 // Heal 1 hp
+              HealTarget                    // heal caster
+
+        // Spawn the spell effect
         tmpx = selfx
         tmpy = selfy
         tmpdistance = selfz
         tmpargument = 2
-        SpawnExactParticle   
-        
-        //Sound effect
+        SpawnExactParticle
+
+        // Sound effect
         tmpargument = 0
         PlaySound
-        
-        //Intelligence increases attack speed
+
+        // Intelligence increases attack speed
         SetTargetToWhoeverIsHolding
         tmpturn = targetint > 8
         tmpargument = 65 - tmpturn
         SetReloadTime
       Else
-        tmpargument = 1 
+        tmpargument = 1
         PlaySound
         tmpargument = 50
-        SetReloadTime   
-        
+        SetReloadTime
+
 // Return to spellbook, Do last!
 IfDropped
   GetContent

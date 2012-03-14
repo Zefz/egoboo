@@ -1,4 +1,4 @@
-//Start as a empty weapons rack?
+// Start as a empty weapons rack?
 IfSpawned
   SetTargetToSelf
   SetTargetToTargetLeftHand
@@ -10,7 +10,7 @@ IfSpawned
       tmpargument = 1
       SetState
 
-//Drop items
+// Drop items
 IfStateIs0
   IfBumped
     SetTargetToWhoeverBumped

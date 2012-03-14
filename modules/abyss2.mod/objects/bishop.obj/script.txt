@@ -1,13 +1,13 @@
 IfTimeOut
   tmpargument = rand & 15 + 25
   SetTime
-  
-  //Watch the player
+
+  // Watch the player
   IfStateIs0
     SetTargetToNearestEnemy
       SetTurnModeToWatchTarget
 
-  //This wins the module
+  // This wins the module
   IfStateIs1
     Sneak
     SetTargetToNearestFriend
@@ -16,7 +16,7 @@ IfTimeOut
     ClearWaypoints
     AddWaypoint
 
-    //Allow rogues to kill him
+    // Allow rogues to kill him
     tmpargument = 0
     IfContentIs
       tmpargument = [ROGU]
@@ -25,7 +25,7 @@ IfTimeOut
         JoinEvilTeam
         tmpargument = 1
         SetContent
-        ChangeArmor		//Allow to die
+        ChangeArmor        // Allow to die
 
     IfBumped
       SetTargetToWhoeverBumped
@@ -42,13 +42,13 @@ IfTimeOut
         tmpdistance = 8
         AddQuestAllPlayers
 
-        //Say goodbye
+        // Say goodbye
         tmpargument = 0
         SendMessage
         tmpargument = 1
         SendMessage
 
-        //Become invincible (just in case)
+        // Become invincible (just in case)
         tmpargument = 0
         ChangeArmor
 
@@ -61,7 +61,7 @@ IfTimeOut
         tmpargument = [BEAT]
         AddIDSZ
 
-//Free!
+// Free!
 IfOrdered
   tmpx = selforder
   tmpy = [FREE]
@@ -70,8 +70,8 @@ IfOrdered
     SetState
     JoinGoodTeam
     BeatModule
-    
-    //Credits
+
+    // Credits
     ClearEndMessage
     tmpargument = 5
     AddEndMessage
@@ -117,8 +117,8 @@ IfOrdered
     AddEndMessage
     tmpargument = 26
     AddEndMessage
-    
-//Rogue revenged himself
+
+// Rogue revenged himself
 IfKilled
   tmpargument = 1000
   tmpdistance = EXPMURDER

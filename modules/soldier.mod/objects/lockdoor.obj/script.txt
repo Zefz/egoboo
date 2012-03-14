@@ -4,7 +4,7 @@ IfSpawned
   tmpargument = passage
   ClosePassage
 
-//Open door and close it
+// Open door and close it
 IfTimeOut
   KeepAction
   tmpargument = 10
@@ -12,16 +12,16 @@ IfTimeOut
   tmpargument = passage + 1
   SetTargetToWhoeverIsInPassage
   tmpargument = 0
-  IfContentIs			//Unlocked door
-    IfTargetCanOpenStuff	//Only open for intelligent creatures
+  IfContentIs            // Unlocked door
+    IfTargetCanOpenStuff    // Only open for intelligent creatures
       tmpargument = passage
       OpenPassage
-    Else 
+    Else
       tmpargument = passage
       ClosePassage
 
   tmpargument = 1
-  IfContentIs				//Goldkey door
+  IfContentIs                // Goldkey door
     tmpargument = passage + 1
     tmpdistance = [KEYA]
     SetTargetToPassageID
@@ -47,8 +47,8 @@ IfTimeOut
           tmpargument = 200
           SetTime
 
-  tmpargument = 2              
-  IfContentIs			//Prismatic key door
+  tmpargument = 2
+  IfContentIs            // Prismatic key door
     tmpargument = passage + 1
     tmpdistance = [KEYP]
     SetTargetToPassageID
@@ -68,7 +68,7 @@ IfTimeOut
       tmpargument = passage
       IfPassageOpen
         DoNothing
-      Else			//Tell its locked
+      Else            // Tell its locked
         SetTargetToWhoeverIsInPassage
         IfTargetIsAPlayer
           tmpargument = 1
@@ -84,26 +84,28 @@ IfOrdered
     SendMessageNear
 
 // Handle the animation and sound
-tmpargument = passage 	// Is the passage clear?
-IfPassageOpen			// 
-  tmpargument = 0		  //
-  IfStateIs			  // State 0 ( Closed )
-    tmpargument = ACTIONMG	    //
-    DoAction			    //
-      tmpargument = 1		      // Open it
-      SetState			      //
-      tmpargument = 0		      //
-      tmpdistance = 11025	      //
-      PlaySound			      //
+tmpargument = passage     // Is the passage clear?
+IfPassageOpen
+  tmpargument = 0
+  IfStateIs              // State 0 ( Closed )
+    tmpargument = ACTIONMG
+    DoAction
+      tmpargument = 1              // Open it
+      SetState
+      tmpargument = 0
+      tmpdistance = 11025
+      PlaySound
 Else
-  tmpargument = 1		  //
-  IfStateIs			  // State 1 ( Open )
-    tmpargument = ACTIONMJ	    //
-    DoAction			    //
-      tmpargument = 0		      // Close it
-      SetState			      //
-      tmpargument = 1		      //
-      tmpdistance = 11025	      //
-      PlaySound			      //
+  tmpargument = 1
+  IfStateIs              // State 1 ( Open )
+    tmpargument = ACTIONMJ
+    DoAction
+      tmpargument = 0              // Close it
+      SetState
+      tmpargument = 1
+      tmpdistance = 11025
+      PlaySound
 
-End				// Finished with this character
+// Finished with this character
+End
+

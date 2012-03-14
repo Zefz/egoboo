@@ -13,7 +13,7 @@ IfSpawned
   KeepAction
   MakeCrushValid
   MakeAmmoKnown
-  
+
   // Don't activate right away
   tmpargument = 100
   SetTime
@@ -134,9 +134,10 @@ IfGrabbed
     tmpargument = 1
     SetState
 
-IfHitGround				// Make a sound
-  tmpargument = 1			  //
-  PlaySound				  //
+// Make a sound
+IfHitGround
+  tmpargument = 1
+  PlaySound
 
 IfNotDropped
   tmpargument = 2
@@ -148,8 +149,9 @@ IfTakenOut
     tmpargument = 4
     SendMessageNear
 
+// No longer needed, this is handled by the sourcecode now...
 //IfNotPutAway
-//  tmpargument = 3         //No longer needed, this is handled by the sourcecode now...
+//  tmpargument = 3
 //  SendMessageNear
 
 // See if the trap is sprung

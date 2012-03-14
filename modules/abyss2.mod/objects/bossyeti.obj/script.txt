@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-//STATUE AI
+// STATUE AI
 IfSpawned
   tmpargument = 2
   ChangeArmor
@@ -12,11 +12,12 @@ IfSpawned
   SetLight
 
 //------------------------------------------------------------------------------
-//BOSS AI
+// BOSS AI
 tmpargument = 2
+
 IfArmorIs
   IfOrdered
-    tmpx = [YETI]           //Become alive?
+    tmpx = [YETI]           // Become alive?
     tmpy = selforder
     IfXIsEqualToY
       tmpargument = 0
@@ -28,80 +29,80 @@ IfArmorIs
       ClosePassage
 Else
 
-  //The different states:
-  //0: Guard
-  //1: Combat
-  //2: Turned to rock
+  // The different states:
+  // 0: Guard
+  // 1: Combat
+  // 2: Turned to rock
   //------------------------------------------------------------------------------
-  //Combat/Guard
+  // Combat/Guard
   IfTimeOut
     tmpargument = rand & 15 + 25
     SetTime
 
-    //Spawn meteors
+    // Spawn meteors
     tmpargument = 0
     IfStateIsNot
       tmpx = rand & 1
       tmpy = 0
-      IfXIsEqualToY         //50%
+      IfXIsEqualToY         // 50%
         tmpargument = 49
         tmpdistance = 450
         tmpx = rand & 255 + targetx - 128
-        tmpx = rand & 240 + tmpx	- 120	//lessen the randomness
+        tmpx = rand & 240 + tmpx    - 120    // lessen the randomness
         tmpy = rand & 255 + targety - 256
-        tmpy = rand & 240 + tmpy	- 120    //lessen the randomness
+        tmpy = rand & 240 + tmpy    - 120    // lessen the randomness
         tmpturn = rand % 65535
         SpawnExactCharacterXYZ
           tmpargument = 1
           SetChildState
 
-    //Guard mode
+    // Guard mode
     IfStateIs0
       tmpx = rand & 1023 + selfx - 512
       tmpy = rand & 1023 + selfy - 512
       ClearWaypoints
       AddWaypoint
 
-      //Close the exit!
+      // Close the exit!
       SetTargetToWideEnemy
         tmpargument = 1
         SetState
-        tmpargument = 1		//Roar!
+        tmpargument = 1        // Roar!
         SendMessageNear
         tmpargument = 6
         PlaySound
 
-    //Combat mode
+    // Combat mode
     IfStateIs1
       SetTargetToWideEnemy
         DoNothing
       Else
         tmpargument = 0
         SetState
-      tmpdistance = 200				//For Compass later
+      tmpdistance = 200                // For Compass later
       tmpx = targetdistance
       tmpy = 1600
       IfXIsLessThanY
         tmpy = 650
         IfXIsLessThanY
           tmpy = 200
-          IfXIsLessThanY                     //Close enough to attack?
+          IfXIsLessThanY                     // Close enough to attack?
             IfFacingTarget
-              tmpx = rand % 3			//33% kick, 33% smash, 33% nothing
+              tmpx = rand % 3            // 33% kick, 33% smash, 33% nothing
               tmpy = 0
               IfXIsEqualToY
-                tmpargument = ACTIONUA         //Smash
+                tmpargument = ACTIONUA         // Smash
                 DoAction
               tmpy = 1
               IfXIsEqualToY
-                tmpargument = ACTIONUB         //Kick
+                tmpargument = ACTIONUB         // Kick
                 DoAction
 
-          //Jump bash them
+          // Jump bash them
           Else
             tmpx = rand % 55
             tmpy = 8
-            IfXIsLessThanY              //Chance
+            IfXIsLessThanY              // Chance
               tmpargument = ACTIONJA
               DoAction
                 tmpargument = 7
@@ -109,7 +110,7 @@ Else
                 tmpdistance = selfz + 15
                 tmpx = selfx
                 tmpy = selfy
-                SpawnExactParticle	//Spawn 8 balls of fire
+                SpawnExactParticle    // Spawn 8 balls of fire
                 SpawnExactParticle
                 SpawnExactParticle
                 SpawnExactParticle
@@ -118,27 +119,27 @@ Else
                 SpawnExactParticle
                 SpawnExactParticle
         Else
-          tmpdistance = 1500		//Charge!
+          tmpdistance = 1500        // Charge!
           Run
-        tmpx = targetx			//Move towards enemy
+        tmpx = targetx            // Move towards enemy
         tmpy = targety
         tmpturn = targetturnto
         Compass
         ClearWaypoints
         AddWaypoint
       Else
-        tmpargument = 0			//Return to guard
+        tmpargument = 0            // Return to guard
         SetState
 
-    //What to do if rock solid
+    // What to do if rock solid
     IfStateIs2
       SetTargetToSelf
       tmpargument = 50
-      HealTarget		//Remove poison and regenerate extra
+      HealTarget        // Remove poison and regenerate extra
       tmpx = selflife
       tmpy = 3000
-      IfXIsMoreThanY	//Keep regeneration in rock form
-        tmpargument = 0	//until you gain 20 life again
+      IfXIsMoreThanY    // Keep regeneration in rock form
+        tmpargument = 0    // until you gain 20 life again
         ChangeArmor
         tmpargument = 0
         SetState
@@ -148,14 +149,14 @@ Else
         SetLight
 
   //------------------------------------------------------------------------------
-  //Handle death by sending a message and other stuff
+  // Handle death by sending a message and other stuff
   IfKilled
-    tmpargument = 1		//Sound number
+    tmpargument = 1        // Sound number
     PlaySound
 
     UnkeepAction
 
-    //Messaging
+    // Messaging
     tmpargument = MESSAGEDEATH
     IfTargetIsOnSameTeam
       tmpargument = MESSAGEFRAG
@@ -164,15 +165,15 @@ Else
     SendMessageNear
 
     // Drop goodies
-    tmpargument = selfmoney	//All of it
+    tmpargument = selfmoney    // All of it
     DropMoney
 
-    //Destroyed fire blast...
+    // Destroyed fire blast...
     SpawnPoof
     SpawnPoof
     SpawnPoof
 
-    //Spawn a golden chest reward
+    // Spawn a golden chest reward
     tmpargument = 86
     tmpx = selfx
     tmpy = selfy
@@ -180,22 +181,22 @@ Else
     tmpturn = rand
     SpawnExactCharacterXYZ
 
-    tmpargument = 2		//Randomize the chest type
-    tmpx = rand % 100		//55% chance for artifact
+    tmpargument = 2        // Randomize the chest type
+    tmpx = rand % 100        // 55% chance for artifact
     tmpy = 55
-    IfXIsMoreThanY		//35% for armor chest
+    IfXIsMoreThanY        // 35% for armor chest
       tmpargument = 1
       tmpy = 90
-      IfXIsMoreThanY		//10% for mere gold & treasure
+      IfXIsMoreThanY        // 10% for mere gold & treasure
         tmpargument = 0
     SetChildState
 
-    //Open the exit!
+    // Open the exit!
     tmpargument = 37
     OpenPassage
 
   //------------------------------------------------------------------------------
-  //Handle being attacked by blocking or countering or running away
+  // Handle being attacked by blocking or countering or running away
   IfAttacked
 
     // Turn to rock if life is less than 6 blocks
@@ -204,19 +205,19 @@ Else
       tmpx = selflife
       tmpy = 1800
       IfXIsLessThanY
-        tmpargument = 2		//Rock form
+        tmpargument = 2        // Rock form
         SetState
-        tmpargument = 1		//Look like rock
+        tmpargument = 1        // Look like rock
         ChangeArmor
-        tmpargument = ACTIONMK	//rock mode
+        tmpargument = ACTIONMK    // rock mode
         DoActionOverride
         KeepAction
-        tmpargument = 5		//rock sound
+        tmpargument = 5        // rock sound
         PlaySound
         tmpargument = 255
         SetLight
 
-      //Ice Bonus damage
+      // Ice Bonus damage
       Else
         GetDamageType
         tmpx = tmpargument
@@ -225,17 +226,17 @@ Else
           // Permanent life loss from ice
           SetOldTarget
           SetTargetToSelf
-          tmpargument = 0 - 1024		//Lose 4 permanent life
+          tmpargument = 0 - 1024        // Lose 4 permanent life
           GiveLifeToTarget
           SetTargetToOldTarget
           tmpargument = 5
           SendMessageNear
 
-        //Ouch sound
+        // Ouch sound
         tmpargument = 2
         PlaySound
 
-    //Hit while rock form, spawn a dust cloud and clink
+    // Hit while rock form, spawn a dust cloud and clink
     Else
       tmpargument = 4
       PlaySound

@@ -2,17 +2,20 @@
 IfAttacked
   SetTargetToWhoeverAttacked
   IfTargetIsAPlayer
-    tmpargument = TEAME       //Team EVIL
+    tmpargument = TEAME       // Team EVIL
     TargetJoinTeam
   CallForHelp
+
 IfKilled
   SetTargetToWhoeverAttacked
   IfTargetIsAPlayer
-    tmpargument = TEAME       //Team EVIL
+    tmpargument = TEAME       // Team EVIL
     TargetJoinTeam
-IfSomeoneIsStealing     //Someone is stealing from our shop! ><
-  CallForHelp           //Call the guards!
-  tmpargument = TEAME       //Team EVIL
+
+// Someone is stealing from our shop! ><
+IfSomeoneIsStealing
+  CallForHelp           // Call the guards!
+  tmpargument = TEAME       // Team EVIL
   TargetJoinTeam
 
 //------------------------------------------------------------------------------
@@ -68,8 +71,8 @@ IfSpawned
   SpawnExactParticle
 
   // Show the area
-  //tmpdistance = 255
-  //FlashPassage
+  // tmpdistance = 255
+  // FlashPassage
 
   // Add some random goodies
   tmpdistance = 0

@@ -48,7 +48,7 @@ IfStateIs1
     tmpargument = 60
     SetTime
   IfTimeOut
-    tmpdistance = 128*15      //Look up to 15 tiles away
+    tmpdistance = 128*15      // Look up to 15 tiles away
     SetTargetToDistantEnemy
       tmpx = targetx - selfx < 3 + targetx
       tmpy = targety - selfy < 3 + targety
@@ -82,7 +82,7 @@ IfStateIs2
     IfTargetIsOnHatedTeam
       IfTargetIsDefending
         // Check incoming direction
-        tmpx = targetturnto + 49152 - targetturn & 65535    //IfTargetIsFacingSelf?
+        tmpx = targetturnto + 49152 - targetturn & 65535    // IfTargetIsFacingSelf?
         tmpy = 32768
         IfXIsLessThanY
           // Hit shield
@@ -121,16 +121,16 @@ IfStateIs2
   IfXIsMoreThanY // It was damaged or bumped
     // Message...  Argument set earlier
     SendMessageNear
-    
+
     // Experience as a consolation prize
     tmpargument = 5
     tmpdistance = EXPSECRET
     GiveExperienceToTarget
-    
+
     // Sound effect
     tmpargument = 0
     PlaySound
-    
+
     // Death animation and alpha fade
     tmpargument = 0
     SetBumpHeight
@@ -168,4 +168,6 @@ IfStateIs3
       tmpargument = 8
       SetTime
 
-End					// Finished with this character
+// Finished with this character
+End
+

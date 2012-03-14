@@ -1,8 +1,8 @@
-//Need at least 2 damage in 1 hit to die
+// Need at least 2 damage in 1 hit to die
 IfSpawned
   tmpargument = 511
   SetDamageThreshold
-  
+
 IfKilled
   // Smash open
   tmpargument = [GOOD]
@@ -24,11 +24,11 @@ IfKilled
   Else
     tmpargument = tmpx
     OpenPassage
-    
+
     // Play the secret music
     tmpargument = 1
     PlaySound
-    
+
     // Give experience
     tmpargument = 20
     tmpdistance = EXPSECRET

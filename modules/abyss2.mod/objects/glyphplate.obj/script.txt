@@ -1,9 +1,9 @@
 // This reads an inscription, if the target can read
 IfTimeOut
-  //Check every so often
+  // Check every so often
   tmpargument = rand & 15 + 10
   SetTime
-  
+
   // Check the plate passages
   tmpx = 0 // Can't read message
   tmpdistance = 0 // Set to 1 if a message is to be displayed
@@ -80,12 +80,12 @@ IfTimeOut
       tmpx = 10 // Message
     Else
       SetTargetToOldTarget
-  
-  //Allow guys with truesight to always read the plate
+
+  // Allow guys with truesight to always read the plate
   IfTargetCanSeeInvisible
     IfTargetCanSeeKurses
       tmpy = 65535
-  
+
   tmpy = 1
   IfXIsMoreThanY
     tmpargument = 0
@@ -93,16 +93,16 @@ IfTimeOut
     tmpargument = [READ]
     IfTargetHasSkillID
       tmpx = targetint
-      tmpy = 4608			//Need 18 int to read
+      tmpy = 4608            // Need 18 int to read
       IfXIsLessThanY
         tmpx = 1
       Else
         tmpargument = 0
         GetXY
     Else
-      tmpx = 0    //Cannot read...
+      tmpx = 0    // Cannot read...
 
-  IfTargetIsAPlayer					//Last check that only players read
+  IfTargetIsAPlayer                    // Last check that only players read
     IfDistanceIsMoreThanTurn
       // Display the message
       tmpargument = 150
@@ -115,4 +115,6 @@ IfTimeOut
       tmpargument = tmpx // The message
       SendMessage
 
-End					// All done
+// All done
+End
+

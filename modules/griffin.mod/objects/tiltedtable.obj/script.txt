@@ -1,14 +1,14 @@
 // ZZ> This function makes an item fall to the floor when spawned
 IfSpawned
   tmpargument = 1
-  IfContentIs				//table is toppled
+  IfContentIs                // table is toppled
     tmpargument = ACTIONMJ
-    DoActionOverride				  
+    DoActionOverride
     KeepAction
     tmpargument = 40
     SetBumpHeight
 
-//Make troll destroy it
+// Make troll destroy it
 IfBumped
   SetTargetToWhoeverBumped
   tmpargument = [TROL]
@@ -19,4 +19,6 @@ IfBumped
     SendMessageNear
     PlaySound
 
-End					// All done
+// All done
+End
+

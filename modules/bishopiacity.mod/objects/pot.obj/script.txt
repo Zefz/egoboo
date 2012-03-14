@@ -1,6 +1,6 @@
-//Future plans: Mix stuff in pots?
+// Future plans: Mix stuff in pots?
 
-//Spit out some funny messages
+// Spit out some funny messages
 SetTargetToRider
   IfStateIs0
     tmpargument = 1

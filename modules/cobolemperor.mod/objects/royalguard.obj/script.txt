@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-//Bumpy bump
+// Bumpy bump
 IfBumped
   SetTargetToWhoeverBumped
     // Jump over barriers, onto mounts
@@ -24,7 +24,7 @@ IfBumped
     SetTargetToOldTarget
 
 //------------------------------------------------------------------------------
-//Shield usage
+// Shield usage
 IfStateIs1
   IfTargetIsAttacking
     tmpx = targetdistance
@@ -42,9 +42,9 @@ IfKilled
     tmpargument = 1
   SendMessageNear
 
-  //Make everyone attack
+  // Make everyone attack
   CallForHelp
-  
+
   tmpargument = 1
   PlaySound
 
@@ -56,10 +56,10 @@ IfKilled
   tmpargument = 40
   SetBumpHeight
 
-  //Make em crushable
+  // Make em crushable
   MakeCrushValid
-  
-//Mooshed in a passage
+
+// Mooshed in a passage
 IfCrushed
   tmpargument = 1
   tmpx = 0
@@ -107,19 +107,19 @@ IfAttacked
     PlaySound
 
 //------------------------------------------------------------------------------
-//Main AI loop
+// Main AI loop
 IfTimeOut
   tmpargument = rand & 31 + 25
   SetTime
-  
-  //Guard
+
+  // Guard
   IfStateIs0
     tmpx = selfspawnx
     tmpy = selfspawny
     ClearWaypoints
     AddWaypoint
-    
-  //Combat
+
+  // Combat
   IfStateIs1
     SetTurnModeToWatchTarget
     tmpdistance = 128*12
@@ -131,16 +131,16 @@ IfTimeOut
       Compass
       ClearWaypoints
       AddWaypoint
-      
-      //Attack
+
+      // Attack
       tmpx = targetdistance
       tmpy = 150
       IfXIsLessThanY
         IfFacingTarget
           IfHoldingMeleeWeapon
             PressLatchButton
-            
-      //Formation (needs to be replaced by phalanax formation)
+
+      // Formation (needs to be replaced by phalanax formation)
       SetTargetToNearestFriend
       tmpx = targetdistance
       tmpy = 128
@@ -156,7 +156,7 @@ IfTimeOut
     Else
       tmpargument = 0
       SetState
-      
+
 //------------------------------------------------------------------------------
 IfCalledForHelp
   tmpargument = 1

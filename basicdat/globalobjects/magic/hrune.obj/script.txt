@@ -4,8 +4,8 @@ IfSpawned
   DoAction
   KeepAction
   MakeCrushValid
-  
-//Crushed in a passage
+
+// Crushed in a passage
 IfCrushed
   tmpargument = 3
   tmpdistance = selfz
@@ -18,13 +18,12 @@ IfCrushed
   GoPoof
   tmpargument = 5
   SendMessageNear
-  
+
 // Make it lie on the floor
 IfDropped
   KeepAction
   tmpargument = ACTIONJB
   DoAction
-
 
 // Play a clink or clang
 IfHitGround
@@ -49,20 +48,20 @@ IfGrabbed
 IfUsed
   SetTargetToWhoeverIsHolding
   tmpargument = [HMAG]
-  IfTargetHasSkillID		//Can cast divine?
+  IfTargetHasSkillID        // Can cast divine?
     GetContent
     tmpx = tmpargument
     tmpy = 900
-    IfXIsLessThanY		//Dont overcharge
+    IfXIsLessThanY        // Dont overcharge
       tmpy = targetmanaflow
-      IfXIsLessThanY		//Enough manaflow?
+      IfXIsLessThanY        // Enough manaflow?
         tmpy = 10
         tmpx = targetmana
-        IfXIsMoreThanY		//Enough mana to charge more?
-          tmpargument = 10	//Mana cost
+        IfXIsMoreThanY        // Enough mana to charge more?
+          tmpargument = 10    // Mana cost
           CostTargetMana
           GetContent
-          tmpargument = tmpargument + 10	//Casting speed
+          tmpargument = tmpargument + 10    // Casting speed
           SetContent
   Else
     tmpargument = 3
@@ -72,18 +71,18 @@ Else
   GetContent
   tmpx = tmpargument
   tmpy = 896
-  IfXIsMoreThanY	//Finished Charging
+  IfXIsMoreThanY    // Finished Charging
     tmpargument = 4
-    SendMessageNear	//Send message
+    SendMessageNear    // Send message
     tmpargument = 0
     tmpx = targetx
     tmpy = targety
     tmpdistance = targetz
-    SpawnExactParticle	//Spawn the magic effects
+    SpawnExactParticle    // Spawn the magic effects
     tmpargument = 1
-    PlaySound		//Play the holy sound
+    PlaySound        // Play the holy sound
     tmpargument = 150
-    SetReloadTime	//cannot be used again for a while
+    SetReloadTime    // cannot be used again for a while
   tmpargument = 0
   SetContent
 
@@ -92,6 +91,7 @@ Else
 GetContent
 tmpx = tmpargument
 tmpy = 0
+
 IfXIsMoreThanY
   tmpturn = tmpargument * 25 + 5000
   tmpdistance = SPAWNORIGIN

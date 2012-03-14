@@ -1,11 +1,11 @@
-//This function makes an item fall to the floor when spawned
+// This function makes an item fall to the floor when spawned
 IfSpawned
   tmpargument = ACTIONJB
   DoAction
   KeepAction
   MakeCrushValid
-  
-//Crushed in a passage
+
+// Crushed in a passage
 IfCrushed
   tmpargument = 5
   tmpdistance = selfz
@@ -18,35 +18,41 @@ IfCrushed
   GoPoof
   tmpargument = 5
   SendMessageNear
-  
-IfDropped				// Make it lie on floor
+
+// Make it lie on floor
+IfDropped
   KeepAction
-IfGrabbed				// Tell them what they've won, Johnny!
+
+// Tell them what they've won, Johnny!
+IfGrabbed
   SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer
     tmpargument = 0
     SendMessageNear
+
 IfHitGround
   tmpargument = 0
   tmpdistance = rand % 2047 + 8000
   PlaySound
   tmpargument = ACTIONDB
   DoAction
-IfHeld			//Hide in hand
+
+// Hide in hand
+IfHeld
   tmpargument = 1
   SetState
 Else
   tmpargument = 0
   SetState
 
-//Spell stuff
+// Spell stuff
 IfUsed
   SetTargetToWhoeverIsHolding
   SetOwnerToTarget
   tmpargument = [HMAG]
-  IfTargetHasSkillID				//Need divine spell skill
+  IfTargetHasSkillID                // Need divine spell skill
 
-    //Aiming Cursor
+    // Aiming Cursor
     SetTargetToOwner
     GetContent
     tmpdistance = tmpargument > 8 + 4 < 6
@@ -60,31 +66,31 @@ IfUsed
 
     GetContent
     tmpx = tmpargument
-    tmpy = 768					//Don't overcharge
+    tmpy = 768                    // Don't overcharge
     IfXIsLessThanY
-      tmpy = targetmanaflow			//Enough spell power?
+      tmpy = targetmanaflow            // Enough spell power?
       IfYIsMoreThanX
-        tmpy = rand % 400 + targetwis			//Enough wisdom? Need about 22
+        tmpy = rand % 400 + targetwis            // Enough wisdom? Need about 22
         tmpx = rand % 4700 + tmpargument
         IfYIsMoreThanX
-          tmpargument = 6				//Mana cost
+          tmpargument = 6                // Mana cost
           CostTargetMana
-            GetContent				//Increase the charge
-            tmpargument = tmpargument + 4		//Casting Time
+            GetContent                // Increase the charge
+            tmpargument = tmpargument + 4        // Casting Time
             SetContent
         Else
           tmpargument = 4
           SendMessageNear
           tmpargument = 50
           SetReloadTime
-    tmpargument = YELLOW			//Icon sparkles
+    tmpargument = YELLOW            // Icon sparkles
     SparkleIcon
 
 Else
   GetContent
   tmpx = tmpargument
   tmpy = 750
-  IfXIsMoreThanY		//Enough power to activate?
+  IfXIsMoreThanY        // Enough power to activate?
     GetContent
     tmpdistance = tmpargument > 8 + 4 < 6
     tmpturn = targetturn
@@ -94,10 +100,10 @@ Else
     tmpdistance = targetz
     tmpargument = 2
     SpawnExactParticle
-    tmpargument = 100		//Set cooldown time
+    tmpargument = 100        // Set cooldown time
     SetReloadTime
     tmpargument = 3
-    SendMessageNear		//Tell what happened
+    SendMessageNear        // Tell what happened
     tmpargument = 1
     tmpdistance = rand % 6000 + 11000
     PlaySound
@@ -105,17 +111,17 @@ Else
     GetContent
     tmpx = tmpargument
     tmpy = 0
-    IfXIsMoreThanY		//Only if there was a charge
+    IfXIsMoreThanY        // Only if there was a charge
       tmpargument = 1
-      SendMessageNear		//Tell it didn't work
+      SendMessageNear        // Tell it didn't work
       tmpargument = 2
       tmpdistance = rand % 6000 + 11000
       PlaySound
   tmpargument = 0
-  SetContent			//Reset counter
+  SetContent            // Reset counter
   UnsparkleIcon
 
-  //Award xp and stuff for daring to do it
+  // Award xp and stuff for daring to do it
   IfNameIsKnown
     DoNothing
   Else
@@ -129,10 +135,13 @@ Else
 // character's hand
 tmpx = selfcontent
 tmpy = 0
+
 IfXIsMoreThanY
   tmpturn = selfcontent < 4 + 3000
   tmpdistance = SPAWNORIGIN
   tmpargument = 0
   SpawnAttachedSizedParticle
 
-End					// All done
+// All done
+End
+

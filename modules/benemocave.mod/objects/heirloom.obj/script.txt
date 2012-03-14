@@ -4,11 +4,14 @@ IfSpawned
   DoAction
   KeepAction
   MakeCrushValid
+
 IfDropped
   KeepAction
+
 IfHitGround
   tmpargument = 0
   PlaySound
+
 IfGrabbed
   SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer
@@ -81,5 +84,5 @@ IfTimeOut
   SpawnParticle
   tmpargument = 10
   SetTime
-  
+
 End

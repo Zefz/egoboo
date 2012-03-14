@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-//STATUE AI
+// STATUE AI
 IfSpawned
   tmpargument = 1
   ChangeArmor
@@ -12,11 +12,12 @@ IfSpawned
   SetFlyHeight
 
 //------------------------------------------------------------------------------
-//BOSS AI
+// BOSS AI
 tmpargument = 1
+
 IfArmorIs
   IfOrdered
-    tmpx = [WATC]           //Become alive?
+    tmpx = [WATC]           // Become alive?
     tmpy = selforder
     IfXIsEqualToY
       tmpargument = 0
@@ -25,7 +26,7 @@ IfArmorIs
       tmpargument = 40
       SetFlyHeight
 Else
-  //Backstabbing!
+  // Backstabbing!
   IfBackstabbed
     SetTargetToWhoeverAttacked
     GetDamageType
@@ -42,7 +43,7 @@ Else
     PlaySound
     SpawnPoof
 
-    //Reduce size
+    // Reduce size
     tmpargument = 40
     SetBumpSize
     tmpargument = 35
@@ -52,41 +53,39 @@ Else
     tmpargument = selfmoney
     DropMoney
 
-    //Tell the dracolich we are dead
+    // Tell the dracolich we are dead
     tmpargument = [BDIE]
     IssueOrder
 
-
-  //Ouch
-  IfAttacked				// Counter attack
-    SetTargetToWhoeverAttacked		  //
-      IfTargetIsOnHatedTeam		    //
-        BecomeLeader			      //
-        tmpargument = 1			      // Enter combat mode
-        SetState				      //
+  // Ouch
+  IfAttacked                // Counter attack
+    SetTargetToWhoeverAttacked
+      IfTargetIsOnHatedTeam
+        BecomeLeader
+        tmpargument = 1                  // Enter combat mode
+        SetState
         SetTurnModeToWatchTarget
-      Else				    //
-        SetTargetToOldTarget		      //
-    tmpargument = rand & 1 + 1		  //
+      Else
+        SetTargetToOldTarget
+    tmpargument = rand & 1 + 1
     PlaySound
 
+  IfTargetKilled                // Return to watch mode
+    tmpargument = 0
+    SetState
 
-  IfTargetKilled				// Return to watch mode
-    tmpargument = 0			  //
-    SetState				  //
-
-  IfBumped				// Attack whoever it bumped
-    SetTargetToWhoeverBumped		  //
-    IfTargetIsOnHatedTeam			  // Make sure it's an enemy
+  IfBumped                // Attack whoever it bumped
+    SetTargetToWhoeverBumped
+    IfTargetIsOnHatedTeam              // Make sure it's an enemy
       DoNothing
-    Else					  // Scooch around friendly
-      tmpx = rand & 255 + targetx - 128	    //
-      tmpy = rand & 255 + targety - 128	    //
-      ClearWaypoints			    //
-      AddWaypoint				    //
-      SetTargetToOldTarget		    //
+    Else                      // Scooch around friendly
+      tmpx = rand & 255 + targetx - 128
+      tmpy = rand & 255 + targety - 128
+      ClearWaypoints
+      AddWaypoint
+      SetTargetToOldTarget
 
-  IfTimeOut				// This is done every so often
+  IfTimeOut                // This is done every so often
     IfStateIs0
       tmpx = selfspawnx
       tmpy = selfspawny
@@ -100,7 +99,7 @@ Else
           SetTurnModeToSpin
     IfStateIs1
 
-      //Shoot
+      // Shoot
       IfFacingTarget
 
         tmpx = selfx
@@ -109,15 +108,15 @@ Else
         tmpturn = selfturn
         Compass
         tmpdistance = selfz + 50
-        tmpargument = 3           //Gas
+        tmpargument = 3           // Gas
         SpawnExactParticle
-        tmpargument = 4           //Daze
+        tmpargument = 4           // Daze
         SpawnExactParticle
-        tmpargument = 5           //Freeze
+        tmpargument = 5           // Freeze
         SpawnExactParticle
-        tmpargument = 6           //Burn
+        tmpargument = 6           // Burn
         SpawnExactParticle
-        tmpargument = rand % 3 + 1	//Randomize ray
+        tmpargument = rand % 3 + 1    // Randomize ray
 
       tmpx = targetdistance
       tmpy = 128*30
@@ -134,10 +133,12 @@ Else
         tmpy = selfspawny
         tmpargument = 0
         SetState
-    ClearWaypoints			  //
-    AddWaypoint				  //
-    tmpargument = rand & 15 + 50		  // Wait a while and try again
-    SetTime				  //
+    ClearWaypoints
+    AddWaypoint
+    tmpargument = rand & 15 + 50          // Wait a while and try again
+    SetTime
 
-End					// Finished with this character
+// Finished with this character
+End
+
   

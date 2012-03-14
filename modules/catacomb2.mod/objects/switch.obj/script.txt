@@ -1,21 +1,24 @@
 // Make it stay open or close
 IfSpawned
-  KeepAction			//Start at off
+  KeepAction            // Start at off
 
-//Turn switch when bumped
+// Turn switch when bumped
 IfBumped
   SetTargetToWhoeverBumped
   IfStateIs0
     IfTargetIsAPlayer
-      tmpargument = ACTIONMG	    //Turn
+      tmpargument = ACTIONMG        // Turn
       DoAction
-      tmpargument = [OPEN]	//Say open
-      tmpdistance = [OPEN]	//To all with [OPEN] IDSZ
+      tmpargument = [OPEN]    // Say open
+      tmpdistance = [OPEN]    // To all with [OPEN] IDSZ
       OrderSpecialID
-      tmpargument = 1		//Don't do again
+      tmpargument = 1        // Don't do again
       SetState
       tmpdistance = rand % 2670 + 10000
       tmpargument = 0
       PlaySound
       SendMessageNear
-End				// Finished with this character
+
+// Finished with this character
+End
+

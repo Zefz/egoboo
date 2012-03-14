@@ -1,15 +1,15 @@
-//Slow down movement
+// Slow down movement
 IfSpawned
   Sneak
-  
+
 //------------------------------------------------------------------------------
-//Scream and shout
+// Scream and shout
 IfUsed
   tmpargument = rand & 1 + 8
   PlaySound
 
 //------------------------------------------------------------------------------
-//Handle being bored by cheering or sneezing
+// Handle being bored by cheering or sneezing
 IfBored
   tmpargument = ACTIONMC
   DoAction
@@ -25,9 +25,9 @@ IfBored
       SendMessageNear
       tmpargument = 9
       PlaySound
-    
+
 //------------------------------------------------------------------------------
-//Handle death by sending a message and other stuff
+// Handle death by sending a message and other stuff
 IfKilled
   tmpargument = 5
   PlaySound
@@ -47,7 +47,7 @@ IfKilled
   SetBumpHeight
 
 //------------------------------------------------------------------------------
-//Handle being attacked by blocking or countering or running away
+// Handle being attacked by blocking or countering or running away
 IfAttacked
   SetTargetToWhoeverAttacked
   IfTargetIsOnSameTeam
@@ -60,27 +60,27 @@ IfAttacked
     PlaySound
 
 //------------------------------------------------------------------------------
-//Main AI loop
+// Main AI loop
 IfTimeOut
   tmpargument = rand & 31 + 20
   SetTime
-  
-  //Prisoned
+
+  // Prisoned
   IfStateIs0
     tmpx = selfspawnx
     tmpy = selfspawny
     ClearWaypoints
     AddWaypoint
-  
-  //Following the player
+
+  // Following the player
   IfStateIs1
     SetTurnModeToVelocity
     tmpx = rand & 511 + ownerx - 256
     tmpy = rand & 511 + ownery - 256
     ClearWaypoints
     AddWaypoint
-    
-    //8% chance to wander off taking pictures
+
+    // 8% chance to wander off taking pictures
     tmpx = rand % 100
     tmpy = 8
     IfXIsLessThanY
@@ -91,15 +91,14 @@ IfTimeOut
         tmpargument = 1
         SendMessage
 
-  
-  //Wander off taking pictures
+  // Wander off taking pictures
   IfStateIs2
     tmpx = rand & 1023 + selfx - 512
     tmpy = rand & 1023 + selfy - 512
     ClearWaypoints
     AddWaypoint
-    
-    //Take picture of monster
+
+    // Take picture of monster
     IfTargetIsOnOtherTeam
       tmpx = targetx
       tmpy = targety
@@ -113,18 +112,18 @@ IfTimeOut
         PressLatchButton
         SetTurnModeToVelocity
     Else
-      SetTargetToNearestLifeform    
-      
-  //Randomly take pictures
+      SetTargetToNearestLifeform
+
+  // Randomly take pictures
   tmpargument = 0
-  IfStateIsNot  
+  IfStateIsNot
     tmpx = rand & 255
     tmpy = 8
     IfXIsLessThanY
       tmpargument = LATCHRIGHT
       PressLatchButton
-  
-  //Adjust speed according to distance to target
+
+  // Adjust speed according to distance to target
   tmpx = targetdistance
   tmpy = 128*3
   IfXIsMoreThanY
@@ -133,7 +132,7 @@ IfTimeOut
     Sneak
 
 //------------------------------------------------------------------------------
-//Bumping            
+// Bumping
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsAPlayer
@@ -141,17 +140,17 @@ IfBumped
     IfStateIsNot
       tmpargument = 1
       SetState
-      
-      //Hey!
+
+      // Hey!
       tmpargument = rand & 1 + 6
       PlaySound
       tmpargument = 2
       SendMessageNear
-    
+
     SetOwnerToTarget
   Else
     IfTargetIsAPlatform
-      //Jump over obstacles
+      // Jump over obstacles
       tmpargument = LATCHJUMP
       PressLatchButton
     Else
@@ -164,7 +163,7 @@ IfBumped
             tmpargument = 1
             SendMessage
       Else
-        //Jump over corpses
+        // Jump over corpses
         tmpargument = LATCHJUMP
         PressLatchButton
 //------------------------------------------------------------------------------

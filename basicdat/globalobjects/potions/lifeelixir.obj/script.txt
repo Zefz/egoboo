@@ -63,7 +63,7 @@ IfUsed
     GiveExperienceToTarget
   SetTargetToWhoeverIsHolding
 
-    //Do the effects
+    // Do the effects
     tmpargument = 256
     GiveLifeToTarget
     tmpargument = 63560

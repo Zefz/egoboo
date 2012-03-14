@@ -1,4 +1,4 @@
-//When Spawned
+// When Spawned
 IfSpawned
   tmpargument = 65
   SetFlyHeight

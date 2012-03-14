@@ -1,24 +1,24 @@
-//This object is a tool controlled by setting its content value to a specified number.
-//(Set in spawn.txt). Object is module specified and must be modified to be used
-//elsewhere...
-//Content commands:
-//0 = play music
-//Module Setting: Catacombs
+// This object is a tool controlled by setting its content value to a specified number.
+// (Set in spawn.txt). Object is module specified and must be modified to be used
+// elsewhere...
+// Content commands:
+// 0 = play music
+// Module Setting: Catacombs
 
 //------------------------------------------------------------------------------------
-//Play Music
+// Play Music
 IfSpawned
   tmpargument = 14
   tmpdistance = 0
   PlayMusic
 
-//Music when they enter the real dungeon
+// Music when they enter the real dungeon
 IfSpawned
   tmpdistance = 10
   tmpargument = 3
   SetMusicPassage
 
-//Enable deadfall pits
+// Enable deadfall pits
 IfSpawned
   PitsKill
 
@@ -33,10 +33,10 @@ IfTimeOut
       PlayFullSound
 
       // Pop the baddies
-      tmpargument = 13		// The passage to spawn
-      tmpdistance = 244		// The tile to find
-      tmpx = 0			// Needed for first call
-      tmpy = 0			// Needed for first call
+      tmpargument = 13        // The passage to spawn
+      tmpdistance = 244        // The tile to find
+      tmpx = 0            // Needed for first call
+      tmpy = 0            // Needed for first call
       FindTileInPassage
         // Replace the tile
         tmpargument = 246
@@ -144,5 +144,8 @@ IfTimeOut
   SetTime
 
 //------------------------------------------------------------------------------------
-End					// All done
+
+// All done
+End
+
 //------------------------------------------------------------------------------------

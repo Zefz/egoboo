@@ -4,7 +4,7 @@ IfHitGround
   PlaySound
 
 //------------------------------------------------------------------------------
-//This is the big cheese
+// This is the big cheese
 IfSpawned
   BecomeLeader
 
@@ -24,7 +24,7 @@ IfKilled
   tmpargument = 45
   SetBumpHeight
 
-  //Boss has been killed
+  // Boss has been killed
   JoinEvilTeam
   tmpargument = [BOSS]
   IssueOrder
@@ -34,14 +34,14 @@ IfKilled
 IfAttacked
   tmpargument = rand & 1 + 1
   PlaySound
-  
-  //Return fire
+
+  // Return fire
   SetTargetToWhoeverAttacked
   IfTargetIsOnHatedTeam
     IfStateIs0
       tmpargument = 1
       SetState
-      tmpargument = 3		//My god shall protect me!
+      tmpargument = 3        // My god shall protect me!
       PlayFullSound
       tmpargument = 1
       SendMessage
@@ -51,12 +51,12 @@ IfAttacked
     SetTargetToOldTarget
 
 //------------------------------------------------------------------------------
-//The main AI loop
+// The main AI loop
 IfTimeOut
   tmpargument = rand & 31 + 15
   SetTime
 
-  //Guard
+  // Guard
   IfStateIs0
     tmpx = selfspawnx
     tmpy = selfspawny
@@ -66,28 +66,28 @@ IfTimeOut
     SetTargetToDistantEnemy
       tmpargument = 1
       SetState
-      tmpargument = 3		//My god shall protect me!
+      tmpargument = 3        // My god shall protect me!
       PlayFullSound
       tmpargument = 1
       SendMessage
 
-  //Combat
+  // Combat
   IfStateIs1
 
-    //Start boss music
+    // Start boss music
     tmpdistance = 0
     tmpargument = 20
     PlayMusic
-    
+
     tmpdistance = 1700
     SetTargetToDistantEnemy
       tmpx = targetdistance
       tmpy = 350
-      IfXIsMoreThanY		//Far enough away to go ranged mode
+      IfXIsMoreThanY        // Far enough away to go ranged mode
         SetTurnModeToWatchTarget
         tmpargument = 3
         SetState
-      Else			//Too close, go bashing
+      Else            // Too close, go bashing
         SetTurnModeToVelocity
         tmpx = targetx
         tmpy = targety
@@ -99,15 +99,15 @@ IfTimeOut
         IfFacingTarget
           tmpargument = LATCHRIGHT
           PressLatchButton
-    Else			//Target ran away
+    Else            // Target ran away
       SetTurnModeToVelocity
-      tmpargument = 0   
+      tmpargument = 0
       tmpx = selfspawnx
       tmpy = selfspawny
       ClearWaypoints
       AddWaypoint
 
-//Charging for spell
+// Charging for spell
 IfStateIs3
   tmpx = targetdistance
   tmpy = 200
@@ -121,8 +121,8 @@ IfStateIs3
     AddWaypoint
     tmpargument = LATCHLEFT
     PressLatchButton
-    
-    //Never run out of mana
+
+    // Never run out of mana
     tmpx = selfmana
     tmpy = 256
     IfXIsLessThanY
@@ -131,12 +131,12 @@ IfStateIs3
       tmpargument = 256
       PumpTarget
       SetTargetToOldTarget
-    
-    //Check if we are finished charging
+
+    // Check if we are finished charging
     tmpargument = selfcontent +1
     SetContent
     tmpx = tmpargument
-    tmpy = 70              //charge time (holybolt time/8)
+    tmpy = 70              // charge time (holybolt time/8)
     IfXIsMoreThanY
       tmpargument = 1
       SetState

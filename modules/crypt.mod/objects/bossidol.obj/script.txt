@@ -1,16 +1,16 @@
-//Special prurple glow
+// Special prurple glow
 IfSpawned
   tmpargument = -1
   SetBlueShift
   SetGreenShift
 
-//This makes boss invincible until the idol is broken
-//Heal and sparklies
+// This makes boss invincible until the idol is broken
+// Heal and sparklies
 IfTimeOut
   tmpargument = [LICH]
   tmpdistance = BLAHFRIENDS + BLAHENEMIES
   SetTargetToNearestBlahID
-    tmpargument = 2560         //10 hp!
+    tmpargument = 2560         // 10 hp!
     HealTarget
     tmpargument = 1
     tmpx = targetx
@@ -19,22 +19,22 @@ IfTimeOut
     SpawnExactParticle
   tmpargument = 50
   SetTime
-  
-  //Flashy!
+
+  // Flashy!
   SetTargetToSelf
   FlashTarget
 
-//Need at least 2 damage in 1 hit to die
+// Need at least 2 damage in 1 hit to die
 IfSpawned
   tmpargument = 511
   SetDamageThreshold
-  
+
 IfKilled
   tmpargument = 3
   SendMessage
   tmpargument = 48
   SetContent
-  
+
   // Smash open
   tmpargument = [GOOD]
   IfTargetHasSpecialID
@@ -55,11 +55,11 @@ IfKilled
   Else
     tmpargument = tmpx
     OpenPassage
-    
+
     // Play the secret music
     tmpargument = 1
     PlaySound
-    
+
     // Give experience
     tmpargument = 20
     tmpdistance = EXPSECRET
@@ -82,5 +82,5 @@ IfKilled
   tmpturn = selfturn
   SpawnExactCharacterXYZ
   GoPoof
-  
+
 End

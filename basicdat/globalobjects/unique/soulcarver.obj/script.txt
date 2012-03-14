@@ -1,9 +1,10 @@
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -16,21 +17,29 @@ IfCrushed
   GoPoof
   tmpargument = 1
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
-IfTakenOut				// Do the unsheathe sound
+
+// Make it lie on floor
+IfDropped
+  KeepAction
+
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
+
+// Do the unsheathe sound
+IfTakenOut
   tmpargument = 11
   PlaySound
   SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer
     tmpargument = 2
     SendMessageNear
-IfHitGround				// Make a sound
+
+// Make a sound
+IfHitGround
   tmpargument = 10
   PlaySound
 
@@ -45,6 +54,7 @@ IfHeld
 // White embers and smoke
 tmpx = rand & 3
 tmpy = 0
+
 IfXIsEqualToY
   tmpargument = 4
   tmpdistance = rand % 9
@@ -53,21 +63,21 @@ IfXIsEqualToY
   tmpdistance = rand % 9
   SpawnParticle
 
-//Damage bonuses vs. demons
-IfScoredAHit		                  //Sets target to who the holder last hit
+// Damage bonuses vs. demons
+IfScoredAHit                          // Sets target to who the holder last hit
   tmpargument = [DEMO]
   IfTargetHasID
     tmpargument = rand % 3 + 12
     PlaySound
-    tmpargument = rand & 511 + 512  //2-4 extra
+    tmpargument = rand & 511 + 512  // 2-4 extra
     tmpargument = -tmpargument
     GiveLifeToTarget
-    tmpargument = [LORD]		//Even more vs. the Daemon Lord
+    tmpargument = [LORD]        // Even more vs. the Daemon Lord
     IfTargetHasID
-      tmpargument = -1325		//5 true damage
+      tmpargument = -1325        // 5 true damage
       GiveLifeToTarget
-    
-    //Randomize message
+
+    // Randomize message
     tmpx = rand % 4
     tmpy = 0
     IfXIsEqualToY
@@ -83,11 +93,11 @@ IfScoredAHit		                  //Sets target to who the holder last hit
       tmpargument = 6
     SendMessageNear
 
-    //Randomize sound
+    // Randomize sound
     tmpargument = rand & 1 + 13
     PlaySound
-    
-    //Spelly effects
+
+    // Spelly effects
     tmpargument = 6
     tmpx = targetx
     tmpy = targety
@@ -95,8 +105,10 @@ IfScoredAHit		                  //Sets target to who the holder last hit
     SpawnExactParticle
     SpawnExactParticle
     SpawnExactParticle
-    
+
     // Now that you know what it does, you learn its name.
     MakeNameKnown
 
-End					// All done
+// All done
+End
+

@@ -1,4 +1,4 @@
-//This spawns the portal in the beginning and starts the music
+// This spawns the portal in the beginning and starts the music
 IfSpawned
   tmpx = selfx
   tmpy = selfy
@@ -9,7 +9,7 @@ IfSpawned
   tmpargument = 18
   tmpdistance = 0
   PlayMusic
-  
+
 // This pops some ghuuls in a given area, if the detection area is blocked
 IfTimeOut
   // Check the detection passage...
@@ -21,15 +21,15 @@ IfTimeOut
       PlayFullSound
 
       // Pop the baddies
-      tmpargument = passage + 1	// The passage to spawn
-      tmpdistance = 244		// The tile to find
-      tmpx = 0			// Needed for first call
-      tmpy = 0			// Needed for first call
+      tmpargument = passage + 1    // The passage to spawn
+      tmpdistance = 244        // The tile to find
+      tmpx = 0            // Needed for first call
+      tmpy = 0            // Needed for first call
       FindTileInPassage
         // Replace the tile
         tmpargument = 246
         SetTileXY
-        
+
         // Spawn a ghuul
         tmpargument = 98
         tmpdistance = 0
@@ -134,4 +134,6 @@ IfTimeOut
   tmpargument = 10
   SetTime
 
-End					// All done
+// All done
+End
+

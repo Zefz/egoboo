@@ -1,5 +1,5 @@
 // Icicle spell
-//  by Pteromys of Melon Island... http://melonisland.net
+//  by Pteromys of Melon Island... http:// melonisland.net
 //  based on the "Sword Wall" spell
 // Usage: Hold down attack to summon icicles in front of you.
 //   Release to send the icicles into the sky
@@ -44,7 +44,7 @@ IfChanged
   KeepAction
 
 // Icicle event handling
-IfStateIs4				// 4. Pinned somebody and waiting
+IfStateIs4                // 4. Pinned somebody and waiting
   tmpx = 0
   tmpy = 1
   IfTimeOut
@@ -60,7 +60,7 @@ IfStateIs4				// 4. Pinned somebody and waiting
     tmpdistance = selfz
     tmpargument = 3
     SpawnExactParticle
-    tmpargument = 2			// *CRASH! tinkle-tinkle-tinkle...*
+    tmpargument = 2            // *CRASH! tinkle-tinkle-tinkle...*
     tmpdistance = 22050
     PlaySound
     tmpargument = ACTIONKA
@@ -68,14 +68,16 @@ IfStateIs4				// 4. Pinned somebody and waiting
     KeepAction
     tmpargument = 5
     SetState
-IfStateIs3				// 3. Falling
+
+// 3. Falling
+IfStateIs3
   IfScoredAHit
     SetTargetToSelf
     SetOwnerToTarget
     SetTargetToWhoeverWasHit
     StopTargetMovement
     EnchantTarget
-    tmpargument = 4			// Don't shatter on impact if I've pinned somebody
+    tmpargument = 4            // Don't shatter on impact if I've pinned somebody
     SetState
     IfTargetIsAlive
       tmpargument = 3
@@ -102,7 +104,7 @@ IfStateIs3				// 3. Falling
       tmpdistance = selfz
       tmpargument = 3
       SpawnExactParticle
-      tmpargument = 2			// *CRASH! tinkle-tinkle-tinkle...*
+      tmpargument = 2            // *CRASH! tinkle-tinkle-tinkle...*
       tmpdistance = 22050
       PlaySound
       tmpargument = ACTIONKA
@@ -110,7 +112,9 @@ IfStateIs3				// 3. Falling
       KeepAction
       tmpargument = 5
       SetState
-IfStateIs2				// 2. Floating on high
+
+// 2. Floating on high
+IfStateIs2
   tmpx = 500
   tmpy = selfaltitude
   IfXIsLessThanY
@@ -127,18 +131,18 @@ IfStateIs2				// 2. Floating on high
     Else
       SetTargetToSelf
       tmpargument = 1 - targetspeedz
-      tmpargument = tmpargument < 1 + tmpargument < 3 + tmpargument < 2 //long-way multiply by 100
+      tmpargument = tmpargument < 1 + tmpargument < 3 + tmpargument < 2 // long-way multiply by 100
     AccelerateUp
-  tmpargument = 1			// Don't fall until I'm actually floating on high
+  tmpargument = 1            // Don't fall until I'm actually floating on high
   IfContentIs
     tmpargument = 3
     SetTime
-    SetTargetToNearestLifeform		// Anybody to fall on?
+    SetTargetToNearestLifeform        // Anybody to fall on?
       tmpx = targetdistance
       tmpy = 50
       IfXIsLessThanY
         IfTargetIsFlying
-          GetState //nop
+          GetState // nop
         Else
           SetTargetToSelf
           StopTargetMovement
@@ -160,7 +164,7 @@ IfStateIs2				// 2. Floating on high
     tmpdistance = selfz
     tmpargument = 3
     SpawnExactParticle
-    tmpargument = 2			// *CRASH! tinkle-tinkle-tinkle...*
+    tmpargument = 2            // *CRASH! tinkle-tinkle-tinkle...*
     tmpdistance = 22050
     PlaySound
     tmpargument = ACTIONKA
@@ -168,12 +172,14 @@ IfStateIs2				// 2. Floating on high
     KeepAction
     tmpargument = 5
     SetState
-IfStateIs1				// 1. Being summoned
+
+// 1. Being summoned
+IfStateIs1
   IfOrdered
     tmpx = selforder
-    tmpy = 462				// Unique order ID for icicles to float up (hex 1CE)
+    tmpy = 462                // Unique order ID for icicles to float up (hex 1CE)
     IfXIsEqualToY
-      tmpargument = 0			// Rely on "AccelerateUp" for flying now
+      tmpargument = 0            // Rely on "AccelerateUp" for flying now
       SetFlyHeight
       tmpargument = 2
       SetState
@@ -225,7 +231,7 @@ IfStateIs0
             tmpargument = 1
             SpawnExactParticle
 
-            GetContent				// Is it time to spawn another icicle?
+            GetContent                // Is it time to spawn another icicle?
             tmpx = tmpargument & 255
             tmpy = 0
             IfXIsEqualToY
@@ -237,7 +243,7 @@ IfStateIs0
               Compass
               tmpdistance = selfz + 30
               tmpargument = 3
-              SpawnExactParticle		// Make a little smoke puffie
+              SpawnExactParticle        // Make a little smoke puffie
               tmpturn = rand % 65535
               SpawnCharacterXYZ
                 GetState
@@ -252,7 +258,7 @@ IfStateIs0
         tmpargument = ACTIONZA
         CorrectActionForHand
         TargetDoAction
-        tmpargument = 462			// Unique order to make icicles fly up
+        tmpargument = 462            // Unique order to make icicles fly up
         tmpdistance = [ICIC]
         OrderSpecialID
         tmpargument = 0

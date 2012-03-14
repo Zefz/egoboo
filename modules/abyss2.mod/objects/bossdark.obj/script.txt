@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-//STATUE AI
+// STATUE AI
 IfSpawned
   tmpargument = 1
   ChangeArmor
@@ -12,11 +12,12 @@ IfSpawned
   SetFlyHeight
 
 //------------------------------------------------------------------------------
-//BOSS AI
+// BOSS AI
 tmpargument = 1
+
 IfArmorIs
   IfOrdered
-    tmpx = [DKNI]           //Become alive?
+    tmpx = [DKNI]           // Become alive?
     tmpy = selforder
     IfXIsEqualToY
       tmpargument = 0
@@ -42,14 +43,13 @@ Else
       tmpargument = 0
       SetState
 
-
   //------------------------------------------------------------------------------
   // ZZ> Handle death by sending a message and other stuff
   IfKilled
     tmpargument = 2
     PlaySound
 
-    //Get rid of the darkness
+    // Get rid of the darkness
     DisaffirmCharacter
 
     // Drop goodies
@@ -57,10 +57,8 @@ Else
     DropMoney
     DropKeys
 
-
     tmpargument = 0
     SendMessageNear
-
 
     // Make the character body
     tmpargument = 0
@@ -68,10 +66,9 @@ Else
     tmpargument = 0
     SetFlyHeight
 
-    //Tell the dracolich we are dead
+    // Tell the dracolich we are dead
     tmpargument = [BDIE]
     IssueOrder
-
 
   //------------------------------------------------------------------------------
   IfBumped
@@ -86,14 +83,13 @@ Else
       AddWaypoint
       SetTargetToOldTarget
 
-
   //------------------------------------------------------------------------------
   IfTimeOut
     // Return to normal
     IfStateIs4
       tmpargument = 1
       SetState
-      
+
     // Wait for the good guys to barge in...
     IfStateIs0
       tmpargument = 20
@@ -178,8 +174,6 @@ Else
         SetState
         tmpargument = rand & 3 + 6
         SetTime
-
-
 
   //------------------------------------------------------------------------------
   // ZZ> Handle being attacked by blocking or countering or running away

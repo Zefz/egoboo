@@ -5,13 +5,13 @@ IfAttacked
   PlaySound
 
 //--------------------------------------------------------------------------------
-//Monster death
+// Monster death
 IfKilled
   // Make the character body
   tmpargument = 50
   SetBumpHeight
 
-  //Death sound
+  // Death sound
   tmpargument = 4
   PlaySound
 
@@ -23,38 +23,38 @@ IfKilled
       tmpargument = 2
   SendMessageNear
 
-  //Drop the loot
+  // Drop the loot
   DropMoney
   DropKeys
   DropItems
 
 //--------------------------------------------------------------------------------
-//Combat AI
+// Combat AI
 IfTimeOut
 
   // Reset the timer
   tmpargument = 10
   SetTime
 
-  //Groan
+  // Groan
   tmpx = 7
   tmpy = rand & 255
   IfXIsMoreThanY
     tmpargument = rand & 1 + 1
     PlaySound
 
-  //Target enemy
+  // Target enemy
   SetTargetToWideEnemy
     SetTurnModeToWatchTarget
 
-    //Chase enemy
+    // Chase enemy
     tmpx = selfx
     tmpy = selfy
     tmpturn = targetturnto
     tmpdistance = 600
     Compass
 
-  //No enemies found - wander
+  // No enemies found - wander
   Else
     SetTurnModeToVelocity
     tmpx = rand & 511 + selfx - 256
@@ -63,7 +63,7 @@ IfTimeOut
     SetTime
 
   ClearWaypoints
-  AddWaypoint	//Do movements
+  AddWaypoint    // Do movements
 
   // Attack the enemy?
   tmpx = targetdistance
@@ -72,19 +72,19 @@ IfTimeOut
     IfFacingTarget
       IfTargetIsOnHatedTeam
         tmpx = rand & 1280 + selfdex
-        tmpy = 2560		//50% chance at 5 dexterity
-        IfXIsMoreThanY			//Attack rating based on DEX
-          tmpargument = ACTIONBC		//Attack
+        tmpy = 2560        // 50% chance at 5 dexterity
+        IfXIsMoreThanY            // Attack rating based on DEX
+          tmpargument = ACTIONBC        // Attack
           DoAction
 
 //--------------------------------------------------------------------------------
-//Dont flock
+// Dont flock
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsOnSameTeam
     tmpx = rand % 500 + targetx - 250
     tmpy = rand % 500 + targety - 250
-    tmpturn = targetturnto + 32768		//TargetTurnAway
+    tmpturn = targetturnto + 32768        // TargetTurnAway
     tmpdistance = rand % 400 + 500
     Compass
     ClearWaypoints
@@ -97,15 +97,15 @@ IfBumped
 End
 //--------------------------------------------------------------------------------
 
-//SetTargetToNearestFriend
+// SetTargetToNearestFriend
 //  tmpx = targetdistance
 //  tmpy = 100
 //  IfXIsLessThanY
 //    tmpx = selfx
 //    tmpy = selfy
-//    tmpturn = targetturnto + 32768		//TargetTurnAway
+//    tmpturn = targetturnto + 32768        // TargetTurnAway
 //    tmpdistance = 200
 //    Compass
 //    ClearWaypoints
 //    AddWaypoint
-//SetTargetToOldTarget
+// SetTargetToOldTarget

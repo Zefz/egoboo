@@ -1,37 +1,37 @@
-//Soldier special abillties:
-//LEVEL   ABILLITY
-//1     - Weapon Profiency, Defender (100% block rating)
-//2     - Critical Strike
-//3     - n/a
-//4     - n/a
-//5     - Sunder Strike
-//6     - n/a
-//7     - n/a 
-//8     - Weapon Mastery
-//9     - n/a
-//10    - n/a 
-//11    - Grogging Hit
-//12    - n/a
-//13    - n/a
-//14    - Hardy
+// Soldier special abillties:
+// LEVEL   ABILLITY
+// 1     - Weapon Profiency, Defender (100% block rating)
+// 2     - Critical Strike
+// 3     - n/a
+// 4     - n/a
+// 5     - Sunder Strike
+// 6     - n/a
+// 7     - n/a
+// 8     - Weapon Mastery
+// 9     - n/a
+// 10    - n/a
+// 11    - Grogging Hit
+// 12    - n/a
+// 13    - n/a
+// 14    - Hardy
 //-----------------------------------------------------------------------------
-//Reset
+// Reset
 IfSpawned
   tmpargument = 0
   SetState
   SetContent
 
 //-----------------------------------------------------------------------------
-//For sunder strikes
+// For sunder strikes
 IfSpawned
   SetOwnerToTarget
-  
+
 //-----------------------------------------------------------------------------
-//Damage resist skill
+// Damage resist skill
 tmpx = selflevel
-tmpy = 12            //At least level 14
+tmpy = 12            // At least level 14
 IfXIsMoreThanY
-  tmpargument = selflevel * 24       //Reduce all damage by 1/10 per level
+  tmpargument = selflevel * 24       // Reduce all damage by 1/10 per level
   SetDamageThreshold
 
 //-----------------------------------------------------------------------------
@@ -40,82 +40,82 @@ IfHitGround
   PlaySound
 
 //-----------------------------------------------------------------------------
-//Weapon mastery skill
+// Weapon mastery skill
 SetTargetToSelf
 tmpx = selflevel
-tmpy = 6             //Need level 8
+tmpy = 6             // Need level 8
 IfXIsMoreThanY
   IfScoredAHit
     SetTargetToWhoeverWasHit
-    tmpargument = 512           //+2 damage
+    tmpargument = 512           // +2 damage
     DamageTarget
-  
+
 //-----------------------------------------------------------------------------
-//Critical hit abillity
+// Critical hit abillity
 tmpx = selflevel
-tmpy = 0             //Need level 2
+tmpy = 0             // Need level 2
 IfXIsMoreThanY
   IfScoredAHit
     SetTargetToWhoeverWasHit
     tmpx = rand % 100
-    tmpy = selflevel          //1% chance * (level-1)
+    tmpy = selflevel          // 1% chance * (level-1)
     IfXIsLessThanY
-      tmpargument = 128*selflevel + 128     //0.5 extra damage per level
+      tmpargument = 128*selflevel + 128     // 0.5 extra damage per level
       DamageTarget
       tmpargument = 10
       PlaySound
-      
-      //Draw the text
-      tmpdistance = 3         //Duration
-      tmpargument = 7         //Message 7
-      tmpturn = RED           //Message color
+
+      // Draw the text
+      tmpdistance = 3         // Duration
+      tmpargument = 7         // Message 7
+      tmpturn = RED           // Message color
       DrawBillboard
-  
+
 //-----------------------------------------------------------------------------
-//Sunder attack abillity
+// Sunder attack abillity
 tmpx = selflevel
-tmpy = 3             //Need level 5
+tmpy = 3             // Need level 5
 IfXIsMoreThanY
   IfScoredAHit
     SetTargetToWhoeverWasHit
     tmpx = rand % 100
-    tmpy = selflevel*2          //2% chance per (level-1)
+    tmpy = selflevel*2          // 2% chance per (level-1)
     IfXIsLessThanY
       EnchantTarget
       tmpargument = 12
       PlaySound
-      
-      //Draw the text
-      tmpdistance = 3         //Duration
-      tmpargument = 9         //Message 9
-      tmpturn = BLUE          //Message color
+
+      // Draw the text
+      tmpdistance = 3         // Duration
+      tmpargument = 9         // Message 9
+      tmpturn = BLUE          // Message color
       DrawBillboard
 
 //-----------------------------------------------------------------------------
-//Grog strike abillity
+// Grog strike abillity
 tmpx = selflevel
-tmpy = 9            //Need level 11
+tmpy = 9            // Need level 11
 IfXIsMoreThanY
   IfScoredAHit
     SetTargetToWhoeverWasHit
     GetTargetGrogTime
     tmpx = tmpargument
     tmpy = 0
-    IfXIsEqualToY				//Dont stack this with itself
-      tmpx = selflevel * 2      //2% per level
+    IfXIsEqualToY                // Dont stack this with itself
+      tmpx = selflevel * 2      // 2% per level
       tmpy = rand % 100
       IfXIsMoreThanY
-        tmpargument = selflevel>4  //Increases 1 with every 4 levels
+        tmpargument = selflevel>4  // Increases 1 with every 4 levels
         GrogTarget
         tmpargument = 11
         PlaySound
-        
-        //Draw the text
-        tmpdistance = 3         //Duration
-        tmpargument = 9         //Message 8
-        tmpturn = GREEN         //Message color
+
+        // Draw the text
+        tmpdistance = 3         // Duration
+        tmpargument = 9         // Message 8
+        tmpturn = GREEN         // Message color
         DrawBillboard
-      
+
 //-----------------------------------------------------------------------------
 // ZZ> Gong sound
 IfCleanedUp
@@ -155,7 +155,7 @@ IfKilled
   SendMessage
 
   // Drop goodies
-  tmpargument = 1+selflevel*selflevel*100		//The money loss formula
+  tmpargument = 1+selflevel*selflevel*100        // The money loss formula
   DropMoney
   DropKeys
 

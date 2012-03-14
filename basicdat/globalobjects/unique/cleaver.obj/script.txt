@@ -1,11 +1,11 @@
-//Magic sparkles
+// Magic sparkles
 IfHeld
   tmpargument = RED
   SparkleIcon
 Else
   UnsparkleIcon
 
-//Spawn a spelly effect
+// Spawn a spelly effect
 IfTimeOut
   tmpargument = 7
   SetTime
@@ -15,7 +15,7 @@ IfTimeOut
   tmpdistance = rand & 75 + selfz
   IfHeld
     SpawnExactParticle
-    
+
 IfTakenOut
   tmpargument = 2
   PlaySound
@@ -23,13 +23,14 @@ IfTakenOut
   IfTargetIsAPlayer
     tmpargument = 4
     SendMessageNear
-    
+
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -42,29 +43,40 @@ IfCrushed
   GoPoof
   tmpargument = 1
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-  tmpargument = 3			  //
-  PlaySound				  //
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
-IfHitGround				// Make a sound
-  tmpargument = 1			  //
-  PlaySound				  //
+
+// Make it lie on floor
+IfDropped
+  KeepAction
+  tmpargument = 3
+  PlaySound
+
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
+
+// Make a sound
+IfHitGround
+  tmpargument = 1
+  PlaySound
+
 IfNotDropped
   tmpargument = 2
   SendMessageNear
+
 IfTakenOut
   SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer
     tmpargument = 4
     SendMessageNear
-    
+
+// No longer needed, this is handled by the sourcecode now...
 //IfNotPutAway
-//  tmpargument = 3         //No longer needed, this is handled by the sourcecode now...
+//  tmpargument = 3
 //  SendMessageNear
 
-End					// All done
+// All done
+End
+

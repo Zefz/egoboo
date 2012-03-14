@@ -1,31 +1,34 @@
-IfKilled				// This reduces the height of the char
-  IfTargetIsOnHatedTeam			  // Final words
-    tmpargument = 0			    //
-    SendMessageNear			    //
-  tmpargument = 30			  // Dead height
-  SetBumpHeight				  //
-  tmpargument = 1			  // Sound
-  PlaySound				  //
+IfKilled                // This reduces the height of the char
+  IfTargetIsOnHatedTeam              // Final words
+    tmpargument = 0
+    SendMessageNear
+  tmpargument = 30              // Dead height
+  SetBumpHeight
+  tmpargument = 1              // Sound
+  PlaySound
 
-IfAttacked				// Don't take kindly to attackers
-  SetTargetToWhoeverAttacked		  //
-    tmpargument = 0			    // Sound
-    PlaySound				    //
+// Don't take kindly to attackers
+IfAttacked
+  SetTargetToWhoeverAttacked
+    tmpargument = 0                // Sound
+    PlaySound
 
-IfBumped				// Attack whoever it bumped
-  SetTargetToWhoeverBumped		  //
-  IfTargetIsOnHatedTeam			  // Make sure it's an enemy
-    tmpargument = LATCHLEFT		    // Bite 'em
-    PressLatchButton			    //
-  Else					  // Scooch around friendly
-    tmpx = rand & 1023 + targetx - 512      //
-    tmpy = rand & 1023 + targety - 512      //
-    ClearWaypoints			    //
-    AddWaypoint				    //
-    SetTargetToOldTarget		    //
+// Attack whoever it bumped
+IfBumped
+  SetTargetToWhoeverBumped
+  IfTargetIsOnHatedTeam              // Make sure it's an enemy
+    tmpargument = LATCHLEFT            // Bite 'em
+    PressLatchButton
+  Else                      // Scooch around friendly
+    tmpx = rand & 1023 + targetx - 512
+    tmpy = rand & 1023 + targety - 512
+    ClearWaypoints
+    AddWaypoint
+    SetTargetToOldTarget
 
-IfTimeOut				// This is done every so often
-  SetTargetToWideEnemy			  // Look for enemies
+// This is done every so often
+IfTimeOut
+  SetTargetToWideEnemy              // Look for enemies
     tmpargument = rand & 1 + 2
     PlaySound
 
@@ -37,11 +40,14 @@ IfTimeOut				// This is done every so often
     tmpturn = targetturnto
     tmpdistance = 300
     Compass
-  Else					  // Move towards the shrine
+  Else                      // Move towards the shrine
     tmpx = 32*128
     tmpy = 30*128
-  ClearWaypoints			  //
-  AddWaypoint				  //
-  tmpargument = rand & 63 + 20		  // Wait a while and try again
-  SetTime				  //
-End					// Finished with this character
+  ClearWaypoints
+  AddWaypoint
+  tmpargument = rand & 63 + 20          // Wait a while and try again
+  SetTime
+
+// Finished with this character
+End
+

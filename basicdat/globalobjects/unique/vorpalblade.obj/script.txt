@@ -1,22 +1,23 @@
-//10% chance of dealing a +50 damage
+// 10% chance of dealing a +50 damage
 IfUsed
   tmpx = rand % 100
   tmpy = 10
   IfXIsLessThanY
     tmpargument = 4
     SendMessageNear
-    tmpargument = 3           //50 damage!
+    tmpargument = 3           // 50 damage!
   Else
-    tmpargument = 2           //4-8 damage
+    tmpargument = 2           // 4-8 damage
   tmpdistance = SPAWNLAST
   SpawnAttachedParticle
 
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -29,24 +30,35 @@ IfCrushed
   GoPoof
   tmpargument = 1
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-IfHitGround				// Make a sound
-  tmpargument = 1			  //
-  PlaySound				  //
-IfTakenOut				// Make a sound
-  tmpargument = 2			  //
-  PlaySound				  //
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
+
+// Make it lie on floor
+IfDropped
+  KeepAction
+
+// Make a sound
+IfHitGround
+  tmpargument = 1
+  PlaySound
+
+// Make a sound
+IfTakenOut
+  tmpargument = 2
+  PlaySound
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
     IfNameIsKnown
-      tmpargument = 2			  //
+      tmpargument = 2
     Else
       tmpargument = 3
-    SendMessageNear			  //
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
-End					// All done
+    SendMessageNear
+
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
+
+// All done
+End
+

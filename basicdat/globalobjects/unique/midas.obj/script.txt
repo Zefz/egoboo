@@ -1,8 +1,8 @@
-//We control when ammo is used
+// We control when ammo is used
 IfUsed
   IncreaseAmmo
 
-//Turn enemies to gold!
+// Turn enemies to gold!
 IfScoredAHit
   SetTargetToWhoeverWasHit
   IfTargetIsAPlayer
@@ -19,28 +19,28 @@ IfScoredAHit
       DrawBillboard
     Else
       FlashTarget
-      KillTarget                //Turn em to gold!
+      KillTarget                // Turn em to gold!
         tmpargument = 5
         SetTime
         SetReloadTime
         tmpargument = 1
         SetState
-        
+
 IfTimeOut
 
-  //Turn enemies into gold
+  // Turn enemies into gold
   IfStateIs1
     SetTargetToWhoeverWasHit
     PoofTarget
-    
-    //Spawn some gold
+
+    // Spawn some gold
     tmpargument = 2
     tmpx = targetx
     tmpy = targety
     tmpdistance = targetz
     SpawnExactParticle
-    
-    //Tell them what happened
+
+    // Tell them what happened
     tmpargument = 2
     SendMessageNear
     tmpargument = 5
@@ -50,8 +50,8 @@ IfTimeOut
     tmpdistance = 3
     tmpturn = YELLOW
     DrawBillboard
-    
-    //Finite amount of ammo
+
+    // Finite amount of ammo
     CostAmmo
     IfAmmoOut
       GoPoof
@@ -59,13 +59,13 @@ IfTimeOut
       SendMessageNear
     tmpargument = 0
     SetState
-  
+
 //--------------------------------------------------------------------------------
-//This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+// This function makes an item fall to the floor when spawned
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
 
 //--------------------------------------------------------------------------------
@@ -80,40 +80,43 @@ IfCrushed
   SpawnExactParticle
   GoPoof
   tmpargument = 1
-  SendMessageNear  
+  SendMessageNear
 
 //--------------------------------------------------------------------------------
-//Say oops, that's kursed
+// Say oops, that's kursed
 IfNotDropped
   SetTargetToWhoeverIsHolding
   tmpargument = 3
   SendMessageNear
-  
-//--------------------------------------------------------------------------------
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-  
-//--------------------------------------------------------------------------------
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear
-    
-//--------------------------------------------------------------------------------
-IfTakenOut				// Do the unsheathe sound
-  tmpargument = 2			  //
-  PlaySound				  //
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  
-    tmpargument = 2			  
-    SendMessageNear			  
 
 //--------------------------------------------------------------------------------
-IfHitGround				// Make a sound
-  tmpargument = 1			  
-  PlaySound				  
-  
+IfDropped                // Make it lie on floor
+  KeepAction
+
 //--------------------------------------------------------------------------------
-End					// All done
+IfGrabbed                // Tell them what they've won...
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
+
+//--------------------------------------------------------------------------------
+IfTakenOut                // Do the unsheathe sound
+  tmpargument = 2
+  PlaySound
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 2
+    SendMessageNear
+
+//--------------------------------------------------------------------------------
+IfHitGround                // Make a sound
+  tmpargument = 1
+  PlaySound
+
+//--------------------------------------------------------------------------------
+
+// All done
+End
+
 //--------------------------------------------------------------------------------

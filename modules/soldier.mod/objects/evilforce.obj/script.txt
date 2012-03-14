@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------
-//Sound the player that he is stepping on something evil
+// Sound the player that he is stepping on something evil
 IfTimeOut
   tmpargument = 50
   SetTime

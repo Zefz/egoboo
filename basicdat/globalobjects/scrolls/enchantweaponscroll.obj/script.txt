@@ -1,10 +1,11 @@
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
   MakeAmmoKnown
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -17,13 +18,17 @@ IfCrushed
   GoPoof
   tmpargument = 6
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-IfHitGround				// Make a sound
-  tmpargument = 0
-  PlaySound	
 
-//Go blank  
+// Make it lie on floor
+IfDropped
+  KeepAction
+
+// Make a sound
+IfHitGround
+  tmpargument = 0
+  PlaySound
+
+// Go blank
 IfInWater
   IfHeld
     DoNothing
@@ -36,15 +41,16 @@ IfInWater
       tmpargument = 5
       SendMessageNear
       MakeNameKnown      // To keep messages okay
-      
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
+
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
   SetOwnerToTarget
-  IfTargetIsAPlayer			  //
+  IfTargetIsAPlayer
     GetContent
-    SendMessageNear			  //
-    
-//Scroll effects
+    SendMessageNear
+
+// Scroll effects
 IfUsed
   tmpargument = 0
   IfContentIs
@@ -52,7 +58,7 @@ IfUsed
     tmpargument = 1
     PlaySound
 
-    //Spelly effects
+    // Spelly effects
     tmpx = selfx
     tmpy = selfy
     tmpdistance = 0
@@ -96,7 +102,7 @@ IfUsed
     Else
       tmpargument = 8
       SendMessageNear
-    IfTargetIsOwner 
+    IfTargetIsOwner
       FlashTarget
       tmpx = targetx
       tmpy = targety
@@ -105,11 +111,11 @@ IfUsed
       SpawnExactParticle
       MakeUsageKnown
       MakeNameKnown
-      tmpargument = 11  // Basically, if the owner's other hand is empty,             
+      tmpargument = 11  // Basically, if the owner's other hand is empty,
       SendMessageNear   // the scroll targets him instead. This part only works in 2.7.x and above...
       tmpargument = 32  // raise STR a wee bit. 1/8th
       GiveStrengthToTarget // Just like Nethack :)
-     
+
      // Do flashy things
         tmpargument = 0
         tmpdistance = 11025
@@ -117,7 +123,7 @@ IfUsed
         tmpargument = 60
         SetReloadTime
       // No valid target...
-   
+
     CostAmmo
     IfAmmoOut
       GoPoof
@@ -130,8 +136,8 @@ IfUsed
     SendMessageNear
     tmpargument = 50
     SetReloadTime
-    
-//On fire!
+
+// On fire!
 IfReaffirmed
   IfHeld
     DoNothing
@@ -147,11 +153,15 @@ IfReaffirmed
     GoPoof
     tmpargument = 4
     SendMessageNear
+
 IfNameIsKnown
   IfStateIs0
     tmpargument = 1
     ChangeArmor
     SetState
   Else
-    DoNothing 
-End					// All done
+    DoNothing
+
+// All done
+End
+

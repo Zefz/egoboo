@@ -8,14 +8,12 @@ IfBumped
     tmpargument = LATCHJUMP
     PressLatchButton
 
-
 //-----------------------------------------------------------------------------
 // ZZ> Gong sound
 IfCleanedUp
   tmpargument = 2
   tmpdistance = 8000
   PlayFullSound
-
 
 //------------------------------------------------------------------------------
 // ZZ> Yell at player
@@ -28,14 +26,12 @@ IfTooMuchBaggage
   tmpargument = 50
   SetReloadTime
 
-
 //------------------------------------------------------------------------------
 // ZZ> Scream and shout
 IfUsed
   tmpdistance = rand & 2047 + 14000
   tmpargument = rand & 1 + 8
   PlaySound
-
 
 //------------------------------------------------------------------------------
 // ZZ> Handle being bored by cheering or sneezing
@@ -47,7 +43,6 @@ IfBored
     tmpargument = 10
     tmpdistance = rand & 2047 + 14000
     PlaySound
-
 
 //------------------------------------------------------------------------------
 // ZZ> Handle death by sending a message and other stuff
@@ -67,7 +62,7 @@ IfKilled
   SendMessage
 
   // Drop goodies
-  tmpargument = selflevel*selflevel*100		//The money loss formula
+  tmpargument = selflevel*selflevel*100        // The money loss formula
   DropMoney
   DropKeys
 
@@ -75,29 +70,28 @@ IfKilled
   tmpargument = 45
   SetBumpHeight
 
-
 //------------------------------------------------------------------------------
-//Invoke special power if enough xp gained
+// Invoke special power if enough xp gained
 SetTargetToSelf
 tmpx = targetexp
 tmpy = 9998
+
 IfXIsMoreThanY
-  UndoEnchant		//Hinder looping of same enchant
+  UndoEnchant        // Hinder looping of same enchant
   SetOwnerToTarget
-  EnchantTarget		//Give the special bonus
-  tmpargument = 2	//Spawn some fancy sparklies
+  EnchantTarget        // Give the special bonus
+  tmpargument = 2    // Spawn some fancy sparklies
   tmpx = selfx
   tmpy = selfy
   tmpdistance = selfz
   SpawnExactParticle
 Else
-  UndoEnchant		//Remove if needed xp is lost
+  UndoEnchant        // Remove if needed xp is lost
 
 //------------------------------------------------------------------------------
 // ZZ> For helper AIs
 IfLeaderKilled
   BecomeLeader
-
 
 //------------------------------------------------------------------------------
 // ZZ> Handle being attacked by blocking or countering or running away
@@ -114,8 +108,6 @@ IfAttacked
     tmpargument = rand & 1 + 3
     tmpdistance = rand & 2047 + 14000
     PlaySound
-
-
 
 //------------------------------------------------------------------------------
 End

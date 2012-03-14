@@ -1,4 +1,4 @@
-IfBumped				//Display a message (Based on skin)
+IfBumped                // Display a message (Based on skin)
   IfTimeOut
     SetTargetToWhoeverBumped
     IfTargetIsAPlayer
@@ -6,11 +6,13 @@ IfBumped				//Display a message (Based on skin)
       IfTargetHasSkillID
         SetTargetToSelf
         tmpargument = targetarmor
-        SendMessageNear			//Armor level is which message to send
+        SendMessageNear            // Armor level is which message to send
       Else
-        tmpargument = 4     //They can't read!
+        tmpargument = 4     // They can't read!
         SendMessageNear
       tmpargument = 100
       SetTime
 
-End					// All done
+// All done
+End
+

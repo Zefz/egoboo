@@ -1,72 +1,72 @@
-//Setup
+// Setup
 IfSpawned
   tmpargument = 6
   SetContent
 
-//Found the sister?
+// Found the sister?
 IfOrdered
   tmpx = selforder
   tmpy = [FORT]
   IfXIsEqualToY
-    tmpargument = 4     //Do nothing anymore
+    tmpargument = 4     // Do nothing anymore
     SetState
 
-//Handle talking
+// Handle talking
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsAPlayer
     IfTargetIsOnSameTeam
       tmpargument = [FORT]
-      tmpdistance = 0          //Reset the quest level first
+      tmpdistance = 0          // Reset the quest level first
       IfTargetHasQuest
         DoNothing
       tmpturn = 1
-      IfDistanceIsMoreThanTurn  //They have done the quest
+      IfDistanceIsMoreThanTurn  // They have done the quest
         IfStateIs0
           tmpargument = 11
           IfContentIs
-            DoNothing           //Play the "another time" voice
+            DoNothing           // Play the "another time" voice
           Else
             tmpargument = 11
             SetContent
-            tmpargument = 6     //Say hello there
+            tmpargument = 6     // Say hello there
           PlayFullSound
           SendMessage
           tmpargument = 2
-          SetState                    //Wait before talking
+          SetState                    // Wait before talking
 
       Else
-        IfStateIs0                    //Standing at spawn point
+        IfStateIs0                    // Standing at spawn point
           GetContent
           PlayFullSound
           SendMessage
           tmpargument = 2
-          SetState                    //Wait before talking
+          SetState                    // Wait before talking
           tmpargument = 150
           SetTime
           GetContent
           tmpargument = tmpargument + 1
           SetContent
 
-          //All done talking! Follow player
+          // All done talking! Follow player
           tmpx = 11
           tmpy = tmpargument
           IfXIsEqualToY
             SetOwnerToTarget
             tmpargument = 3
-            SetState              //Follow
-            tmpargument = [BSPK]            //This tells meena we are looking for her
+            SetState              // Follow
+            tmpargument = [BSPK]            // This tells meena we are looking for her
             IssueOrder
-            tmpargument = [FORT]        //Add the quest to the log
+            tmpargument = [FORT]        // Add the quest to the log
             tmpdistance = 0
             AddQuestAllPlayers
 
-//become bad
+// become bad
 IfCalledForHelp
-  tmpargument = 1               //Combat
+  tmpargument = 1               // Combat
   SetState
 
-//Ouch
+// Ouch
 IfAttacked
   SetTargetToWhoeverAttacked
   IfTargetIsOnSameTeam
@@ -78,31 +78,31 @@ IfAttacked
   IfTargetIsAPlayer
     tmpargument = TEAME
     TargetJoinTeam
-//Yah!
+// Yah!
 IfUsed
   tmpargument = 5
   PlaySound
 
-//Death stuff
+// Death stuff
 IfKilled
   tmpargument = selfmoney
   DropMoney
 
-  //Sound
+  // Sound
   tmpargument = 1
   PlaySound
 
-  //Message
+  // Message
   IfTargetIsSelf
     tmpargument = 0
   Else
     tmpargument = 1
   SendMessage
-  
+
   tmpargument = TEAME
   TargetJoinTeam
 
-//Use shield and attack
+// Use shield and attack
 IfTargetIsOnHatedTeam
   IfFacingTarget
     tmpx = targetdistance
@@ -115,21 +115,20 @@ IfTargetIsOnHatedTeam
         IfHoldingItemID
           PressLatchButton
 
-
-//Main AI loop
+// Main AI loop
 IfTimeOut
   tmpargument = rand & 31 + 15
   SetTime
 
   tmpx = selflife
-  tmpy = 1500           //Less than 6 hp
+  tmpy = 1500           // Less than 6 hp
   IfXIsLessThanY
     tmpargument = 1
   Else
     tmpargument = 0
   ChangeArmor
 
-  //Standing at spawn
+  // Standing at spawn
   IfStateIs0
     SetTurnModeToVelocity
     SetTargetToWideEnemy
@@ -140,7 +139,7 @@ IfTimeOut
     ClearWaypoints
     AddWaypoint
 
-  //Combat
+  // Combat
   IfStateIs1
     SetTargetToWideEnemy
       tmpx = targetx
@@ -151,14 +150,14 @@ IfTimeOut
       AddWaypoint
     Else
       tmpargument = 0
-      SetState                  //No enemies around anymore
+      SetState                  // No enemies around anymore
 
-  //Resume talking
+  // Resume talking
   IfStateIs2
     tmpargument = 0
     SetState
 
-  //Follow player
+  // Follow player
   IfStateIs3
     SetTargetToOwner
     tmpx = targetdistance

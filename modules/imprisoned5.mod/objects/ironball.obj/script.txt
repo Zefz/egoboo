@@ -1,4 +1,4 @@
-//Go poof Demogorgon is permanently imprisoned or released
+// Go poof Demogorgon is permanently imprisoned or released
 IfOrdered
   tmpx = selforder
   tmpy = [DEMO]
@@ -141,7 +141,7 @@ Else
   tmpx = tmpx * tmpdistance > 8
   tmpy = tmpy * tmpdistance > 8
   AddXY
-  
+
   // Now draw them all
   tmpargument = 3
   GetXY
@@ -167,4 +167,6 @@ Else
   tmpdistance = selfz
   SpawnExactParticle
 
-End					// All done
+// All done
+End
+

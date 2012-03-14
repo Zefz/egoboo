@@ -1,30 +1,31 @@
-//The different States:
-//0: Wander around
-//1: Combat mode
+// The different States:
+// 0: Wander around
+// 1: Combat mode
 //------------------------------------------------------------------------------
-//Magical creature enchant (Dies if not enchanted)
+// Magical creature enchant (Dies if not enchanted)
 IfSpawned
   SetTargetToSelf
   EnchantTarget  // Target is self...
 
 //------------------------------------------------------------------------------
-//Death effects
-IfKilled				// This reduces the height of the char
-  tmpargument = 0			    //
-  SendMessageNear			    //
-  tmpargument = selfmoney			  // Drop money
-  DropMoney				  //
-  tmpargument = 2			  //
-  PlaySound				  //
+// Death effects
+IfKilled                // This reduces the height of the char
+  tmpargument = 0
+  SendMessageNear
+  tmpargument = selfmoney              // Drop money
+  DropMoney
+  tmpargument = 2
+  PlaySound
 
 //------------------------------------------------------------------------------
-//This makes stalkers blink into visibility when attacked
+// This makes stalkers blink into visibility when attacked
 IfAttacked
   tmpargument = 50
   SetTime
   SetDamageTime
   tmpargument = 2
   SetState
+
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsOnHatedTeam
@@ -36,72 +37,72 @@ IfBumped
     SetTargetToOldTarget
 
 //------------------------------------------------------------------------------
-//Handle invisibility
+// Handle invisibility
 IfStateIs2
   tmpargument = 75
-  SetLight                //Visible
+  SetLight                // Visible
   tmpargument = 255
   SetAlpha
 Else
   tmpargument = 0
-  SetLight                //Invisible
+  SetLight                // Invisible
   tmpargument = 0
   SetAlpha
 
 //------------------------------------------------------------------------------
-//Counter attack
+// Counter attack
 IfAttacked
-  SetTargetToWhoeverAttacked		  //
-    IfTargetIsOnHatedTeam		    //
-      tmpargument = 1			      // Enter combat mode
-      SetState				      //
-    Else				    //
-      SetTargetToOldTarget		      //
-  tmpargument = rand & 1		  //
-  PlaySound				  //
+  SetTargetToWhoeverAttacked
+    IfTargetIsOnHatedTeam
+      tmpargument = 1                  // Enter combat mode
+      SetState
+    Else
+      SetTargetToOldTarget
+  tmpargument = rand & 1
+  PlaySound
 
 //------------------------------------------------------------------------------
-//Enemy is dead
-IfTargetKilled				// Return to follow mode
-  tmpargument = 0			  //
-  SetState				  //
+// Enemy is dead
+IfTargetKilled                // Return to follow mode
+  tmpargument = 0
+  SetState
 
 //------------------------------------------------------------------------------
-//Somebody bumped
-IfBumped				// Attack whoever it bumped
-  SetTargetToWhoeverBumped		  //
-  IfTargetIsOnHatedTeam			  // Make sure it's an enemy
+// Somebody bumped
+IfBumped                // Attack whoever it bumped
+  SetTargetToWhoeverBumped
+  IfTargetIsOnHatedTeam              // Make sure it's an enemy
     IfHoldingMeleeWeapon                    // Got Weapon?
-      PressLatchButton			      //
-  Else					  // Scooch around friendly
-    tmpx = rand & 255 + targetx - 128	    //
-    tmpy = rand & 255 + targety - 128	    //
-    ClearWaypoints			    //
-    AddWaypoint				    //
-    SetTargetToOldTarget		    //
+      PressLatchButton
+  Else                      // Scooch around friendly
+    tmpx = rand & 255 + targetx - 128
+    tmpy = rand & 255 + targety - 128
+    ClearWaypoints
+    AddWaypoint
+    SetTargetToOldTarget
 
 //------------------------------------------------------------------------------
-IfTimeOut				// This is done every so often
+IfTimeOut                // This is done every so often
 
-  IfStateIs0				  // State 0 ( Wander )
-    SetTargetToWideEnemy			  // Look for enemies
-      tmpargument = 1			    // Enter combat mode
+  IfStateIs0                  // State 0 ( Wander )
+    SetTargetToWideEnemy              // Look for enemies
+      tmpargument = 1                // Enter combat mode
       SetState
     tmpx = selfcontent
     tmpy = 0
     IfXIsEqualToY
-      tmpx = rand & 1023 - 512 + selfx	    //
-      tmpy = rand & 1023 - 512 + selfy	    //
+      tmpx = rand & 1023 - 512 + selfx
+      tmpy = rand & 1023 - 512 + selfy
     Else
       // Guard starting area
       tmpx = rand & 511 - 256 + selfspawnx
       tmpy = rand & 511 - 256 + selfspawny
-  IfStateIs1					  // State 1 ( Combat )
-    tmpx = targetdistance		    // Too far?
-    tmpy = 1400				    //
-    IfXIsMoreThanY			    //
+  IfStateIs1                      // State 1 ( Combat )
+    tmpx = targetdistance            // Too far?
+    tmpy = 1400
+    IfXIsMoreThanY
       tmpargument = 0
-      SetState				      // Revert to follow mode
+      SetState                      // Revert to follow mode
       tmpx = selfx
       tmpy = selfy
     Else
@@ -115,7 +116,7 @@ IfTimeOut				// This is done every so often
         Compass
       Else
         tmpy = 0  // Unarmed...
-        IfHoldingMeleeWeapon		      // Got Weapon?
+        IfHoldingMeleeWeapon              // Got Weapon?
           tmpy = 350
         Else
           IfHoldingRangedWeapon
@@ -143,15 +144,18 @@ IfTimeOut				// This is done every so often
           tmpturn = targetturnto
           tmpdistance = 400
           Compass
-  ClearWaypoints			  //
-  AddWaypoint				  //
-  tmpargument = rand & 15 + 10		  // Wait a while and try again
+  ClearWaypoints
+  AddWaypoint
+  tmpargument = rand & 15 + 10          // Wait a while and try again
   SetTime
 
-  //Become invisible again
+  // Become invisible again
   IfStateIs2
     tmpargument = 1
     SetState
 //------------------------------------------------------------------------------
-End					// Finished with this character
+
+// Finished with this character
+End
+
 //------------------------------------------------------------------------------

@@ -1,8 +1,8 @@
-//Make it Glow
+// Make it Glow
 IfSpawned
   ReaffirmCharacter
 
-//Blacken Status bars
+// Blacken Status bars
 IfHeld
   SetTargetToWhoeverIsHolding
   IfStateIs0
@@ -21,13 +21,13 @@ IfPutAway
   UndoEnchant
 
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
 
-//Poof if crushed
+// Poof if crushed
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -41,7 +41,7 @@ IfCrushed
   tmpargument = 1
   SendMessageNear
 
-//Scream every so often
+// Scream every so often
 IfTimeOut
   tmpargument = rand & 63 + 90
   SetTime
@@ -54,38 +54,44 @@ IfTimeOut
         SendMessageNear
         PlaySound
 
-IfDropped				// Make it lie on floor
-  KeepAction				  //
+// Make it lie on floor
+IfDropped
+  KeepAction
   UndoEnchant
 
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
 
-//Make a sound if dropped on ground
-IfHitGround				// Make a sound
-  tmpargument = 1			  //
-  PlaySound				  //
+// Make a sound if dropped on ground
+IfHitGround                // Make a sound
+  tmpargument = 1
+  PlaySound
 
-//Tell its kursed
+// Tell its kursed
 IfNotDropped
   tmpargument = 2
   SendMessageNear
+
+// No longer needed, this is handled by the sourcecode now...
 //IfNotPutAway
-//  tmpargument = 3         //No longer needed, this is handled by the sourcecode now...
+//  tmpargument = 3
 //  SendMessageNear
 
-//Tell the players what they got
+// Tell the players what they got
 IfTakenOut
   SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer
     tmpargument = 4
     SendMessageNear
 
-//Remove enchant if not holding
+// Remove enchant if not holding
 IfPutAway
   UndoEnchant
 
-End					// All done
+// All done
+End
+

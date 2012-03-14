@@ -28,7 +28,7 @@ IfStateIs0
       tmpdistance = selfz
       tmpargument = 0
       SpawnExactParticle
-      
+
       tmpargument = 10
       CostTargetMana
         tmpargument = selfcontent + targetmanaflow
@@ -50,7 +50,7 @@ IfStateIs0
       tmpx = tmpx - 512
       IfXIsMoreThanY
         // Figure out the charge state, and spawn accordingly
-        tmpturn = tmpx > 9 + 1		// State 1, 2, or 3 for child
+        tmpturn = tmpx > 9 + 1        // State 1, 2, or 3 for child
         tmpargument = 0
         tmpx = selfx
         tmpy = selfy
@@ -62,7 +62,7 @@ IfStateIs0
         TargetDoAction
         tmpargument = 25
         SetReloadTime
-        
+
         IfUsageIsKnown
           DoNothing
         Else
@@ -71,7 +71,7 @@ IfStateIs0
           GiveExperienceToTarget
           MakeUsageKnown
           MakeNameKnown
-          
+
   // Return to spellbook, Do last!
   IfDropped
     tmpargument = 0

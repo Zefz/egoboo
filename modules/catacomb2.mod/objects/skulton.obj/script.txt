@@ -2,14 +2,14 @@
 // Setup character
 IfSpawned
   Walk
-  BecomeLeader		//Bossy guy eh?
+  BecomeLeader        // Bossy guy eh?
 
-  //Sustained by magic
+  // Sustained by magic
   SetTargetToSelf
   EnchantTarget
 
 //------------------------------------------------------------------------------
-//New round
+// New round
 IfTimeOut
   tmpargument = 25
   SetTime
@@ -22,9 +22,9 @@ IfTimeOut
     Else
       tmpargument = STATECOMBAT
     SetState
-  
+
   IfStateIsCharge
-    Run							//Random approach
+    Run                            // Random approach
     tmpx = rand % 512 + targetx - 256
     tmpy = rand % 512 + targety - 256
     tmpdistance = rand % 550 - 100
@@ -37,15 +37,15 @@ IfTimeOut
 
   IfStateIsCombat
     Walk
-    tmpx = targetx				//Cling to enemy and try to hit
+    tmpx = targetx                // Cling to enemy and try to hit
     tmpy = targety
     tmpdistance = 500
     tmpturn = targetturnto
     Compass
     ClearWaypoints
     AddWaypoint
-  
-    tmpx = targetdistance			//Attack stuff
+
+    tmpx = targetdistance            // Attack stuff
     tmpy = 200
     IfXIsLessThanY
       IfFacingTarget
@@ -53,7 +53,7 @@ IfTimeOut
           tmpargument = LATCHRIGHT
           PressLatchButton
 
-  //Return to spawn when enemy is killed
+  // Return to spawn when enemy is killed
   IfStateIsRetreat
     SetTargetToNearbyEnemy
       tmpargument = STATECHARGE
@@ -67,7 +67,7 @@ IfTimeOut
       SetTime
 
 //------------------------------------------------------------------------------
-//Run away if hit enemy and then prepare to reapproach
+// Run away if hit enemy and then prepare to reapproach
 IfScoredAHit
   Run
   tmpx = targetx
@@ -81,68 +81,68 @@ IfScoredAHit
   SetTime
 
 //------------------------------------------------------------------------------
-//Return to start
+// Return to start
 IfTargetKilled
   tmpargument = STATERETREAT
   SetState
 
 //------------------------------------------------------------------------------
-//Someone is mean!
+// Someone is mean!
 IfAttacked
   SetTargetToWhoeverAttacked
   tmpargument = STATECOMBAT
   SetState
-  
+
 //------------------------------------------------------------------------------
-//Spawn burning footsteps
+// Spawn burning footsteps
 tmpx = selfcontent
-tmpy = 6			//Step timer/space between steps
+tmpy = 6            // Step timer/space between steps
 IfXIsMoreThanY
   tmpx = selfaccel
-  tmpy = 15			//Only if moving
+  tmpy = 15            // Only if moving
   IfXIsMoreThanY
     tmpargument = 3
-    IfStateIsNot		//Don't do if not in combat
+    IfStateIsNot        // Don't do if not in combat
       tmpargument = 4
       tmpx = selfx
       tmpy = selfy
       tmpdistance = selfz
-      SpawnExactParticle	//Create the step
+      SpawnExactParticle    // Create the step
     tmpargument = 0
-    SetContent			//Reset step timer
+    SetContent            // Reset step timer
 Else
   tmpargument = tmpargument +1
-  SetContent			//Increase step timer by 1
+  SetContent            // Increase step timer by 1
 
 //------------------------------------------------------------------------------
-//Do victory stuff and drop loot
+// Do victory stuff and drop loot
 IfKilled
   tmpargument = selfmoney
   DropMoney
   DropItems
   DropKeys
-  tmpargument = 0		//Tell them what happened
+  tmpargument = 0        // Tell them what happened
   SendMessageNear
 
-  tmpargument = 50		//award some quest xp
+  tmpargument = 50        // award some quest xp
   tmpdistance = EXPQUEST
   GiveExperienceToGoodTeam
 
-  //Death cry
+  // Death cry
   tmpargument = 3
   PlaySound
 
-  //Make the body
+  // Make the body
   tmpargument = 15
   SetBumpHeight
-  
-  //Spawn the portal to the first level of the abyss!
+
+  // Spawn the portal to the first level of the abyss!
   tmpargument = 101
   tmpx = selfspawnx
   tmpy = selfspawny
   tmpdistance = selfz
   SpawnExactCharacterXYZ
-  
+
 //------------------------------------------------------------------------------
 End
 //------------------------------------------------------------------------------

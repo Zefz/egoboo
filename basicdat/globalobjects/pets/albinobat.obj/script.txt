@@ -7,13 +7,13 @@ IfSpawned
       SetOwnerToTarget
       JoinTargetTeam
       MakeNameKnown
-      
+
 //------------------------------------------------------------------------------
 IfDropped
   UnkeepAction
-            
+
 //------------------------------------------------------------------------------
-//Say hello
+// Say hello
 IfGrabbed
   MakeCrushInvalid
   IfNameIsKnown
@@ -22,12 +22,12 @@ IfGrabbed
       SetOldTarget
       SetTargetToOwner
       IfTargetIsOldTarget
-        tmpargument = 5             //ello' boss
+        tmpargument = 5             // ello' boss
       Else
-        tmpargument = 6             //You're not the boss!
+        tmpargument = 6             // You're not the boss!
       SendMessageNear
   Else
-    SetTargetToWhoeverIsHolding     //New boss =)
+    SetTargetToWhoeverIsHolding     // New boss =)
     IfTargetIsAPlayer
       SetOwnerToTarget
       JoinTargetTeam
@@ -38,7 +38,7 @@ IfGrabbed
       SendMessageNear
 
 //------------------------------------------------------------------------------
-//Display stats
+// Display stats
 IfUsed
   SetTargetToWhoeverIsHolding
   tmpargument = 25
@@ -55,7 +55,7 @@ IfUsed
     IfXIsMoreThanY
       tmpx = 3
     tmpargument = 8 + tmpx
-    tmpx = targetlevel              //To display levels above 3 properly
+    tmpx = targetlevel              // To display levels above 3 properly
     SendMessageNear
 
     // Stats
@@ -74,26 +74,26 @@ IfUsed
     tmpdistance = targetexp
     tmpargument = 16
     SendMessageNear
-    
+
 //------------------------------------------------------------------------------
-//Tell others its healed
+// Tell others its healed
 IfHealed
   tmpargument = 17
   SendMessageNear
-  
+
 //------------------------------------------------------------------------------
-//Respawn
-IfCleanedUp				
-  IfTargetIsAlive			  // Make sure killer is away
-    tmpx = 1100				    //
-    tmpy = targetdistance		    //
-    IfXIsLessThanY			    //
-      RespawnCharacter			      //
-  Else					  // Killer is far away
-    RespawnCharacter			    //
-    
+// Respawn
+IfCleanedUp
+  IfTargetIsAlive              // Make sure killer is away
+    tmpx = 1100
+    tmpy = targetdistance
+    IfXIsLessThanY
+      RespawnCharacter
+  Else                      // Killer is far away
+    RespawnCharacter
+
 //------------------------------------------------------------------------------
-//Mooshed in a passage
+// Mooshed in a passage
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -108,7 +108,7 @@ IfCrushed
   SendMessageNear
 
 //------------------------------------------------------------------------------
-//Handle death stuff
+// Handle death stuff
 IfKilled
   SetTargetToWhoeverAttacked
   IfNameIsKnown
@@ -122,17 +122,17 @@ IfKilled
     tmpargument = 1
     SendMessageNear
 
-  //Unbumpable body
+  // Unbumpable body
   tmpargument = 0
   SetBumpHeight
   SetBumpSize
 
-  //Death sound
+  // Death sound
   tmpargument = 0
   PlaySound
 
 //------------------------------------------------------------------------------
-//What to do if bumped
+// What to do if bumped
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsOnHatedTeam
@@ -143,8 +143,8 @@ IfBumped
     ClearWaypoints
     AddWaypoint
 
-    //Bite the enemy				//Must look at him
-    IfTargetIsAlive				//Cant attack dead ones
+    // Bite the enemy                // Must look at him
+    IfTargetIsAlive                // Cant attack dead ones
       tmpargument = rand & 255 + selfstr
       tmpdistance = DAMAGEPOKE
       DamageTarget
@@ -152,12 +152,12 @@ IfBumped
         SetTargetToOwner
         tmpargument = 1+selflevel*64
         HealTarget
-        SetTargetToOldTarget      //Lifesteal goes to the boss
+        SetTargetToOldTarget      // Lifesteal goes to the boss
 
-  //Move out of way of friends
+  // Move out of way of friends
   IfTargetIsOnSameTeam
     tmpx = rand & 511 - 256 + targetx
-    tmpy = rand & 511 - 256 + targety 
+    tmpy = rand & 511 - 256 + targety
     ClearWaypoints
     AddWaypoint
     SetTargetToOldTarget
@@ -165,35 +165,35 @@ IfBumped
     SetTime
 
 //------------------------------------------------------------------------------
-//What to do each round
+// What to do each round
 IfTimeOut
   tmpargument = rand & 15 + 40
   SetTime
-  
+
   IfHeld
     DoNothing
   Else
     tmpx = ownerdistance
     tmpy = 1000
     IfXIsLessThanY
-      SetTargetToWideEnemy				//Locate enemy
+      SetTargetToWideEnemy                // Locate enemy
         tmpx = targetx
         tmpy = targety
         tmpturn = rand & 4095 - 2048 + targetturnto
         tmpdistance = 700
         Compass
-      Else						//No enemies, flock around boss
+      Else                        // No enemies, flock around boss
         tmpx = rand & 1500 + ownerx - 750
         tmpy = rand & 1500 + ownery - 750
     Else
       tmpx = rand & 1500 + ownerx - 750
       tmpy = rand & 1500 + ownery - 750
-    tmpargument = 100				//Bats are fast
+    tmpargument = 100                // Bats are fast
     SetSpeedPercent
     ClearWaypoints
     AddWaypoint
 
-    //Random growl sound
+    // Random growl sound
     tmpx = rand & 511
     tmpy = 5
     IfXIsLessThanY
@@ -201,5 +201,8 @@ IfTimeOut
       PlaySound
 
 //------------------------------------------------------------------------------
-End					// Finished with this character
+
+// Finished with this character
+End
+
 //------------------------------------------------------------------------------

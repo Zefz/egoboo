@@ -4,14 +4,14 @@ IfSpawned
   SetState
 
 //----------------------------------------------------------------------------------
-//They got us in the back!
+// They got us in the back!
 IfBackstabbed
   SetTargetToWhoeverAttacked
   tmpargument = 3
   SendMessageNear
   GetDamageType
-  tmpdistance = tmpargument         //Same type of damage as last
-  tmpargument = targetdex       //+1 damage per dex
+  tmpdistance = tmpargument         // Same type of damage as last
+  tmpargument = targetdex       // +1 damage per dex
   TargetDamageSelf
 
 //----------------------------------------------------------------------------------
@@ -19,17 +19,17 @@ IfTimeOut
   tmpargument = rand & 15 + 30
   SetTime
 
-  //Recharge gas attack
+  // Recharge gas attack
   tmpx = selfcontent
   tmpy = 0
   IfXIsMoreThanY
     tmpargument = selfcontent -1
     SetContent
 
-  //Idle
+  // Idle
   IfStateIsGuard
     SetTargetToNearbyEnemy
-      IfFacingTarget                      //I see you!
+      IfFacingTarget                      // I see you!
         tmpargument = STATECOMBAT
         SetState
       Else
@@ -44,19 +44,19 @@ IfTimeOut
       ClearWaypoints
       AddWaypoint
 
-  //Following enemy
+  // Following enemy
   IfStateIsCombat
-    IfTargetIsOnHatedTeam		//Attack?
+    IfTargetIsOnHatedTeam        // Attack?
       IfFacingTarget
         tmpx = targetdistance
         tmpy = 200
         IfXIsLessThanY
           tmpx = 35 + selfdex < 8
           tmpy = rand % 100
-          IfXIsMoreThanY			//Check for attack skill
+          IfXIsMoreThanY            // Check for attack skill
             tmpargument = ACTIONBA
             DoAction
-      //Move towards the enemy
+      // Move towards the enemy
       tmpx = targetx
       tmpy = targety
       tmpdistance = 400
@@ -69,13 +69,13 @@ IfTimeOut
       SetState
 
 //----------------------------------------------------------------------------------
-//They died
+// They died
 IfTargetKilled
   tmpargument = STATEGUARD
   SetState
-  
+
 //----------------------------------------------------------------------------------
-//Say ouch
+// Say ouch
 IfAttacked
   tmpargument = rand & 1
   PlaySound
@@ -87,21 +87,21 @@ IfAttacked
       SetTargetToOldTarget
 
 //----------------------------------------------------------------------------------
-//Explode
+// Explode
 IfKilled
   tmpargument = 3
   tmpdistance = selfz
   tmpx = selfx
   tmpy = selfy
   SpawnExactParticle
-  IfTargetIsSelf			//Death message
+  IfTargetIsSelf            // Death message
     tmpargument = 1
   Else
     tmpargument = 0
   SendMessageNear
 
 //----------------------------------------------------------------------------------
-//Counter attack
+// Counter attack
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsOnHatedTeam
@@ -109,20 +109,20 @@ IfBumped
       tmpargument = ACTIONBA
       DoAction
 
-      //Spew some paralysis gas
+      // Spew some paralysis gas
       tmpargument = 0
       IfContentIs
         tmpargument = selflevel*15 + 150
-        SetTargetReloadTime		//Paralyse the target for 3 seconds + 0.3 seconds per level
+        SetTargetReloadTime        // Paralyse the target for 3 seconds + 0.3 seconds per level
         tmpargument = 4
         tmpx = targetx
         tmpy = targety
         tmpdistance = targetz
         SpawnExactParticle
-        SpawnExactParticle		//Cloud
-        tmpargument = rand & 3 + 5	//Recharge time
+        SpawnExactParticle        // Cloud
+        tmpargument = rand & 3 + 5    // Recharge time
         SetContent
-        tmpargument = 5			//Gass sound
+        tmpargument = 5            // Gass sound
         PlaySound
         tmpargument = 2
         SendMessageNear
@@ -130,5 +130,8 @@ IfBumped
     SetTargetToOldTarget
 
 //----------------------------------------------------------------------------------
-End					// All done
+
+// All done
+End
+
 //----------------------------------------------------------------------------------

@@ -133,11 +133,11 @@ IfBumped
       SetTargetToOldTarget
 
 // Make the bottom fade out
-tmpturn = 0		// Use this intensity
-tmpx = 1200		// Below this height,
-tmpdistance = 255	// Use this intensity
-tmpy = 5000		// Above this height,
-FlashVariableHeight	// Interpolate between
+tmpturn = 0        // Use this intensity
+tmpx = 1200        // Below this height,
+tmpdistance = 255    // Use this intensity
+tmpy = 5000        // Above this height,
+FlashVariableHeight    // Interpolate between
 
 IfTimeOut
 

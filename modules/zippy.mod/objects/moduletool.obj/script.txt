@@ -1,4 +1,4 @@
-//Shows the map and plays the music
+// Shows the map and plays the music
 IfSpawned
   EnableExport
   ShowMap
@@ -6,8 +6,8 @@ IfSpawned
   tmpargument = 9
   tmpdistance = 0
   PlayMusic
-  
-  //Check if any outlaws have entered town
+
+  // Check if any outlaws have entered town
   tmpargument = passage + 2
   tmpturn = [EVIL]
   tmpdistance = BLAHQUEST + BLAHFRIENDS
@@ -15,9 +15,8 @@ IfSpawned
     tmpargument = TEAME
     TargetJoinTeam
     CallForHelp
-      
-  
-  //Spawn santa! Easter egg
+
+  // Spawn santa! Easter egg
   tmpx = datemonth
   tmpy = 12
   IfXIsEqualToY
@@ -30,26 +29,26 @@ IfSpawned
       tmpy = 23 * 128
       tmpdistance = selfz
       SpawnExactCharacterXYZ
-  
-//Check the two exits for runners
+
+// Check the two exits for runners
 IfTimeOut
   tmpargument = 35
   SetTime
 
-   //If tmpx == 0, then someone escaped!
+   // If tmpx == 0, then someone escaped!
     tmpx = 1
     tmpargument = passage
     tmpturn = [NONE]
     tmpdistance = BLAHPLAYERS + BLAHENEMIES
     SetTargetToBlahInPassage
-      tmpx = 0  
+      tmpx = 0
     Else
       tmpargument = passage + 1
       tmpturn = [NONE]
       tmpdistance = BLAHPLAYERS + BLAHENEMIES
       SetTargetToBlahInPassage
         tmpx = 0
-        
+
     tmpy = 0
     IfXIsEqualToY
       EnableExport
@@ -60,10 +59,12 @@ IfTimeOut
       AddEndMessage
       tmpargument = 1
       AddEndMessage
-      
-      //Remember them for next time
+
+      // Remember them for next time
       tmpargument = [EVIL]
       tmpdistance = 0
       AddQuestAllPlayers
-        
-End					// All done
+
+// All done
+End
+

@@ -5,48 +5,47 @@ IfSpawned
   KeepAction
   tmpargument = 200
   SetTime
-  
+
 //-------------------------------------------------------------------------------------------
 IfOrdered
   tmpx = selforder
   tmpy = [CHES]
   IfXIsEqualToY
-  
-    //Activate combat AI
+
+    // Activate combat AI
     tmpargument = STATECOMBAT
     SetState
     UnkeepAction
-    
-    //Allow death
+
+    // Allow death
     JoinGoodTeam
     tmpargument = 1
     ChangeArmor
     SetTargetToSelf
     EnchantTarget
-    
-    
-  //Stop if the game is over
+
+  // Stop if the game is over
   tmpx = selforder
   tmpy = [DEAD]
   IfXIsEqualToY
     SetTargetToSelf
     KillTarget
-    
+
 //-------------------------------------------------------------------------------------------
-IfKilled				// This reduces the height of the char
+IfKilled                // This reduces the height of the char
   tmpargument = 0
-  PlaySound				//Death sound
+  PlaySound                // Death sound
 
   // Last words...
   tmpargument = 0
-  SendMessageNear	
-  
+  SendMessageNear
+
 IfAttacked
   tmpargument = 1
   PlaySound
 
 //-------------------------------------------------------------------------------------------
-//Only exist as long as we have a rider
+// Only exist as long as we have a rider
 IfTimeOut
   SetTargetToRider
     DoNothing
@@ -56,4 +55,6 @@ IfTimeOut
   tmpargument = 20
   SetTime
 
-End					// Finished with this character
+// Finished with this character
+End
+

@@ -1,4 +1,4 @@
-//This function makes an item fall to the floor when spawned
+// This function makes an item fall to the floor when spawned
 IfSpawned
   tmpargument = ACTIONJB
   DoAction
@@ -17,7 +17,7 @@ Else
   tmpargument = 0
   SetFlyHeight
 
-//Particle effect
+// Particle effect
 IfTakenOut
   ReaffirmCharacter
 
@@ -34,28 +34,31 @@ IfCrushed
   tmpargument = 1
   SendMessageNear
 
-IfDropped				// Make it lie on floor
+// Make it lie on floor
+IfDropped
   KeepAction
 
-IfHitGround				// Make a sound
+// Make a sound
+IfHitGround
   tmpargument = 1
   tmpdistance = rand % 2047 + 10000
   PlaySound
 
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
   SetTargetToWhoeverIsHolding
   tmpargument = 1
   SetState
   SetOwnerToTarget
 
-//Magic enchants
+// Magic enchants
 IfHeld
   IfStateIs1
-    GetState				//DoNothing
+    GetState                // DoNothing
   Else
     SetTargetToWhoeverIsHolding
     tmpargument = 1
@@ -65,23 +68,26 @@ IfHeld
     IfTargetHasSkillID
       EnchantTarget
 
-//Undo enchants
+// Undo enchants
 IfHitGround
   SetTargetToWhoeverIsHolding
   SetOwnerToTarget
   UndoEnchant
   tmpargument = 0
   SetState
+
 IfTakenOut
   SetTargetToWhoeverIsHolding
   SetOwnerToTarget
   UndoEnchant
   tmpargument = 0
   SetState
+
 IfPutAway
   UndoEnchant
   tmpargument = 0
   SetState
 
-End					// All done
+// All done
+End
 

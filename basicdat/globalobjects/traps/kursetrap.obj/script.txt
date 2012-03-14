@@ -9,7 +9,7 @@ IfStateIs0
 IfTimeOut
 
   tmpargument = 0
-  SetState		//Reset
+  SetState        // Reset
 
   // Wait a while
   tmpargument = 3
@@ -29,13 +29,13 @@ IfTimeOut
       PlaySound
 
       tmpargument = [XENC]
-      IfTargetHasID			//Can it be enchanted?
+      IfTargetHasID            // Can it be enchanted?
         DoNothing
       Else
-        EnchantTarget			//Yup
+        EnchantTarget            // Yup
 
       // Wait before resetting
-      tmpargument = 50*30		//30 seconds
+      tmpargument = 50*30        // 30 seconds
       SetTime
       tmpargument = 1
       SetState

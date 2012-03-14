@@ -1,16 +1,17 @@
 tmpx = selfz
 tmpy = 0
+
 IfXIsLessThanY
   tmpargument = 10
   SetFlyHeight
 
-//When Spawned
+// When Spawned
 IfSpawned
   tmpargument = 10
-  SetFlyHeight					//Randomize Z position
+  SetFlyHeight                    // Randomize Z position
   ClearWaypoints
 
-  //Platform near the start (TEAL)
+  // Platform near the start (TEAL)
   tmpargument = 1
   IfContentIs
     tmpx = 44 < 7
@@ -28,7 +29,7 @@ IfSpawned
     tmpargument = 3
     SetRedShift
 
-  //Second platform (BLUE)
+  // Second platform (BLUE)
   tmpargument = 2
   IfContentIs
     tmpx = 51 < 7
@@ -47,7 +48,7 @@ IfSpawned
     SetRedShift
     SetGreenShift
 
-  //Third platform (PINK)
+  // Third platform (PINK)
   tmpargument = 3
   IfContentIs
     tmpx = 50 < 7
@@ -65,9 +66,9 @@ IfSpawned
     tmpargument = 3
     SetBlueShift
 
-
 // Completely random platform AI
 tmpargument = 0
+
 IfContentIs
   IfTimeOut
     tmpx = selfspawnx
@@ -76,7 +77,7 @@ IfContentIs
     AddWaypoint
     tmpargument = rand % 200
     SetTime
-        
+
 // Don't get stuck in other platforms
 IfBumped
   // The key platform doesnt do this, unless the key falls off
@@ -86,7 +87,7 @@ IfBumped
     SetTargetToWhoeverBumped
     tmpargument = [PLAT]
     IfTargetHasID
-      tmpargument = rand & 63 + targetz - 32	//Fudge until success!
+      tmpargument = rand & 63 + targetz - 32    // Fudge until success!
       SetFlyHeight
 
 // All Done

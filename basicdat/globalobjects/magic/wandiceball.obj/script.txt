@@ -1,8 +1,8 @@
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
   ReaffirmCharacter
 
@@ -18,30 +18,36 @@ IfCrushed
   GoPoof
   tmpargument = 1
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
 
-IfHitGround				// Make a sound
-  tmpargument = 2			  //
-  PlaySound				  //
+// Make it lie on floor
+IfDropped
+  KeepAction
+
+// Make a sound
+IfHitGround
+  tmpargument = 2
+  PlaySound
 
 IfTakenOut
-  SetTargetToWhoeverIsHolding		  //
+  SetTargetToWhoeverIsHolding
   ReaffirmCharacter
   IfTargetIsAPlayer
     tmpargument = 2
     SendMessageNear
 
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
 
-//Remove if out of charges
+// Remove if out of charges
 IfAmmoOut
   GoPoof
   tmpargument = 3
   SendMessageNear
 
-End					// All done
+// All done
+End
+

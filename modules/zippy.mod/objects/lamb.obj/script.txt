@@ -5,18 +5,18 @@ IfAttacked
     tmpargument = TEAME
     TargetJoinTeam
   CallForHelp
-  
+
 //------------------------------------------------------------------------------
 // ZZ> Move around...  Start at state 0
 IfTimeOut
-  
-  //Make sheep sounds
+
+  // Make sheep sounds
   tmpx = rand & 63
   tmpy = 0
   IfXIsEqualToY
     tmpargument = 0
     PlaySound
-    
+
   // Find shepherd
   IfStateIs0
     tmpargument = [SHEP]
@@ -27,8 +27,8 @@ IfTimeOut
       SetState
     tmpargument = 5
     SetTime
-   
-  //Follow the herd
+
+  // Follow the herd
   IfStateIs1
     SetTargetToOwner
     tmpx = ownerx
@@ -51,7 +51,7 @@ IfTimeOut
     SetTime
 
 //------------------------------------------------------------------------------
-//Handle death by sending a message and other stuff
+// Handle death by sending a message and other stuff
 IfKilled
   SetTargetToWhoeverAttacked
   IfTargetIsSelf
@@ -66,9 +66,9 @@ IfKilled
 
   tmpargument = [SHEP]
   IssueOrder
-  
+
 //------------------------------------------------------------------------------
-//Secret easter egg (summon black sheep if all sheep are killed)
+// Secret easter egg (summon black sheep if all sheep are killed)
 IfOrdered
   tmpx = [SHEP]
   tmpy = selforder
@@ -76,7 +76,7 @@ IfOrdered
     tmpargument = selfcontent + 1
     SetContent
     tmpx = selfcontent
-    tmpy = 8                //How many to kill
+    tmpy = 8                // How many to kill
     IfXIsEqualToY
       tmpargument = 78
       tmpx = selfx
@@ -84,7 +84,7 @@ IfOrdered
       tmpdistance = 750 + selfz
       tmpturn = rand
       SpawnExactCharacterXYZ
-      
+
 //------------------------------------------------------------------------------
 End
 //------------------------------------------------------------------------------

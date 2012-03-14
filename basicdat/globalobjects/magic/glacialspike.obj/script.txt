@@ -7,7 +7,7 @@ IfSpawned
     MakeNameUnknown
     NotAnItem
     MakeCrushValid
-        
+
     // Spawn another spike?
     tmpx = selfstate
     tmpy = 1
@@ -19,12 +19,12 @@ IfSpawned
       Compass
       tmpdistance = selfz
       SpawnCharacterXYZ
-        tmpargument = selfstate - 1	// Child will spawn the next spike
+        tmpargument = selfstate - 1    // Child will spawn the next spike
         SetChildState
         tmpargument = selfcontent
         SetChildContent
 
-    //Stay hidden
+    // Stay hidden
     tmpargument = ACTIONMJ
     DoAction
     tmpargument = 0
@@ -35,8 +35,8 @@ IfSpawned
     tmpy = selfstate*20
     tmpargument = tmpx - tmpy
     SetTime
-    
-    //This makes the spikes look a lot better
+
+    // This makes the spikes look a lot better
     tmpx = rand & 255 + selfx - 128
     tmpy = rand & 255 + selfy - 128
     ClearWaypoints
@@ -52,36 +52,36 @@ IfStateIs0
   DoNothing
 Else
 
-  //Its breakable
+  // Its breakable
   IfCrushed
     tmpargument = 1
     PlaySound
     GoPoof
-  
-  //Handle AI
+
+  // Handle AI
   IfTimeOut
-    
-    //Die away
+
+    // Die away
     tmpargument = 0
     IfContentIs
       tmpargument = ACTIONKA
       DoAction
       tmpargument = 300
       SetTime
-      
-      //Sound effect
+
+      // Sound effect
       tmpargument = 1
       PlaySound
-      
-    //Show ourselves!
+
+    // Show ourselves!
     Else
-    
-      //Deal damage
+
+      // Deal damage
       tmpargument = 0
       tmpdistance = SPAWNLAST
       SpawnAttachedParticle
 
-      //This makes us visible
+      // This makes us visible
       tmpargument = ACTIONDA
       DoAction
       KeepAction
@@ -89,12 +89,12 @@ Else
       SetLight
       SetAlpha
 
-      //When we die
-      tmpargument = selfcontent*50    //2 seconds 
+      // When we die
+      tmpargument = selfcontent*50    // 2 seconds
       SetTime
       tmpargument = 0
       SetContent
-      
+
       // Cast sound
       tmpargument = 0
       PlaySound
@@ -126,12 +126,12 @@ IfStateIs0
           CostTargetMana
             tmpargument = selfcontent + tmpx
             SetContent
-            
-    //Targeting particles
+
+    // Targeting particles
     tmpx = selfcontent
     tmpy = 0
     IfXIsMoreThanY
-      tmpargument = 1      
+      tmpargument = 1
       tmpx = targetx
       tmpy = targety
       tmpdistance = selfcontent > 8
@@ -140,8 +140,8 @@ IfStateIs0
       Compass
       tmpdistance = targetz
       SpawnExactParticle
-      
-      tmpargument = 1     
+
+      tmpargument = 1
       tmpx = targetx
       tmpy = targety
       tmpdistance = 100
@@ -168,10 +168,10 @@ IfStateIs0
         tmpdistance = targetz
         SpawnCharacterXYZ
           // Set starting state
-          tmpargument = selfcontent > 7	// Child will spawn the next spike
+          tmpargument = selfcontent > 7    // Child will spawn the next spike
           SetChildState
           SetChildContent
-          
+
           // Identify stuff
           MakeNameKnown
           MakeUsageKnown
@@ -186,11 +186,11 @@ IfStateIs0
         // Didn't pump it enough
         tmpargument = 0
         SendMessageNear
-        
+
     // Reset the charge counter
     tmpargument = 0
     SetContent
-    
+
   // Return to spellbook, Do last!
   IfDropped
     tmpargument = 0

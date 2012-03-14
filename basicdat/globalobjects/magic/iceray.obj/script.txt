@@ -17,14 +17,14 @@ IfUsed
   IfXIsMoreThanY
     tmpargument = 512
     CostTargetMana
-    
+
     IfTargetIsAPlayer
       MakeNameKnown
       MakeUsageKnown
-    
-    //Cooldown
+
+    // Cooldown
     tmpturn = targetint > 8
-    tmpargument = 150 - tmpturn     //Higher INT = faster attack speed
+    tmpargument = 150 - tmpturn     // Higher INT = faster attack speed
     SetReloadTime
 
     // Spawn the damage particle

@@ -4,18 +4,18 @@ IfBumped
     IfTimeOut
       tmpargument = 200
       SetTime
-      
+
       tmpargument = [UNDE]
       IfTargetHasID
-        tmpargument = 2         //Zombi message
+        tmpargument = 2         // Zombi message
         SendMessageNear
       Else
         tmpargument = [ELFF]
         IfTargetHasID
-          tmpargument = 1       //Elf message
+          tmpargument = 1       // Elf message
           SendMessageNear
         Else
-          tmpargument = 0       //Normal message
+          tmpargument = 0       // Normal message
           SendMessageNear
-        
+
 End

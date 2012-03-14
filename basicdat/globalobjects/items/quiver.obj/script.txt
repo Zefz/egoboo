@@ -1,13 +1,13 @@
-//Made by Clonkinator
-//I'm so evil: The quiver is just a scratch off of the ammo box
-//Modified by zefz: Ive improved the skin and model (No longer an ammo box)
-//Also improved the script and sound later on
+// Made by Clonkinator
+// I'm so evil: The quiver is just a scratch off of the ammo box
+// Modified by zefz: Ive improved the skin and model (No longer an ammo box)
+// Also improved the script and sound later on
 //----------------------------------------------------------------------------------
-//This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+// This function makes an item fall to the floor when spawned
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
   MakeAmmoKnown                           // Makes the number of quivers show up
 
@@ -26,21 +26,21 @@ IfCrushed
   SendMessageNear
 
 //----------------------------------------------------------------------------------
-IfDropped				// Make it lie on floor
-  KeepAction				  //
+IfDropped                // Make it lie on floor
+  KeepAction
 
 //----------------------------------------------------------------------------------
-IfHitGround				// Make a sound
-  tmpargument = 1			  //
-  tmpdistance = rand % 2047 + 10000	  //
-  PlaySound				  //
+IfHitGround                // Make a sound
+  tmpargument = 1
+  tmpdistance = rand % 2047 + 10000
+  PlaySound
 
 //----------------------------------------------------------------------------------
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
+IfGrabbed                // Tell them what they've won...
+  SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer
-    tmpargument = 0			  //
-    SendMessageNear			  //
+    tmpargument = 0
+    SendMessageNear
 
 //----------------------------------------------------------------------------------
 IfUsed
@@ -56,35 +56,35 @@ IfUsed
     SetTargetToWhoeverIsHolding
     tmpargument = [LBOW]
     RestockTargetAmmoIDFirst
-    tmpargument = 0			  //
-    PlaySound				  //
-    PlaySound				  //  //
-    PlaySound				  //
+    tmpargument = 0
+    PlaySound
+    PlaySound                  //
+    PlaySound
     tmpargument = 2
     SendMessageNear
-    CostAmmo				//Use 1 quiver
+    CostAmmo                // Use 1 quiver
     IfAmmoOut
-      GoPoof				//Dissapear
+      GoPoof                // Dissapear
   Else
     tmpargument = [XBOW]
     IfTargetHasID
       SetTargetToWhoeverIsHolding
       tmpargument = [XBOW]
       RestockTargetAmmoIDFirst
-      tmpargument = 0			  //
-      PlaySound				  //
-      PlaySound				  //
-      PlaySound				  //
+      tmpargument = 0
+      PlaySound
+      PlaySound
+      PlaySound
       tmpargument = 2
       SendMessageNear
-      CostAmmo				//Use 1 quiver
+      CostAmmo                // Use 1 quiver
       IfAmmoOut
-        GoPoof				//Dissapear
+        GoPoof                // Dissapear
     Else
       SetTargetToWhoeverIsHolding
       tmpargument = 3
-      SendMessageNear			//Nothing to reload
+      SendMessageNear            // Nothing to reload
 
 //----------------------------------------------------------------------------------
-End					// All done
-//----------------------------------------------------------------------------------
+// All done
+End

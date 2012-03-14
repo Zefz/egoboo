@@ -12,7 +12,7 @@ IfSpawned
     tmpargument = 0
     tmpdistance = SPAWNLAST
     SpawnAttachedParticle
-    tmpargument = selfstate < 4 + 600     //Sword duration
+    tmpargument = selfstate < 4 + 600     // Sword duration
     SetTime
     // Spawn another sword?
     IfStateIs1
@@ -25,7 +25,7 @@ IfSpawned
       Compass
       tmpdistance = selfz + 100
       SpawnCharacterXYZ
-        tmpargument = selfstate - 1	// Child will spawn more swords
+        tmpargument = selfstate - 1    // Child will spawn more swords
         SetChildState
 
 IfChanged
@@ -100,7 +100,7 @@ IfStateIs0
         tmpdistance = targetz + 500
         SpawnCharacterXYZ
           // Set starting state
-          tmpargument = selfcontent > 8 + 1	// Child will spawn more swords
+          tmpargument = selfcontent > 8 + 1    // Child will spawn more swords
           tmpargument = tmpargument < 1
           SetChildState
 

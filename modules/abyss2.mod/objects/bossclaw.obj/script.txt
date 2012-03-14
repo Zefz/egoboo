@@ -4,11 +4,12 @@ IfDropped
   KeepAction
 
 //------------------------------------------------------------------------------
-//This makes the claw become normal when in statue mode
+// This makes the claw become normal when in statue mode
 IfSpawned
   IfHeld
     SetTargetToWhoeverIsHolding
     JoinTargetTeam
+
 IfOrdered
   tmpx = selforder
   tmpy = [SCOR]

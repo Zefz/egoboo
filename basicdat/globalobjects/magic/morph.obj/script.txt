@@ -4,6 +4,7 @@ IfSpawned
   tmpargument = 0
   SetState
   KeepAction
+
 IfChanged
   IfCharacterWasABook  // Did it start out as a book or the spell object?
     // It's a spell in hand

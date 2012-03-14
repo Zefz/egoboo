@@ -2,6 +2,7 @@
 IfAttacked
   CallForHelp
   JoinEvilTeam
+
 IfCalledForHelp
   JoinEvilTeam
 
@@ -43,7 +44,6 @@ IfTimeOut
     AddWaypoint
     tmpargument = rand & 31 + 15
     SetTime
-
 
 //------------------------------------------------------------------------------
 // ZZ> Handle death by sending a message and other stuff

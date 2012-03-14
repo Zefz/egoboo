@@ -2,23 +2,24 @@
 IfSpawned
   tmpargument = 30
   SetTime
-  
+
 //------------------------------------------------------------------------------
-//Remove alert
+// Remove alert
 IfTargetKilled
   tmpargument = 0
   tmpx = 0
   tmpy = 0
   SetXY
-    
-  //Dont attack dead bodies
+
+  // Dont attack dead bodies
   tmpargument = STATEGUARD
   SetState
 
 //------------------------------------------------------------------------------
-//Alert countdown
+// Alert countdown
 tmpargument = 0
 GetXY
+
 IfXIsMoreThanY
   tmpx = tmpx - 1
   SetXY
@@ -26,16 +27,16 @@ IfXIsMoreThanY
 //------------------------------------------------------------------------------
 // ZZ> Run away if too close to killer
 IfOrdered
-  
+
   // Someone said that there's an enemy around, so look for 'im
   tmpx = selforder
   tmpy = [FAER]
   IfXIsEqualToY
     tmpargument = 0
-    tmpx = 50*25      //Stay alert for 25 seconds
+    tmpx = 50*25      // Stay alert for 25 seconds
     tmpy = 0
     SetXY
-  
+
   // Someone died, so make Scrub Lumpkins run away
   tmpy = [RUNN]
   IfXIsEqualToY
@@ -109,7 +110,7 @@ IfAttacked
   // Scream
   tmpargument = 2
   PlaySound
-  
+
   // Pick either 0 or 7, Parry or Combat
   SetTargetToWhoeverAttacked
   IfStateIsRetreat
@@ -121,13 +122,13 @@ IfAttacked
         tmpargument = [FAER]
         IssueOrder
         tmpargument = 0
-        tmpx = 25*50    //25 seconds
+        tmpx = 25*50    // 25 seconds
         tmpy = 0
         SetXY
-      
+
       tmpargument = rand & 1
       tmpargument = tmpargument < 3 - tmpargument
-      
+
       // Check remaining life and remaining friends
       tmpx = selfmorale < 8 + selflife
       tmpy = 1024
@@ -141,7 +142,7 @@ IfAttacked
 // ZZ> Handle being healed by spitting out a message and stopping retreat
 IfHealed
   IfStateIsRetreat
-    tmpargument = STATECHARGE   //Get our morale back!
+    tmpargument = STATECHARGE   // Get our morale back!
     SetState
     tmpargument = 5
   Else
@@ -149,7 +150,7 @@ IfHealed
   SendMessageNear
 
 //------------------------------------------------------------------------------
-//Handle blocking an attack by countering
+// Handle blocking an attack by countering
 IfBlocked
   IfStateIsRetreat
     DoNothing
@@ -194,12 +195,12 @@ IfTimeOut
   // Choose a new state, by setting tmpargument
   // Look for enemies
   SetTurnModeToVelocity
-  
+
   // Find an enemy
   tmpargument = 0
   GetXY
   IfXIsMoreThanY
-    SetTargetToWideEnemy          //If we are alert, target even morphed characters
+    SetTargetToWideEnemy          // If we are alert, target even morphed characters
   Else
     tmpx = 0
     IfTargetIsOnHatedTeam
@@ -221,13 +222,13 @@ IfTimeOut
         tmpargument = [LUMP]
         tmpdistance = BLAHENEMIES + BLAHINVERTID
         SetTargetToWideBlahID
-          tmpx = 1    
+          tmpx = 1
     Else
       tmpargument = [LUMP]
       tmpdistance = BLAHENEMIES + BLAHINVERTID
       SetTargetToWideBlahID
-        tmpx = 1    
-      
+        tmpx = 1
+
   tmpy = 0
   IfXIsMoreThanY
     // Default to previous state
@@ -367,20 +368,20 @@ IfTimeOut
       Else
         // Find a weapon!!!
         tmpx = 0
-        tmpargument = [GONN]      //Gonne
+        tmpargument = [GONN]      // Gonne
         tmpdistance = BLAHITEMS
         SetTargetToWideBlahID
           tmpx = 1
         Else
-          tmpargument = [CLAW]    //Claw
+          tmpargument = [CLAW]    // Claw
           SetTargetToWideBlahID
             tmpx = 1
           Else
-            tmpargument = [SWOR]  //Sword
+            tmpargument = [SWOR]  // Sword
             SetTargetToWideBlahID
               tmpx = 1
             Else
-              tmpargument = [TORC]  //Torch
+              tmpargument = [TORC]  // Torch
               SetTargetToWideBlahID
                 tmpx = 1
         tmpy = 1
@@ -388,7 +389,7 @@ IfTimeOut
           tmpx = targetdistance
           tmpy = 70
           IfXIsLessThanY
-            tmpargument = rand & 1 + LATCHALTLEFT   //randomize left or right grab
+            tmpargument = rand & 1 + LATCHALTLEFT   // randomize left or right grab
             PressLatchButton
           tmpx = targetx
           tmpy = targety

@@ -8,6 +8,7 @@ IfSpawned
     JoinNullTeam
     MakeNameUnknown
     NotAnItem
+
 IfChanged
   // It's a spell in hand
   tmpargument = 0

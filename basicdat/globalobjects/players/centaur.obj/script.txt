@@ -4,9 +4,8 @@ IfCleanedUp
   tmpargument = 2
   PlayFullSound
 
-
 //------------------------------------------------------------------------------
-//Tell players that the inventory is too small
+// Tell players that the inventory is too small
 IfTooMuchBaggage
   tmpargument = 8
   SendMessageNear
@@ -15,13 +14,11 @@ IfTooMuchBaggage
   tmpargument = 50
   SetReloadTime
 
-
 //------------------------------------------------------------------------------
-//Scream and shout when attacking
+// Scream and shout when attacking
 IfUsed
   tmpargument = rand & 1 + 8
   PlaySound
-
 
 //------------------------------------------------------------------------------
 // Booring....
@@ -35,9 +32,8 @@ IfBumped
     tmpargument = 10
     PlaySound
 
-
 //------------------------------------------------------------------------------
-//Handle death by sending a message and other stuff
+// Handle death by sending a message and other stuff
 IfKilled
   tmpargument = 5
   PlaySound
@@ -62,30 +58,30 @@ IfKilled
   SetBumpHeight
 
 //------------------------------------------------------------------------------
-//Invoke special power if enough xp gained
+// Invoke special power if enough xp gained
 SetTargetToSelf
 tmpx = targetexp
 tmpy = 9998
+
 IfXIsMoreThanY
-  UndoEnchant		//Hinder looping of same enchant
+  UndoEnchant        // Hinder looping of same enchant
   SetOwnerToTarget
-  EnchantTarget		//Give the special bonus
-  tmpargument = 2	//Spawn some fancy sparklies
+  EnchantTarget        // Give the special bonus
+  tmpargument = 2    // Spawn some fancy sparklies
   tmpx = selfx
   tmpy = selfy
   tmpdistance = selfz
   SpawnExactParticle
 Else
-  UndoEnchant		//Remove if needed xp is lost
+  UndoEnchant        // Remove if needed xp is lost
 
 //------------------------------------------------------------------------------
-//For helper AIs
+// For helper AIs
 IfLeaderKilled
   BecomeLeader
 
-
 //------------------------------------------------------------------------------
-//Say ouch
+// Say ouch
 IfAttacked
   SetTargetToWhoeverAttacked
   IfTargetIsOnSameTeam
@@ -96,8 +92,6 @@ IfAttacked
   Else
     tmpargument = rand & 1 + 3
     PlaySound
-
-
 
 //------------------------------------------------------------------------------
 End

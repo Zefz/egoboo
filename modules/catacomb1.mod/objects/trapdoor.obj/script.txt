@@ -1,8 +1,8 @@
-//Victory!
+// Victory!
 IfStateIs0
   IfBumped
     SetTargetToWhoeverBumped
-      IfTargetIsAMount			//Check rider instead
+      IfTargetIsAMount            // Check rider instead
         SetTargetToTargetLeftHand
       IfTargetCanOpenStuff
         EnableExport
@@ -10,14 +10,14 @@ IfStateIs0
 
         // Mark this module as beaten, hidden modules may open up
         tmpargument = [MAIN]
-        tmpdistance = 5           //The quest level
-        AddQuestAllPlayers        //Add it
+        tmpdistance = 5           // The quest level
+        AddQuestAllPlayers        // Add it
 
-        tmpargument = ACTIONMJ	      //Open Trap Door
+        tmpargument = ACTIONMJ          // Open Trap Door
         DoAction
         KeepAction
         tmpargument = 0
-        PlaySound			      //  Start the new action
+        PlaySound                  //  Start the new action
         tmpargument = 1
         SetState
 End

@@ -37,7 +37,7 @@ IfUsed
             tmpdistance = targetz
             tmpargument = 0
             SpawnExactParticle
-            
+
       // Spawn particles around target
       SetTargetToNearestFriend
       tmpx = targetdistance

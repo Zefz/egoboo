@@ -1,25 +1,25 @@
-//Ready messages
+// Ready messages
 IfSpawned
   tmpargument = 0
   IfContentIs
     tmpargument = 3
     SetContent
-    
-  //Set up general stuff
+
+  // Set up general stuff
   tmpargument = ACTIONJB
   DoAction
   KeepAction
   MakeCrushValid
-    
-//Let them wonder...
+
+// Let them wonder...
 IfUsed
   SetTargetToWhoeverIsHolding
   tmpargument = 75
   SetReloadTime
   tmpargument = selfcontent
   SendMessageNear
-  
-  //Ready next message
+
+  // Ready next message
   tmpx = selfcontent
   tmpy = 8
   IfXIsLessThanY
@@ -28,8 +28,8 @@ IfUsed
   Else
     tmpargument = 3
     SetContent
-  
-//Poof!
+
+// Poof!
 IfCrushed
   SpawnPoof
   SpawnPoof

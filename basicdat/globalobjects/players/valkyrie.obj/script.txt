@@ -1,30 +1,30 @@
-//VALKYRIE
+// VALKYRIE
 //-------------------------------------------
-//Level       Abillity
-//1			- Immune vs. Cold, Weapon Profiency, Poison Use, Backstab
-//2			- Spear Mastery
-//3			- n/a
-//4			- Speed
-//5			- n/a
-//6			- n/a
-//7			- Stealth (While standing still)
-//8     - n/a
-//9			- n/a
-//10		- Sneak (Can move 1 step at the time while stealthing)
-//11    - n/a
-//12		- Hardy
-//13    - n/a
-//14    - Stalker (Can sneak while stealthing)
-//15    - Critical Strike
-//16    - n/a
-//17    - n/a
-//18    - Shade (Can move and jump while stealthing)
-//19    - n/a
-//20    - Ultimate Sacrifice
+// Level       Abillity
+// 1            - Immune vs. Cold, Weapon Profiency, Poison Use, Backstab
+// 2            - Spear Mastery
+// 3            - n/a
+// 4            - Speed
+// 5            - n/a
+// 6            - n/a
+// 7            - Stealth (While standing still)
+// 8     - n/a
+// 9            - n/a
+// 10        - Sneak (Can move 1 step at the time while stealthing)
+// 11    - n/a
+// 12        - Hardy
+// 13    - n/a
+// 14    - Stalker (Can sneak while stealthing)
+// 15    - Critical Strike
+// 16    - n/a
+// 17    - n/a
+// 18    - Shade (Can move and jump while stealthing)
+// 19    - n/a
+// 20    - Ultimate Sacrifice
 //-----------------------------------------------------------------------------
-//Spear mastery skill
+// Spear mastery skill
 tmpx = selflevel
-tmpy = 0            //Need level 1
+tmpy = 0            // Need level 1
 IfXIsMoreThanY
   IfScoredAHit
     SetTargetToLastItemUsed
@@ -35,18 +35,18 @@ IfXIsMoreThanY
         DamageTarget
 
 //-----------------------------------------------------------------------------
-//Damage resist skill
+// Damage resist skill
 tmpx = selflevel
-tmpy = 10                   //need level 12
+tmpy = 10                   // need level 12
 IfXIsMoreThanY
-  tmpargument = selflevel * 24       //Reduce all damage by 1/10 per level
+  tmpargument = selflevel * 24       // Reduce all damage by 1/10 per level
   SetDamageThreshold
 
 //-----------------------------------------------------------------------------
-//Ultimate sacrifice skill
+// Ultimate sacrifice skill
 IfKilled
   tmpx = selflevel
-  tmpy = 18            //need level 20
+  tmpy = 18            // need level 20
   IfXIsMoreThanY
     tmpx = selfx
     tmpy = selfy
@@ -56,16 +56,16 @@ IfKilled
     SendMessage
 
 //-----------------------------------------------------------------------------
-//Critical hit abillity
+// Critical hit abillity
 tmpx = selflevel
-tmpy = 0             //Need level 2
+tmpy = 0             // Need level 2
 IfXIsMoreThanY
   IfScoredAHit
     SetTargetToWhoeverWasHit
     tmpx = rand % 100
-    tmpy = selflevel          //1% chance * (level-1)
+    tmpy = selflevel          // 1% chance * (level-1)
     IfXIsLessThanY
-      tmpargument = 128*selflevel + 128     //0.5 extra damage per level
+      tmpargument = 128*selflevel + 128     // 0.5 extra damage per level
       DamageTarget
       tmpargument = 10
       PlaySound
@@ -73,83 +73,82 @@ IfXIsMoreThanY
       SendMessage
 
 //-----------------------------------------------------------------------------
-//Speed abillity
+// Speed abillity
 tmpx = selflevel
-tmpy = 5            //Need Level 7
+tmpy = 5            // Need Level 7
 IfXIsMoreThanY
   SetTargetToSelf
   tmpx = targetmaxlife > 2
-  tmpx = targetmaxlife > 1 + tmpx          //0.75 of max life
+  tmpx = targetmaxlife > 1 + tmpx          // 0.75 of max life
   tmpy = targetlife
-  IfXIsMoreThanY              //Only if at 75% life or better
+  IfXIsMoreThanY              // Only if at 75% life or better
     Run
   Else
     Run
-    tmpargument = 1+selflevel+100       //1 percent bonus per level
+    tmpargument = 1+selflevel+100       // 1 percent bonus per level
     SetSpeedPercent
-    
+
 //-----------------------------------------------------------------------------
-//Harvest soul skill (gain mana when kill something)
+// Harvest soul skill (gain mana when kill something)
 IfScoredAHit
   SetTargetToWhoeverWasHit
   IfTargetKilled
     SetTargetToSelf
-    tmpx = selflevel*52             //Gain 1 extra mana per 5 levels
-    tmpargument = 384 + tmpx       //gain 1.5 mana
+    tmpx = selflevel*52             // Gain 1 extra mana per 5 levels
+    tmpargument = 384 + tmpx       // gain 1.5 mana
     PumpTarget
 
-
 //-----------------------------------------------------------------------------
-//Go stealth mode when standing still
-//State 0 = Ready
-//State 1 = Cooldown
-//State 2 = Going stealth stealth
-//State 3 = In stealth mode
+// Go stealth mode when standing still
+// State 0 = Ready
+// State 1 = Cooldown
+// State 2 = Going stealth stealth
+// State 3 = In stealth mode
 
 tmpx = selflevel
-tmpy = 5           //Need to be level 7 at least
+tmpy = 5           // Need to be level 7 at least
 IfXIsMoreThanY
-  //If tmpdistance > 0 then reset cloak timer
+  // If tmpdistance > 0 then reset cloak timer
   tmpdistance = 0
-  
-  //Stuff that makes us visible
+
+  // Stuff that makes us visible
   SetTargetToSelf
   IfBumped
-    tmpdistance = 300     //6 seconds
+    tmpdistance = 300     // 6 seconds
   IfAttacked
-    tmpdistance = 300     //6 seconds
+    tmpdistance = 300     // 6 seconds
   IfTargetIsAttacking
-    tmpdistance = 150     //3 seconds
+    tmpdistance = 150     // 3 seconds
   IfTargetIsDefending
-    tmpdistance = 100     //2 seconds
-    
-  //Is the player not moving to fast?
+    tmpdistance = 100     // 2 seconds
+
+  // Is the player not moving to fast?
   SetTargetToSelf
-  
-  IfStateIs3                //Allow movement if already stealthed
-    tmpy = selflevel-6      //Max speed determined by level
+
+  IfStateIs3                // Allow movement if already stealthed
+    tmpy = selflevel-6      // Max speed determined by level
   Else
-    tmpy = 1                //When not stealthed, stand still to go stealth
+    tmpy = 1                // When not stealthed, stand still to go stealth
   tmpx = targetspeedx + targetspeedy + targetspeedz
   IfXIsLessThanY
-    SetTargetToNearbyEnemy  //Can't hide in plain sight
-      tmpx = selflevel*50 + targetdistance        //Level increases
+    SetTargetToNearbyEnemy  // Can't hide in plain sight
+      tmpx = selflevel*50 + targetdistance        // Level increases
     Else
       tmpx = 551
     tmpy = 550
     IfXIsMoreThanY
       IfInvisible
-        DoNothing           //No need to hide if already invisisble
+        DoNothing           // No need to hide if already invisisble
       Else
         IfStateIs0
           tmpargument = 2
           SetState
           tmpargument = 50
           SetTime
-  Else                    //Character is moving, reset timer
-    tmpdistance = 75     //1,5 seconds
-    
-  //Handle and reset cooldown counter for stealth
+  Else                    // Character is moving, reset timer
+    tmpdistance = 75     // 1,5 seconds
+
+  // Handle and reset cooldown counter for stealth
   IfTimeOut
     IfStateIs1
       tmpargument = 0
@@ -161,26 +160,26 @@ IfXIsMoreThanY
       PlaySound
       tmpargument = 3
       SetState
-      
-    //Check sneak abillity to see if we are detected
+
+    // Check sneak abillity to see if we are detected
     IfStateIs3
-      tmpargument = 25            //Check every 1 second
+      tmpargument = 25            // Check every 1 second
       SetTime
       SetTargetToNearestEnemy
         tmpturn = selflevel*50
         tmpx = targetdistance
         tmpy = 1000 - tmpturn
         IfXIsLessThanY
-          tmpturn = targetdistance > 7          //Distance increases chance
+          tmpturn = targetdistance > 7          // Distance increases chance
           tmpx = targetwis > 9
           tmpx = tmpx - tmpturn
           tmpx = rand % 40 + tmpx
           tmpy = selfdex > 10
           tmpy = rand % 40 + tmpy
-          IfXIsMoreThanY                        //We were detected!
-            tmpdistance = 300               //6 seconds
-          
-  //Disable stealth and reset timer if tmpdistance is bigger than 0
+          IfXIsMoreThanY                        // We were detected!
+            tmpdistance = 300               // 6 seconds
+
+  // Disable stealth and reset timer if tmpdistance is bigger than 0
   tmpturn = 0
   IfDistanceIsMoreThanTurn
     tmpargument = tmpdistance
@@ -191,8 +190,8 @@ IfXIsMoreThanY
       tmpargument = 15
       PlaySound
     tmpargument = 1
-    SetState    
-    
+    SetState
+
 //-----------------------------------------------------------------------------
 IfHitGround
   tmpargument = 0
@@ -211,7 +210,7 @@ IfBored
   tmpargument = 5 + tmpx
   SendMessageNear
   tmpargument = 9 + tmpx
-  PlaySound  
+  PlaySound
   tmpargument = ACTIONMC
   DoAction
 
@@ -264,7 +263,7 @@ IfTooMuchBaggage
   PlaySound
   tmpargument = 50
   SetReloadTime
-  
+
 //------------------------------------------------------------------------------
 IfUsed
   tmpargument = rand & 1 + 11

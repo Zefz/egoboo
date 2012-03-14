@@ -23,13 +23,13 @@ IfSpawned
   SetState
   tmpx = rand & 255  // Figure out type of armor, 1 2 or 3...  0 isn't sold
   tmpy = 170
-  IfXIsMoreThanY		//Best
+  IfXIsMoreThanY        // Best
     tmpargument = 2
   tmpy = 170
-  IfXIsLessThanY		//Second
+  IfXIsLessThanY        // Second
     tmpargument = 1
   tmpy = 64
-  IfXIsLessThanY		//Normal
+  IfXIsLessThanY        // Normal
     tmpargument = 0
   SetContent
 

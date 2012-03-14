@@ -6,11 +6,11 @@ IfKilled
   tmpargument = 0
   PlaySound
   DropItems
-  
+
   SpawnPoof
   GoPoof
-  
-//Spelly effects
+
+// Spelly effects
 tmpargument = 1
 tmpdistance = selfz
 tmpx = selfx

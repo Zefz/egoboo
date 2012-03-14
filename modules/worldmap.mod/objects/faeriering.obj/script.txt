@@ -1,4 +1,4 @@
-//This makes the magic ring (30% chance to be there)
+// This makes the magic ring (30% chance to be there)
 IfStateIs0
   IfSpawned
     tmpx = rand % 100
@@ -111,8 +111,8 @@ IfStateIs0
       tmpx = rand & 511 + selfx - 256
       tmpy = rand & 511 + selfy - 256
       SpawnExactParticle
-      
-      //Spawn the other faeries
+
+      // Spawn the other faeries
       tmpx = rand & 511 + selfx - 256
       tmpy = rand & 511 + selfy - 256
       SpawnCharacter
@@ -124,13 +124,11 @@ IfStateIs0
       tmpargument = 2
       SetChildState
 
-//randomize "skin"
-IfSpawned    
+// randomize "skin"
+IfSpawned
   tmpargument = 5 + selfstate
   tmpdistance = SPAWNORIGIN
   SpawnAttachedParticle
-    
-    
 
 // ZZ> This controls the faerie AI
 IfTimeOut

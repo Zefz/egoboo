@@ -1,4 +1,5 @@
 tmpargument = 1
+
 IfContentIs
   SetTargetToNearestLifeform
   tmpx = targetdistance

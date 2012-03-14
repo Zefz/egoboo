@@ -13,6 +13,7 @@ IfStateIs1
     SetTime
     tmpargument = 2
     SetState
+
 IfStateIs2
   tmpx = rand & 255
   tmpy = 15
@@ -32,6 +33,7 @@ IfStateIs2
       SetTime
       tmpargument = 3
       SetState
+
 IfStateIs3
   IfTimeOut
     tmpargument = 1
@@ -41,6 +43,7 @@ IfStateIs3
     PlaySound
     tmpargument = 4
     SetState
+
 IfStateIs4
   GetWaterLevel
   tmpx = tmpargument

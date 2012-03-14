@@ -16,7 +16,7 @@ IfSpawned
 IfStateIs0
   GetWaterLevel
   tmpy = tmpargument + 51440
-  tmpx = selfz < 2 + selfz < 1 //Long-way multiply by 10
+  tmpx = selfz < 2 + selfz < 1 // Long-way multiply by 10
   IfXIsLessThanY
     tmpargument = 2
     tmpdistance = 22050
@@ -63,8 +63,10 @@ IfStateIs0
 
 tmpx = targetspeedz
 tmpy = 0 - 10
+
 IfStateIs1
   tmpy = 10
+
 IfXIsLessThanY
   tmpargument = 100
   AccelerateUp

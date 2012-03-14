@@ -1,23 +1,23 @@
-//Look very angry, because we really are...
+// Look very angry, because we really are...
 IfSpawned
   tmpargument = ACTIONMC
   DoAction
   tmpargument = 1
   PlayFullSound
-  
-IfTimeOut				// This is done every so often
-  
-  //Groan
+
+// This is done every so often
+IfTimeOut
+  // Groan
   tmpx = rand & 255
   tmpy = 245
   IfXIsMoreThanY
     tmpargument = rand & 1 + 1
     PlaySound
-  
-  //Follow the tourist!
-  SetTargetToNearestEnemy		  
+
+  // Follow the tourist!
+  SetTargetToNearestEnemy
   IfTargetKilled
-    tmpx = selfspawnx     //No enemy... return home
+    tmpx = selfspawnx     // No enemy... return home
     tmpy = selfspawny
   Else
     tmpx = targetx
@@ -27,10 +27,10 @@ IfTimeOut				// This is done every so often
     Compass
   ClearWaypoints
   AddWaypoint
-  tmpargument = rand & 15 + 10		  // Wait a while and try again
+  tmpargument = rand & 15 + 10          // Wait a while and try again
   SetTime
 
-  //Attack
+  // Attack
   IfTargetIsOnHatedTeam
     IfFacingTarget
       tmpx = targetdistance
@@ -39,7 +39,7 @@ IfTimeOut				// This is done every so often
         tmpargument = ACTIONUA
         DoAction
 
-//Don't get stuck in other objects such as braziers or chests
+// Don't get stuck in other objects such as braziers or chests
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsOnHatedTeam
@@ -49,5 +49,7 @@ IfBumped
     tmpy = rand & 511 + targety - 256
     ClearWaypoints
     AddWaypoint
-  
-End					// Finished with this character
+
+// Finished with this character
+End
+

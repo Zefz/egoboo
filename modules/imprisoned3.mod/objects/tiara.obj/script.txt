@@ -1,24 +1,24 @@
 //------------------------------------------------------------------------------
-//Main AI
+// Main AI
 IfTimeOut
   tmpargument = rand & 31 + 30
   SetTime
-  
+
   IfStateIs0
     tmpx = selfspawnx
     tmpy = selfspawny
     ClearWaypoints
-    AddWaypoint		       
+    AddWaypoint
 
-    SetTargetToWideEnemy	//Enemy found, target him
-      tmpargument = 1 
-      SetState 		//and charge
+    SetTargetToWideEnemy    // Enemy found, target him
+      tmpargument = 1
+      SetState         // and charge
       SetTurnModeToWatchTarget
 
-  //Combat AI
+  // Combat AI
   IfStateIs1
-  
-    //Taunt
+
+    // Taunt
     tmpx = rand & 255
     tmpy = 10
     IfXIsLessThanY
@@ -26,8 +26,8 @@ IfTimeOut
       PlaySound
       tmpargument = 5
       SendMessageNear
-    
-    //Move in for the kill
+
+    // Move in for the kill
     tmpx = targetx
     tmpy = targety
     tmpturn = rand
@@ -35,8 +35,8 @@ IfTimeOut
     Compass
     ClearWaypoints
     AddWaypoint
-    
-    //Attack!
+
+    // Attack!
     IfFacingTarget
       tmpx = targetdistance
       tmpy = 220
@@ -48,26 +48,26 @@ IfTimeOut
 IfTargetKilled
   tmpargument = 0
   SetState
-  
+
 //-----------------------------------------------------------------------------
-//Critical hit abillity
+// Critical hit abillity
 IfScoredAHit
   SetTargetToWhoeverWasHit
   tmpx = rand % 100
-  tmpy = 15               //15%
+  tmpy = 15               // 15%
   IfXIsLessThanY
-    tmpargument = 1024   //+4 damage
+    tmpargument = 1024   // +4 damage
     DamageTarget
     tmpargument = 4
     PlaySound
     tmpargument = 1
     SendMessage
-    
+
 //-----------------------------------------------------------------------------
 IfHitGround
   tmpargument = 0
   PlaySound
-  
+
 //------------------------------------------------------------------------------
 // ZZ> Handle death by sending a message and other stuff
 IfKilled
@@ -88,7 +88,7 @@ IfKilled
   // Make the character body
   tmpargument = 45
   SetBumpHeight
-  
+
   CallForHelp
   tmpargument = TEAME
   JoinTeam
@@ -98,7 +98,7 @@ IfCalledForHelp
   CallForHelp
   tmpargument = TEAME
   JoinTeam
-  
+
 //------------------------------------------------------------------------------
 IfAttacked
   CallForHelp
@@ -120,11 +120,11 @@ IfUsed
   PlaySound
 
 //------------------------------------------------------------------------------
-//Someone healed us
+// Someone healed us
 IfHealed
   tmpargument = 6
   SendMessageNear
-  
+
 //------------------------------------------------------------------------------
 End
 //------------------------------------------------------------------------------

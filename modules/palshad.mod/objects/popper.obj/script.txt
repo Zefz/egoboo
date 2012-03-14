@@ -1,6 +1,6 @@
 // This pops some ghouls in a given area, if the detection area is blocked
 
-//!!!BAD!!!
+// !!!BAD!!!
 //IfSpawned
 //  tmpargument = passage
 //  tmpdistance = 220
@@ -8,7 +8,7 @@
 //  tmpargument = passage + 1
 //  tmpdistance = 255
 //  FlashPassage
-//!!!BAD!!!
+// !!!BAD!!!
 
 IfTimeOut
   // Check the detection passage...
@@ -20,10 +20,10 @@ IfTimeOut
       PlayFullSound
 
       // Pop the baddies
-      tmpargument = passage + 1	// The passage to spawn
-      tmpdistance = 60		// The tile to find
-      tmpx = 0			// Needed for first call
-      tmpy = 0			// Needed for first call
+      tmpargument = passage + 1    // The passage to spawn
+      tmpdistance = 60        // The tile to find
+      tmpx = 0            // Needed for first call
+      tmpy = 0            // Needed for first call
       FindTileInPassage
         // Replace the tile
         tmpargument = 61
@@ -129,4 +129,7 @@ IfTimeOut
   // Wait a bit before checking again
   tmpargument = 10
   SetTime
-End					// All done
+
+// All done
+End
+

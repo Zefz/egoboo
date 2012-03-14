@@ -1,4 +1,4 @@
-//Died...
+// Died...
 
 IfKilled
   tmpargument = 0
@@ -6,7 +6,7 @@ IfKilled
     tmpargument = 1
   SendMessage
 
-  //Drop goodies
+  // Drop goodies
   tmpargument = selfmoney
   DropItems
   DropMoney
@@ -22,19 +22,19 @@ IfKilled
 IfTimeOut
   tmpargument = 25
   SetTime
-  
-  //Teleport around
+
+  // Teleport around
   IfTargetIsOnHatedTeam
     tmpx = rand % 5
     tmpy = 1
     IfXIsEqualToY
-      tmpx = 0            //20% chance to always teleport
+      tmpx = 0            // 20% chance to always teleport
     Else
-      tmpx = targetdistance   //else only if very close
+      tmpx = targetdistance   // else only if very close
     tmpy = 300
     IfXIsLessThanY
-      
-      tmpargument = rand % 6		//Randomize next teleport point
+
+      tmpargument = rand % 6        // Randomize next teleport point
       SetState
 
       IfStateIs0
@@ -61,7 +61,7 @@ IfTimeOut
         tmpx = 10019
         tmpy = 13399
 
-      SpawnPoof		  //Spawn spelly effects at last point
+      SpawnPoof          // Spawn spelly effects at last point
       tmpargument = 4
       PlaySound
 
@@ -69,15 +69,15 @@ IfTimeOut
       DoAction
       Teleport
 
-      SpawnPoof		  //Spawn spelly effects at new point
+      SpawnPoof          // Spawn spelly effects at new point
       tmpargument = 4
       PlaySound
-    
-  tmpdistance = 128*25      //Detect 25 tiles away
+
+  tmpdistance = 128*25      // Detect 25 tiles away
   SetTargetToDistantEnemy
     SetTurnModeToWatchTarget
-    
-    //Begin charging disenchant?
+
+    // Begin charging disenchant?
     IfTargetIsFlying
       tmpargument = 7
       tmpx = targetx
@@ -87,11 +87,11 @@ IfTimeOut
       tmpargument = selfcontent + 1
       SetContent
       tmpargument = 125
-      SetTime				//Don't teleport away while charging
+      SetTime                // Don't teleport away while charging
 
       tmpargument = 0
       IfContentIs
-        tmpx = 256			//Keep at least 2 tiles away (if not casting)
+        tmpx = 256            // Keep at least 2 tiles away (if not casting)
         tmpy = targetdistance
         IfXIsMoreThanY
           tmpargument = 0
@@ -103,11 +103,11 @@ IfTimeOut
         IfXIsLessThanY
           tmpargument = LATCHRIGHT
           PressLatchButton
-          SetOldTarget			//remember our enemy
+          SetOldTarget            // remember our enemy
           SetTargetToSelf
           tmpargument = [WAND]
-          RestockTargetAmmoIDFirst	//Never run out of charges
-          SetTargetToOldTarget		//Return target to enemy
+          RestockTargetAmmoIDFirst    // Never run out of charges
+          SetTargetToOldTarget        // Return target to enemy
           tmpargument = 50
           SetTime
   Else
@@ -115,8 +115,8 @@ IfTimeOut
     SetTargetToSelf
     tmpargument = 0
     SetContent
-  
-  //Check if casting is finished
+
+  // Check if casting is finished
   tmpx = selfcontent
   tmpy = 75
   IfXIsMoreThanY
@@ -127,28 +127,29 @@ IfTimeOut
     tmpargument = 3
     PlayFullSound
     SendMessage
-  
+
     tmpargument = 0
-    SetTime			//Teleport away!
-    
-  //Don't go running into the pit!
+    SetTime            // Teleport away!
+
+  // Don't go running into the pit!
   tmpx = selfx
   tmpy = selfy
   ClearWaypoints
   AddWaypoint
-  
-//Abort casting and escape!
+
+// Abort casting and escape!
 IfBumped
   tmpargument = 0
   SetTime
   SetContent
+
 IfAttacked
   tmpargument = 0
   SetTime
   SetContent
 
 //------------------------------------------------------------------------------
-//Put on some eyes
+// Put on some eyes
 IfSpawned
   tmpargument = 0
   tmpdistance = 9

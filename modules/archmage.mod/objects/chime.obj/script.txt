@@ -2,8 +2,8 @@ IfHealed
   IfTimeOut
     tmpargument = 25
     SetTime
-    
-    //Play the appropiate chime sound
+
+    // Play the appropiate chime sound
     tmpargument = 0
     IfArmorIs
       PlayFullSound
@@ -29,10 +29,10 @@ IfHealed
       tmpdistance = [PUZL]
       OrderSpecialID
 
-//Stop or enable player activated chimes
+// Stop or enable player activated chimes
 IfOrdered
-    
-  //Notify player which chimes to play
+
+  // Notify player which chimes to play
   tmpargument = selforder - 1
   IfArmorIs
     PlayFullSound
@@ -41,8 +41,8 @@ IfOrdered
     tmpdistance = selfz
     tmpargument = 0
     SpawnExactParticle
-      
-  //Truesight allows to see next chime
+
+  // Truesight allows to see next chime
   tmpargument = selforder -11
   IfArmorIs
     tmpx = selfx

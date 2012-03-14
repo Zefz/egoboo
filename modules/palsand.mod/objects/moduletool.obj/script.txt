@@ -1,37 +1,38 @@
-//This is a special secret: if the module is beaten within the time limit
-//a secret module will be unlocked! Content/50 is seconds left.
+// This is a special secret: if the module is beaten within the time limit
+// a secret module will be unlocked! Content/50 is seconds left.
 IfSpawned
 
-  //Prepeare the victory song
+  // Prepeare the victory song
   tmpargument = 58
   tmpdistance = 14
   SetMusicPassage
-  
-  //Play Music
+
+  // Play Music
   tmpargument = 4
   tmpdistance = 0
   PlayMusic
-  
-  //Start the timer?
+
+  // Start the timer?
   tmpargument = 53
   tmpdistance = [KEYS]
   SetTargetToPassageID
     tmpargument = [KEYS]
     CostTargetItemID
-      tmpargument = 1500*difficulty           //Start at exactly 5 minutes
-      tmpargument = 15000 - tmpargument       //-0.5 minutes per difficulty level
+      tmpargument = 1500*difficulty           // Start at exactly 5 minutes
+      tmpargument = 15000 - tmpargument       // -0.5 minutes per difficulty level
       SetContent
-      
+
       tmpargument = 0
       PlayFullSound
       tmpargument = [ARCH]
-      IssueOrder              //Activate the secret!
+      IssueOrder              // Activate the secret!
   Else
     GoPoof
-    
-//Update the timer
+
+// Update the timer
 tmpx = selfcontent
 tmpy = 0
+
 IfXIsMoreThanY
   tmpargument = selfcontent - 1
   SetContent
@@ -40,8 +41,11 @@ IfXIsMoreThanY
 // Open the boss passage
 tmpx = selfmorale
 tmpy = 0
+
 IfXIsEqualToY
   tmpargument = passage
   OpenPassage
 
-End					// All done
+// All done
+End
+

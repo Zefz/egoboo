@@ -1,53 +1,55 @@
-//HEALER
+// HEALER
 //-------------------------------------------
-//Level       Abillity
-//1			Divine Magic, See Kurses
-//2			n/a
-//3			n/a
-//4			Holy Aura
-//5			n/a
-//6			n/a
-//7			Divine Power
-//8			n/a
-//9			n/a
-//10		Guardian Angel
-//11	  n/a
-//12		n/a
-//13		Immune vs. Kurses
-//14	  n/a
-//15		n/a
-//16		Last Boon
+// Level       Abillity
+// 1            Divine Magic, See Kurses
+// 2            n/a
+// 3            n/a
+// 4            Holy Aura
+// 5            n/a
+// 6            n/a
+// 7            Divine Power
+// 8            n/a
+// 9            n/a
+// 10        Guardian Angel
+// 11      n/a
+// 12        n/a
+// 13        Immune vs. Kurses
+// 14      n/a
+// 15        n/a
+// 16        Last Boon
 //-----------------------------------------------------------------------------
-//Reset
+// Reset
 IfSpawned
   tmpargument = 0
   SetState
   SetContent
 
 //-----------------------------------------------------------------------------
-//Immune vs. kurses abillity
+// Immune vs. kurses abillity
 tmpx = selflevel
 tmpy = 11
-IfXIsMoreThanY					//Gain abillity at 13th level
+
+// Gain abillity at 13th level
+IfXIsMoreThanY
   SetTargetToSelf
   UnkurseTargetInventory
-  
+
 //-----------------------------------------------------------------------------
-//Invoke Divine Power if enough xp gained
+// Invoke Divine Power if enough xp gained
 IfStateIs0
   SetTargetToSelf
   tmpx = selflevel
-  tmpy = 5          //Need level 7
+  tmpy = 5          // Need level 7
   IfXIsMoreThanY
     SetOwnerToTarget
-    EnchantTarget 	//Give the special bonus
+    EnchantTarget     // Give the special bonus
     tmpargument = 1
     SetState
 
 //------------------------------------------------------------------------------
-//Holy Aura special skill
+// Holy Aura special skill
 tmpx = selflevel
-tmpy = 2            //Need level 4
+tmpy = 2            // Need level 4
 IfXIsMoreThanY
   tmpargument = 0
   IfContentIs
@@ -60,14 +62,14 @@ IfXIsMoreThanY
           tmpy = 127
           IfXIsMoreThanY
             tmpargument = selflevel * 128
-            tmpargument = rand % tmpargument + 256  //1 to (level/2) damage
+            tmpargument = rand % tmpargument + 256  // 1 to (level/2) damage
             DamageTarget
-            tmpargument = 75 - selflevel        //How often?
+            tmpargument = 75 - selflevel        // How often?
             SetTime
             tmpargument = 1
             SetContent
-                    
-            //Spelly effects
+
+            // Spelly effects
             tmpargument = 3
             tmpx = targetx
             tmpy = targety
@@ -75,8 +77,8 @@ IfXIsMoreThanY
             SpawnExactParticle
             tmpargument = 11
             PlaySound
-            
-            //Cost some mana
+
+            // Cost some mana
             SetTargetToSelf
             tmpargument = 128
             CostTargetMana
@@ -84,16 +86,16 @@ IfXIsMoreThanY
 IfTimeOut
   tmpargument = 0
   SetContent
-  
+
 //-------------------------------------------
-//Guardian angel special skill
-//and Last boon skill
+// Guardian angel special skill
+// and Last boon skill
 IfKilled
   tmpx = selflevel
-  tmpy = 8            //Need level 10
+  tmpy = 8            // Need level 10
   IfXIsMoreThanY
     tmpx = rand % 100
-    tmpy = selfwis > 9          //% chance equal to wis/2
+    tmpy = selfwis > 9          // % chance equal to wis/2
     IfXIsLessThanY
       SetTargetToSelf
       RespawnTarget
@@ -103,7 +105,7 @@ IfKilled
       PlayFullSound
     Else
       tmpx = selflevel
-      tmpy = 14            //Need level 16
+      tmpy = 14            // Need level 16
       IfXIsMoreThanY
         tmpargument = 5
         tmpx = selfx
@@ -161,13 +163,13 @@ IfKilled
   SendMessage
 
   // Misc.
-  tmpargument = 1+selflevel*selflevel*100		//The money loss formula
+  tmpargument = 1+selflevel*selflevel*100        // The money loss formula
   DropMoney
   DropKeys
   tmpargument = 45
   SetBumpHeight
 
-  //Just in case...
+  // Just in case...
   tmpargument = ACTIONKA
   DoActionOverride
   UndoEnchant

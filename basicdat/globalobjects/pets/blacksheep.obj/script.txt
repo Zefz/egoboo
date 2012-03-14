@@ -1,7 +1,7 @@
-//selfstate is rage counter
-//If content = 1 then rage is active
+// selfstate is rage counter
+// If content = 1 then rage is active
 
-//Announce the beast has arrived
+// Announce the beast has arrived
 IfSpawned
   SetTargetToWhoeverIsHolding
     IfTargetIsAPlayer
@@ -16,14 +16,14 @@ IfSpawned
     tmpargument = 5
     PlayFullSound
     JoinNullTeam
-    
-//Say ouch
+
+// Say ouch
 IfAttacked
   tmpargument = 3
   PlaySound
   SetTargetToWhoeverAttacked
-  
-//Say hello
+
+// Say hello
 IfGrabbed
   IfNameIsKnown
     SetTargetToWhoeverIsHolding
@@ -45,32 +45,32 @@ IfGrabbed
       SendMessageNear
       tmpargument = 13
       SendMessageNear
-      
-  //Lose all rage
+
+  // Lose all rage
   tmpargument = 0
   SetState
   UndoEnchant
   tmpargument = 0
   SetContent
 
-//Let the player know what this is
+// Let the player know what this is
 IfTakenOut
   SetTargetToWhoeverIsHolding
     IfTargetIsAPlayer
       tmpargument = 11
-      SendMessageNear 
+      SendMessageNear
 
-//Display stats or make crunch noise
+// Display stats or make crunch noise
 IfUsed
   SetTargetToWhoeverIsHolding
     tmpargument = 50
     SetTargetReloadTime
-    
+
   IfTargetIsAPlayer
     // Print =NAME=
     SetTargetToSelf
     tmpargument = 1
-    SendMessageNear      
+    SendMessageNear
 
     // Level
     tmpx = targetlevel+1
@@ -94,77 +94,76 @@ IfUsed
     tmpargument = 8
     SendMessageNear
 
-//Ressurection
-IfCleanedUp				
-  IfTargetIsAlive			  
-    tmpx = 1100				  
-    tmpy = targetdistance		 
-    IfXIsLessThanY			 
-      RespawnCharacter			     
-  Else					 
-    RespawnCharacter	
+// Ressurection
+IfCleanedUp
+  IfTargetIsAlive
+    tmpx = 1100
+    tmpy = targetdistance
+    IfXIsLessThanY
+      RespawnCharacter
+  Else
+    RespawnCharacter
 
-//Goodbye!
+// Goodbye!
 IfDropped
   SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer
     tmpargument = 3
     SendMessageNear
-    
-  //Prepeare for roaming around!
+
+  // Prepeare for roaming around!
   SetTargetToSelf
   StopTargetMovement
   UnkeepAction
-  
 
-//Death stuff
-IfKilled			
+// Death stuff
+IfKilled
   tmpargument = 0
   SendMessageNear
-  tmpargument = 30			 
+  tmpargument = 30
   SetBumpHeight
-  
-  //Death sound
+
+  // Death sound
   tmpargument = 2
   PlaySound
-  
-//Get out of the way
+
+// Get out of the way
 IfBumped
   SetTargetToWhoeverBumped
-  IfTargetIsOnSameTeam  
+  IfTargetIsOnSameTeam
     tmpx = rand & 1023 + targetx - 512
     tmpy = rand & 1023 + targety - 512
     ClearWaypoints
     AddWaypoint
 
-//Main AI loop
+// Main AI loop
 IfTimeOut
 
-  //Baah!			
+  // Baah!
   tmpx = rand & 63
   tmpy = 0
-  IfXIsEqualToY                  
+  IfXIsEqualToY
     tmpargument = rand & 1
     PlaySound
-  
+
   tmpargument = 1
   IfContentIs
-    tmpargument = 12        //Double reaction in rage
+    tmpargument = 12        // Double reaction in rage
     SetTime
   Else
     tmpargument = 25
     SetTime
-    
-  //Reduce rage
+
+  // Reduce rage
   tmpx = selfstate
   tmpy = 0
   IfXIsMoreThanY
     tmpargument = selfstate - 1
     SetState
-  
-  //Become enraged!
+
+  // Become enraged!
   tmpx = selfstate
-  tmpy = 11                     //Rage treshold
+  tmpy = 11                     // Rage treshold
   IfXIsMoreThanY
     tmpargument = 0
     IfContentIs
@@ -185,23 +184,23 @@ IfTimeOut
     DoNothing
   Else
     SetTargetToOwner
-    IfNameIsKnown                              //No owner yet, wander
+    IfNameIsKnown                              // No owner yet, wander
       tmpargument = 0
       IfContentIs
-        SetTargetToNearbyEnemy              //Act normally
+        SetTargetToNearbyEnemy              // Act normally
       Else
-        SetTargetToWideEnemy                //In rage more agressive
+        SetTargetToWideEnemy                // In rage more agressive
       IfTargetIsOnHatedTeam
         tmpx = targetdistance
         tmpy = 150
         IfXIsLessThanY
           IfFacingTarget
-            tmpargument = ACTIONUA              //Bite
+            tmpargument = ACTIONUA              // Bite
             DoAction
             tmpargument = rand & selfstr > 1
             DamageTarget
-            tmpargument = selfstate + 5         //3 bites in a row should do the trick
-            SetState                           //Build some rage
+            tmpargument = selfstate + 5         // 3 bites in a row should do the trick
+            SetState                           // Build some rage
             tmpargument = 4
             PlaySound
             tmpargument = 1
@@ -209,14 +208,14 @@ IfTimeOut
             tmpy = targety
             tmpdistance = targetz
             SpawnExactParticle
-            
-        //Move towards the prey
+
+        // Move towards the prey
         tmpx = targetx
         tmpy = targety
         tmpturn = targetturnto
         tmpdistance = 800
         Compass
-      Else                          //No enemies, follow
+      Else                          // No enemies, follow
         tmpx = ownerx
         tmpy = ownery
         tmpargument = 1
@@ -227,7 +226,7 @@ IfTimeOut
     Else
       tmpx = rand & 1023 - 512 + selfspawnx
       tmpy = rand & 1023 - 512 + selfspawny
-    ClearWaypoints			
-    AddWaypoint		
-		
-End					
+    ClearWaypoints
+    AddWaypoint
+
+End

@@ -1,4 +1,4 @@
-//Start the music
+// Start the music
 IfSpawned
   tmpargument = 10
   tmpdistance = 0
@@ -40,7 +40,7 @@ IfSpawned
   SetXY
   tmpargument = 50
   SetTime
-  
+
 IfTimeOut
   IfStateIs0
     // Wait until the closest player moves

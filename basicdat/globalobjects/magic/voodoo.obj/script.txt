@@ -1,11 +1,11 @@
-//This function makes an item fall to the floor when spawned
+// This function makes an item fall to the floor when spawned
 IfSpawned
   tmpargument = ACTIONJB
   DoAction
   KeepAction
   MakeCrushValid
-  
-//Crushed in a passage
+
+// Crushed in a passage
 IfCrushed
   tmpargument = 3
   tmpdistance = selfz
@@ -18,29 +18,35 @@ IfCrushed
   GoPoof
   tmpargument = 6
   SendMessageNear
-  
-IfDropped				// Make it lie on floor
+
+// Make it lie on floor
+IfDropped
   KeepAction
-IfGrabbed				// Tell them what they've won, Johnny!
+
+// Tell them what they've won, Johnny!
+IfGrabbed
   SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer
     tmpargument = 0
     SendMessageNear
+
 IfHitGround
   tmpargument = 0
   PlaySound
   tmpargument = ACTIONDB
   DoAction
-IfHeld			//Hide in hand
+
+// Hide in hand
+IfHeld
   tmpargument = 1
   SetState
 Else
   tmpargument = 0
   SetState
 
-//Spell stuff
+// Spell stuff
 IfUsed
-  UndoEnchant       //Undo existing kurse first
+  UndoEnchant       // Undo existing kurse first
     UnsparkleIcon
     tmpargument = 25
     SetReloadTime
@@ -48,19 +54,19 @@ IfUsed
     SetTargetToWhoeverIsHolding
     SetOwnerToTarget
     tmpargument = [HMAG]
-    IfTargetHasSkillID				//Need divine spell skill
+    IfTargetHasSkillID                // Need divine spell skill
       tmpx = selfcontent
-      tmpy = 512					//Max charge
+      tmpy = 512                    // Max charge
       IfXIsLessThanY
         tmpx = selfcontent
-        tmpy = targetmanaflow			//Enough spell power?
+        tmpy = targetmanaflow            // Enough spell power?
         IfYIsMoreThanX
-          tmpargument = 4				//Casting Time
+          tmpargument = 4                // Casting Time
           CostTargetMana
-            tmpargument = selfcontent + tmpargument	    //Increase the charge
+            tmpargument = selfcontent + tmpargument        // Increase the charge
             SetContent
-            
-      //Make the target glow
+
+      // Make the target glow
       tmpdistance = 128*4
       SetTargetToDistantEnemy
         DoNothing
@@ -77,28 +83,28 @@ IfUsed
 Else
   tmpx = selfcontent
   tmpy = 511
-  IfXIsMoreThanY		//Minimum charge needed
-    tmpargument = 50		//Set cooldown time
+  IfXIsMoreThanY        // Minimum charge needed
+    tmpargument = 50        // Set cooldown time
     SetReloadTime
-    
-    //Only kurse enemies
+
+    // Only kurse enemies
     IfTargetIsOnHatedTeam
-      
-      //Handle target stuff
+
+      // Handle target stuff
       SetOldTarget
       SetTargetToWhoeverIsHolding
       SetOwnerToTarget
       SetTargetToOldTarget
-      
-      //See if they are immune
+
+      // See if they are immune
       tmpargument = [XENC]
       IfTargetHasAnyID
         tmpargument = 5
-        SendMessageNear		//Tell what happened
+        SendMessageNear        // Tell what happened
         tmpargument = 2
         PlaySound
       Else
-        //Award xp and stuff for daring to do it
+        // Award xp and stuff for daring to do it
         IfNameIsKnown
           DoNothing
         Else
@@ -109,79 +115,81 @@ Else
           MakeUsageKnown
         tmpargument = 50
         SetReloadTime
-        
-        //Check if they resist it
+
+        // Check if they resist it
         tmpx = targetint > 8
-        tmpx = rand % 10 + tmpx       //1-10 + INT
+        tmpx = rand % 10 + tmpx       // 1-10 + INT
         SetTargetToOwner
         tmpy = targetwis > 8
-        tmpy = rand % 10 + tmpy      //1-10 + WIS
+        tmpy = rand % 10 + tmpy      // 1-10 + WIS
         SetTargetToOldTarget
         IfXIsLessThanY
-        
-          //Success!
+
+          // Success!
           EnchantTarget
-            //Daze as well
+            // Daze as well
             tmpargument = 3
             DazeTarget
-            
-            //Damage
+
+            // Damage
             SetTargetToOwner
             tmpargument = targetwis > 9     // 1 damage per 2 wisdom
             SetTargetToOldTarget
             DamageTarget
-            
-            //Sparklies!
+
+            // Sparklies!
             tmpargument = GREEN
-            SparkleIcon        
-            
-            //Sound effect
+            SparkleIcon
+
+            // Sound effect
             tmpargument = 3
-            SendMessageNear		
+            SendMessageNear
             tmpargument = 1
             PlaySound
-            
+
           Else
             tmpargument = 5
-            SendMessageNear		//Resisted!
+            SendMessageNear        // Resisted!
             tmpargument = 2
-            PlaySound        
+            PlaySound
         Else
           tmpargument = 5
-          SendMessageNear		//Resisted!
+          SendMessageNear        // Resisted!
           tmpargument = 2
           PlaySound
-          
-    //Not valid enemy
+
+    // Not valid enemy
     Else
       tmpargument = 1
-      SendMessageNear		//Tell it didn't work
+      SendMessageNear        // Tell it didn't work
       tmpargument = 2
       PlaySound
 
-  //Not charged enough
+  // Not charged enough
   Else
     tmpx = selfcontent
     tmpy = 0
-    IfXIsMoreThanY		//Only if there was a charge
+    IfXIsMoreThanY        // Only if there was a charge
       tmpargument = 1
-      SendMessageNear		//Tell it didn't work
+      SendMessageNear        // Tell it didn't work
       tmpargument = 2
       PlaySound
 
-  //Reset counter
+  // Reset counter
   tmpargument = 0
-  SetContent			
-  
+  SetContent
 
 // Put the little mana ball on the
 // character's hand
 tmpx = selfcontent
 tmpy = 0
+
 IfXIsMoreThanY
   tmpturn = selfcontent < 4 + 3000
   tmpdistance = SPAWNORIGIN
   tmpargument = 2
   SpawnAttachedSizedParticle
 
-End					// All done
+// All done
+End
+

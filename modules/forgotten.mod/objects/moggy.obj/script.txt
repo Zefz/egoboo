@@ -3,12 +3,12 @@ tmpy = selfy
 tmpargument = WHITE
 ShowBlipXY
 
-//Ressurected?
+// Ressurected?
 IfUnarmed
   tmpargument = 2
   SetState
 
-//Ouch
+// Ouch
 IfAttacked
   SetTargetToWhoeverAttacked
   IfTargetIsOnSameTeam
@@ -16,29 +16,29 @@ IfAttacked
   Else
     tmpargument = 4
   PlaySound
-  
-//Yah!
+
+// Yah!
 IfUsed
   tmpargument = 5
   PlaySound
-  
-//Death stuff
+
+// Death stuff
 IfKilled
   tmpargument = selfmoney
   DropMoney
-  
-  //Sound
+
+  // Sound
   tmpargument = 1
   PlaySound
-  
-  //Message
+
+  // Message
   IfTargetIsSelf
     tmpargument = 0
   Else
     tmpargument = 1
   SendMessage
 
-//Use shield and attack
+// Use shield and attack
 IfTargetIsOnHatedTeam
   IfFacingTarget
     tmpx = targetdistance
@@ -50,61 +50,60 @@ IfTargetIsOnHatedTeam
         tmpargument = [SHIE]
         IfHoldingItemID
           PressLatchButton
- 
-          
-//Main AI loop
+
+// Main AI loop
 IfTimeOut
   tmpargument = rand & 31 + 15
   SetTime
-  
+
   tmpx = selflife
-  tmpy = 1500           //Less than 6 hp
+  tmpy = 1500           // Less than 6 hp
   IfXIsLessThanY
-    tmpargument = 1 
+    tmpargument = 1
   Else
     tmpargument = 0
   ChangeArmor
 
-  //Follow boss
+  // Follow boss
   IfStateIs0
     SetTurnModeToVelocity
     SetTargetToNearbyEnemy
       tmpargument = [LOCK]
-      IfTargetHasID         //Dont attack lurking mimics
+      IfTargetHasID         // Dont attack lurking mimics
         GetTargetState
         tmpx = tmpargument
         tmpy = 1
-        IfXIsEqualToY       //Its moving! Attack!
+        IfXIsEqualToY       // Its moving! Attack!
           tmpargument = 1
           SetState
-        Else                //We know nothin..
+        Else                // We know nothin..
           tmpx = leaderx
           tmpy = leadery
           FindPath
-      Else                  //It's not a mimic - Charge!
+      Else                  // It's not a mimic - Charge!
         tmpargument = 1
-        SetState    
+        SetState
     Else
       tmpx = leaderdistance
       tmpy = 375
       IfXIsLessThanY
-        
-        //Drink healing potions, we have three to start with
+
+        // Drink healing potions, we have three to start with
         SetTargetToSelf
         tmpx = targetlife
-        tmpy = 1024            //Only 4 hp left or less
+        tmpy = 1024            // Only 4 hp left or less
         IfXIsLessThanY
-          GetContent            //Content = number of potions
+          GetContent            // Content = number of potions
           tmpx = tmpargument
           tmpy = 0
           IfXIsMoreThanY
             tmpargument = tmpargument -1
-            SetContent                      //Drink one
+            SetContent                      // Drink one
             tmpdistance = SPAWNORIGIN
             tmpargument = 2
             SpawnAttachedParticle
             tmpargument = rand & 1023 + 512
-            HealTarget                     //Healing!
+            HealTarget                     // Healing!
             tmpargument = 3
             SendMessageNear
         tmpx = rand & 511 + selfx - 256
@@ -116,16 +115,16 @@ IfTimeOut
         SetTargetToLeader
         tmpturn = targetturnto
         Compass
-      FindPath      
-      
-  //Combat
+      FindPath
+
+  // Combat
   IfStateIs1
-    SetTargetToNearbyEnemy      //Don't blindly follow our boss while we are under attack
+    SetTargetToNearbyEnemy      // Don't blindly follow our boss while we are under attack
       tmpx = 0
     Else
       tmpx = leaderdistance
     tmpy = 800
-    IfXIsLessThanY                //Follow boss if he is far away
+    IfXIsLessThanY                // Follow boss if he is far away
       SetTargetToWideEnemy
         tmpx = targetx
         tmpy = targety
@@ -134,7 +133,7 @@ IfTimeOut
         FindPath
       Else
         tmpargument = 0
-        SetState                  //No enemies around anymore
+        SetState                  // No enemies around anymore
     Else
       tmpx = leaderx
       tmpy = leadery
@@ -142,14 +141,14 @@ IfTimeOut
       SetTargetToLeader
       tmpturn = targetturnto
       Compass
-      FindPath                     //Return to leader
+      FindPath                     // Return to leader
       tmpargument = 0
       SetState
 
-  //Ressurected AI
+  // Ressurected AI
   IfStateIs2
     SetTurnModeToVelocity
-    SetTargetToNearbyEnemy      //Don't blindly follow our boss while we are under attack
+    SetTargetToNearbyEnemy      // Don't blindly follow our boss while we are under attack
       tmpx = 0
     Else
       tmpx = leaderdistance
@@ -157,7 +156,7 @@ IfTimeOut
     IfXIsLessThanY
       tmpx = rand & 511 + selfx - 256
       tmpy = rand & 511 + selfy - 256
-      SetTargetToNearbyEnemy            //Go combat!
+      SetTargetToNearbyEnemy            // Go combat!
         tmpx = targetx
         tmpy = targety
         tmpdistance = 500
@@ -170,14 +169,14 @@ IfTimeOut
       SetTargetToLeader
       tmpturn = targetturnto
       Compass
-    
-    //Get a shield if possible
+
+    // Get a shield if possible
     IfHoldingShield
       DoNothing
     Else
       tmpargument = 0
-      SetXY                 //Remember waypoint if fails
-      tmpdistance = 8       //Items
+      SetXY                 // Remember waypoint if fails
+      tmpdistance = 8       // Items
       tmpargument = [SHIE]
       SetTargetToWideBlahID
         tmpx = targetdistance
@@ -189,26 +188,26 @@ IfTimeOut
         tmpy = targety
       Else
         tmpargument = 0
-        GetXY                   //Get the previous waypoint, we failed
+        GetXY                   // Get the previous waypoint, we failed
 
-    //First priority is to find a weapon
+    // First priority is to find a weapon
     IfHoldingMeleeWeapon
       DoNothing
     Else
-    //First priority is to find a weapon
+    // First priority is to find a weapon
     IfHoldingMeleeWeapon
       DoNothing
-    Else       
-      //Found something?
+    Else
+      // Found something?
       SetTargetToNearbyWeapon
         tmpx = targetdistance
         tmpy = 75
         IfXIsLessThanY
           tmpargument = LATCHALTRIGHT
           PressLatchButton
-        tmpx = targetx            //Move towards it
-        tmpy = targety 
-    
-    FindPath      
-    
+        tmpx = targetx            // Move towards it
+        tmpy = targety
+
+    FindPath
+
 End

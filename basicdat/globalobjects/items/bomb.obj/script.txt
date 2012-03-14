@@ -1,5 +1,5 @@
 // Bomb object script
-//  by Pteromys of Melon Island... http://melonisland.net
+//  by Pteromys of Melon Island... http:// melonisland.net
 //  second object I've edited
 //  based on a cross between the bear trap and the fireball wand
 // Usage: Tap attack button once quickly to set a bomb
@@ -17,16 +17,16 @@
 IfSpawned
   JoinNullTeam
   ReaffirmCharacter
-  IfStateIs2				// If not lit, I shouldn't have a little sparkie
+  IfStateIs2                // If not lit, I shouldn't have a little sparkie
     DisaffirmCharacter
   Else
-    IfStateIs1				// Thrown
+    IfStateIs1                // Thrown
       tmpx = 0
       tmpy = 0
       tmpturn = ownerturn
       tmpdistance = targetstr > 7
       tmpdistance = tmpdistance * 20
-      tmpdistance = rand % 20 + tmpdistance    //Strength increases range
+      tmpdistance = rand % 20 + tmpdistance    // Strength increases range
       Compass
       SetTargetToSelf
       AccelerateTarget
@@ -34,7 +34,7 @@ IfSpawned
       AccelerateUp
       tmpargument = 1
       PlaySound
-    Else				// Possibility of land mine
+    Else                // Possibility of land mine
       tmpargument = [TRAP]
       tmpdistance = BLAHITEMS
       SetTargetToNearestBlahID
@@ -53,14 +53,14 @@ IfSpawned
             SetState
   MakeCrushValid
   MakeAmmoKnown
-  IfStateIs4				// If land mine
-    tmpargument = ACTIONMK		// Change shape
+  IfStateIs4                // If land mine
+    tmpargument = ACTIONMK        // Change shape
     DoActionOverride
     KeepAction
     DisaffirmCharacter
-    tmpargument = 100			// Delay for land mine to activate
+    tmpargument = 100            // Delay for land mine to activate
     SetTime
-  Else					// or not...
+  Else                    // or not...
     tmpargument = ACTIONJB
     DoAction
     KeepAction
@@ -68,12 +68,13 @@ IfSpawned
     tmpargument = 210
     SetTime
 
-IfReaffirmed				// If we lit this item...
+// If we lit this item...
+IfReaffirmed
   IfHeld
     DisaffirmCharacter
   Else
     IfStateIs2
-      tmpargument = 210			// fuse time
+      tmpargument = 210            // fuse time
       SetTime
       tmpargument = 0
       SetState
@@ -82,7 +83,9 @@ IfReaffirmed				// If we lit this item...
     tmpy = 3
     IfXIsMoreThanY
       DisaffirmCharacter
-IfDisaffirmed				// Go out if hits water when it's lit
+
+// Go out if hits water when it's lit
+IfDisaffirmed
   tmpx = selfstate
   tmpy = 2
   IfXIsLessThanY
@@ -95,15 +98,16 @@ IfHitGround
     tmpargument = 1024
     DamageTarget
 
-IfTimeOut				// When the fuse goes, the bomb blows
+// When the fuse goes, the bomb blows
+IfTimeOut
   tmpx = selfstate
   tmpy = 2
   IfXIsLessThanY
-    SetTargetToSelf			// Call explosion by dropping life below threshold
+    SetTargetToSelf            // Call explosion by dropping life below threshold
     tmpargument = 1024
     DamageTarget
   tmpy = 3
-  IfXIsMoreThanY			// Somebody stepped on a land mine!
+  IfXIsMoreThanY            // Somebody stepped on a land mine!
     SetTargetToNearestLifeform
       SetTargetToLowestTarget
       IfTargetIsFlying
@@ -130,7 +134,8 @@ IfTimeOut				// When the fuse goes, the bomb blows
     tmpargument = 6
     SetTime
 
-IfCrushed				// Surprise when you leave bombs in doorways!
+// Surprise when you leave bombs in doorways!
+IfCrushed
   tmpargument = 2
   SendMessageNear
   tmpx = selfx
@@ -143,12 +148,13 @@ IfCrushed				// Surprise when you leave bombs in doorways!
 // Don't attack bombs... it's not safe!
 tmpx = selflife
 tmpy = 25560
+
 IfXIsLessThanY
-  IfHeld				// Don't die
+  IfHeld                // Don't die
     tmpargument = 25599 - selflife
     HealSelf
   Else
-    IfStateIs4				// Not as a land mine...
+    IfStateIs4                // Not as a land mine...
       tmpargument = 25599 - selflife
       HealSelf
       tmpargument = 5
@@ -166,17 +172,17 @@ IfUsed
   tmpargument = [TECH]
   IfTargetHasSkillID
     tmpargument = selfstate + 9
-    tmpx = 200				// max charge
+    tmpx = 200                // max charge
     tmpy = tmpargument
     IfXIsLessThanY
-      tmpargument = 200			// Charge cannot go above max
+      tmpargument = 200            // Charge cannot go above max
     SetContent
     IfStateIs2
       tmpargument = 3
       SetState
   Else
     IfTimeOut
-      tmpargument = 4			//Cant use this..
+      tmpargument = 4            // Cant use this..
       SendMessageNear
       tmpargument = 50
       SetTime
@@ -192,13 +198,13 @@ Else
       tmpdistance = targetz + 15
       tmpturn = rand
       SpawnCharacterXYZ
-        tmpargument = 1			// Make the new one have 1 ammo
+        tmpargument = 1            // Make the new one have 1 ammo
         SetChildAmmo
-        CostAmmo			// Down the ammo
-        IfAmmoOut			// If I'm out of ammo, I shouldn't have a bomb in my hand
+        CostAmmo            // Down the ammo
+        IfAmmoOut            // If I'm out of ammo, I shouldn't have a bomb in my hand
           GoPoof
         tmpargument = 200
-        IfContentIs			// If you've charged up a throw
+        IfContentIs            // If you've charged up a throw
           tmpargument = 1
           SetChildState
         Else
@@ -209,9 +215,9 @@ Else
         SendMessageNear
       tmpargument = 50
       SetReloadTime
-      tmpargument = 2			// Become just held again
+      tmpargument = 2            // Become just held again
       SetState
-      tmpargument = 0			// Reset charge
+      tmpargument = 0            // Reset charge
       SetContent
 
 IfTakenOut
@@ -220,10 +226,13 @@ IfTakenOut
   IfTargetIsAPlayer
     tmpargument = 3
     SendMessageNear
-IfDropped				// Make it lie on floor
+
+// Make it lie on floor
+IfDropped
   tmpargument = 2
   SetState
   KeepAction
+
 IfGrabbed
   SetTargetToWhoeverIsHolding
   SetOwnerToTarget
@@ -247,13 +256,13 @@ IfGrabbed
     tmpargument = [DISA]
     IfTargetHasSkillID
       tmpx = 1
-    IfXIsEqualToY			// If expert in either technology or disarming traps...
+    IfXIsEqualToY            // If expert in either technology or disarming traps...
       tmpargument = 1
       SendMessageNear
-      tmpargument = 2			// ...defuse the bomb.
+      tmpargument = 2            // ...defuse the bomb.
       SetState
       DisaffirmCharacter
-    Else				// If not, inadvertently detonate
+    Else                // If not, inadvertently detonate
       IfTargetIsAPlayer
         tmpargument = 5
         SendMessageNear
@@ -271,4 +280,6 @@ IfGrabbed
     tmpargument = 2
     SetState
 
-End					// Finished
+// Finished
+End
+

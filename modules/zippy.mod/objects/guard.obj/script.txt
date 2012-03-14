@@ -16,11 +16,12 @@ IfAttacked
       TargetJoinTeam
       DisableExport
   SetTargetToOldTarget
+
 IfCalledForHelp
   SetTargetToWhoeverCalledForHelp
     tmpargument = 0
-    
-    //Get new guard area
+
+    // Get new guard area
     tmpx = targetx
     tmpy = targety
     SetXY
@@ -35,127 +36,127 @@ tmpargument = 4
 ShowBlipXY
 
 //----------------------------------------------------------------------------------
-//Use shield
+// Use shield
 IfTargetIsOnHatedTeam
   IfTargetIsAttacking
     IfFacingTarget
       IfHoldingShield
         PressLatchButton
-        
+
 //----------------------------------------------------------------------------------
-IfKilled				// This reduces the height of the char
+IfKilled                // This reduces the height of the char
   SetTargetToWhoeverAttacked
-  CallForHelp			//Alert friends
-  
+  CallForHelp            // Alert friends
+
   IfTargetIsAPlayer
     tmpargument = TEAME
     TargetJoinTeam
 
-  IfTargetIsOnSameTeam			  // Fragged!
-    tmpargument = 3			    //
-    IfTargetIsSelf			    // No, just a damage tile
-      tmpargument = 4			      //
-  SendMessage				  //
+  IfTargetIsOnSameTeam              // Fragged!
+    tmpargument = 3
+    IfTargetIsSelf                // No, just a damage tile
+      tmpargument = 4
+  SendMessage
 
-  tmpargument = selfmoney			  // Drop money
-  DropMoney				  //
+  tmpargument = selfmoney              // Drop money
+  DropMoney
 
-  tmpargument = 45			  //
-  SetBumpHeight				  //
+  tmpargument = 45
+  SetBumpHeight
 
 //----------------------------------------------------------------------------------
-IfAttacked				// Attacked
-  SetTargetToWhoeverAttacked		  //
-    IfTargetIsAlive			    //
+IfAttacked                // Attacked
+  SetTargetToWhoeverAttacked
+    IfTargetIsAlive
       IfTargetIsOnHatedTeam
-        tmpargument = 1			        //
+        tmpargument = 1
         IfHoldingRangedWeapon
           tmpargument = 2
-        SetState			        //  
-      tmpargument = rand & 1 + 4	// Ouch!
-      PlaySound			        //
-    Else				    //Attacker died already
-      SetTargetToOldTarget		      //
+        SetState
+      tmpargument = rand & 1 + 4    // Ouch!
+      PlaySound
+    Else                    // Attacker died already
+      SetTargetToOldTarget
 
 //----------------------------------------------------------------------------------
-IfTimeOut				// This is done every so often
-  SetTargetToWideEnemy		  // Look out for enemies
+IfTimeOut                // This is done every so often
+  SetTargetToWideEnemy          // Look out for enemies
     tmpargument = STATECOMBAT
-    SetState				      // Change to combat mode
+    SetState                      // Change to combat mode
   Else
     tmpargument = STATEGUARD
     SetState
-    
+
   IfStateIsGuard
     Sneak
-    
+
     // Try again later
-    tmpargument = 50			  
+    tmpargument = 50
     SetTime
 
-    //Move around guard area
+    // Move around guard area
     tmpargument = 0
     GetXY
     tmpx = rand & 1023 + tmpx - 512
     tmpy = rand & 1023 + tmpy - 512
     ClearWaypoints
     AddWaypoint
-    
+
     SetTargetToWideEnemy
       tmpargument = STATECOMBAT
       SetState
-    
+
   IfStateIsCombat
     Run
-    
+
     // Try again later
-    tmpargument = rand & 15 + 20 
+    tmpargument = rand & 15 + 20
     SetTime
-    
-    //Melee AI
+
+    // Melee AI
     IfHoldingMeleeWeapon
-      tmpx = targetdistance		    // Close enough to attack?
+      tmpx = targetdistance            // Close enough to attack?
       tmpy = 200
       IfXIsLessThanY
         IfFacingTarget
           IfHoldingMeleeWeapon
             PressLatchButton
-      tmpx = rand & 255 + targetx - 128			    // Move towards enemy
+      tmpx = rand & 255 + targetx - 128                // Move towards enemy
       tmpy = rand & 255 + targety - 128
       tmpturn = targetturnto
       tmpdistance = 600
       Compass
       ClearWaypoints
       AddWaypoint
-      
-    //Ranged AI
+
+    // Ranged AI
     IfHoldingRangedWeapon
       tmpx = targetdistance
       tmpy = 800
       IfXIsMoreThanY
-        tmpx = targetx			    // Move towards enemy
-        tmpy = targety			    //
+        tmpx = targetx                // Move towards enemy
+        tmpy = targety
       Else
         tmpy = 300
         IfXIsLessThanY
-          tmpx = rand & 2046 + selfx - 1023			    // Move away from enemy
-          tmpy = rand & 2046 + selfy - 1023			    //
+          tmpx = rand & 2046 + selfx - 1023                // Move away from enemy
+          tmpy = rand & 2046 + selfy - 1023
         Else
-          tmpx = selfx        //We are okay
+          tmpx = selfx        // We are okay
           tmpy = selfy
       tmpdistance = 50
       tmpturn = targetturnto
       Compass
       ClearWaypoints
       AddWaypoint
-      
-      //Shoot, but try not to hit friend
+
+      // Shoot, but try not to hit friend
       IfFacingTarget
         SetOldTarget
         tmpx = targetdistance
         SetTargetToNearestFriend
-        IfFacingTarget              //Dont shoot if we are looking at a friend
-          tmpy = targetdistance     //who is closer than our target
+        IfFacingTarget              // Dont shoot if we are looking at a friend
+          tmpy = targetdistance     // who is closer than our target
         Else
           tmpx = 0
           tmpy = 1
@@ -163,8 +164,8 @@ IfTimeOut				// This is done every so often
         IfXIsLessThanY
           IfHoldingRangedWeapon
             PressLatchButton
-        
-        //Try to get a better aim
+
+        // Try to get a better aim
         Else
           tmpx = rand & 1023 + targetx - 512
           tmpy = rand & 1023 + targety - 512
@@ -173,27 +174,28 @@ IfTimeOut				// This is done every so often
           Compass
           ClearWaypoints
           AddWaypoint
-          
-
 
 //----------------------------------------------------------------------------------
-//Bumped
-IfBumped				
-  SetTargetToWhoeverBumped		  //
+// Bumped
+IfBumped
+  SetTargetToWhoeverBumped
     IfTargetIsOnHatedTeam
       tmpargument = STATECOMBAT
       SetState
     Else
       SetTargetToOldTarget
-      
-      //Get out of the way
-      tmpx = rand & 511 + selfx - 256		    //
-      tmpy = rand & 511 + selfy - 256		    //
-      ClearWaypoints			    //
-      AddWaypoint				    //
-      tmpargument = 40			    
-      SetTime				    //
+
+      // Get out of the way
+      tmpx = rand & 511 + selfx - 256
+      tmpy = rand & 511 + selfy - 256
+      ClearWaypoints
+      AddWaypoint
+      tmpargument = 40
+      SetTime
 
 //----------------------------------------------------------------------------------
-End					// All done
+
+// All done
+End
+
 //----------------------------------------------------------------------------------

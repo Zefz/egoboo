@@ -13,8 +13,8 @@ IfTimeOut
       tmpargument = [GNOM]
       IfTargetHasID
         tmpx = 2 // Message
-        
-      //Check for truesight as well
+
+      // Check for truesight as well
       IfTargetCanSeeInvisible
         IfTargetCanSeeKurses
           tmpx = 2 // Message
@@ -26,8 +26,8 @@ IfTimeOut
       tmpargument = [GNOM]
       IfTargetHasID
         tmpx = 3 // Message
-        
-      //Check for truesight as well
+
+      // Check for truesight as well
       IfTargetCanSeeInvisible
         IfTargetCanSeeKurses
           tmpx = 3 // Message
@@ -39,8 +39,8 @@ IfTimeOut
       tmpargument = [GNOM]
       IfTargetHasID
         tmpx = 4 // Message
-        
-      //Check for truesight as well
+
+      // Check for truesight as well
       IfTargetCanSeeInvisible
         IfTargetCanSeeKurses
           tmpx = 4 // Message
@@ -52,8 +52,8 @@ IfTimeOut
       tmpargument = [GNOM]
       IfTargetHasID
         tmpx = 5 // Message
-        
-      //Check for truesight as well
+
+      // Check for truesight as well
       IfTargetCanSeeInvisible
         IfTargetCanSeeKurses
           tmpx = 5 // Message
@@ -74,4 +74,6 @@ IfTimeOut
     tmpargument = 10
     SetTime
 
-End					// All done
+// All done
+End
+

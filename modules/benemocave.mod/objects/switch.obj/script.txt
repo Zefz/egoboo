@@ -1,11 +1,11 @@
 // Make it stay open or close
 IfSpawned
-  //If content is 1, start as on
+  // If content is 1, start as on
   tmpargument = 1
   IfContentIs
     tmpargument = passage
     OpenPassage
-    tmpargument = ACTIONMG	    //Turn
+    tmpargument = ACTIONMG        // Turn
     DoAction
   Else
     tmpargument = passage
@@ -13,7 +13,7 @@ IfSpawned
 
   KeepAction
 
-//Turn switch when bumped
+// Turn switch when bumped
 IfBumped
   SetTargetToWhoeverBumped
   IfStateIs0
@@ -21,11 +21,11 @@ IfBumped
       tmpargument = passage
       IfPassageOpen
         ClosePassage
-        tmpargument = ACTIONMJ	    //Turn
+        tmpargument = ACTIONMJ        // Turn
         DoAction
       Else
         OpenPassage
-        tmpargument = ACTIONMG	    //Turn
+        tmpargument = ACTIONMG        // Turn
         DoAction
       tmpargument = 0
       PlaySound
@@ -40,4 +40,6 @@ IfTimeOut
   tmpargument = 0
   SetState
 
-End				// Finished with this character
+// Finished with this character
+End
+

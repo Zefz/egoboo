@@ -1,9 +1,10 @@
 // ZZ> This function makes an item fall to the floor when spawned
 
-IfBumped				//Display a message (Based on content number)
+// Display a message (Based on content number)
+IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsAPlayer
-    IfStateIs0				//Not looping
+    IfStateIs0                // Not looping
       GetContent
       tmpargument = tmpargument
       SendMessageNear
@@ -12,8 +13,11 @@ IfBumped				//Display a message (Based on content number)
       tmpargument = 1
       SetState
 
-IfTimeOut				//Disable looping of messages
+// Disable looping of messages
+IfTimeOut
   tmpargument = 0
   SetState
 
-End					// All done
+// All done
+End
+

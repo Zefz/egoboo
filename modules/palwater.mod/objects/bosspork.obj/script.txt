@@ -2,11 +2,13 @@
 IfSpawned
   SetTurnModeToSpin
   DisableExport
+
 IfTimeOut
   // Make sparklies
   SpawnPoof
   tmpargument = 10
   SetTime
+
 IfGrabbed
   EnableExport
   BeatModule
@@ -36,19 +38,21 @@ IfGrabbed
   AddEndMessage
   tmpargument = 4
   AddEndMessage
-  
-  //Mark as beaten
+
+  // Mark as beaten
   tmpargument = [BEAT]
   AddIDSZ
 
   // Mark this module as beaten, hidden modules may open up
   tmpargument = [MAIN]
-  tmpdistance = 1           //The quest level
-  AddQuestAllPlayers        //Add it
+  tmpdistance = 1           // The quest level
+  AddQuestAllPlayers        // Add it
 
   // Become the export object
   SetTargetToSelf
   tmpargument = 125
   ChangeTargetClass
 
-End					// All done
+// All done
+End
+

@@ -1,4 +1,4 @@
-//Handle talking
+// Handle talking
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsAPlayer
@@ -16,29 +16,29 @@ IfBumped
           SetTime
 
       Else
-        //Recieving money?
+        // Recieving money?
         IfStateIs3
           tmpx = targetmoney
           tmpy = 0
           IfXIsMoreThanY
             tmpargument = 0 - 1
             GiveMoneyToTarget
-            IfTargetIsMale          //Its a dude
+            IfTargetIsMale          // Its a dude
               tmpargument = 5
               PlaySound
               tmpargument = 3
               SendMessage
-            Else                    //Its a nice lady
+            Else                    // Its a nice lady
               tmpargument = 7
               PlaySound
               tmpargument = 5
               SendMessage
-            tmpargument = 4               //Return to begging!
+            tmpargument = 4               // Return to begging!
             SetState
-            tmpargument = 75               //Wait before talking
+            tmpargument = 75               // Wait before talking
             SetTime
 
-            //Get nicer clothes!
+            // Get nicer clothes!
             tmpx = selfmoney
             tmpy = 6
             IfXIsEqualToY
@@ -50,7 +50,7 @@ IfBumped
               ChangeArmor
             tmpy = 15
             IfXIsEqualToY
-              tmpargument = 3   //final!
+              tmpargument = 3   // final!
               ChangeArmor
               tmpargument = 5
               SetState
@@ -58,71 +58,72 @@ IfBumped
             tmpargument = 0
             SetState
 
-        //begging
-        IfStateIs0                    //Ready to accept money!
+        // begging
+        IfStateIs0                    // Ready to accept money!
           tmpargument = 4
           PlaySound
           tmpargument = 2
           SendMessage
-          tmpargument = 2           //Prepeare for give money
+          tmpargument = 2           // Prepeare for give money
           SetState
-          tmpargument = 75               //Wait before talking
+          tmpargument = 75               // Wait before talking
           SetTime
 
-//Make attackers hostile
+// Make attackers hostile
 IfAttacked
   SetTargetToWhoeverAttacked
   IfTargetIsAPlayer
     CallForHelp
     tmpargument = TEAME
     TargetJoinTeam
-  tmpargument = 1               //Combat
+  tmpargument = 1               // Combat
   SetState
+
 IfCalledForHelp
-  tmpargument = 1               //Combat
+  tmpargument = 1               // Combat
   SetState
+
 IfKilled
   tmpargument = TEAME
   TargetJoinTeam
 
-//Ouch
+// Ouch
 IfAttacked
   SetTargetToWhoeverAttacked
   tmpargument = 4
   PlaySound
 
-//Death stuff
+// Death stuff
 IfKilled
   tmpargument = selfmoney
   DropMoney
 
-  //Sound
+  // Sound
   tmpargument = 1
   PlaySound
 
-  //Message
+  // Message
   IfTargetIsSelf
     tmpargument = 0
   Else
     tmpargument = 1
   SendMessage
 
-//Use shield and attack
+// Use shield and attack
 IfTargetIsOnHatedTeam
   IfFacingTarget
     tmpx = targetdistance
     tmpy = 60
     IfXIsLessThanY
       tmpargument = rand & 1
-      PressLatchButton          //Left or right
+      PressLatchButton          // Left or right
 
-
-//Main AI loop
+// Main AI loop
 IfTimeOut
   tmpargument = rand & 31 + 15
   SetTime
 
-  //Standing at spawn
+  // Standing at spawn
   IfStateIs0
     SetTargetToNearbyEnemy
       tmpargument = 1
@@ -132,7 +133,7 @@ IfTimeOut
     ClearWaypoints
     AddWaypoint
 
-  //Combat
+  // Combat
   IfStateIs1
     SetTargetToNearbyEnemy
       tmpx = targetx
@@ -143,9 +144,9 @@ IfTimeOut
       AddWaypoint
     Else
       tmpargument = 0
-      SetState                  //No enemies around anymore
+      SetState                  // No enemies around anymore
 
-  //Resume talking
+  // Resume talking
   IfStateIs2
     tmpargument = 3
     SetState

@@ -1,4 +1,4 @@
-//Content sets which direction to turn
+// Content sets which direction to turn
 IfSpawned
   GetContent
   tmpx = selfspawnx
@@ -14,5 +14,8 @@ tmpy = selfspawny
 Teleport
 
 //---------------------------------------------------------------------------------
-End					// Finished with this character
+
+// Finished with this character
+End
+
 //---------------------------------------------------------------------------------

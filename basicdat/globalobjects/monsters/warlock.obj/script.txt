@@ -1,42 +1,42 @@
-//Use self content as a bit field. For example to use a book of enchant (buff) in right hand
-//with a sword in left hand (melee), you simply add 16 + 64 + 8 + 256 + 512 and put 856 in selfcontent.
-//You should only use 1 modifier per hand, or it might cause funky stuff to happen
+// Use self content as a bit field. For example to use a book of enchant (buff) in right hand
+// with a sword in left hand (melee), you simply add 16 + 64 + 8 + 256 + 512 and put 856 in selfcontent.
+// You should only use 1 modifier per hand, or it might cause funky stuff to happen
 // Default modifiers are: Ranged Attack and no charge time (instant cast)
 
 //------------------------------------------------------------------------------
-//LEFT HAND MODIFIERS
-//1     -     Medium charge time (3 seconds)
-//2     -     Long charge time (5 seconds)
-//4     -     Buff self
-//8     -     Melee attack
+// LEFT HAND MODIFIERS
+// 1     -     Medium charge time (3 seconds)
+// 2     -     Long charge time (5 seconds)
+// 4     -     Buff self
+// 8     -     Melee attack
 //------------------------------------------------------------------------------
-//RIGHT HAND MODIFIERS
-//16     -     Medium charge time (2 seconds)
-//32     -     Long charge time (5 seconds)
-//64     -     Buff self
-//128    -     Melee attack
+// RIGHT HAND MODIFIERS
+// 16     -     Medium charge time (2 seconds)
+// 32     -     Long charge time (5 seconds)
+// 64     -     Buff self
+// 128    -     Melee attack
 //------------------------------------------------------------------------------
-//256    -     Enable LEFT hand
-//512    -     Enable RIGHT hand
+// 256    -     Enable LEFT hand
+// 512    -     Enable RIGHT hand
 //------------------------------------------------------------------------------
-//XY data is used for various purposes (obtained by using GetXY)
-//0 = left hand (tmpx = charge time and tmpy = range)
-//1 = right hand (tmpx = charge time and tmpy = range)
-//2 = buffing data for both hands, tmpx left and tmpy right (do we need to cast buffs)
+// XY data is used for various purposes (obtained by using GetXY)
+// 0 = left hand (tmpx = charge time and tmpy = range)
+// 1 = right hand (tmpx = charge time and tmpy = range)
+// 2 = buffing data for both hands, tmpx left and tmpy right (do we need to cast buffs)
 //------------------------------------------------------------------------------
 IfSpawned
   tmpargument = STATEWANDER
   SetState
-  
-  //SETUP LEFT HAND
-  tmpx = selfcontent & 256    //Hand enabled?
+
+  // SETUP LEFT HAND
+  tmpx = selfcontent & 256    // Hand enabled?
   tmpy = 256
   IfXIsEqualToY
-    tmpargument = 0         //left hand
-    tmpturn = 0             //charge time
-    
-    //calculate charge time
-    tmpx = selfcontent & 1       //short charge?
+    tmpargument = 0         // left hand
+    tmpturn = 0             // charge time
+
+    // calculate charge time
+    tmpx = selfcontent & 1       // short charge?
     tmpy = 1
     IfXIsEqualToY
       tmpturn = 150
@@ -44,27 +44,27 @@ IfSpawned
       tmpx = selfcontent & 2
       tmpy = 2
       IfXIsEqualToY
-        tmpturn = 250               //long charge?
-    
-    //calculate attack range
-    tmpx = selfcontent & 8         //melee?
+        tmpturn = 250               // long charge?
+
+    // calculate attack range
+    tmpx = selfcontent & 8         // melee?
     tmpy = 8
     IfXIsEqualToY
-      tmpy = 250                  //melee attack
+      tmpy = 250                  // melee attack
     Else
-      tmpy = 700                  //ranged attack
+      tmpy = 700                  // ranged attack
     tmpx = tmpturn
     SetXY
-  
-  //SETUP RIGHT HAND
-  tmpx = selfcontent & 512    //Hand enabled?
+
+  // SETUP RIGHT HAND
+  tmpx = selfcontent & 512    // Hand enabled?
   tmpy = 512
   IfXIsEqualToY
-    tmpargument = 1         //right hand
-    tmpturn = 0             //charge time
-    
-    //calculate charge time
-    tmpx = selfcontent & 16       //short charge?
+    tmpargument = 1         // right hand
+    tmpturn = 0             // charge time
+
+    // calculate charge time
+    tmpx = selfcontent & 16       // short charge?
     tmpy = 16
     IfXIsEqualToY
       tmpturn = 150
@@ -72,26 +72,26 @@ IfSpawned
       tmpx = selfcontent & 32
       tmpy = 32
       IfXIsEqualToY
-        tmpturn = 250               //long charge?
-    
-    //calculate attack range
-    tmpx = selfcontent & 128      //melee?
+        tmpturn = 250               // long charge?
+
+    // calculate attack range
+    tmpx = selfcontent & 128      // melee?
     tmpy = 128
     IfXIsEqualToY
-      tmpy = 250                  //melee attack
+      tmpy = 250                  // melee attack
     Else
-      tmpy = 700                  //ranged attack
+      tmpy = 700                  // ranged attack
     tmpx = tmpturn
     SetXY
-    
-    //need to cast buff?
+
+    // need to cast buff?
     tmpargument = 2
     tmpx = selfcontent & 4
     tmpy = selfcontent & 64
     SetXY
 
 //------------------------------------------------------------------------------
-//Handle death by sending a message and other stuff
+// Handle death by sending a message and other stuff
 IfKilled
   tmpargument = 2
   PlaySound
@@ -112,18 +112,18 @@ IfKilled
   SetBumpHeight
 
 //------------------------------------------------------------------------------
-//Oops
+// Oops
 IfHealed
   tmpargument = 2
   SendMessageNear
 
 //------------------------------------------------------------------------------
-//Keep 'em guessin'
+// Keep 'em guessin'
 IfAttacked
   tmpargument = rand & 1
   PlaySound
 
-  //get aggro
+  // get aggro
   SetTargetToWhoeverAttacked
     IfTargetIsOnHatedTeam
       DoNothing
@@ -160,13 +160,13 @@ IfBumped
     SetTargetToOldTarget
 
 //------------------------------------------------------------------------------
-//For charging a spell...
+// For charging a spell...
 IfStateIs10
 
   // Keep charging
   tmpargument = LATCHLEFT
   PressLatchButton
-  
+
   tmpx = targetx
   tmpy = targety
   tmpdistance = -600
@@ -174,35 +174,35 @@ IfStateIs10
   Compass
   ClearWaypoints
   AddWaypoint
-  
-  //Release the spell?
+
+  // Release the spell?
   IfTimeOut
     tmpargument = 10
     SetTime
-    
-    //was this a buff? if so disable this hand
+
+    // was this a buff? if so disable this hand
     tmpargument = 2
     GetXY
     tmpy = 0
     IfXIsEqualToY
       IfFacingTarget
-        //range is good?
+        // range is good?
         tmpargument = 0
         GetXY
         tmpx = targetdistance
         IfXIsLessThanY
-          tmpargument = STATECOMBAT     //return to combat mode
+          tmpargument = STATECOMBAT     // return to combat mode
           SetState
     Else
       tmpargument = selfcontent - 256
       SetContent
-      tmpargument = STATECOMBAT     //return to combat mode
+      tmpargument = STATECOMBAT     // return to combat mode
       SetState
 
 //------------------------------------------------------------------------------
-//For charging a spell...
+// For charging a spell...
 IfStateIs11
-    
+
   // Keep charging
   tmpargument = LATCHRIGHT
   PressLatchButton
@@ -213,81 +213,81 @@ IfStateIs11
   Compass
   ClearWaypoints
   AddWaypoint
-  
-  //Release the spell?
+
+  // Release the spell?
   IfTimeOut
     tmpargument = 10
     SetTime
-  
-    //was this a buff? if so disable this hand
+
+    // was this a buff? if so disable this hand
     tmpargument = 2
     GetXY
     tmpx = 0
     IfXIsEqualToY
       IfFacingTarget
-        //range is good?
+        // range is good?
         tmpargument = 1
         GetXY
         tmpx = targetdistance
         IfXIsLessThanY
-          tmpargument = STATECOMBAT     //return to combat mode
+          tmpargument = STATECOMBAT     // return to combat mode
           SetState
     Else
       tmpargument = selfcontent - 512
-      SetContent  
+      SetContent
       tmpargument = STATECOMBAT
       SetState
-    
+
 //------------------------------------------------------------------------------
-//Main AI loop
+// Main AI loop
 IfTimeOut
 
   IfStateIsCombat
     tmpargument = rand & 15 + 20
     SetTime
-    
+
     // Pick a spell to use on the enemy...  Left or right
     IfTargetIsOnHatedTeam
-      
-      //Left hand is valid?
+
+      // Left hand is valid?
       tmpx = selfcontent & 256
       tmpy = 256
       IfXIsEqualToY
         tmpargument = 0
-        
-        //If both hands are valid, pick one at random
+
+        // If both hands are valid, pick one at random
         tmpx = selfcontent & 512
         tmpy = 512
         IfXIsEqualToY
-          tmpargument = rand & 1        //tmpargument == which hand to use
-          
-      //assume only right hand is valid
+          tmpargument = rand & 1        // tmpargument == which hand to use
+
+      // assume only right hand is valid
       Else
         tmpargument = 1
-            
-      //does this hand need to be charged?
+
+      // does this hand need to be charged?
       GetXY
       tmpy = 0
       IfXIsMoreThanY
         tmpargument = tmpargument + 10
         SetState
-        
+
         tmpargument = tmpargument - 10
-        GetXY                           //Set time to charge this spell or item
+        GetXY                           // Set time to charge this spell or item
         tmpargument = tmpx
         SetTime
-        
-      //nope, instant cast!
+
+      // nope, instant cast!
       Else
         IfFacingTarget
           GetXY
-          tmpx = targetdistance       //close enough?
+          tmpx = targetdistance       // close enough?
           IfXIsLessThanY
             tmpargument = LATCHLEFT + tmpargument
             PressLatchButton
-      
-      //Move closer
-      tmpdistance = -tmpy > 1       //max distance / 2
+
+      // Move closer
+      tmpdistance = -tmpy > 1       // max distance / 2
       tmpx = targetx
       tmpy = targety
       tmpturn = targetturnto
@@ -295,11 +295,11 @@ IfTimeOut
       ClearWaypoints
       AddWaypoint
 
-    //No enemy target
+    // No enemy target
     Else
       tmpargument = STATEWANDER
       SetState
-    
+
   IfStateIsParry
     // Halfway through a teleport
     tmpargument = rand & 15 + 35
@@ -312,7 +312,7 @@ IfTimeOut
     Teleport
     tmpargument = 15
     SetState
-    
+
     // Face the target
     tmpx = targetx
     tmpy = targety
@@ -337,8 +337,8 @@ IfTimeOut
   IfStateIsWander
     tmpargument = 20
     SetTime
-    
-    //Enable rebuffing again
+
+    // Enable rebuffing again
     tmpargument = 2
     GetXY
     tmpy = 0
@@ -348,7 +348,7 @@ IfTimeOut
       IfXIsEqualToY
         tmpargument = selfcontent + 256
         SetContent
-        tmpargument = LATCHLEFT         //try to undo buff
+        tmpargument = LATCHLEFT         // try to undo buff
         PressLatchButton
     tmpargument = 2
     GetXY
@@ -360,10 +360,10 @@ IfTimeOut
       IfXIsEqualToY
         tmpargument = selfcontent + 512
         SetContent
-        tmpargument = LATCHRIGHT          //try to undo buff
+        tmpargument = LATCHRIGHT          // try to undo buff
         PressLatchButton
-           
-    //Teleport...
+
+    // Teleport...
     tmpx = rand & 255
     tmpy = 250
     IfXIsMoreThanY
@@ -371,7 +371,7 @@ IfTimeOut
       SetState
       SetTime
     Else
-    
+
       // Go after enemies
       SetTargetToWideEnemy
         tmpargument = rand & 7 + 4
@@ -384,8 +384,8 @@ IfTimeOut
         tmpdistance = -200
         Compass
         SetTurnModeToWatchTarget
-        
-      //Wander around
+
+      // Wander around
       Else
         SetTurnModeToVelocity
         tmpargument = rand & 15 + 25

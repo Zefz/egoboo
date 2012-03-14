@@ -1,13 +1,13 @@
-//Make yourself disenchantable
+// Make yourself disenchantable
 IfSpawned
   SetTargetToSelf
   EnchantTarget
-  
+
   // Must die in 1 hit to disallow punching it open
   tmpargument = 512
   SetDamageThreshold
 
-//Magic sparklies
+// Magic sparklies
 tmpargument = 1
 tmpdistance = selfz
 tmpx = selfx
@@ -27,7 +27,7 @@ IfHealed
     tmpargument = 20
     SetTime
 
-//Make sure it's invisible
+// Make sure it's invisible
 IfSpawned
   IfStateIs0
     tmpargument = 2
@@ -63,7 +63,7 @@ IfKilled
   tmpdistance = EXPQUEST
   GiveExperienceToGoodTeam
 
-  //Drop the crown
+  // Drop the crown
   DropKeys
   DropItems
   tmpargument = selfmoney
@@ -76,7 +76,7 @@ IfKilled
   tmpargument = 0
   SendMessageNear
 
-  //Spooky spell effect
+  // Spooky spell effect
   tmpargument = 2
   tmpx = selfx
   tmpy = selfy
@@ -85,14 +85,14 @@ IfKilled
 
   GoPoof
 
-  //Bad stuff usually happens when destroying seals
+  // Bad stuff usually happens when destroying seals
   tmpargument = 0
   IfContentIs
     tmpx = 2500
     tmpy = 2200
     tmpdistance = 50
     tmpargument = 55
-    SpawnExactCharacterXYZ           //20 fiend bugs
+    SpawnExactCharacterXYZ           // 20 fiend bugs
     SpawnExactCharacterXYZ
     SpawnExactCharacterXYZ
     SpawnExactCharacterXYZ
@@ -123,7 +123,7 @@ IfKilled
     tmpy = selfy
     tmpdistance = selfz
     tmpargument = 49
-    SpawnExactCharacterXYZ           //Prepeare a meteor swarm
+    SpawnExactCharacterXYZ           // Prepeare a meteor swarm
     SpawnExactCharacterXYZ
     tmpy = selfy + 250
     SpawnExactCharacterXYZ
@@ -139,14 +139,14 @@ IfKilled
     SpawnExactCharacterXYZ
 
   tmpargument = 2
-  IfContentIs			    //Open the exit gate =) Nothin bad
+  IfContentIs                // Open the exit gate =) Nothin bad
     tmpargument = 14
     OpenPassage
     tmpargument = 15
     OpenPassage
 
   tmpargument = 3
-  IfContentIs			    //Wake the Magma Yeti! moahaha!
+  IfContentIs                // Wake the Magma Yeti! moahaha!
     tmpargument = [YETI]
     IssueOrder
 

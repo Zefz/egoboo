@@ -1,15 +1,15 @@
-//This manages attack speed (Adjusted by strenght and\or dexterity)
+// This manages attack speed (Adjusted by strenght and\or dexterity)
 IfUsed
   SetTargetToWhoeverIsHolding
-  tmpargument = targetdex > 8		//Every point of dex increases speed by 1
+  tmpargument = targetdex > 8        // Every point of dex increases speed by 1
   tmpargument = 60 - tmpargument
   SetReloadTime
-  
+
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
 
 IfCrushed
@@ -25,25 +25,31 @@ IfCrushed
   tmpargument = 1
   SendMessageNear
 
-IfDropped				// Make it lie on floor
-  KeepAction				  //
+// Make it lie on floor
+IfDropped
+  KeepAction
 
-IfHitGround				// Make a sound
-  tmpargument = 1			  //
-  PlaySound				  //
+// Make a sound
+IfHitGround
+  tmpargument = 1
+  PlaySound
 
-IfTakenOut				// Make a sound
-  tmpargument = 2			  //
-  PlaySound				  //
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 2			  //
-    SendMessageNear			  //
+// Make a sound
+IfTakenOut
+  tmpargument = 2
+  PlaySound
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 2
+    SendMessageNear
 
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
 
-End					// All done
+// All done
+End
+

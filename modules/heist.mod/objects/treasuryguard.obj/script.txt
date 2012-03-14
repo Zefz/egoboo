@@ -1,12 +1,12 @@
-//Randomize skin
+// Randomize skin
 IfSpawned
   tmpargument = rand % 4
   ChangeArmor
 
-  //Moving guard 1
+  // Moving guard 1
   tmpargument = 1
   IfContentIs
-    tmpargument = 2		
+    tmpargument = 2
     SetState
 
     tmpx = 2235
@@ -17,10 +17,10 @@ IfSpawned
     tmpy = 4801
     AddWaypoint
 
-  //Moving guard 2
+  // Moving guard 2
   tmpargument = 2
   IfContentIs
-    tmpargument = 2		
+    tmpargument = 2
     SetState
 
     tmpx = 2235
@@ -31,16 +31,16 @@ IfSpawned
     tmpy = 6478
     AddWaypoint
 
-  //Sleeping Guard
+  // Sleeping Guard
   tmpargument = 3
   IfContentIs
-    tmpargument = 3		
+    tmpargument = 3
     SetState
 
-  //Moving inner guard 3
+  // Moving inner guard 3
   tmpargument = 4
   IfContentIs
-    tmpargument = 2		
+    tmpargument = 2
     SetState
 
     tmpx = 5320
@@ -51,10 +51,10 @@ IfSpawned
     tmpy = 7479
     AddWaypoint
 
-  //Moving inner guard 4
+  // Moving inner guard 4
   tmpargument = 5
   IfContentIs
-    tmpargument = 2		
+    tmpargument = 2
     SetState
 
     tmpx = 5569
@@ -65,7 +65,7 @@ IfSpawned
     tmpy = 6456
     AddWaypoint
 
-//Someone sounded the alarm
+// Someone sounded the alarm
 IfOrdered
   tmpx = selforder
   tmpy = [HELP]
@@ -77,7 +77,7 @@ IfOrdered
     SetTime
 
 //---------------------------------------------------------
-//Better fighting tactics
+// Better fighting tactics
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsAMount
@@ -87,7 +87,7 @@ IfBumped
     SetState
   IfTargetIsOnHatedTeam
     tmpargument = 1
-    IfStateIsNot		//Sound the alarm!
+    IfStateIsNot        // Sound the alarm!
       tmpargument = 1
       SetState
       tmpargument = [HELP]
@@ -108,19 +108,19 @@ IfBumped
     SetTargetToOldTarget
 
 //------------------------------------------------------------------------------
-//Use shield
+// Use shield
 IfTargetIsAttacking
-  IfTargetIsOnHatedTeam   
+  IfTargetIsOnHatedTeam
     IfFacingTarget
       IfHoldingShield
         tmpx = selfdex
         tmpy = rand % targetdex * 2
-        IfXIsMoreThanY			//Check dexterity skill to block
+        IfXIsMoreThanY            // Check dexterity skill to block
           tmpargument = LATCHLEFT
           PressLatchButton
 
 //------------------------------------------------------------------------------
-//Pick next enemy
+// Pick next enemy
 IfTargetKilled
   SetTargetToNearestEnemy
     tmpargument = 1
@@ -148,7 +148,7 @@ IfKilled
 //------------------------------------------------------------------------------
 IfTimeOut
 
-  //Standing Guard
+  // Standing Guard
   IfStateIs0
     SetTurnModeToVelocity
     tmpargument = rand % 25 + 20
@@ -157,22 +157,22 @@ IfTimeOut
       IfFacingTarget
         tmpx = targetdistance
         tmpy = rand % 250 + 650
-        IfXIsLessThanY			//Close enough to see?
+        IfXIsLessThanY            // Close enough to see?
           tmpargument = 1
           SetState
           tmpargument = [HELP]
-          IssueOrder                      //Sound the alarm!
+          IssueOrder                      // Sound the alarm!
           tmpargument = 6
           PlayFullSound
           SendMessageNear
     Else
       Walk
-      tmpx = selfspawnx   
-      tmpy = selfspawny    
-      ClearWaypoints			    
-      AddWaypoint				 
+      tmpx = selfspawnx
+      tmpy = selfspawny
+      ClearWaypoints
+      AddWaypoint
 
-  //Combat mode
+  // Combat mode
   IfStateIs1
     tmpdistance = 128*7
     SetTargetToDistantEnemy
@@ -184,23 +184,23 @@ IfTimeOut
     tmpargument = rand % 21 + 15
     SetTime
 
-    //Draw weapons if unarmed
+    // Draw weapons if unarmed
     IfUnarmed
       tmpargument = LATCHPACKRIGHT
       PressLatchButton
 
-    //Melee combat
+    // Melee combat
     IfHoldingMeleeWeapon
       tmpdistance = 200
       IfFacingTarget
-        tmpx = targetdistance			//Close enough?
+        tmpx = targetdistance            // Close enough?
         tmpy = 250
         IfXIsLessThanY
           IfTargetIsOnHatedTeam
-            tmpargument = LATCHRIGHT		//Attack!
+            tmpargument = LATCHRIGHT        // Attack!
             PressLatchButton
         Else
-          tmpdistance = 1500			//Charge attack
+          tmpdistance = 1500            // Charge attack
       IfHoldingShield
         DoNothing
       Else
@@ -214,90 +214,90 @@ IfTimeOut
       ClearWaypoints
       AddWaypoint
 
-    //Ranged combat
+    // Ranged combat
     IfHoldingRangedWeapon
-      IfFacingTarget			//Dont shoot if not facing or the target is facing self with shield
+      IfFacingTarget            // Dont shoot if not facing or the target is facing self with shield
         tmpx = targetturn
         tmpy = selfturn
         IfXIsLessThanY
           IfTargetIsDefending
             DoNothing
 
-          //Shoot!
+          // Shoot!
           Else
             IfTargetIsOnHatedTeam
-              SetTargetToNearestFriend		//Try not to hit friends
+              SetTargetToNearestFriend        // Try not to hit friends
                 IfFacingTarget
                   tmpx = targetdistance
                   tmpy = 450
-                  IfXIsMoreThanY		//Friend is far away
+                  IfXIsMoreThanY        // Friend is far away
                     SetTargetToOldTarget
                     tmpargument = LATCHRIGHT
                     PressLatchButton
                   Else
                     SetTargetToOldTarget
                     tmpy = targetdistance
-                    IfXIsMoreThanY		//Enemy is closer than friend
+                    IfXIsMoreThanY        // Enemy is closer than friend
                       tmpargument = LATCHRIGHT
                       PressLatchButton
                 Else
-                  SetTargetToOldTarget		//Not facing friend
+                  SetTargetToOldTarget        // Not facing friend
                   tmpargument = LATCHRIGHT
                   PressLatchButton
               Else
-                SetTargetToOldTarget		//No friends nearby
+                SetTargetToOldTarget        // No friends nearby
                 tmpargument = LATCHRIGHT
                 PressLatchButton
 
-        //Shoot!
+        // Shoot!
         Else
           IfTargetIsOnHatedTeam
-            SetTargetToNearestFriend		//Try not to hit friends
+            SetTargetToNearestFriend        // Try not to hit friends
               IfFacingTarget
                 tmpx = targetdistance
                 tmpy = 450
-                IfXIsMoreThanY		//Friend is far away
+                IfXIsMoreThanY        // Friend is far away
                   SetTargetToOldTarget
                   tmpargument = LATCHRIGHT
                   PressLatchButton
                 Else
                   SetTargetToOldTarget
                   tmpy = targetdistance
-                  IfXIsMoreThanY		//Enemy is closer than friend
+                  IfXIsMoreThanY        // Enemy is closer than friend
                     tmpargument = LATCHRIGHT
                     PressLatchButton
               Else
-                SetTargetToOldTarget		//Not facing friend
+                SetTargetToOldTarget        // Not facing friend
                 tmpargument = LATCHRIGHT
                 PressLatchButton
             Else
-              SetTargetToOldTarget		//No friends nearby
+              SetTargetToOldTarget        // No friends nearby
               tmpargument = LATCHRIGHT
               PressLatchButton
- 
+
       SetTargetToNearestEnemy
       SetTurnModeToWatchTarget
       tmpx = targetdistance
       tmpy = 350
-      IfXIsLessThanY			//Keep distance
+      IfXIsLessThanY            // Keep distance
         tmpdistance = 0 - 400
         tmpx = rand & 350 + targetx - 175
         tmpy = rand & 350 + targety - 175
       Else
         tmpx = targetdistance
         tmpy = 650
-        IfXIsMoreThanY			//Target too far away?
+        IfXIsMoreThanY            // Target too far away?
           tmpdistance = 0 - 400
           tmpx = targetx
           tmpy = targety
         Else
-          tmpx = selfx			//No, this position is fine
+          tmpx = selfx            // No, this position is fine
           tmpy = selfy
 
       ClearWaypoints
       AddWaypoint
 
-      //Try to avoid hitting friends
+      // Try to avoid hitting friends
       SetTargetToNearestFriend
         IfFacingTarget
           tmpx = targetdistance
@@ -309,45 +309,45 @@ IfTimeOut
             AddWaypoint
         SetTargetToOldTarget
 
-      //Check for ammo if we need a reload
+      // Check for ammo if we need a reload
       SetOldTarget
       SetTargetToSelf
       SetTargetToTargetRightHand
       tmpx = targetammo
       tmpy = 10
-      IfXIsLessThanY		//Yep
+      IfXIsLessThanY        // Yep
         tmpargument = 9
         PlaySound
         tmpargument = 7
         SendMessageNear
         tmpargument = [LBOW]
         SetTargetToSelf
-        RestockTargetAmmoIDAll 
+        RestockTargetAmmoIDAll
       SetTargetToOldTarget
 
-  //Moving Guard
+  // Moving Guard
   IfStateIs2
     Sneak
     SetTurnModeToVelocity
     tmpargument = 15
     SetTime
 
-    //Watch out for enemies
+    // Watch out for enemies
     SetTargetToWideEnemy
       IfFacingTarget
         tmpx = targetdistance
         tmpy = rand % 250 + 470
-        IfXIsLessThanY			//Close enough to see?
+        IfXIsLessThanY            // Close enough to see?
           tmpargument = 1
           SetState
           SetTime
           tmpargument = [HELP]
-          IssueOrder                      //Sound the alarm!
+          IssueOrder                      // Sound the alarm!
           tmpargument = 6
           PlayFullSound
           SendMessageNear
 
-  //Sleepy guard
+  // Sleepy guard
   IfStateIs3
     tmpargument = rand % 100 + 175
     SetTime
@@ -365,21 +365,21 @@ IfTimeOut
 IfAttacked
   SetTargetToWhoeverAttacked
   IfTargetIsOnHatedTeam
-    tmpargument = 4		//Ouch!
+    tmpargument = 4        // Ouch!
     PlaySound
     tmpargument = 1
-    IfStateIsNot			//Only if not in combat already
+    IfStateIsNot            // Only if not in combat already
       IfBackstabbed
         tmpargument = 5
         SendMessageNear
         tmpargument = 15
         tmpdistance = EXPMURDER
-        GiveExperienceToTarget            //Award some xp for backstabbing
+        GiveExperienceToTarget            // Award some xp for backstabbing
         SetTargetToSelf
-        KillTarget                        //Killed!
+        KillTarget                        // Killed!
       Else
         tmpargument = [HELP]
-        IssueOrder                      //Sound the alarm!
+        IssueOrder                      // Sound the alarm!
         tmpargument = 1
         SetState
         SetTime
@@ -389,10 +389,10 @@ IfAttacked
   Else
     IfTargetIsOnSameTeam
       tmpargument = 1
-      PlaySound				//Hey! careful there 
+      PlaySound                // Hey! careful there
     SetTargetToOldTarget
 
-//Stand still few seconds before turning to start again
+// Stand still few seconds before turning to start again
 IfAtLastWaypoint
   IfStateIs2
     tmpargument = rand & 63 + 100

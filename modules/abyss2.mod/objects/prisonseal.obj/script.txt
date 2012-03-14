@@ -1,22 +1,22 @@
-//Make yourself disenchantable
+// Make yourself disenchantable
 IfSpawned
   tmpargument = 0
   IfContentIs
     SetTargetToSelf
     EnchantTarget
-    
+
   // Must die in 1 hit to disallow punching it open
   tmpargument = 512
   SetDamageThreshold
 
-//Remove self if ordered to do so
+// Remove self if ordered to do so
 IfOrdered
   tmpx = selforder
   tmpy = [FREE]
   IfXIsEqualToY
     GoPoof
 
-  //This is lord bishop's prison orb (looks different)
+  // This is lord bishop's prison orb (looks different)
   tmpx = selforder
   tmpy = [KING]
   IfXIsEqualToY
@@ -24,8 +24,9 @@ IfOrdered
     SetContent
     ChangeArmor
 
-//Spelly effects
+// Spelly effects
 tmpargument = 0
+
 IfContentIs
   tmpargument = 1
 Else
@@ -90,5 +91,5 @@ IfKilled
 
   GoPoof
   tmpargument = [FREE]
-  IssueOrder               //Release the prisoner!
+  IssueOrder               // Release the prisoner!
 End

@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-//Add an additional well the players can heal at in easy and normal mode
+// Add an additional well the players can heal at in easy and normal mode
 IfSpawned
   tmpx = difficulty
   tmpy = 2
@@ -9,24 +9,25 @@ IfSpawned
     tmpy = 3584
     tmpdistance = selfz
     SpawnExactCharacterXYZ
-  
-  //Display all enemies on this level
+
+  // Display all enemies on this level
   tmpdistance = BLAHFRIENDS + BLAHENEMIES + BLAHQUEST
   tmpargument = [IMPC]
   SetTargetToNearestBlahID
-  IfTargetHasQuest                  //Get the current quest level
+  IfTargetHasQuest                  // Get the current quest level
     tmpargument = [NONE]
     AddBlipAllEnemies
-    tmpargument = tmpdistance       //quest level = time left
+    tmpargument = tmpdistance       // quest level = time left
   Else
-    tmpargument = 50*60*15          //Default to 15 minutes
+    tmpargument = 50*60*15          // Default to 15 minutes
   SetContent
   ShowTimer
-    
+
 //------------------------------------------------------------------------------
-//Do the countdown timer
+// Do the countdown timer
 tmpx = selfcontent
 tmpy = 0
+
 IfXIsMoreThanY
   tmpargument = selfcontent - 1
   SetContent
@@ -40,42 +41,43 @@ tmpargument = YELLOW
 ShowBlipXY
 
 //------------------------------------------------------------------------------
-//Spawning a portal AI
+// Spawning a portal AI
 tmpargument = 0
+
 IfArmorIs
 
-  //Do the countdown timer for the next round
+  // Do the countdown timer for the next round
   tmpargument = 0
   GetXY
   IfXIsMoreThanY
     tmpx = tmpx - 1
     tmpy = 0
     SetXY
-    
-    //10 seconds to next round
+
+    // 10 seconds to next round
     tmpy = 500
     IfXIsEqualToY
       tmpargument = 18
       SendMessage
 
-    //3 seconds to next round
+    // 3 seconds to next round
     tmpy = 150
     IfXIsEqualToY
       tmpargument = 19
       SendMessage
-      
-    //2 seconds to next round
+
+    // 2 seconds to next round
     tmpy = 100
     IfXIsEqualToY
       tmpargument = 20
       SendMessage
-      
-    //1 seconds to next round
+
+    // 1 seconds to next round
     tmpy = 50
     IfXIsEqualToY
       tmpargument = 21
       SendMessage
-      
+
   //------------------------------------------------------------------------------
   IfKilled
     GoPoof
@@ -85,16 +87,16 @@ IfArmorIs
     PlayFullSound
     tmpargument = 7
     PlayMusic
-    
-    //Explosion
+
+    // Explosion
     tmpargument = 2
     tmpy = selfy
     tmpx = selfx
     tmpdistance = selfz
     SpawnExactParticle
-    
+
   //------------------------------------------------------------------------------
-  //Spawn sparklies around (Just for fancy)
+  // Spawn sparklies around (Just for fancy)
   SetTargetToSelf
   tmpx = targetx
   tmpy = targety
@@ -111,42 +113,42 @@ IfArmorIs
     tmpy = selfy
     tmpdistance = selfz
     SpawnExactParticle
-    
+
   //------------------------------------------------------------------------------
-  //Setup characteristics
+  // Setup characteristics
   IfSpawned
     SetTurnModeToSpin
     AddStat
-    
-    //Time before first wave spawns
+
+    // Time before first wave spawns
     tmpargument = 0
-    tmpx = 50*22        //22 seconds
+    tmpx = 50*22        // 22 seconds
     tmpy = 0
     SetXY
 
     tmpargument = 12
     SendMessage
-    
-    //Default music
+
+    // Default music
     tmpargument = 11
     PlayMusic
-    
-    //Show them the exciting map
+
+    // Show them the exciting map
     ShowMap
     ShowYouAreHere
-    
-  //New round!
+
+  // New round!
   tmpargument = 0
   GetXY
   IfXIsEqualToY
-    
-    //32 seconds before next round
+
+    // 32 seconds before next round
     tmpargument = 0
     tmpx = 50*32
     tmpy = 0
     SetXY
-    
-    //Alert the players
+
+    // Alert the players
     tmpx = selfstate
     tmpy = 11
     IfXIsLessThanY
@@ -154,20 +156,20 @@ IfArmorIs
       PlayFullSound
       tmpargument = selfstate
       SendMessage
-      
-      //Set the correct music if not already doing so...
+
+      // Set the correct music if not already doing so...
       tmpargument = 25
       PlayMusic
-      
-    //Next round
+
+    // Next round
     tmpargument = selfstate + 1
     SetState
-    
+
     tmpargument = [WAVE]
     tmpdistance = [WAVE]
-    OrderSpecialID  
+    OrderSpecialID
 
-    //Spawn chest reward
+    // Spawn chest reward
     IfStateIs4
       tmpargument = 61
       tmpx = 29*128
@@ -175,8 +177,8 @@ IfArmorIs
       tmpdistance = 700
       tmpturn = rand
       SpawnExactCharacterXYZ
-      
-    //Spawn chest reward
+
+    // Spawn chest reward
     IfStateIs8
       tmpargument = 61
       tmpx = 35*128
@@ -184,13 +186,13 @@ IfArmorIs
       tmpdistance = 700
       tmpturn = rand
       SpawnExactCharacterXYZ
-    
-    //Boss music!
+
+    // Boss music!
     IfStateIs11
       tmpargument = 6
       PlayMusic
-    
-    //Enable escape through the portal
+
+    // Enable escape through the portal
     IfStateIs12
       tmpargument = 1
       ChangeArmor
@@ -200,19 +202,19 @@ IfArmorIs
       PlayMusic
       SetTurnModeToVelocity
 
-//Finished spawning the portal
+// Finished spawning the portal
 Else
   IfBumped
     SetTargetToWhoeverBumped
     IfTargetIsAPlayer
-      tmpargument = [IMPD]          //Imprisoned one level 4
-      tmpdistance = selfcontent     //Store time left on this level
+      tmpargument = [IMPD]          // Imprisoned one level 4
+      tmpdistance = selfcontent     // Store time left on this level
       AddQuestAllPlayers
       BeatModule
       EnableExport
       EndModule
       ClearEndMessage
-      tmpy = selfcontent / 60 / 50      //Calculate amount of time left from the ticks
+      tmpy = selfcontent / 60 / 50      // Calculate amount of time left from the ticks
       tmpx = selfcontent / 50
       tmpx = tmpx % 60
       tmpargument = 13
@@ -223,5 +225,5 @@ Else
       AddEndMessage
       tmpargument = 16
       AddEndMessage
-    
+
 End

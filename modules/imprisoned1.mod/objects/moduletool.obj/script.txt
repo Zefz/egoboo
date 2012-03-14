@@ -2,78 +2,79 @@ IfSpawned
   tmpargument = 8
   tmpdistance = 0
   PlayMusic
-  
-  tmpargument = rand % 5        //Random particle type
-  tmpdistance = 0
-  tmpx = rand % 768 - 348 + selfspawnx
-  tmpy = rand % 768 - 348 + selfspawny
-  SpawnExactParticle
-  
-  tmpargument = rand % 5        //Random particle type
-  tmpdistance = 0
-  tmpx = rand % 768 - 348 + selfspawnx
-  tmpy = rand % 768 - 348 + selfspawny
-  SpawnExactParticle
-  
-  tmpargument = rand % 5        //Random particle type
-  tmpdistance = 0
-  tmpx = rand % 768 - 348 + selfspawnx
-  tmpy = rand % 768 - 348 + selfspawny
-  SpawnExactParticle
-  
-  tmpargument = rand % 5        //Random particle type
-  tmpdistance = 0
-  tmpx = rand % 768 - 348 + selfspawnx
-  tmpy = rand % 768 - 348 + selfspawny
-  SpawnExactParticle
-  
-  tmpargument = rand % 5        //Random particle type
+
+  tmpargument = rand % 5        // Random particle type
   tmpdistance = 0
   tmpx = rand % 768 - 348 + selfspawnx
   tmpy = rand % 768 - 348 + selfspawny
   SpawnExactParticle
 
-  tmpargument = rand % 5        //Random particle type
+  tmpargument = rand % 5        // Random particle type
   tmpdistance = 0
   tmpx = rand % 768 - 348 + selfspawnx
   tmpy = rand % 768 - 348 + selfspawny
   SpawnExactParticle
-  
-  tmpargument = rand % 5        //Random particle type
+
+  tmpargument = rand % 5        // Random particle type
   tmpdistance = 0
   tmpx = rand % 768 - 348 + selfspawnx
   tmpy = rand % 768 - 348 + selfspawny
   SpawnExactParticle
-  
-  tmpargument = rand % 5        //Random particle type
+
+  tmpargument = rand % 5        // Random particle type
   tmpdistance = 0
   tmpx = rand % 768 - 348 + selfspawnx
   tmpy = rand % 768 - 348 + selfspawny
-  SpawnExactParticle  
-  
-  tmpargument = 50*60*60 //one hour
+  SpawnExactParticle
+
+  tmpargument = rand % 5        // Random particle type
+  tmpdistance = 0
+  tmpx = rand % 768 - 348 + selfspawnx
+  tmpy = rand % 768 - 348 + selfspawny
+  SpawnExactParticle
+
+  tmpargument = rand % 5        // Random particle type
+  tmpdistance = 0
+  tmpx = rand % 768 - 348 + selfspawnx
+  tmpy = rand % 768 - 348 + selfspawny
+  SpawnExactParticle
+
+  tmpargument = rand % 5        // Random particle type
+  tmpdistance = 0
+  tmpx = rand % 768 - 348 + selfspawnx
+  tmpy = rand % 768 - 348 + selfspawny
+  SpawnExactParticle
+
+  tmpargument = rand % 5        // Random particle type
+  tmpdistance = 0
+  tmpx = rand % 768 - 348 + selfspawnx
+  tmpy = rand % 768 - 348 + selfspawny
+  SpawnExactParticle
+
+  tmpargument = 50*60*60 // one hour
   SetContent
 
-//Update the game timer
+// Update the game timer
 tmpx = selfcontent
 tmpy = 0
+
 IfXIsMoreThanY
   tmpargument = selfcontent - 1
   SetContent
   ShowTimer
-  
+
 IfOrdered
   tmpx = selforder
   tmpy = [BEAT]
   IfXIsEqualToY
-    tmpargument = [IMPA]          //Imprisoned one level 1
-    tmpdistance = selfcontent     //Store time left on this level
+    tmpargument = [IMPA]          // Imprisoned one level 1
+    tmpdistance = selfcontent     // Store time left on this level
     AddQuestAllPlayers
     BeatModule
     EnableExport
     EndModule
     ClearEndMessage
-    tmpy = selfcontent / 60 / 50      //Calculate amount of time left from the ticks
+    tmpy = selfcontent / 60 / 50      // Calculate amount of time left from the ticks
     tmpx = selfcontent / 50
     tmpx = tmpx % 60
     tmpargument = 0
@@ -88,5 +89,8 @@ IfOrdered
     AddEndMessage
 
 //------------------------------------------------------------------------------------
-End					// All done
+
+// All done
+End
+
 //------------------------------------------------------------------------------------

@@ -3,7 +3,7 @@ IfHealed
   GetDamageType
   tmpx = tmpargument
   tmpy = DAMAGEFIRE
-  IfXIsEqualToY		//Only if not fire damage
+  IfXIsEqualToY        // Only if not fire damage
     DoNothing
   Else
     // Damage is inverted to make the Gelfeet invincible...
@@ -48,7 +48,8 @@ IfTimeOut
         SendMessageNear
         PoofTarget
 
-IfBumped				// Eat the enemy
+// Eat the enemy
+IfBumped
   SetTargetToWhoeverBumped
   tmpx = targetz
   tmpy = selfz + 30
@@ -59,28 +60,30 @@ IfBumped				// Eat the enemy
       tmpargument = 0
       PlaySound
 
-//Content 1 = Y direction while content 0 = X direction
-IfSpawned				// This is done once in a lifetime
+// Content 1 = Y direction while content 0 = X direction
+IfSpawned                // This is done once in a lifetime
   tmpargument = 0
   IfContentIs
-    ClearWaypoints			  // Now go there
-    tmpy = 128*8 + selfspawny				  // Waypoint 0
-    tmpx = selfspawnx				  //
-    AddWaypoint				  //
-    tmpy = 128*8				  // Waypoint 1
+    ClearWaypoints              // Now go there
+    tmpy = 128*8 + selfspawny                  // Waypoint 0
+    tmpx = selfspawnx
+    AddWaypoint
+    tmpy = 128*8                  // Waypoint 1
     tmpy = selfspawny - tmpy
-    tmpx = selfspawnx				  //
-    AddWaypoint				  //
+    tmpx = selfspawnx
+    AddWaypoint
 
   tmpargument = 1
   IfContentIs
-    ClearWaypoints			  // Now go there
-    tmpx = 128*5 + selfspawnx				  // Waypoint 0
-    tmpy = selfspawny				  //
-    AddWaypoint				  //
-    tmpx = 128*5				  // Waypoint 1
+    ClearWaypoints              // Now go there
+    tmpx = 128*5 + selfspawnx                  // Waypoint 0
+    tmpy = selfspawny
+    AddWaypoint
+    tmpx = 128*5                  // Waypoint 1
     tmpx = selfspawnx - tmpx
-    tmpy = selfspawny				  //
-    AddWaypoint				  //
+    tmpy = selfspawny
+    AddWaypoint
 
-End					// Finished with this character
+// Finished with this character
+End
+

@@ -1,4 +1,4 @@
-//Attack the enemy if he is approaching
+// Attack the enemy if he is approaching
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsOnHatedTeam
@@ -10,8 +10,8 @@ IfBumped
         SetState
   Else
     SetTargetToOldTarget
-    
-//Anti heal sound
+
+// Anti heal sound
 IfUsed
   tmpargument = 6
   PlaySound
@@ -24,7 +24,7 @@ IfTargetKilled
   Else
     tmpargument = 0
     SetState
-    SetContent		//Reset battlecry (Enemies are defeated or fled)
+    SetContent        // Reset battlecry (Enemies are defeated or fled)
 
 //------------------------------------------------------------------------------
 // ZZ> Handle death by sending a message and other stuff
@@ -36,7 +36,7 @@ IfKilled
   DropKeys
   DropItems
 
-  //Death message and sound
+  // Death message and sound
   tmpargument = 0
   SendMessageNear
   tmpargument = 4
@@ -46,7 +46,7 @@ IfKilled
   tmpargument = 25
   SetBumpHeight
 
-  //Victory tune
+  // Victory tune
   tmpargument = 14
   tmpdistance = 0
   PlayMusic
@@ -57,11 +57,11 @@ IfKilled
   tmpargument = [BEAT]
   AddIDSZ
   ClearEndMessage
-  
-  //Special ending
+
+  // Special ending
   tmpargument = [LORD]
   tmpdistance = 6
-  SetTargetToNearestBlahID	      //Did lord hagen survive?
+  SetTargetToNearestBlahID          // Did lord hagen survive?
     tmpargument = 7
     AddEndMessage
     tmpargument = 8
@@ -72,7 +72,7 @@ IfKilled
     tmpargument = [LORD]
     AddIDSZ
 
-  //Normal ending
+  // Normal ending
   Else
     tmpargument = 5
     AddEndMessage
@@ -83,7 +83,7 @@ IfKilled
     GiveExperienceToGoodTeam
 
 //------------------------------------------------------------------------------
-//Always target bumpers
+// Always target bumpers
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsOnHatedTeam
@@ -95,23 +95,23 @@ IfBumped
     SetTargetToOldTarget
 
 //------------------------------------------------------------------------------
-//0 Wait for good guys
-//1 Charge enemy
-//2 Close combat
+// 0 Wait for good guys
+// 1 Charge enemy
+// 2 Close combat
 
-//Special order when the boss door is opened
+// Special order when the boss door is opened
 IfOrdered
   tmpx = selforder
   tmpy = [ATTA]
   IfXIsEqualToY
     SetTargetToNearestEnemy
-      tmpargument = 1		//Charge nearest enemy
+      tmpargument = 1        // Charge nearest enemy
       SetState
-      SetContent			//Dont do more warcries this combat
+      SetContent            // Dont do more warcries this combat
     Else
       tmpargument = 0
       SetState
-    //Do the warcry
+    // Do the warcry
     tmpargument = 2
     SendMessageNear
     tmpargument = 5
@@ -123,23 +123,23 @@ IfTimeOut
   IfStateIs0
     SetTargetToNearbyEnemy
       tmpargument = 0
-      IfContentIs			//Do the battlecry
+      IfContentIs            // Do the battlecry
         tmpargument = 1
         SetContent
         tmpargument = 2
         SendMessageNear
         tmpargument = 5
         PlaySound
-      tmpargument = 1			//Charge target
+      tmpargument = 1            // Charge target
       SetState
       tmpargument = rand % 20
       SetTime
     Else
-      Sneak				//33% speed
+      Sneak                // 33% speed
       tmpx = selfspawnx
       tmpy = selfspawny
       ClearWaypoints
-      AddWaypoint			//Return to start
+      AddWaypoint            // Return to start
       tmpargument = rand & 15 + 50
       SetTime
 
@@ -150,14 +150,14 @@ IfTimeOut
     Else
       tmpargument = 0
       SetState
-    
-    Run					//100% speed
+
+    Run                    // 100% speed
     SetTurnModeToWatchTarget
 
-    //Target is far away, pick the closest one
+    // Target is far away, pick the closest one
     tmpx = targetdistance
     tmpy = 1400
-    IfXIsMoreThanY			
+    IfXIsMoreThanY
       SetTargetToNearestEnemy
 
     // Charge the enemy
@@ -171,29 +171,29 @@ IfTimeOut
     tmpargument = 50
     SetTime
 
-    //Close enough to chop?
+    // Close enough to chop?
     tmpx = targetdistance
     tmpy = 500
     IfXIsLessThanY
       tmpargument = 2
-      SetState		
+      SetState
 
-  //Close Combat
+  // Close Combat
   IfStateIs2
     SetTargetToWideEnemy
       DoNothing
     Else
       tmpargument = 0
       SetState
-    Walk				//50% speed
+    Walk                // 50% speed
     SetTurnModeToVelocity
     tmpargument = rand & 31 + 30
     SetTime
     tmpx = targetdistance
     tmpy = 200
-    IfXIsLessThanY			// Close enough to attack
+    IfXIsLessThanY            // Close enough to attack
       tmpdistance = 1
-      IfHoldingShield               //If the shield is lost, use magic!
+      IfHoldingShield               // If the shield is lost, use magic!
         DoNothing
       Else
         tmpx = selfmana
@@ -201,9 +201,9 @@ IfTimeOut
         IfXIsMoreThanY
           tmpdistance = 0
           tmpargument = LATCHLEFT
-          PressLatchButton              //Use evil voodoo!!
-      
-      //Did not use voodoo, attack normally instead
+          PressLatchButton              // Use evil voodoo!!
+
+      // Did not use voodoo, attack normally instead
       tmpturn = 0
       IfDistanceIsMoreThanTurn
         IfHoldingMeleeWeapon
@@ -211,13 +211,13 @@ IfTimeOut
             tmpargument = LATCHRIGHT
             PressLatchButton
 
-    //Keep in combat position
+    // Keep in combat position
     tmpx = targetdistance
     tmpy = 250
-    IfXIsMoreThanY			//Keep a tactical distance
+    IfXIsMoreThanY            // Keep a tactical distance
       SetTurnModeToWatchTarget
       tmpdistance = 0 - 200
-    Else				//Move in for attack
+    Else                // Move in for attack
       SetTurnModeToVelocity
       tmpdistance = 500
     tmpx = targetx
@@ -227,7 +227,7 @@ IfTimeOut
     ClearWaypoints
     AddWaypoint
 
-    //Is the target too far away?
+    // Is the target too far away?
     tmpx = targetdistance
     tmpy = 500
     IfXIsMoreThanY
@@ -236,13 +236,13 @@ IfTimeOut
       SetTime
 
 //------------------------------------------------------------------------------
-//How to react if damaged
+// How to react if damaged
 IfAttacked
-  SetTargetToWhoeverAttacked		//Always target attackers
+  SetTargetToWhoeverAttacked        // Always target attackers
   tmpargument = rand & 1 + 2
   PlaySound
-  
-//Get rid of the shield
+
+// Get rid of the shield
 IfHoldingShield
   tmpx = selflife > 8
   tmpy = 6
@@ -254,11 +254,11 @@ IfHoldingShield
         SendMessage
 
 //------------------------------------------------------------------------------
-//Use shield
+// Use shield
 IfTargetIsAttacking
   IfFacingTarget
     IfHoldingShield
-      tmpx = selfdex			//Check dexterity to block, 10 is average
+      tmpx = selfdex            // Check dexterity to block, 10 is average
       tmpy = rand & 7120
       IfXIsMoreThanY
         PressLatchButton

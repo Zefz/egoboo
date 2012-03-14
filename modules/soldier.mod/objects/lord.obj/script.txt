@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-//Jumping over corpses
+// Jumping over corpses
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsAlive
@@ -14,6 +14,7 @@ IfBumped
 
 //------------------------------------------------------------------------------
 tmpargument = 0
+
 IfStateIsNot
   GetContent
   tmpx = tmpargument
@@ -22,7 +23,7 @@ IfStateIsNot
     tmpargument = tmpx - 1
     SetContent
 
-//Joining the soldier
+// Joining the soldier
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsAPlayer
@@ -38,17 +39,17 @@ IfBumped
       GiveExperienceToGoodTeam
       tmpargument = 3
       SetState
-      DropKeys			//Drop boss key
-      AddStat			//Show stats
+      DropKeys            // Drop boss key
+      AddStat            // Show stats
 
 //-----------------------------------------------------------------------------
-//Footstep sound
+// Footstep sound
 IfHitGround
   tmpargument = 0
   PlaySound
 
 //----------------------------------------------------------------------------
-//Using his shield
+// Using his shield
 IfTargetIsAttacking
   IfTargetIsOnHatedTeam
     IfFacingTarget
@@ -58,7 +59,7 @@ IfTargetIsAttacking
         PressLatchButton
 
 //------------------------------------------------------------------------------
-//Moving around...
+// Moving around...
 IfTimeOut
   IfStateIs3
     tmpargument = 0
@@ -77,7 +78,7 @@ IfTimeOut
       tmpargument = 100
       SetContent
 
-    //Get in a fight!
+    // Get in a fight!
     tmpdistance = 128*5
     SetTargetToDistantEnemy
       // Charge!
@@ -101,7 +102,7 @@ IfTimeOut
       SetTime
     Else
 
-      //Following the player
+      // Following the player
       SetTargetToLeader
       tmpx = targetdistance
       tmpy = 400
@@ -116,8 +117,8 @@ IfTimeOut
         tmpargument = 20
         SetTime
       Else
-      
-        //Run to the player
+
+        // Run to the player
         tmpy = 1200
         IfXIsLessThanY
           tmpx = targetx
@@ -131,7 +132,7 @@ IfTimeOut
           SetTime
         Else
 
-          //Walking around, player too far away
+          // Walking around, player too far away
           tmpx = selfx
           tmpy = selfy
           tmpturn = selfturn + 8192
@@ -142,9 +143,9 @@ IfTimeOut
           tmpargument = 20
           SetTime
 
-  //Still a prisoner...
+  // Still a prisoner...
   Else
-      //How close is the player?
+      // How close is the player?
     tmpargument = [SOLD]
     tmpdistance = 6 // Friends and Enemies
     SetTargetToNearestBlahID
@@ -157,7 +158,7 @@ IfTimeOut
         IfXIsLessThanY
           IfStateIs0
 
-            //Talk to the player...
+            // Talk to the player...
             tmpargument = 90 // Delay
             SetContent
 
@@ -174,7 +175,7 @@ IfTimeOut
             tmpargument = 20
             SetTime
         Else
-          //Approach the player
+          // Approach the player
           tmpx = selfspawnx
           tmpy = selfspawny
           tmpturn = targetturnto
@@ -185,7 +186,7 @@ IfTimeOut
           tmpargument = 20
           SetTime
       Else
-        //Walk around in a circle
+        // Walk around in a circle
         tmpx = selfx
         tmpy = selfy
         tmpturn = selfturn + 8192
@@ -196,7 +197,7 @@ IfTimeOut
         tmpargument = 20
         SetTime
     Else
-      //If blah is not, Move around in a circle
+      // If blah is not, Move around in a circle
       tmpx = selfx
       tmpy = selfy
       tmpturn = selfturn + 8192
@@ -208,7 +209,7 @@ IfTimeOut
       SetTime
 
 //------------------------------------------------------------------------------
-//If the lord is killed
+// If the lord is killed
 IfKilled
   tmpargument = 7
   PlaySound
@@ -217,18 +218,18 @@ IfKilled
     tmpargument = 1
   SendMessage
 
-  //Drop all his items
+  // Drop all his items
   tmpargument = selfmoney
   DropMoney
   DropKeys
   DropItems
 
-  //Create the body
+  // Create the body
   tmpargument = 45
   SetBumpHeight
 
 //------------------------------------------------------------------------------
-//What happens if the Lord is attacked?
+// What happens if the Lord is attacked?
 IfAttacked
   SetTargetToWhoeverAttacked
   IfTargetIsOnSameTeam

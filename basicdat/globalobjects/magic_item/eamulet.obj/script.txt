@@ -13,11 +13,14 @@ IfSpawned
   DoAction
   KeepAction
   MakeCrushValid
+
 IfDropped
   KeepAction
+
 IfHitGround
   tmpargument = 0
   PlaySound
+
 IfGrabbed
   SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer

@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-//FOOTSTEP SOUND
+// FOOTSTEP SOUND
 IfHitGround
   tmpargument = 1
   tmpdistance = 17000
@@ -40,7 +40,7 @@ IfKilled
   tmpargument = 65535
   DropMoney
 
-  //Sound
+  // Sound
   tmpargument = 0
   PlaySound
 

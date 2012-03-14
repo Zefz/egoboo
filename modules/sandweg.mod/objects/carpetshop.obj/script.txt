@@ -1,11 +1,11 @@
-//Show where you are on the map
+// Show where you are on the map
 tmpx = selfx
 tmpy = selfy
 tmpargument = YELLOW
 ShowBlipXY
 
 //------------------------------------------------------------------------------
-//Handle orders ( purchases )
+// Handle orders ( purchases )
 IfOrdered
   // Counter specifies transaction ( 0, 1, or 2 )
   // Order specifies price
@@ -28,22 +28,21 @@ IfOrdered
         tmpargument = tmpx + 5
         tmpx = selforder
         SendMessageNear
-        
+
 //------------------------------------------------------------------------------
 IfSpawned
 
-  //Make it a shop
+  // Make it a shop
   tmpargument = passage
   AddShopPassage
 
-  Sneak				//Dont run around
+  Sneak                // Dont run around
   tmpargument = STATEGUARD
   SetState
-  
-  //Place the carpet
+
+  // Place the carpet
   DropItems
-  
-  
+
 //------------------------------------------------------------------------------
 IfHealed
   tmpargument = 1
@@ -56,14 +55,15 @@ IfAttacked
   SetTargetToWhoeverAttacked
   IfTargetIsAPlayer
     CallForHelp
-    tmpargument = TEAME     //Team Evil
+    tmpargument = TEAME     // Team Evil
     TargetJoinTeam
     tmpargument = STATECOMBAT
     SetState
   tmpargument = 5
   PlaySound
+
 IfKilled
-  CallForHelp			//Warn friends
+  CallForHelp            // Warn friends
   tmpargument = TEAME
   TargetJoinTeam
 
@@ -73,9 +73,9 @@ IfTimeOut
   tmpargument = 50
   SetTime
 
-  //WAIT AND TALK
+  // WAIT AND TALK
   IfStateIsGuard
-    SetTargetToNearbyEnemy		//Enemy near, go combat mode
+    SetTargetToNearbyEnemy        // Enemy near, go combat mode
       tmpargument = STATECOMBAT
       SetState
       CallForHelp
@@ -85,14 +85,14 @@ IfTimeOut
       ClearWaypoints
       AddWaypoint
 
-      //Reduce that counter
+      // Reduce that counter
       tmpx = selfcontent
       tmpy = 0
       IfXIsMoreThanY
         tmpargument = selfcontent - 1
         SetContent
-      
-      //Cry out to attract buyers
+
+      // Cry out to attract buyers
       tmpdistance = BLAHFRIENDS
       tmpargument = [HUMA]
       SetTargetToNearestBlahID
@@ -105,12 +105,12 @@ IfTimeOut
             tmpargument = rand % 3 + 2
             SendMessageNear
             PlaySound
-            tmpargument = 6   //Wait 6 seconds before doing again
+            tmpargument = 6   // Wait 6 seconds before doing again
             SetContent
         Else
           SetTurnModeToVelocity
-          
-  //Run away in panic
+
+  // Run away in panic
   IfStateIsCombat
     Run
     SetTargetToNearbyEnemy
@@ -122,18 +122,17 @@ IfTimeOut
     AddWaypoint
     tmpargument = 75
     SetTime
-    
-    //Return to shopkeeping mode if everything seems normal again
+
+    // Return to shopkeeping mode if everything seems normal again
     SetTargetToNearestEnemy
       tmpx = targetdistance
       tmpy = 128*16
       IfXIsMoreThanY
         tmpargument = STATEGUARD
-        SetState        
-    
+        SetState
 
 //------------------------------------------------------------------------------
-//What to do if bumped
+// What to do if bumped
 IfBumped
   IfStateIsGuard
     SetTargetToWhoeverBumped

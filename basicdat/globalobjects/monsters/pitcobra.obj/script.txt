@@ -51,14 +51,14 @@ IfTimeOut
   tmpdistance = 128*8
   SetTargetToDistantEnemy
     IfFacingTarget
-      //Growl
+      // Growl
       tmpx = rand & 2047
       tmpy = 0
       IfXIsEqualToY
         tmpargument = 3
         PlaySound
 
-      //Attack
+      // Attack
       tmpx = targetdistance
       tmpy = 450
       IfXIsLessThanY
@@ -73,12 +73,12 @@ IfTimeOut
           SetTargetToSelf
           AccelerateTarget
           SetTargetToOldTarget
-          
-          //Spawn bite particle
+
+          // Spawn bite particle
           tmpargument = 5
           tmpdistance = SPAWNLAST
           SpawnAttachedParticle
-          
+
           // Play the attack sound
           tmpargument = 2
           PlaySound
@@ -96,8 +96,8 @@ IfTimeOut
       Compass
     ClearWaypoints
     AddWaypoint
-    
-  //No enemies around.... wander
+
+  // No enemies around.... wander
   Else
     tmpx = selfx
     tmpy = selfy

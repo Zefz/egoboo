@@ -43,20 +43,20 @@ IfKilled
   SpawnExactParticle
   PlaySound
 
-  //Is it a monster inside?
+  // Is it a monster inside?
   tmpx = rand & 100
-  tmpy = 50			//50% chance
+  tmpy = 50            // 50% chance
   IfXIsMoreThanY
-    tmpx = rand % 3		//Randomize monster
+    tmpx = rand % 3        // Randomize monster
     tmpy = 0
     IfXIsEqualToY
-      tmpargument = 66		//Ghoul
+      tmpargument = 66        // Ghoul
     tmpy = 1
     IfXIsEqualToY
-      tmpargument = 42		//Ghost
+      tmpargument = 42        // Ghost
     tmpy = 2
     IfXIsEqualToY
-      tmpargument = 47		//Zombi
+      tmpargument = 47        // Zombi
     tmpx = selfx
     tmpy = selfy
     tmpdistance = selfz
@@ -67,46 +67,46 @@ IfKilled
     tmpargument = 1
     PlaySound
 
-  //Drop loot
+  // Drop loot
   DropItems
   DropKeys
   tmpargument = 67605
   DropMoney
-  tmpx = rand % 9		//Randomize loot
+  tmpx = rand % 9        // Randomize loot
   tmpy = 0
   IfXIsEqualToY
-    tmpargument = 62		//Quiver
+    tmpargument = 62        // Quiver
   tmpy = 1
   IfXIsEqualToY
-    tmpargument = 67		//Scythe
+    tmpargument = 67        // Scythe
   tmpy = 2
   IfXIsEqualToY
-    tmpargument = 39		//Ammobox
+    tmpargument = 39        // Ammobox
   tmpy = 3
   IfXIsEqualToY
-    tmpargument = 61		//Identify Scroll
+    tmpargument = 61        // Identify Scroll
   tmpy = 4
   IfXIsEqualToY
-    tmpargument = 60		//Mana potion
+    tmpargument = 60        // Mana potion
   tmpy = 5
   IfXIsEqualToY
-    tmpargument = 37		//Levitation Potion
+    tmpargument = 37        // Levitation Potion
   tmpy = 6
   IfXIsEqualToY
-    tmpargument = 71		//Silver Crossbow
+    tmpargument = 71        // Silver Crossbow
   tmpy = 7
   IfXIsEqualToY
-    tmpargument = 69		//Silver Scimitar
+    tmpargument = 69        // Silver Scimitar
   tmpy = 8
   IfXIsEqualToY
-    tmpargument = 38		//Lamp
+    tmpargument = 38        // Lamp
   tmpx = selfx
   tmpy = selfy
   tmpdistance = selfz
   tmpturn = selfturn
   SpawnExactCharacterXYZ
 
-//Make it destroyable
+// Make it destroyable
 IfSpawned
   JoinEvilTeam
 

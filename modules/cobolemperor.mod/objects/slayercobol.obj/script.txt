@@ -20,7 +20,7 @@ IfBumped
   IfContentIs
     IfTargetIsOnHatedTeam
       tmpargument = 0
-      SetContent            //no more hiding
+      SetContent            // no more hiding
       tmpargument = 8
       PlaySound
       tmpargument = 1
@@ -69,11 +69,11 @@ IfBumped
 
 //------------------------------------------------------------------------------
 IfKilled
-  
-  //Death skin
+
+  // Death skin
   tmpargument = rand & 1
   ChangeArmor
-  
+
   // Tell the players
   tmpargument = 0
   IfTargetIsOnSameTeam
@@ -85,7 +85,7 @@ IfKilled
   DoActionOverride
   KeepAction
 
-  //Death cry
+  // Death cry
   tmpargument = 1
   PlaySound
 
@@ -102,14 +102,14 @@ IfKilled
   tmpargument = 50
   SetTime
 
-  //Make em crushable
+  // Make em crushable
   MakeCrushValid
-  
-  //Remove invicibillity
+
+  // Remove invicibillity
   tmpargument = 255
   SetLight
-  
-//Mooshed in a passage
+
+// Mooshed in a passage
 IfCrushed
   tmpargument = 1
   tmpx = 0
@@ -150,7 +150,7 @@ IfAttacked
       tmpargument = 1
       IfContentIs
         tmpargument = 0
-        SetContent            //no more hiding
+        SetContent            // no more hiding
         tmpargument = 8
         PlaySound
         tmpargument = 3
@@ -160,7 +160,7 @@ IfAttacked
 
       // Check for instant death
       IfBackstabbed
-        // Allow Rogues to backstab 
+        // Allow Rogues to backstab
         tmpargument = 8
         SendMessageNear
 
@@ -232,20 +232,20 @@ IfTimeOut
       AddWaypoint
       tmpargument = rand & 31 + 30 // TIme
   Else
-    
-    //Sneaky mode
+
+    // Sneaky mode
     IfStateIs0
       Sneak
       tmpx = selfspawnx
       tmpy = selfspawny
       SetTargetToWideEnemy
         SetTurnModeToWatchTarget
-        
-        //Sneak from behind
+
+        // Sneak from behind
         tmpturn = targetturnto
         tmpdistance = 400
-        
-        //If target facing self and closing in, move around instead
+
+        // If target facing self and closing in, move around instead
         tmpx = targetdistance
         tmpy = 350
         IfXIsLessThanY
@@ -259,7 +259,7 @@ IfTimeOut
               Run
               tmpturn = targetturnto + 16000
               tmpdistance = 0 - 350
-              
+
         tmpx = targetx
         tmpy = targety
         Compass
@@ -267,13 +267,13 @@ IfTimeOut
         SetTurnModeToVelocity
       ClearWaypoints
       AddWaypoint
-        
-    //Combat mode
+
+    // Combat mode
     IfStateIs1
       Run
       tmpargument = 0
       SetContent
-      tmpdistance = 128*8        //Up to 8 tiles
+      tmpdistance = 128*8        // Up to 8 tiles
       SetTargetToDistantEnemy
         SetTurnModeToWatchTarget
         tmpx = rand & 511 + targetx - 256
@@ -291,8 +291,8 @@ IfTimeOut
         SetTurnModeToVelocity
         tmpargument = 0
         SetState
-        
-    //Attack
+
+    // Attack
     IfTargetIsOnHatedTeam
       IfTargetIsAlive
         IfFacingTarget
@@ -300,7 +300,7 @@ IfTimeOut
             tmpx = targetdistance
             tmpy = 100
             IfXIsLessThanY
-              PressLatchButton    
+              PressLatchButton
           IfHoldingRangedWeapon
             SetOldTarget
             tmpx = targetdistance
@@ -308,7 +308,7 @@ IfTimeOut
             IfXIsLessThanY
               SetTargetToNearestFriend
               IfFacingTarget
-                tmpx = targetx                 //Avoid shooting friends
+                tmpx = targetx                 // Avoid shooting friends
                 tmpy = targety
                 tmpdistance = 100
                 tmpturn = targetturn + 49152
@@ -318,8 +318,8 @@ IfTimeOut
               Else
                 PressLatchButton
             SetTargetToOldTarget
-              
-    //Hide and unhide
+
+    // Hide and unhide
     tmpargument = 0
     IfContentIs
       tmpargument = 255
@@ -330,13 +330,13 @@ IfTimeOut
         tmpargument = 1
         SetContent
         SetTargetToNearestEnemy
-          
-          //Cant hide in plain sight
+
+          // Cant hide in plain sight
           IfTargetIsAlive
             tmpx = targetdistance
-            tmpy = 128*4           
+            tmpy = 128*4
             IfXIsLessThanY
-              tmpargument = 0         //They are too close
+              tmpargument = 0         // They are too close
               SetContent
             tmpy = 128*10
             IfXIsLessThanY
@@ -345,10 +345,10 @@ IfTimeOut
               IfXIsMoreThanY
                 tmpy = 55768
                 IfXIsLessThanY
-                  tmpargument = 0     //They are looking at us
+                  tmpargument = 0     // They are looking at us
                   SetContent
-              
-        //Do it!
+
+        // Do it!
         tmpargument = 1
         IfContentIs
           tmpargument = 0
@@ -359,13 +359,13 @@ IfTimeOut
           PlaySound
         SetTargetToOldTarget
 
-    //Check for detection
+    // Check for detection
     tmpargument = 1
     IfContentIs
       IfTargetIsOnHatedTeam
         IfTargetIsAlive
           tmpdistance = targetdistance * 2
-          tmpx = targetwis - tmpdistance        //-3 wisdom for every tile the target is away
+          tmpx = targetwis - tmpdistance        // -3 wisdom for every tile the target is away
           tmpy = selfdex
           IfXIsMoreThanY
             tmpargument = 0
@@ -374,9 +374,9 @@ IfTimeOut
             SendMessageNear
             tmpargument = 12
             PlaySound
-            
+
 //------------------------------------------------------------------------------
-//Backstab!
+// Backstab!
 IfScoredAHit
   SetTargetToWhoeverWasHit
   IfTargetIsOnHatedTeam
@@ -384,8 +384,8 @@ IfScoredAHit
     IfContentIs
       tmpargument = 12
       PlaySound
-      
-      //Backstab bonus
+
+      // Backstab bonus
       tmpx = selfturn - targetturn
       tmpy = 10768
       IfXIsMoreThanY
@@ -393,8 +393,8 @@ IfScoredAHit
         IfXIsLessThanY
           tmpargument = 0
           SetContent
-           
-      //Proceed if content is still 1
+
+      // Proceed if content is still 1
       tmpargument = 1
       IfContentIs
         tmpargument = 10
@@ -403,8 +403,8 @@ IfScoredAHit
         SetContent
         tmpargument = 13
         PlaySound
-        
-        //4 bonus damage
+
+        // 4 bonus damage
         tmpargument = 1024
         DamageTarget
   Else
@@ -436,7 +436,7 @@ IfOrdered
       tmpargument = ACTIONMJ
       DoActionOverride
       UnkeepAction
-      
+
       // Start combat
       tmpargument = 1
       SetState

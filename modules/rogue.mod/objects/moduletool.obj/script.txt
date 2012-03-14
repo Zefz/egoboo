@@ -1,12 +1,12 @@
-//This object is a tool controlled by setting its content value to a specified number.
-//(Set in spawn.txt). Object is module specified and must be modified to be used
-//elsewhere...
-//Content commands:
-//0 = play music
-//Module Setting: Rogue Starter
+// This object is a tool controlled by setting its content value to a specified number.
+// (Set in spawn.txt). Object is module specified and must be modified to be used
+// elsewhere...
+// Content commands:
+// 0 = play music
+// Module Setting: Rogue Starter
 
 //------------------------------------------------------------------------------------
-//Play Music
+// Play Music
 tmpargument = 4
 tmpdistance = 0
 PlayMusic
@@ -57,9 +57,12 @@ tmpy = 57 < 7 + 64
 SpawnExactParticle
 
 //------------------------------------------------------------------------------------
-//Do last
+// Do last
 GoPoof
 
 //------------------------------------------------------------------------------------
-End					// All done
+
+// All done
+End
+
 //------------------------------------------------------------------------------------

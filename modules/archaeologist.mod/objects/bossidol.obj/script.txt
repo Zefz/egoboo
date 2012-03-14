@@ -9,7 +9,7 @@ IfGrabbed
   tmpargument = 0
   SendMessageNear
 
-  //Award some xp
+  // Award some xp
   tmpargument = 70
   tmpdistance = EXPSECRET
   GiveExperienceToTarget

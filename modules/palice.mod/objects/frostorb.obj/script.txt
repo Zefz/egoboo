@@ -6,4 +6,7 @@ IfSpawned
   tmpdistance = selfz
   SpawnExactParticle
 //  GoPoof
-End					// All done
+
+// All done
+End
+

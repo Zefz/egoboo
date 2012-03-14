@@ -1,4 +1,4 @@
-//Make it squishy
+// Make it squishy
 IfSpawned
   MakeCrushValid
 
@@ -8,6 +8,7 @@ IfStateIs2
   // Full of blud
   tmpargument = selfcontent + 2 & 15 + 40
   SetContent
+
 IfStateIs1
   // Filling up with blud
   IfTimeOut
@@ -17,6 +18,7 @@ IfStateIs1
     SetTime
   tmpargument = selfcontent + 2 & 15 + 20
   SetContent
+
 IfStateIs0
   // Normal
   tmpargument = selfcontent + 2 & 15
@@ -28,8 +30,8 @@ SetFrame
 IfTimeOut
   tmpargument = rand & 15 + 24
   SetTime
-  
-  //Buzzing sound
+
+  // Buzzing sound
   SetTargetToWideEnemy
     SetTargetToLeader
     IfTargetIsSelf
@@ -85,18 +87,18 @@ IfCrushed
 // ZZ> Handle death by sending a message and other stuff...
 IfKilled
   SetTargetToWhoeverAttacked
-  
+
   // Sound
   tmpargument = 0
   PlaySound
 
   // Die or Pop?
   IfStateIs2
-    
+
     // Pop
     tmpargument = ACTIONKB
     DoActionOverride
-    
+
     // Particle spawn
     SpawnPoof
     tmpargument = 1
@@ -110,8 +112,8 @@ IfKilled
     tmpargument = ACTIONKA
     DoActionOverride
     tmpargument = 0
-    
-  //Fragkill
+
+  // Fragkill
   IfTargetIsSelf
     tmpargument = 3
 
@@ -170,7 +172,7 @@ IfBumped
         SetTime
 
 //------------------------------------------------------------------------------
-//For swarm AI
+// For swarm AI
 IfLeaderKilled
   BecomeLeader
 

@@ -1,9 +1,9 @@
-//Bludy Hawk, the Assassin wanted. He's basically just
-//a strong bandit with a different look that causes the
-//module to be beaten if you defeat him.
+// Bludy Hawk, the Assassin wanted. He's basically just
+// a strong bandit with a different look that causes the
+// module to be beaten if you defeat him.
 
-//Zefz: Improved the AI, gave hime some dangerous dodging
-//abilities like the Jungle Cats.
+// Zefz: Improved the AI, gave hime some dangerous dodging
+// abilities like the Jungle Cats.
 
 //------------------------------------------------------------------------------
 IfBumped
@@ -34,7 +34,7 @@ IfBumped
       SetTargetToOldTarget
 
 //------------------------------------------------------------------------------
-//Dodge attacks
+// Dodge attacks
 IfTargetIsAttacking
   IfTargetIsOnHatedTeam
     tmpx = targetdistance
@@ -52,7 +52,7 @@ IfTargetIsAttacking
       AddWaypoint
 
 //------------------------------------------------------------------------------
-//Deadly stuff
+// Deadly stuff
 IfKilled
   // Tell the players
   tmpargument = 0
@@ -65,7 +65,7 @@ IfKilled
   DoActionOverride
   KeepAction
 
-  //Death sound
+  // Death sound
   tmpargument = rand % 3 + 5
   PlaySound
 
@@ -84,23 +84,23 @@ IfKilled
   EnableExport
 
   // Beat it...
-  tmpargument = [BENE]      //Which quest
-  tmpdistance = 1           //Quest level
+  tmpargument = [BENE]      // Which quest
+  tmpdistance = 1           // Quest level
   AddQuestAllPlayers
 
-  //Victory tune
-  tmpargument = 14		//Music track
-  tmpdistance = 0		//Fade in time
+  // Victory tune
+  tmpargument = 14        // Music track
+  tmpdistance = 0        // Fade in time
   PlayMusic
-  
-  //Create the heirloom!
+
+  // Create the heirloom!
   tmpargument = 38
   tmpdistance = selfz
   tmpx = selfspawnx
   tmpy = selfspawny
   SpawnExactCharacterXYZ
-  
-  //Do the end text
+
+  // Do the end text
   ClearEndMessage
   tmpargument = 3
   AddEndMessage
@@ -125,7 +125,7 @@ IfAttacked
     tmpargument = rand % 3 + 2
     PlaySound
 
-//Don't hack dead bodies
+// Don't hack dead bodies
 IfTargetIsAlive
   DoNothing
 Else
@@ -134,26 +134,26 @@ Else
 
 //------------------------------------------------------------------------------
 IfTimeOut
-  //STATE 0 - WANDER
+  // STATE 0 - WANDER
   IfStateIs0
     tmpargument = rand & 15 + 15
     SetTime
     SetTurnModeToVelocity
     SetTargetToWideEnemy
-      tmpargument = 6		//Boss music!
-      tmpdistance = 0		//Fade in time
+      tmpargument = 6        // Boss music!
+      tmpdistance = 0        // Fade in time
       PlayMusic
 
-      //Warriors, attack!
+      // Warriors, attack!
       tmpargument = 1
       PlaySound
       tmpargument = 3
       SendMessageNear
 
-      //Find out which weapon to use
+      // Find out which weapon to use
       IfHoldingRangedWeapon
         tmpx = targetdistance
-        tmpy = 128*2        //2 tiles
+        tmpy = 128*2        // 2 tiles
         IfXIsMoreThanY
           tmpargument = 2
         Else
@@ -167,7 +167,7 @@ IfTimeOut
       ClearWaypoints
       AddWaypoint
 
-  //STATE 1 - MELEE
+  // STATE 1 - MELEE
   IfStateIs1
     tmpargument = rand % 5 + 10 // Time
     SetTime
@@ -175,9 +175,9 @@ IfTimeOut
     // Charge and attack the enemy
     SetTargetToNearestEnemy
     tmpx = targetdistance
-    tmpy = 128*15           //15 tiles
+    tmpy = 128*15           // 15 tiles
     IfXIsLessThanY
-      tmpy = 128*4          //4 tiles
+      tmpy = 128*4          // 4 tiles
       IfXIsLessThanY
         tmpx = rand & 511 + targetx - 256
         tmpy = rand & 511 + targety - 256
@@ -189,7 +189,7 @@ IfTimeOut
         IfHoldingRangedWeapon
           tmpargument = 2
           SetState
-        Else                    //Leap attack
+        Else                    // Leap attack
           tmpargument = LATCHJUMP
           PressLatchButton
           PressLatchButton
@@ -203,7 +203,7 @@ IfTimeOut
       AddWaypoint
     Else
       tmpargument = 0
-      SetState			//target ran away
+      SetState            // target ran away
 
     // Close enough to attack
     IfFacingTarget
@@ -222,7 +222,7 @@ IfTimeOut
       tmpargument = LATCHPACKRIGHT
       PressLatchButton
 
-  //STATE 2 - RANGED POSITION
+  // STATE 2 - RANGED POSITION
   IfStateIs2
     tmpargument = rand & 15 + 30 // Time
     SetTime
@@ -240,7 +240,7 @@ IfTimeOut
       ClearWaypoints
       AddWaypoint
 
-      //Suitable to shoot?
+      // Suitable to shoot?
       IfFacingTarget
         tmpx = targetdistance
         tmpy = 700
@@ -264,25 +264,25 @@ IfTimeOut
             ClearWaypoints
             AddWaypoint
             tmpargument = 2
-            SetState			//not safe to shoot
+            SetState            // not safe to shoot
           SetTargetToOldTarget
           tmpy = targetdistance
           IfXIsMoreThanY
             tmpargument = 3
-            SetState			//Enemy is closer than friend, shoot after all
+            SetState            // Enemy is closer than friend, shoot after all
       SetTargetToOldTarget
 
     Else
-      tmpargument = 0			//target ran away
+      tmpargument = 0            // target ran away
       SetState
 
-  //STATE 3 - RANGED COMBAT
+  // STATE 3 - RANGED COMBAT
   IfStateIs3
     tmpargument = rand & 15 + 20
     SetTime
     IfHoldingRangedWeapon
-      PressLatchButton			//return to ranged movement
-    Else					//ammo out
+      PressLatchButton            // return to ranged movement
+    Else                    // ammo out
       // Put the musketoon away
       tmpargument = LATCHPACKLEFT
       PressLatchButton
@@ -305,7 +305,7 @@ IfTimeOut
         tmpargument = 2
         SetState
 
-  //STATE 4 - RETREAT
+  // STATE 4 - RETREAT
   IfStateIs4
     tmpargument = 150
     SetTime
@@ -325,35 +325,35 @@ IfTimeOut
         tmpargument = 2
         SetState
 
-      //Grab a weapon
+      // Grab a weapon
       Else
         tmpargument = [SWOR]
-        tmpdistance = BLAHITEMS		//Look for items
+        tmpdistance = BLAHITEMS        // Look for items
         tmpx = 0
         SetTargetToWideBlahID
-          tmpx = 1				//Found a sword
+          tmpx = 1                // Found a sword
         Else
           tmpargument = [MACE]
           SetTargetToWideBlahID
-            tmpx = 1				//Found a mace
+            tmpx = 1                // Found a mace
           Else
             tmpargument = [AXEE]
             SetTargetToWideBlahID
-              tmpx = 1			//Found a axe
+              tmpx = 1            // Found a axe
             Else
               tmpargument = [CLAW]
               SetTargetToWideBlahID
-                tmpx = 1			//Found a claw
+                tmpx = 1            // Found a claw
               Else
                 tmpargument = [HAMM]
                 SetTargetToWideBlahID
-                  tmpx = 1			//Found a hammer
+                  tmpx = 1            // Found a hammer
                 Else
                   tmpargument = [POLE]
                   SetTargetToWideBlahID
-                    tmpx = 1			//Found a spear
+                    tmpx = 1            // Found a spear
         tmpy = 1
-        IfXIsEqualToY				//tmpx = 1 means something was found
+        IfXIsEqualToY                // tmpx = 1 means something was found
           tmpx = targetdistance
           tmpy = 50
           IfXIsLessThanY

@@ -12,7 +12,7 @@ IfCrushed
   GoPoof
   tmpargument = 4
   SendMessageNear
-  
+
 IfTargetIsSelf
   DoNothing
 Else
@@ -209,53 +209,63 @@ Else
   SpawnExactParticle
 
 //------------------------------------------------------------------------------
-//This function...  Does stuff
-IfSpawned				// Make it able to be crushed in doors
-  MakeCrushValid			  //
+// This function...  Does stuff
+IfSpawned                // Make it able to be crushed in doors
+  MakeCrushValid
   tmpargument = 15
   SetTime
+
 IfStateIs0
   // Drop it when first appearing
   IfTimeOut
     tmpargument = 1
     SetState
     DetachFromHolder
+
 IfDropped
   UndoEnchant
+
 IfUsed
   tmpargument = 50
   SetReloadTime
-IfHitGround				// Make a sound
-  tmpargument = 0			  //
-  PlaySound				  //
-  
-//IfNotPutAway              //Say oops
-//  tmpargument = 5         //No longer needed, this is handled by the sourcecode now...
+
+// Make a sound
+IfHitGround
+  tmpargument = 0
+  PlaySound
+
+// No longer needed, this is handled by the sourcecode now...
+//IfNotPutAway              // Say oops
+//  tmpargument = 5
 //  SendMessageNear
 
-IfGrabbed				// Tell them what they've won...
-  IfTargetIsSelf			  //
-    tmpx = selfx			    // Clear out the storage values
-    tmpy = selfy			    //
-    tmpargument = 0			    //
-    SetXY				    //
-    tmpargument = 1			    //
-    SetXY				    //
-    tmpargument = 2			    //
-    SetXY				    //
-    tmpargument = 3			    //
-    SetXY				    //
-    SetTargetToWhoeverIsHolding		    //
-    IfTargetIsAPlayer			    //
-      tmpargument = 0			      //
-      SendMessageNear			      //
-  Else					  //
-    SetTargetToWhoeverIsHolding		    //
-    IfTargetIsOldTarget			    //
-      tmpargument = 1			      //
-    Else				    //
-      SetTargetToOldTarget		      //
-      tmpargument = 2			      //
-    SendMessageNear			    //
+// Tell them what they've won...
+IfGrabbed
+  IfTargetIsSelf
+    tmpx = selfx                // Clear out the storage values
+    tmpy = selfy
+    tmpargument = 0
+    SetXY
+    tmpargument = 1
+    SetXY
+    tmpargument = 2
+    SetXY
+    tmpargument = 3
+    SetXY
+    SetTargetToWhoeverIsHolding
+    IfTargetIsAPlayer
+      tmpargument = 0
+      SendMessageNear
+  Else
+    SetTargetToWhoeverIsHolding
+    IfTargetIsOldTarget
+      tmpargument = 1
+    Else
+      SetTargetToOldTarget
+      tmpargument = 2
+    SendMessageNear
   EnchantTarget
-End					// All done
+
+// All done
+End
+

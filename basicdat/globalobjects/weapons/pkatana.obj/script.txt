@@ -1,15 +1,16 @@
-//Show its poisoned if its identified
+// Show its poisoned if its identified
 IfNameIsKnown
-  tmpargument = 0	//Is it not changed already?
+  tmpargument = 0    // Is it not changed already?
   IfArmorIs
-    tmpargument = 1	//Then show poison icon
+    tmpargument = 1    // Then show poison icon
     ChangeArmor
 
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -22,19 +23,27 @@ IfCrushed
   GoPoof
   tmpargument = 1
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
-IfHitGround				// Make a sound
-  tmpargument = 1			  //
-  PlaySound				  //
+
+// Make it lie on floor
+IfDropped
+  KeepAction
+
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
+
+// Make a sound
+IfHitGround
+  tmpargument = 1
+  PlaySound
+
 IfNotDropped
   tmpargument = 2
   SendMessageNear
+
 IfTakenOut
   tmpargument = 2
   PlaySound
@@ -42,38 +51,40 @@ IfTakenOut
   IfTargetIsAPlayer
     tmpargument = 4
     SendMessageNear
+
 //IfNotPutAway
-//  tmpargument = 3         //No longer needed, this is handled by the sourcecode now...
+//  tmpargument = 3
 //  SendMessageNear
 
-//Check if user poisoned himself
+// Check if user poisoned himself
 IfUsed
   SetTargetToWhoeverIsHolding
   tmpargument = [POIS]
-  IfTargetHasSkillID		//Does it have poison use skill?
+  IfTargetHasSkillID        // Does it have poison use skill?
     IfTargetIsAPlayer
-      MakeNameKnown		//Tell the players its poisoned
+      MakeNameKnown        // Tell the players its poisoned
   Else
-    tmpx = rand % 4096 + 1024 	//Wisdom determines the chance, 20 is never and 4 is almost always
+    tmpx = rand % 4096 + 1024     // Wisdom determines the chance, 20 is never and 4 is almost always
     tmpy = targetwis
     IfXIsMoreThanY
       SetOwnerToTarget
-      EnchantTarget		//Give the character some poison damage
+      EnchantTarget        // Give the character some poison damage
       tmpargument = 5
-      SendMessageNear		//Tell them what happened
-      DetachFromHolder		//Drop the weapon
+      SendMessageNear        // Tell them what happened
+      DetachFromHolder        // Drop the weapon
       IfTargetIsAPlayer
-        MakeNameKnown		//Tell the players its poisoned
+        MakeNameKnown        // Tell the players its poisoned
 
-
-//Guys with a conduct dont use poisoned weapons
+// Guys with a conduct dont use poisoned weapons
 IfGrabbed
   SetTargetToWhoeverIsHolding
   tmpargument = [CODE]
   IfTargetHasSkillID
-    tmpargument = 6		//I refuse to hold this!
+    tmpargument = 6        // I refuse to hold this!
     SendMessageNear
-    MakeNameKnown		//Its poisoned, yes
+    MakeNameKnown        // Its poisoned, yes
     DetachFromHolder
 
-End					// All done
+// All done
+End
+

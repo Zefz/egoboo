@@ -1,6 +1,6 @@
-//This shield has always 100% block rate!
+// This shield has always 100% block rate!
 
-//Only for Linux
+// Only for Linux
 IfGrabbed
   SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer
@@ -14,7 +14,7 @@ IfGrabbed
         DetachFromHolder
     SendMessageNear
 
-//Magical effect
+// Magical effect
 IfHeld
   IfOperatorIsLinux
     UndoEnchant
@@ -30,14 +30,14 @@ Else
   UndoEnchant
 
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
-  IfOperatorIsLinux		//Linux shields dont crush/crash in Linux!
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
+  IfOperatorIsLinux        // Linux shields dont crush/crash in Linux!
     DoNothing
   Else
-    MakeCrushValid		//But windows....
+    MakeCrushValid        // But windows....
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -50,9 +50,16 @@ IfCrushed
   GoPoof
   tmpargument = 2
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-IfHitGround				// Make a sound
-  tmpargument = 0			  //
-  PlaySound				  //
-End					// All done
+
+// Make it lie on floor
+IfDropped
+  KeepAction
+
+// Make a sound
+IfHitGround
+  tmpargument = 0
+  PlaySound
+
+// All done
+End
+

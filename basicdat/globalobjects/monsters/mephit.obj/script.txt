@@ -1,8 +1,8 @@
 //------------------------------------------------------------------------------
-//Set correct wing colour
+// Set correct wing colour
 IfSpawned
   SetTargetToSelf
-  SetTargetToTargetLeftHand	//Target the wing
+  SetTargetToTargetLeftHand    // Target the wing
   tmpargument = 1
   IfArmorIs
     ChangeTargetArmor
@@ -14,10 +14,10 @@ IfSpawned
     ChangeTargetArmor
     SetTargetToSelf
     tmpargument = 1280
-    GiveLifeToTarget		//5 bonus hp
+    GiveLifeToTarget        // 5 bonus hp
 
 //------------------------------------------------------------------------------
-//Death Mephit poison attack
+// Death Mephit poison attack
 IfScoredAHit
   tmpargument = 3
   IfArmorIs
@@ -27,40 +27,40 @@ IfScoredAHit
     EnchantTarget
 
 //------------------------------------------------------------------------------
-//Enemy target has been defeated
+// Enemy target has been defeated
 IfTargetKilled
   SetTargetToNearestEnemy
-    tmpargument = 1 //Follow
+    tmpargument = 1 // Follow
     SetState
   Else
-    tmpargument = 0 //Guard
+    tmpargument = 0 // Guard
     SetState
 
 //------------------------------------------------------------------------------
 IfTimeOut
 
-  //Guard in a circle
+  // Guard in a circle
   IfStateIs0
     tmpargument = rand & 31 + 30
     SetTime
-    SetTargetToWideEnemy	//Enemy found, target him
-      tmpargument = 1 
-      SetState 		//and charge
-    Else			//Circle around
+    SetTargetToWideEnemy    // Enemy found, target him
+      tmpargument = 1
+      SetState         // and charge
+    Else            // Circle around
       tmpx = rand & 511 + selfx - 256
       tmpy = rand & 511 + selfy - 256
       ClearWaypoints
-      AddWaypoint		       
+      AddWaypoint
 
-  //Move towards enemy
+  // Move towards enemy
   IfStateIs1
     tmpx = targetdistance
     tmpy = 128*3
     IfXIsLessThanY
       tmpargument = 2
-      SetState		//Melee
-    Else				//Move towards enemy in a
-      tmpx = rand & 1023 + targetx - 511	//random direction pattern
+      SetState        // Melee
+    Else                // Move towards enemy in a
+      tmpx = rand & 1023 + targetx - 511    // random direction pattern
       tmpy = rand & 1023 + targety - 511
       tmpturn = targetturnto
       tmpdistance = rand % 1000 + 500
@@ -70,15 +70,15 @@ IfTimeOut
       tmpargument = 50
       SetTime
 
-    SetTargetToWideEnemy	//Enemy to far away?
-      DoNothing		//Nope
+    SetTargetToWideEnemy    // Enemy to far away?
+      DoNothing        // Nope
     Else
-      tmpargument = 0 		//Yep return to guarding
-      SetState    
+      tmpargument = 0         // Yep return to guarding
+      SetState
       tmpargument = 20
       SetTime
 
-  //Combat
+  // Combat
   IfStateIs2
     tmpx = targetdistance
     tmpy = 170
@@ -89,16 +89,16 @@ IfTimeOut
         tmpargument = 10
         SetTime
 
-    //Enemy to far away?
+    // Enemy to far away?
     tmpx = targetdistance
     tmpy = 128*3
-    IfXIsMoreThanY    
-      tmpargument = 1 		//Retry attack position
-      SetState    
+    IfXIsMoreThanY
+      tmpargument = 1         // Retry attack position
+      SetState
       tmpargument = 0
       SetTime
 
-    //Move towards target
+    // Move towards target
     tmpx = targetx
     tmpy = targety
     tmpdistance = 100
@@ -107,16 +107,16 @@ IfTimeOut
     ClearWaypoints
     AddWaypoint
 
-  //Dont flock
+  // Dont flock
   IfTargetIsOnHatedTeam
     tmpx = targetdistance
     tmpy = 128
     IfXIsMoreThanY
-      SetOldTarget			//Remember enemy
+      SetOldTarget            // Remember enemy
       SetTargetToNearestFriend
         tmpx = targetdistance
         tmpy = 80
-        IfXIsLessThanY			//Too close to friend?
+        IfXIsLessThanY            // Too close to friend?
           tmpx = targetx
           tmpy = targety
           tmpdistance = 300
@@ -124,9 +124,9 @@ IfTimeOut
           Compass
           ClearWaypoints
           AddWaypoint
-      SetTargetToOldTarget		//Set target back to enemy
+      SetTargetToOldTarget        // Set target back to enemy
 
-  //Fly up or down depending on opponent altitude
+  // Fly up or down depending on opponent altitude
   tmpargument = 20
   IfTargetIsOnHatedTeam
     tmpx = targetz
@@ -136,37 +136,37 @@ IfTimeOut
   SetFlyHeight
 
 //------------------------------------------------------------------------------
-//Handle being attacked by countering
+// Handle being attacked by countering
 IfAttacked
   SetTargetToWhoeverAttacked
   IfTargetIsOnHatedTeam
     Run
-    IfStateIs0		//If not already, engage in combat
+    IfStateIs0        // If not already, engage in combat
       tmpargument = 1
       SetState
     tmpargument = 2
-    PlaySound		//Ouch sound
+    PlaySound        // Ouch sound
   Else
     SetTargetToOldTarget
-  
-  //Spawn different types of blud
+
+  // Spawn different types of blud
   tmpargument = 1
   tmpdistance = rand % 50 + selfz
   tmpx = selfx
   tmpy = selfy
-  tmpargument = 0		//Fire mephit
+  tmpargument = 0        // Fire mephit
   IfArmorIs
-    tmpargument = 1		//Red blud
+    tmpargument = 1        // Red blud
   Else
-    tmpargument = 1		//Ice mephit
+    tmpargument = 1        // Ice mephit
     IfArmorIs
-      tmpargument = 3		//Blue blud
+      tmpargument = 3        // Blue blud
     Else
-      tmpargument = 2		//Moss mephit
+      tmpargument = 2        // Moss mephit
       IfArmorIs
-        tmpargument = 5		//Green blud
+        tmpargument = 5        // Green blud
       Else
-        tmpargument = 3		//death mephit also has Blue blud
+        tmpargument = 3        // death mephit also has Blue blud
   SpawnExactParticle
   SpawnExactParticle
   SpawnExactParticle
@@ -174,11 +174,11 @@ IfAttacked
   SpawnExactParticle
 
 //------------------------------------------------------------------------------
-//Slash and bite (Okay forget the biting part)
+// Slash and bite (Okay forget the biting part)
 IfBumped
   SetTargetToWhoeverBumped
-  
-  //Fly over obstacles
+
+  // Fly over obstacles
   IfTargetIsAPlatform
     tmpargument = selfz + 80
     SetFlyHeight
@@ -191,9 +191,9 @@ IfBumped
       tmpargument = selfz + 80
       SetFlyHeight
       tmpargument = 50
-      SetTime      
+      SetTime
 
-  //Attack or scuttle
+  // Attack or scuttle
   IfTargetIsOnHatedTeam
     IfFacingTarget
       IfTargetIsAlive
@@ -204,7 +204,7 @@ IfBumped
     tmpy = rand & 511 + targety - 256
     ClearWaypoints
     AddWaypoint
-    SetTargetToOldTarget	//Oops, friendly xD
+    SetTargetToOldTarget    // Oops, friendly xD
 
 //------------------------------------------------------------------------------
 // Handle death by sending a message and other stuff
@@ -212,24 +212,24 @@ IfKilled
   // Spit out text
   tmpargument = 0
   IfArmorIs
-    DoNothing			//Fire mephit death
+    DoNothing            // Fire mephit death
   Else
     tmpargument = 1
     IfArmorIs
-      tmpargument = 4		//Ice mephit death
+      tmpargument = 4        // Ice mephit death
     Else
-      tmpargument = 2		//moss mephit death
+      tmpargument = 2        // moss mephit death
       IfArmorIs
         tmpargument = 5
       Else
-        tmpargument = 6		//Death mephit death
+        tmpargument = 6        // Death mephit death
   IfTargetIsOnSameTeam
-    tmpargument = 1		//Friendly fire
+    tmpargument = 1        // Friendly fire
     IfTargetIsSelf
-      tmpargument =3		//Sucide!
+      tmpargument =3        // Sucide!
   SendMessageNear
 
-  //Award bonus xp for death mephits
+  // Award bonus xp for death mephits
   tmpargument = 3
   IfArmorIs
     tmpargument = 20
@@ -248,34 +248,34 @@ IfKilled
   tmpargument = 0
   SetFlyHeight
 
-  //Sound
+  // Sound
   tmpargument = 1
   PlaySound
 
-  //Spawn different types of blud
+  // Spawn different types of blud
   tmpargument = 1
   tmpdistance = rand % 50 + selfz
   tmpx = selfx
   tmpy = selfy
-  tmpargument = 0		//Fire mephit
+  tmpargument = 0        // Fire mephit
   IfArmorIs
-    tmpargument = 1		//Red blud
+    tmpargument = 1        // Red blud
   Else
-    tmpargument = 1		//Ice mephit
+    tmpargument = 1        // Ice mephit
     IfArmorIs
-      tmpargument = 3		//Blue blud
+      tmpargument = 3        // Blue blud
     Else
-      tmpargument = 2		//Moss mephit
+      tmpargument = 2        // Moss mephit
       IfArmorIs
-        tmpargument = 5		//Green blud
+        tmpargument = 5        // Green blud
       Else
-        tmpargument = 3		//death mephit also has Blue blud
+        tmpargument = 3        // death mephit also has Blue blud
   SpawnExactParticle
   SpawnExactParticle
   SpawnExactParticle
   SpawnExactParticle
   SpawnExactParticle
-  
+
 //------------------------------------------------------------------------------
 End
 //------------------------------------------------------------------------------

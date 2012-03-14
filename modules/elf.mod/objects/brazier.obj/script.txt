@@ -1,6 +1,6 @@
 // ZZ> This function controls the burning of the fire holder
 IfSpawned
-  tmpargument = rand & 15		  // Initial flicker
+  tmpargument = rand & 15          // Initial flicker
   SetFrame
   GetContent
   SetState
@@ -16,12 +16,13 @@ IfSpawned
     DisaffirmCharacter
     tmpargument = 0
     SetState
+
 IfStateIs0
   // Not lit...
   IfReaffirmed
     tmpargument = 1
     SetState
-    tmpargument = 500			  // Burn for 10 seconds
+    tmpargument = 500              // Burn for 10 seconds
     SetTime
     // Open the passage
     tmpargument = passage
@@ -34,6 +35,7 @@ IfStateIs0
       tmpargument = selfmoney
       tmpdistance = EXPSECRET
       GiveExperienceToGoodTeam
+
 IfStateIs1
   // Lit...
   IfReaffirmed
@@ -59,7 +61,11 @@ IfStateIs1
       // Close the passage
       tmpargument = passage
       ClosePassage
+
 IfReaffirmed
   tmpargument = 50
   SetReloadTime
-End					// All done
+
+// All done
+End
+

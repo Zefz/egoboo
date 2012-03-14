@@ -18,7 +18,7 @@ IfCrushed
   tmpargument = 1
   SendMessageNear
 
-IfDropped	
+IfDropped
   KeepAction
 
 IfHitGround
@@ -34,7 +34,7 @@ IfTakenOut
     SendMessageNear
 
 // Tell them what they've won, Johnny!
-IfGrabbed	
+IfGrabbed
   SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer
     tmpargument = 0

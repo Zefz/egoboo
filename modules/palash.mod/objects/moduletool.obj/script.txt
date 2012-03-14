@@ -19,4 +19,7 @@ tmpdistance = 0    // blue
 SetFogTAD
 
 GoPoof
-End					// All done
+
+// All done
+End
+

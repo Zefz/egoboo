@@ -18,9 +18,9 @@ IfGrabbed
 IfUsed
   SetTargetToWhoeverIsHolding
   tmpargument = [WMAG]
-  IfTargetHasSkillID		//Can cast spell?
+  IfTargetHasSkillID        // Can cast spell?
 
-    //Aiming Cursor
+    // Aiming Cursor
     SetTargetToOwner
     GetContent
     tmpdistance = tmpargument > 8 + 4 < 6
@@ -32,14 +32,14 @@ IfUsed
     tmpargument = 4
     SpawnExactParticle
 
-    //Charge it up!
+    // Charge it up!
     SetTargetToWhoeverIsHolding
     GetContent
     tmpx = tmpargument
     tmpy = 906
     IfXIsLessThanY
       tmpy = targetmanaflow
-      IfXIsLessThanY		//Enough power?
+      IfXIsLessThanY        // Enough power?
         tmpy = 10
         tmpx = targetmana
         IfXIsMoreThanY
@@ -49,18 +49,18 @@ IfUsed
           tmpargument = tmpargument + 7
           SetContent
 
-Else			//Player released the charge
+Else            // Player released the charge
   GetContent
   tmpx = tmpargument
   tmpy = 900
-  IfXIsMoreThanY	//Finished Charging
+  IfXIsMoreThanY    // Finished Charging
     // Make the target shoot
     SetTargetToWhoeverIsHolding
       tmpargument = ACTIONZA
       CorrectActionForHand
       TargetDoAction
 
-    //Figured out what it was
+    // Figured out what it was
     IfNameIsKnown
       DoNothing
     Else
@@ -72,10 +72,10 @@ Else			//Player released the charge
       GiveExperienceToTarget
 
     tmpx = targetmanaflow
-    tmpy = 767				//Need at least 3 mana flow to use
+    tmpy = 767                // Need at least 3 mana flow to use
     IfXIsMoreThanY
 
-      //Spawn the magic effects
+      // Spawn the magic effects
       SetTargetToOwner
       GetContent
       tmpdistance = tmpargument > 8 + 4 < 6
@@ -87,25 +87,24 @@ Else			//Player released the charge
       tmpargument = 0
       SpawnExactParticle
 
-
-      //Play the spell effect sound
+      // Play the spell effect sound
       tmpargument = 1
       tmpdistance = rand & 3000 + 8000
       PlaySound
 
-    Else	//Not high enough level
+    Else    // Not high enough level
       tmpargument = 4
       SendMessageNear
 
-    //Cannot be used again for a while
+    // Cannot be used again for a while
     tmpargument = 150
     SetReloadTime
 
-  Else			//Not enough charged
+  Else            // Not enough charged
     tmpy = 0
     GetContent
     tmpx = tmpargument
-    IfXIsMoreThanY	//Only display message if charged
+    IfXIsMoreThanY    // Only display message if charged
       tmpargument = 3
       SendMessageNear
   tmpargument = 0
@@ -116,6 +115,7 @@ Else			//Player released the charge
 GetContent
 tmpx = tmpargument
 tmpy = 0
+
 IfXIsMoreThanY
   tmpturn = tmpargument * 25 + 5000
   tmpdistance = SPAWNORIGIN

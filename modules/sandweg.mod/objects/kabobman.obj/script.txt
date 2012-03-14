@@ -1,4 +1,4 @@
-//Show where you are on the map
+// Show where you are on the map
 tmpx = selfx
 tmpy = selfy
 tmpargument = YELLOW
@@ -6,10 +6,10 @@ ShowBlipXY
 
 //------------------------------------------------------------------------------
 IfSpawned
-  Sneak				//Dont run around
+  Sneak                // Dont run around
   tmpargument = STATEGUARD
   SetState
-  
+
 //------------------------------------------------------------------------------
 IfHealed
   tmpargument = 7
@@ -22,14 +22,15 @@ IfAttacked
   SetTargetToWhoeverAttacked
   IfTargetIsAPlayer
     CallForHelp
-    tmpargument = TEAME     //Team Evil
+    tmpargument = TEAME     // Team Evil
     TargetJoinTeam
     tmpargument = STATECOMBAT
     SetState
   tmpargument = rand & 1 + 3
   PlaySound
+
 IfKilled
-  CallForHelp			//Warn friends
+  CallForHelp            // Warn friends
   IfTargetIsAPlayer
     tmpargument = TEAME
     TargetJoinTeam
@@ -42,9 +43,9 @@ IfTimeOut
   tmpargument = 50
   SetTime
 
-  //WAIT AND TALK
+  // WAIT AND TALK
   IfStateIsGuard
-    SetTargetToNearbyEnemy		//Enemy near, go combat mode
+    SetTargetToNearbyEnemy        // Enemy near, go combat mode
       tmpargument = STATECOMBAT
       SetState
       CallForHelp
@@ -54,14 +55,14 @@ IfTimeOut
       ClearWaypoints
       AddWaypoint
 
-      //Reduce that counter
+      // Reduce that counter
       tmpx = selfcontent
       tmpy = 0
       IfXIsMoreThanY
         tmpargument = selfcontent - 1
         SetContent
-      
-      //Cry out to attract buyers
+
+      // Cry out to attract buyers
       tmpdistance = BLAHFRIENDS
       tmpargument = [HUMA]
       SetTargetToNearestBlahID
@@ -74,16 +75,16 @@ IfTimeOut
             tmpargument = 2
             SendMessageNear
             PlaySound
-            tmpargument = 8   //Wait 8 seconds before doing again
+            tmpargument = 8   // Wait 8 seconds before doing again
             SetContent
-            
-            //Animate
+
+            // Animate
             tmpargument = ACTIONMC
             DoAction
         Else
           SetTurnModeToVelocity
-          
-  //Run away in panic
+
+  // Run away in panic
   IfStateIsCombat
     Run
     SetTargetToNearbyEnemy
@@ -95,18 +96,17 @@ IfTimeOut
     AddWaypoint
     tmpargument = 75
     SetTime
-    
-    //Return to shopkeeping mode if everything seems normal again
+
+    // Return to shopkeeping mode if everything seems normal again
     SetTargetToNearestEnemy
       tmpx = targetdistance
       tmpy = 128*16
       IfXIsMoreThanY
         tmpargument = STATEGUARD
-        SetState        
-    
+        SetState
 
 //------------------------------------------------------------------------------
-//What to do if bumped
+// What to do if bumped
 IfBumped
   IfStateIsGuard
     SetTargetToWhoeverBumped

@@ -9,7 +9,7 @@ IfTimeOut
     tmpargument = 0
     SetState
 
-//Do the trap!
+// Do the trap!
 IfStateIs0
   tmpx = weight
   tmpy = 10

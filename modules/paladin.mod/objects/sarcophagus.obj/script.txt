@@ -39,11 +39,11 @@ IfKilled
   tmpargument = 0
   tmpx = rand % 40 + selfx
   tmpy = rand % 40 + selfy
-  SpawnParticle  
+  SpawnParticle
   tmpargument = 0
   PlaySound
 
-  //Is it a ghoul inside?
+  // Is it a ghoul inside?
   tmpx = rand & 100
   tmpy = 50
   IfXIsMoreThanY
@@ -58,11 +58,11 @@ IfKilled
     tmpargument = 1
     PlaySound
 
-//Make it destroyable
+// Make it destroyable
 IfSpawned
   JoinEvilTeam
 
-//Drop items
+// Drop items
 IfKilled
   DropItems
   DropKeys

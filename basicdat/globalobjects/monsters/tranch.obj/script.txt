@@ -19,9 +19,9 @@ IfDropped
 
 IfKilled
   IfTargetIsSelf
-    tmpargument = 2     //Sucide!
+    tmpargument = 2     // Sucide!
   Else
-    tmpargument = 0     //Slain
+    tmpargument = 0     // Slain
   SendMessageNear
   tmpargument = 40
   SetBumpHeight
@@ -60,7 +60,7 @@ IfTimeOut
           tmpargument = LATCHJUMP
           PressLatchButton
 
-          //This makes the tranch jump forward
+          // This makes the tranch jump forward
           tmpx = 0
           tmpy = 0
           tmpturn = targetturnto
@@ -70,8 +70,8 @@ IfTimeOut
           SetTargetToSelf
           AccelerateTarget
           SetTargetToOldTarget
-          
-          //Damage particle
+
+          // Damage particle
           tmpargument = 5
           tmpdistance = GRIPLEFT
           SpawnAttachedParticle

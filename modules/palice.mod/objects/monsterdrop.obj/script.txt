@@ -13,7 +13,7 @@ IfOrdered
     tmpargument = 2
     SetState
 
-//Spawn the monster if characters are near
+// Spawn the monster if characters are near
 IfTimeOut
   tmpargument = rand & 7 + 15
   SetTime
@@ -21,27 +21,27 @@ IfTimeOut
   SetTargetToWhoeverIsInPassage
     IfTargetIsAPlayer
       IfStateIs1
-         
-        //Play a falling sound
+
+        // Play a falling sound
         tmpargument = 0
         PlaySound
-           
-        GetContent  //Type of monster (Object slot)
-            
-        //Number 1
+
+        GetContent  // Type of monster (Object slot)
+
+        // Number 1
         tmpx = selfx
         tmpy = selfy + 100
         tmpturn = rand
         SpawnExactCharacterXYZ
-            
-        //Number 2
+
+        // Number 2
         tmpx = selfx + 50
         tmpy = selfy
         tmpdistance = rand % 200 + 700
         tmpturn = rand
         SpawnExactCharacterXYZ
-               
-        //Number 3
+
+        // Number 3
         tmpx = selfx - 50
         tmpy = selfy - 50
         tmpdistance = rand % 200 + 700
@@ -51,43 +51,46 @@ IfTimeOut
         GoPoof
 
       IfStateIs2
-         
-        //Play a falling sound
+
+        // Play a falling sound
         tmpargument = 0
         PlaySound
-           
-        GetContent  //Type of monster (Object slot)
-            
-        //Number 1
+
+        GetContent  // Type of monster (Object slot)
+
+        // Number 1
         tmpx = selfx
         tmpy = selfy + 100
         tmpdistance = rand % 200 + 700
         tmpturn = rand
         SpawnExactCharacterXYZ
-            
-        //Number 2
+
+        // Number 2
         tmpx = selfx + 50
         tmpy = selfy
         tmpdistance = rand % 200 + 700
         tmpturn = rand
         SpawnExactCharacterXYZ
-               
-        //Number 3
+
+        // Number 3
         tmpx = selfx + 50
         tmpy = selfy - 50
-        tmpdistance = rand % 200 + 1200 
+        tmpdistance = rand % 200 + 1200
         tmpturn = rand
         SpawnExactCharacterXYZ
 
-        //Number 4
+        // Number 4
         tmpx = selfx - 50
         tmpy = selfy + 50
-        tmpdistance = rand % 200 + 1200 
+        tmpdistance = rand % 200 + 1200
         tmpturn = rand
         SpawnExactCharacterXYZ
 
         GoPoof
-        
+
     Else
       SetTargetToOldTarget
-End					// All done
+
+// All done
+End
+

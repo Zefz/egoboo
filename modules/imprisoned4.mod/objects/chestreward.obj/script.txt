@@ -1,31 +1,31 @@
 IfSpawned
-  
-  //Mana potion
+
+  // Mana potion
   tmpargument = 44
   tmpdistance = INVENTORY
   SpawnAttachedCharacter
-  
-  //Life potion
+
+  // Life potion
   tmpargument = 43
   tmpdistance = INVENTORY
   SpawnAttachedCharacter
-  
-  //Spawn a random reward
+
+  // Spawn a random reward
   tmpargument = rand % 17 + 45
   tmpdistance = INVENTORY
   SpawnAttachedCharacter
 
-  //Spawn a random reward
+  // Spawn a random reward
   tmpargument = rand % 17 + 45
   tmpdistance = INVENTORY
   SpawnAttachedCharacter
-  
-  //Add some cash into there as well
+
+  // Add some cash into there as well
   tmpargument = rand % 10
   SetMoney
-  
+
 //------------------------------------------------------------------------------
-//Spawn sparklies around (To make it more visible)
+// Spawn sparklies around (To make it more visible)
 SetTargetToSelf
 tmpx = targetx
 tmpy = targety
@@ -41,7 +41,7 @@ IfOrdered
   IfXIsEqualToY
     // Is it closed?
     tmpargument = 0
-    IfStateIs    
+    IfStateIs
       tmpargument = ACTIONMG
       DoAction
         tmpargument = 1
@@ -51,16 +51,15 @@ IfOrdered
         KeepAction
         tmpargument = 0
         PlaySound
-        
+
         // Wait a while
         tmpargument = 40
         SetTime
-        
+
         // Tell the players...
         tmpargument = 3
         SendMessageNear
 
-          
 //------------------------------------------------------------------------------------
 // Someone is trying to open it
 IfBumped
@@ -71,16 +70,16 @@ IfBumped
       // Is it closed?
       tmpargument = 0
       IfStateIs
-        //Animate the target
+        // Animate the target
         tmpargument = ACTIONMG
-        TargetDoAction      
-        
+        TargetDoAction
+
           // Give some experience
           tmpargument = 5
           tmpdistance = EXPDARE
           GiveExperienceToTarget
-            
-          //Open stuff
+
+          // Open stuff
           tmpargument = ACTIONMG
           DoAction
           tmpargument = 1
@@ -90,7 +89,7 @@ IfBumped
           KeepAction
           tmpargument = 0
           PlaySound
-      
+
           // Wait a while
           tmpargument = 40
           SetTime
@@ -105,31 +104,31 @@ IfBumped
             // Reset the timer
             tmpargument = 40
             SetTime
-            
+
             // Tell the players...
             tmpargument = 1
             SendMessageNear
-            
+
             // Make target crouch
             IfFacingTarget
               tmpargument = ACTIONMG
               TargetDoAction
-            
-            //Drop everything
+
+            // Drop everything
             tmpargument = selfmoney
             DropItems
             DropKeys
             DropMoney
-            
-            //Poof State
+
+            // Poof State
             tmpargument = 2
             SetState
 
 //------------------------------------------------------------------------------------
-//No longer needed
+// No longer needed
 IfTimeOut
-  IfStateIs2    
-    //Portal cloud
+  IfStateIs2
+    // Portal cloud
     tmpargument = 0
     tmpx = selfx
     tmpy = selfy

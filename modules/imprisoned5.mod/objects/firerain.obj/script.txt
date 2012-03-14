@@ -1,14 +1,14 @@
 IfSpawned
-  tmpargument = rand % 15 + 35    //time between every meteor
+  tmpargument = rand % 15 + 35    // time between every meteor
   SetTime
-  tmpargument = 10                //number of meteors to spawn
+  tmpargument = 10                // number of meteors to spawn
   SetState
 
 IfTimeOut
-  tmpargument = 20    //time between every meteor
+  tmpargument = 20    // time between every meteor
   SetTime
 
-  //Spawn one meteor
+  // Spawn one meteor
   tmpargument = 0
   SetTargetToNearestEnemy
     tmpdistance = targetz
@@ -20,11 +20,11 @@ IfTimeOut
     tmpy = rand % 250 + selfy - 125
   SpawnExactParticle
 
-  tmpargument = selfstate - 1		//1 meteor used
+  tmpargument = selfstate - 1        // 1 meteor used
   SetState
-  
+
   IfStateIs0
     GoPoof
-  
+
 // Finish up
 End

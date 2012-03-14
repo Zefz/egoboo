@@ -37,7 +37,7 @@ IfKilled
   Else
     tmpargument = 0
   SendMessage
-  
+
   tmpargument = TEAME
   TargetJoinTeam
   CallForHelp

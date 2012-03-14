@@ -1,25 +1,27 @@
-//The different states:
-//0: Wandering around looking for enemies (And following the leader)
-//1: In combat
-//2: Feared
-//3: Gass form
+// The different states:
+// 0: Wandering around looking for enemies (And following the leader)
+// 1: In combat
+// 2: Feared
+// 3: Gass form
 //------------------------------------------------------------------------------
-//How fast can he attack?
+// How fast can he attack?
 IfUsed
   tmpargument = rand % 50 + 50
   SetReloadTime
 
 //------------------------------------------------------------------------------
-//Always have 1 vampire leader
+// Always have 1 vampire leader
 IfSpawned
   BecomeLeader
   MakeCrushValid
+
 IfLeaderKilled
   BecomeLeader
 
 //------------------------------------------------------------------------------
-//Gass cloud effect
+// Gass cloud effect
 tmpargument = 1
+
 IfArmorIs
   GetContent
   tmpx = tmpargument
@@ -37,15 +39,15 @@ IfArmorIs
     tmpargument = tmpargument + 1
     SetContent
 
-//Vampire is staked in spiked door (Lured by player)
+// Vampire is staked in spiked door (Lured by player)
 IfCrushed
   SetTargetToSelf
   KillTarget
   tmpargument = 10
   PlayFullSound
-  tmpargument = 8		//Tell em
+  tmpargument = 8        // Tell em
   SendMessage
-  tmpargument = 50		//A nifty bonus xp for this solution
+  tmpargument = 50        // A nifty bonus xp for this solution
   tmpdistance = EXPSECRET
   GiveExperienceToGoodTeam
   GoPoof
@@ -54,28 +56,28 @@ IfCrushed
 // Let the character walk around
 IfTimeOut
 
-  //Turn to gass to escape?
+  // Turn to gass to escape?
   tmpx = selflife
   tmpy = 10*256
-  IfXIsLessThanY	//Turn to gass if less than 10 life left
+  IfXIsLessThanY    // Turn to gass if less than 10 life left
     tmpargument = 3
-    IfStateIsNot	//Dont become gass if already gas
+    IfStateIsNot    // Dont become gass if already gas
       tmpargument = 1
       ChangeArmor
-      tmpargument = 3	//Gass mode
+      tmpargument = 3    // Gass mode
       SetState
-      tmpargument = 4	//Sound effect and message
+      tmpargument = 4    // Sound effect and message
       SendMessageNear
       tmpargument = 5
       PlaySound
       SetTargetToRider
         tmpargument = [HIDE]
-        OrderTarget	//Hide the wings
+        OrderTarget    // Hide the wings
 
-  //Waiting for the player
+  // Waiting for the player
   IfStateIs0
     Walk
-    SetTargetToWideEnemy		//Found a enemy, enter combat mode
+    SetTargetToWideEnemy        // Found a enemy, enter combat mode
       tmpargument = rand % 20 + 10
       SetTime
       tmpargument = 1
@@ -87,11 +89,11 @@ IfTimeOut
       Compass
       ClearWaypoints
       AddWaypoint
-      tmpargument = rand & 1 + 6	//Laugh
+      tmpargument = rand & 1 + 6    // Laugh
       PlaySound
       tmpargument = 7
       SendMessageNear
-    Else  				//No enemies, wander around
+    Else                  // No enemies, wander around
       tmpargument = rand % 60 + 30
       SetTime
       tmpx = selfspawnx
@@ -99,18 +101,18 @@ IfTimeOut
       ClearWaypoints
       AddWaypoint
 
-  //Combat mode
+  // Combat mode
   IfStateIs1
     tmpargument = 20
     SetTime
-    
-    //Attack?
+
+    // Attack?
     IfTargetIsOnHatedTeam
       tmpx = targetdistance
       tmpy = 160
-      IfXIsLessThanY			//Close enough?
-        IfFacingTarget			//Are we looking at the enemy?
-          //If the target defends, either wait or find new target
+      IfXIsLessThanY            // Close enough?
+        IfFacingTarget            // Are we looking at the enemy?
+          // If the target defends, either wait or find new target
           IfTargetIsFacingSelf
             IfTargetIsDefending
               SetTargetToNearestEnemy
@@ -124,23 +126,23 @@ IfTimeOut
               Compass
               ClearWaypoints
               AddWaypoint
-            Else				//Attack the enemy
+            Else                // Attack the enemy
               tmpargument = LATCHRIGHT
               PressLatchButton
-          Else				//Attack the enemy
+          Else                // Attack the enemy
             tmpargument = LATCHRIGHT
             PressLatchButton
-    
-    //Try to find new enemy
+
+    // Try to find new enemy
     Else
       tmpdistance = 128*10
       SetTargetToDistantEnemy
         DoNothing
       Else
-        tmpargument = 0     //return to spawn
+        tmpargument = 0     // return to spawn
         SetState
-    
-    //Charge    
+
+    // Charge
     Run
     tmpx = targetx
     tmpy = targety
@@ -149,8 +151,8 @@ IfTimeOut
     Compass
     ClearWaypoints
     AddWaypoint
-    
-    //Do spells and special abillities
+
+    // Do spells and special abillities
     tmpargument = 0
     IfContentIs
       IfFacingTarget
@@ -160,62 +162,62 @@ IfTimeOut
           tmpx = rand & 1
           tmpy = 0
           IfXIsEqualToY
-            tmpargument = 6	//Blue attack
+            tmpargument = 6    // Blue attack
           Else
-            tmpargument = 3	//Red attack
+            tmpargument = 3    // Red attack
           tmpx = selfx
           tmpy = selfy
           tmpdistance = selfz + 70
           SpawnExactParticle
-          tmpargument = ACTIONBC	//Cast Spell
+          tmpargument = ACTIONBC    // Cast Spell
           DoAction
             tmpargument = 512
             SetTargetToSelf
-            CostTargetMana		//Pay 2 mana
+            CostTargetMana        // Pay 2 mana
             SetTargetToOldTarget
-            tmpargument = rand % 4 + 3		//Cooldown time
+            tmpargument = rand % 4 + 3        // Cooldown time
             SetContent
     Else
       tmpargument = selfcontent -1
-      SetContent			//Reduce cooldown timer
+      SetContent            // Reduce cooldown timer
 
-    //Combat theme
+    // Combat theme
     tmpdistance = 0
     tmpargument = 20
     PlayMusic
 
-  //Feared
+  // Feared
   IfStateIs2
     Run
     tmpx = targetx
     tmpy = targety
     tmpdistance = 1200
     Compass
-    tmpturn = targetturnfrom	//Run away
+    tmpturn = targetturnfrom    // Run away
     ClearWaypoints
     AddWaypoint
-    tmpargument = 400   //8 seconds
+    tmpargument = 400   // 8 seconds
     SetTime
     tmpargument = 0
     SetState
 
-  //Gass cloud
+  // Gass cloud
   IfStateIs3
     tmpargument = 125
     SetTime
     tmpx = selflife
-    tmpy = 256*25				//About 25 life should be enough
-    IfXIsMoreThanY			//Do we have enough life to return to combat?
-      tmpargument = 0			//If so, become normal again
-      ChangeArmor			//Become visible
-      SetState  			//Return to leader waiting mode
+    tmpy = 256*25                // About 25 life should be enough
+    IfXIsMoreThanY            // Do we have enough life to return to combat?
+      tmpargument = 0            // If so, become normal again
+      ChangeArmor            // Become visible
+      SetState              // Return to leader waiting mode
       SetTime
       SetTargetToRider
         tmpargument = [HIDE]
-        OrderTarget	//Show the wings
-      tmpargument = 5			//Sound effect
+        OrderTarget    // Show the wings
+      tmpargument = 5            // Sound effect
       PlaySound
-    Else				//Nope, still too hurt
+    Else                // Nope, still too hurt
       Run
       SetTargetToNearestEnemy
       tmpx = selfspawnx
@@ -224,32 +226,32 @@ IfTimeOut
       AddWaypoint
 
     tmpdistance = 128*5
-    SetTargetToDistantEnemy		//Laugh and taunt
+    SetTargetToDistantEnemy        // Laugh and taunt
       tmpargument = rand & 1 + 6
       PlaySound
 
 //------------------------------------------------------------------------------
-//What to do if enemy is dead
+// What to do if enemy is dead
 IfTargetKilled
   tmpargument = 3
-  IfStateIsNot			//Only do if not gass form
+  IfStateIsNot            // Only do if not gass form
     SetTargetToNearbyEnemy
-      tmpargument = 1		//Engage nearby enemy
+      tmpargument = 1        // Engage nearby enemy
     Else
-      tmpargument = 0		//Return to leader
+      tmpargument = 0        // Return to leader
     SetState
 
 //------------------------------------------------------------------------------
-//Handle being attacked by blocking or countering or running away
+// Handle being attacked by blocking or countering or running away
 IfAttacked
 
-  //Engage the attacker
+  // Engage the attacker
   SetTargetToWhoeverAttacked
   IfTargetIsOnHatedTeam
-    tmpx = 2			//Only if idle of in combat mode
+    tmpx = 2            // Only if idle of in combat mode
     tmpy = selfstate
     IfXIsLessThanY
-      tmpx = targetx		//Else - counter attack
+      tmpx = targetx        // Else - counter attack
       tmpy = targety
       tmpdistance = 200
       tmpturn = targetturnto
@@ -258,10 +260,10 @@ IfAttacked
       AddWaypoint
       tmpargument = 30
       SetTime
-  Else				//Whoops, friendly fire
+  Else                // Whoops, friendly fire
     SetTargetToNearestEnemy
 
-  //Cover in fear if damaged by holy
+  // Cover in fear if damaged by holy
   GetDamageType
   tmpx = tmpargument
   tmpy = DAMAGEHOLY
@@ -269,18 +271,18 @@ IfAttacked
     tmpargument = 1
     SendMessageNear
     tmpargument = 3
-    IfStateIsNot	//Dont do this if in gass form
-      tmpargument = 2	//Become Feared
+    IfStateIsNot    // Dont do this if in gass form
+      tmpargument = 2    // Become Feared
       SetState
-    tmpargument = 4     //Play feared ouch sound
+    tmpargument = 4     // Play feared ouch sound
   Else
-    tmpargument = rand & 2 + 1	//Play normal ouch sound
+    tmpargument = rand & 2 + 1    // Play normal ouch sound
 
-  //Silver weapons are super effective
+  // Silver weapons are super effective
   IfHitVulnerable
-    tmpargument = 4    //Play feared ouch sound
+    tmpargument = 4    // Play feared ouch sound
 
-  //In gass form the vampire has weakness to fire and holy damage is instant kill
+  // In gass form the vampire has weakness to fire and holy damage is instant kill
   IfStateIs3
     GetDamageType
     tmpx = tmpargument
@@ -292,17 +294,17 @@ IfAttacked
       tmpdistance = DAMAGEFIRE
       DamageTarget
       SetTargetToOldTarget
-      tmpargument = 4     //Play feared ouch sound
+      tmpargument = 4     // Play feared ouch sound
 
     GetDamageType
     tmpx = tmpargument
     tmpy = DAMAGEHOLY
     IfXIsEqualToY
       tmpargument = 50
-      tmpdistance = EXPREVENGE	//Give bonus xp
+      tmpdistance = EXPREVENGE    // Give bonus xp
       GiveExperienceToTarget
       SetOldTarget
-      SetTargetToSelf		//Holy damage is instant kill
+      SetTargetToSelf        // Holy damage is instant kill
       KillTarget
       SetTargetToOldTarget
       tmpargument = 5
@@ -310,9 +312,8 @@ IfAttacked
 
   PlaySound
 
-
 //------------------------------------------------------------------------------
-//Always attack enemies who bump
+// Always attack enemies who bump
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsOnHatedTeam
@@ -321,7 +322,7 @@ IfBumped
     SetTargetToOldTarget
 
 //------------------------------------------------------------------------------
-//Handle death by sending a message and other stuff
+// Handle death by sending a message and other stuff
 IfKilled
   tmpargument = 0
   IfTargetIsOnSameTeam
@@ -330,18 +331,17 @@ IfKilled
       tmpargument = 3
   SendMessageNear
 
-  tmpargument = 10	//Play death sound
+  tmpargument = 10    // Play death sound
   PlaySound
 
-  //If gass form, become normal
+  // If gass form, become normal
   tmpargument = 1
   IfArmorIs
     tmpargument = 0
     ChangeArmor
     SetTargetToRider
-    tmpargument = [HIDE]	//Show the wings
+    tmpargument = [HIDE]    // Show the wings
     OrderTarget
-
 
   // Drop goodies
   tmpargument = selfmoney
@@ -361,7 +361,7 @@ IfKilled
   tmpargument = [DEAD]
   OrderTarget
 
-  //Award xp and open final door. Play victory tune.
+  // Award xp and open final door. Play victory tune.
   tmpargument = passage
   OpenPassage
   tmpargument = 75
@@ -369,8 +369,8 @@ IfKilled
   GiveExperienceToGoodTeam
   tmpargument = 14
   PlayMusic
-  
-  //Add the end text
+
+  // Add the end text
   ClearEndMessage
   tmpargument = 8
   AddEndMessage

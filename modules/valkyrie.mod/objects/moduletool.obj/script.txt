@@ -1,34 +1,34 @@
-//Play music
+// Play music
 IfSpawned
   tmpargument = 24
   tmpdistance = 0
   PlayMusic
-  
-  //Show the map
+
+  // Show the map
   ShowMap
   ShowYouAreHere
 
-//Keep track of how many souls are saved
+// Keep track of how many souls are saved
 IfOrdered
   tmpx = selforder
   tmpy = [SOUL]
   IfXIsEqualToY
     tmpargument = selfcontent + 1
     SetContent
-    
-    //Save seven souls and it's done!
+
+    // Save seven souls and it's done!
     tmpargument = 7
     IfContentIs
       tmpargument = 4
       SendMessage
       BeatModule
       EnableExport
-      
-      //Mark as beaten
+
+      // Mark as beaten
       tmpargument = [BEAT]
       AddIDSZ
-      
-      //Do the end text
+
+      // Do the end text
       ClearEndMessage
       tmpargument = 0
       AddEndMessage
@@ -38,15 +38,17 @@ IfOrdered
       AddEndMessage
       tmpargument = 3
       AddEndMessage
-      
-      //Victory tune
+
+      // Victory tune
       tmpargument = 14
       tmpdistance = 0
       PlayMusic
-      
-      //Award some XP
+
+      // Award some XP
       tmpargument = 100
       tmpdistance = EXPQUEST
       GiveExperienceToGoodTeam
-      
-End					// All done
+
+// All done
+End
+

@@ -1,16 +1,16 @@
-//Become animated and get a target and stick to it
+// Become animated and get a target and stick to it
 IfSpawned
   SetTargetToSelf
   EnchantTarget
   SetTargetToNearestEnemy
     SetOwnerToTarget
 
-//Main AI loop
+// Main AI loop
 IfTimeOut
   tmpargument = rand & 15 + 20
   SetTime
 
-  //This sets the duration before it dissapears
+  // This sets the duration before it dissapears
   GetContent
   tmpargument = tmpargument + 1
   SetContent
@@ -20,20 +20,20 @@ IfTimeOut
     SetTargetToSelf
     KillTarget
 
-  //Attack AI
+  // Attack AI
   SetTargetToOwner
   tmpx = targetdistance
   tmpy = 200
   IfXIsMoreThanY
     SetTurnModeToVelocity
-    tmpx =  rand & 511 + ownerx - 256           //Surround
+    tmpx =  rand & 511 + ownerx - 256           // Surround
     tmpy = rand & 511 + ownery - 256
     tmpdistance = rand & 511 + 500
     tmpturn = rand & 31000 + targetturnto - 16000
     Compass
   Else
     SetTurnModeToWatchTarget
-    tmpx = ownerx                       //Direct charge
+    tmpx = ownerx                       // Direct charge
     tmpy = ownery
     tmpdistance = 0 - 30
     tmpturn = targetturnto
@@ -41,7 +41,7 @@ IfTimeOut
   ClearWaypoints
   AddWaypoint
 
-  //Attack!
+  // Attack!
   SetTargetToOwner
   IfTargetIsOnHatedTeam
     IfFacingTarget
@@ -53,22 +53,24 @@ IfTimeOut
   Else
     SetTargetToNearestEnemy
 
-//Someone attacked it
+// Someone attacked it
 IfHealed
   SetTargetToWhoeverHealed
   IfTargetIsOnHatedTeam
-    SetOwnerToTarget        //Become it's new target
+    SetOwnerToTarget        // Become it's new target
 
-  //Spawn defense ping
+  // Spawn defense ping
   tmpargument = 1
   tmpdistance = SPAWNORIGIN
   tmpy = 0
   tmpx = 0
   SpawnParticle
 
-//Fade away sound
+// Fade away sound
 IfKilled
   tmpargument = 2
   PlaySound
 
-End					// All done
+// All done
+End
+

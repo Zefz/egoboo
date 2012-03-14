@@ -28,13 +28,13 @@ IfKilled
     IfTargetIsOnSameTeam
       tmpargument = 1
     SendMessage
-    
+
   // Give bonus points
   tmpargument = 90
   tmpdistance = EXPQUEST
   GiveExperienceToGoodTeam
 
-  //Death cry
+  // Death cry
   tmpargument = 1
   PlaySound
 
@@ -43,12 +43,12 @@ IfKilled
   DropMoney
   DropItems
   DropKeys
-  
+
   // Make the character body
   tmpargument = 40
   SetBumpHeight
-  
-  //Win the module
+
+  // Win the module
   tmpargument = [BEAT]
   AddIDSZ
   BeatModule
@@ -56,12 +56,12 @@ IfKilled
   tmpargument = [COBO]
   tmpdistance = 1
   AddQuestAllPlayers
-  
-  //Victory tune
+
+  // Victory tune
   tmpargument = 14
   PlayMusic
-  
-  //End text
+
+  // End text
   ClearEndMessage
   tmpargument = 6
   AddEndMessage
@@ -79,11 +79,11 @@ IfAttacked
 
       // Check for backstab
       IfBackstabbed
-        // Allow Rogues to backstab 
+        // Allow Rogues to backstab
         tmpargument = 3
         SendMessageNear
 
-        //Some bonus xp
+        // Some bonus xp
         tmpargument = 20
         tmpdistance = EXPMURDER
         GiveExperienceToTarget
@@ -103,24 +103,24 @@ IfAttacked
     // Tell everyone to charge
     CallForHelp
 
-    //Ouch
+    // Ouch
     tmpargument = rand & 1 + 2
     PlaySound
-    
+
     tmpargument = selfcontent + 12
     SetContent
 
 //------------------------------------------------------------------------------
-//Increase rage
+// Increase rage
 IfScoredAHit
   tmpargument = selfcontent + 16
   SetContent
-  
-  //Go in berserker mode?
+
+  // Go in berserker mode?
   tmpargument = 2
   IfStateIsNot
     tmpx = selfcontent
-    tmpy = 50            //Need 50 rage points to engage
+    tmpy = 50            // Need 50 rage points to engage
     IfXIsMoreThanY
       tmpargument = 2
       SetState
@@ -136,8 +136,8 @@ IfScoredAHit
 IfTimeOut
   tmpargument = rand & 7 + 10
   SetTime
- 
-  //Reduce rage
+
+  // Reduce rage
   tmpx = selfcontent
   tmpy = 0
   IfXIsMoreThanY
@@ -149,14 +149,14 @@ IfTimeOut
       tmpargument = 1
       SetState
 
-  //Throne sitter
+  // Throne sitter
   IfStateIs0
     SetTurnModeToVelocity
     tmpx = selfspawnx
     tmpy = selfspawny
     ClearWaypoints
     AddWaypoint
-    tmpdistance = 128*12          //Look at enemy
+    tmpdistance = 128*12          // Look at enemy
     SetTargetToDistantEnemy
       SetTurnModeToWatchTarget
       tmpx = targetdistance
@@ -164,11 +164,11 @@ IfTimeOut
       IfXIsLessThanY
         tmpy = 128*3
         IfXIsLessThanY
-          tmpargument = 1   //Charge!
+          tmpargument = 1   // Charge!
           SetState
-        CallForHelp     //Order guards to charge
-       
-  //Charge!
+        CallForHelp     // Order guards to charge
+
+  // Charge!
   IfStateIs1
     SetTurnModeToVelocity
     SetTargetToWideEnemy
@@ -182,11 +182,11 @@ IfTimeOut
     Else
       tmpargument = 0
       SetState
-      
-  //Rage!
+
+  // Rage!
   IfStateIs2
     tmpdistance = 128*12
-    SetTargetToDistantEnemy         //Long aggro range
+    SetTargetToDistantEnemy         // Long aggro range
       SetTurnModeToWatchTarget
       tmpx = targetx
       tmpy = targety
@@ -194,34 +194,34 @@ IfTimeOut
       tmpturn = targetturnto
       Compass
     Else
-      tmpargument = selfcontent - 5     //Drain away fast if nothing to attack
+      tmpargument = selfcontent - 5     // Drain away fast if nothing to attack
       SetContent
       tmpx = rand & 1023 + selfx - 512
       tmpy = rand & 1023 + selfy - 512
     ClearWaypoints
     AddWaypoint
-      
-  //Make him a trigger happy fiend
+
+  // Make him a trigger happy fiend
   IfTargetIsOnHatedTeam
     IfFacingTarget
       tmpx = targetdistance
       tmpy = 210
       IfXIsLessThanY
         IfHoldingMeleeWeapon
-          tmpx = selfstate*10     //Double attack rage in berserk
+          tmpx = selfstate*10     // Double attack rage in berserk
           tmpy = rand % 35
           IfXIsMoreThanY
             tmpargument = ACTIONBC
             DoAction
-          //PressLatchButton        //BUG!! DOESNT WORK?!
-       
+          // PressLatchButton        // BUG!! DOESNT WORK?!
+
 //------------------------------------------------------------------------------
-//healing... only good for removing rage
+// healing... only good for removing rage
 IfHealed
   tmpargument = 2
   SendMessageNear
-  
-  //Remove rage
+
+  // Remove rage
   tmpargument = 0
   SetContent
   UndoEnchant

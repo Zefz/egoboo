@@ -1,15 +1,16 @@
 tmpx = selfz
 tmpy = 0
+
 IfXIsLessThanY
   tmpargument = 40
   SetFlyHeight
 
-//When Spawned
+// When Spawned
 IfSpawned
   tmpargument = rand & 75 + 40
-  SetFlyHeight					//Randomize Z position
+  SetFlyHeight                    // Randomize Z position
 
-  //Platform near the start (TEAL)
+  // Platform near the start (TEAL)
   tmpargument = 1
   IfContentIs
     tmpargument = 0
@@ -30,7 +31,7 @@ IfSpawned
     tmpargument = 3
     SetRedShift
 
-  //Second platform (PINK)
+  // Second platform (PINK)
   tmpargument = 2
   IfContentIs
     tmpargument = 0
@@ -51,7 +52,7 @@ IfSpawned
     tmpargument = 3
     SetGreenShift
 
-  //From small isle (YELLOW)
+  // From small isle (YELLOW)
   tmpargument = 3
   IfContentIs
     tmpargument = 0
@@ -72,7 +73,7 @@ IfSpawned
     tmpargument = 3
     SetBlueShift
 
-  //Shortcut (DARK RED)
+  // Shortcut (DARK RED)
   tmpargument = 4
   IfContentIs
     tmpargument = 0
@@ -94,7 +95,7 @@ IfSpawned
     SetBlueShift
     SetGreenShift
 
-  //Longway to double isle (GREEN)
+  // Longway to double isle (GREEN)
   tmpargument = 5
   IfContentIs
     tmpargument = 0
@@ -116,7 +117,7 @@ IfSpawned
     SetRedShift
     SetBlueShift
 
-  //Chest reward secret (NORMAL)
+  // Chest reward secret (NORMAL)
   tmpargument = 6
   IfContentIs
     tmpargument = 0
@@ -134,7 +135,7 @@ IfSpawned
     tmpy = 106 < 7
     SetXY
 
-  //Final platform (BLUE)
+  // Final platform (BLUE)
   tmpargument = 7
   IfContentIs
     tmpargument = 0
@@ -156,8 +157,9 @@ IfSpawned
     SetRedShift
     SetGreenShift
 
-//Completely random platform AI
+// Completely random platform AI
 tmpargument = 0
+
 IfContentIs
   IfTimeOut
     tmpx = rand % 2047 + selfspawnx - 1023
@@ -167,7 +169,7 @@ IfContentIs
     tmpargument = rand % 200
     SetTime
 
-//Prespecified AI
+// Prespecified AI
 Else
   tmpargument = selfstate
   GetXY
@@ -177,7 +179,7 @@ Else
   IfAtLastWaypoint
     IfStateIs2
       tmpargument = 7
-      IfContentIs		//Last platform is special, it teleports!
+      IfContentIs        // Last platform is special, it teleports!
         tmpargument = 0
         GetXY
         SpawnPoof
@@ -190,14 +192,13 @@ Else
       tmpargument = selfstate + 1
     SetState
 
-//Don't get stuck in other platforms
+// Don't get stuck in other platforms
 IfBumped
   SetTargetToWhoeverBumped
   tmpargument = [PLAT]
   IfTargetHasID
-    tmpargument = rand & 63 + targetz - 32	//Fudge until success!
+    tmpargument = rand & 63 + targetz - 32    // Fudge until success!
     SetFlyHeight
-
 
 // All Done
 End

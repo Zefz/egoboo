@@ -1,21 +1,21 @@
 //======Generic melee/ranged fighter AI========
-//- Uses mounts
-//- Handles inventory stuff. grabs and drops
+//= Uses mounts
+//= Handles inventory stuff. grabs and drops
 //  equipment.
-//- Jumps over obstacles
-//- Can use both ranged and melee
-//- Will try to avoid hitting friendlies.
-//- Can be backstabbed with POKE damage.
-//- Also uses shield according to DEX value
+//= Jumps over obstacles
+//= Can use both ranged and melee
+//= Will try to avoid hitting friendlies.
+//= Can be backstabbed with POKE damage.
+//= Also uses shield according to DEX value
 
-//Guide to the States
-//0 - Wander
-//1 - Charge and attack melee
-//2 - Get in ranged position
-//3 - Do ranged combat
-//4 - Retreat!
+// Guide to the States
+// 0 - Wander
+// 1 - Charge and attack melee
+// 2 - Get in ranged position
+// 3 - Do ranged combat
+// 4 - Retreat!
 
-//Sustained by magic
+// Sustained by magic
 IfSpawned
   EnchantTarget
 
@@ -52,13 +52,13 @@ IfBumped
     SetTargetToOldTarget
 
 //------------------------------------------------------------------------------
-//Use shield
+// Use shield
 IfTargetIsAttacking
   IfTargetIsOnHatedTeam
     IfFacingTarget
       IfTargetIsFacingSelf
         IfHoldingShield
-          tmpx = selfdex         //Check dexterity to block, 10 is average
+          tmpx = selfdex         // Check dexterity to block, 10 is average
           tmpy = rand & 7120
           IfXIsMoreThanY
             PressLatchButton
@@ -76,7 +76,7 @@ IfKilled
   DoActionOverride
   KeepAction
 
-  //Death sound
+  // Death sound
   tmpargument = 1
   PlaySound
 
@@ -90,7 +90,7 @@ IfKilled
   tmpargument = 40
   SetBumpHeight
   MakeCrushValid
-  
+
 IfCrushed
   tmpargument = 2
   SendMessageNear
@@ -113,26 +113,26 @@ IfAttacked
       AddWaypoint
       SetTargetToOldTarget
 
-    //Play ouch sound
+    // Play ouch sound
     tmpargument = rand & 1 + 3
     PlaySound
 
-//Don't hack dead bodies
+// Don't hack dead bodies
 IfTargetKilled
   tmpargument = 0
   SetState
 
 //------------------------------------------------------------------------------
-//This is the Main AI loop
+// This is the Main AI loop
 IfTimeOut
 
-  //Taunts
+  // Taunts
   tmpx = rand & 255
   tmpy = 225
   IfXIsMoreThanY
     tmpargument = rand & 1 + 6
     PlaySound
-    
+
   // Riding some type of animal...
   IfSitting
     tmpargument = rand & 15 + 15 // Time
@@ -177,7 +177,7 @@ IfTimeOut
       AddWaypoint
   Else
 
-    //STATE 0 - WANDER
+    // STATE 0 - WANDER
     IfStateIs0
       tmpargument = rand & 15 + 45
       SetTime
@@ -191,21 +191,20 @@ IfTimeOut
       Else
         tmpx = rand & 1023 - 512 + selfspawnx
         tmpy = rand & 1023 - 512 + selfspawny
-        ClearWaypoints           
+        ClearWaypoints
         AddWaypoint
-   
 
-    //STATE 1 - MELEE
+    // STATE 1 - MELEE
     IfStateIs1
       tmpargument = rand & 15 + 30 // Time
       SetTime
-       
+
       // Charge and attack the enemy
       SetTargetToNearestEnemy
       tmpx = targetdistance
-      tmpy = 2500            //Ckise enough to care?
+      tmpy = 2500            // Ckise enough to care?
       IfXIsLessThanY
-        tmpy = 450            //Far away enough to charge?
+        tmpy = 450            // Far away enough to charge?
         IfXIsMoreThanY
           tmpx = rand & 511 + targetx - 256
           tmpy = rand & 511 + targety - 256
@@ -213,7 +212,7 @@ IfTimeOut
           tmpdistance = 1500
           Compass
           SetTurnModeToVelocity
-        Else               //If not, simply engage.
+        Else               // If not, simply engage.
           tmpx = targetx
           tmpy = targety
           tmpturn = targetturnto
@@ -224,7 +223,7 @@ IfTimeOut
         AddWaypoint
       Else
         tmpargument = 0
-        SetState         //target ran away
+        SetState         // target ran away
 
       // Close enough to attack
       IfFacingTarget
@@ -239,14 +238,13 @@ IfTimeOut
       IfHoldingMeleeWeapon
         DoNothing
       Else
-        tmpargument = 4         //panic a little
+        tmpargument = 4         // panic a little
         SetState
         // Draw a new weapon
         tmpargument = LATCHPACKRIGHT
         PressLatchButton
- 
 
-    //STATE 2 - RANGED POSITION
+    // STATE 2 - RANGED POSITION
     IfStateIs2
       tmpargument = rand & 15 + 30 // Time
       SetTime
@@ -254,7 +252,7 @@ IfTimeOut
       SetTargetToNearestEnemy
       SetTurnModeToWatchTarget
       tmpx = targetdistance
-      tmpy = 2500         //Range for following the target
+      tmpy = 2500         // Range for following the target
       IfXIsLessThanY
         tmpx = targetx
         tmpy = targety
@@ -262,9 +260,9 @@ IfTimeOut
         tmpdistance = 600
         Compass
         ClearWaypoints
-        AddWaypoint            //Move towards him
+        AddWaypoint            // Move towards him
 
-        //Suitable to shoot?
+        // Suitable to shoot?
         IfFacingTarget
           tmpx = targetdistance
           tmpy = 700
@@ -287,27 +285,26 @@ IfTimeOut
               Compass
               ClearWaypoints
               AddWaypoint
-              tmpargument = 2   
-              SetState         //not safe to shoot
+              tmpargument = 2
+              SetState         // not safe to shoot
             SetTargetToOldTarget
             tmpy = targetdistance
             IfXIsMoreThanY
               tmpargument = 3
-              SetState         //Enemy is closer than friend, shoot after all
+              SetState         // Enemy is closer than friend, shoot after all
         SetTargetToOldTarget
 
       Else
-        tmpargument = 0         //target ran away
+        tmpargument = 0         // target ran away
         SetState
-       
 
-    //STATE 3 - RANGED COMBAT
+    // STATE 3 - RANGED COMBAT
     IfStateIs3
       tmpargument = rand & 15 + 30
       SetTime
       IfHoldingRangedWeapon
-        PressLatchButton         //return to ranged movement
-      Else               //ammo out
+        PressLatchButton         // return to ranged movement
+      Else               // ammo out
         // Draw a new weapon
         DropWeapons
         // Now using melee weapons
@@ -315,7 +312,7 @@ IfTimeOut
         SetState
       SetTargetToNearestEnemy
 
-      //Continue ranged fighting or retreat?
+      // Continue ranged fighting or retreat?
       IfFacingTarget
         tmpx = targetdistance
         tmpy = 900
@@ -325,12 +322,12 @@ IfTimeOut
         tmpy = 400
         IfXIsLessThanY
           tmpargument = 4
-          SetState   
+          SetState
       Else
         tmpargument = 2
-        SetState   
+        SetState
 
-    //STATE 4 - RETREAT
+    // STATE 4 - RETREAT
     IfStateIs4
       tmpargument = 150
       SetTime
@@ -350,22 +347,23 @@ IfTimeOut
           tmpargument = 2
           SetState
         Else
-          DoNothing      //TODO: GET WEAPONS!
+          DoNothing      // TODO: GET WEAPONS!
 
 //------------------------------------------------------------------------------
-//Say the character looks better
+// Say the character looks better
 IfHealed
   tmpargument = 7
   SendMessageNear
 
 //------------------------------------------------------------------------------
-//Spawn the life force
+// Spawn the life force
 IfSpawned
   tmpargument = 2
   tmpx = 0
   tmpy = 0
   tmpdistance = SPAWNORIGIN
   SpawnAttachedParticle
+
 IfKilled
   DisaffirmCharacter
 //------------------------------------------------------------------------------

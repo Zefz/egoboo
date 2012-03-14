@@ -1,7 +1,7 @@
 // ZZ> This controls the yellow faerie
 IfTimeOut
 
-  //Warn lumpkins to attack the player
+  // Warn lumpkins to attack the player
   tmpargument = [FAER]
   tmpdistance = [WARN]
   OrderSpecialID
@@ -17,7 +17,7 @@ IfTimeOut
     tmpy = rand & 511 + selfy - 256
     ClearWaypoints
     AddWaypoint
-    
+
     // Look for a player to follow
     tmpargument = [ELFF]
     tmpdistance = BLAHFRIENDS // Items, friends and enemies

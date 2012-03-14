@@ -1,26 +1,27 @@
-//====== Meat spit ========
-//- Modelled, Skinned and scripted by Chainsaw.
-//- Read the text file included for usage and instructions.
-//- Checks "Ammo" to determine amount of uses left. Cunfigure it in "Data.txt".
-//- Heals target somewhere between 1 to 3 Hp.
-//- Changes to an empty spit once the "Ammo" runs out.
-//Content 0: Ready for eating!
-//Content 1: No more meat!
-//State 0: Ready to do stuff!
-//State 1: Cooldown time for bumping
+//====== Kabob spit ========
+//= Modelled, Skinned and scripted by Chainsaw.
+//= Read the text file included for usage and instructions.
+//= Checks "Ammo" to determine amount of uses left. Cunfigure it in "Data.txt".
+//= Heals target somewhere between 1 to 3 Hp.
+//= Changes to an empty spit once the "Ammo" runs out.
+// Content 0: Ready for eating!
+// Content 1: No more meat!
+// State 0: Ready to do stuff!
+// State 1: Cooldown time for bumping
 
-//Eat meat bumping
+// Eat meat bumping
 tmpargument = 0
+
 IfContentIs
   IfStateIs0
     IfBumped
-      SetTargetToWhoeverBumped	  //
-      IfTargetIsAPlayer	    // Avoid NPCs or Monsters trigering the script.
-        
+      SetTargetToWhoeverBumped
+      IfTargetIsAPlayer        // Avoid NPCs or Monsters trigering the script.
+
         tmpx = targetmoney
         tmpy = 5
         IfXIsMoreThanY
-          tmpargument = ACTIONMJ	      // Spin the meat
+          tmpargument = ACTIONMJ          // Spin the meat
           DoAction
           tmpargument = rand & 768 + 256 // Heal 1-3 Hp.
           HealTarget
@@ -30,16 +31,16 @@ IfContentIs
           tmpargument = 0
           SendMessage
           PlaySound
-          
-          //Make them pay! mohaha
+
+          // Make them pay! mohaha
           tmpargument = -5
           GiveMoneyToTarget
 
-          //No meat left
+          // No meat left
           IfAmmoOut
             tmpargument = 1
             SetContent
-            tmpargument = ACTIONMG	      //Make the meat dissapear
+            tmpargument = ACTIONMG          // Make the meat dissapear
             DoActionOverride
             KeepAction
 
@@ -54,9 +55,10 @@ IfContentIs
           SetState
           tmpargument = 100
           SetTime
-        
-//No more meat bumping
+
+// No more meat bumping
 tmpargument = 1
+
 IfContentIs
   IfStateIs0
     IfBumped
@@ -68,9 +70,11 @@ IfContentIs
         tmpargument = 100
         SetTime
 
-//Ready the spit for eating again
+// Ready the spit for eating again
 IfTimeOut
   tmpargument = 0
   SetState
 
-End				// Finished with this character
+// Finished with this character
+End
+

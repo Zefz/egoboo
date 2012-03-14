@@ -1,25 +1,26 @@
-//Set our hp on spawn
+// Set our hp on spawn
 IfSpawned
   tmpargument = selflife
   SetState
-    
-//Someone is taking pictures or punching us
+
+// Someone is taking pictures or punching us
 tmpx = selfstate
 tmpy = selflife
+
 IfXIsMoreThanY
   SetTargetToNearestEnemy
   IfTimeOut
     tmpargument = 50
     SetTime
-    
-    //Become a bit more angry
+
+    // Become a bit more angry
     GetContent
     SendMessage
     PlayFullSound
     tmpargument = tmpargument + 1
     SetContent
 
-    //Fourth time is the charm
+    // Fourth time is the charm
     tmpargument = 4
     IfContentIs
       GoPoof
@@ -28,34 +29,34 @@ IfXIsMoreThanY
       tmpy = selfy
       tmpdistance = selfz
       SpawnExactParticle
- 
-      //Release the mummy!
-      tmpargument = 54		//mummy
+
+      // Release the mummy!
+      tmpargument = 54        // mummy
       tmpx = selfx
       tmpy = selfy
       tmpdistance = selfz
       tmpturn = selfturn
       SpawnExactCharacterXYZ
-      
-      //Give some XP
+
+      // Give some XP
       tmpargument = 100
       tmpdistance = EXPSECRET
       GiveExperienceToGoodTeam
-      
-      //Play some more dramatic music
+
+      // Play some more dramatic music
       tmpargument = 20
       tmpdistance = 0
       PlayMusic
-      
-      //Alert the module tool to enable exit
+
+      // Alert the module tool to enable exit
       tmpargument = [EXIT]
       IssueOrder
-    
-  //Remember our last hp
+
+  // Remember our last hp
   tmpargument = selflife
   SetState
 
-//Interest the player  
+// Interest the player
 IfBumped
   IfTimeOut
     tmpargument = 4

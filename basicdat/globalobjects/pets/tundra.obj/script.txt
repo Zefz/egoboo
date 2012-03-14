@@ -6,7 +6,7 @@ IfSpawned
     SetOwnerToTarget
     JoinTargetTeam
     MakeNameKnown
-    
+
 IfGrabbed
   MakeCrushInvalid
   IfNameIsKnown
@@ -33,12 +33,12 @@ IfGrabbed
     DropItems
     tmpargument = 16
     SendMessageNear
-    
+
 IfDropped
   SetTargetToSelf
   StopTargetMovement
   UnkeepAction
-  
+
 IfUsed
   SetTargetToWhoeverIsHolding
   tmpargument = 25
@@ -57,7 +57,6 @@ IfUsed
     tmpargument = 8 + tmpx
     SendMessageNear
 
-
     // Stats
     tmpx = targetlife > 9
     tmpy = 2
@@ -74,7 +73,7 @@ IfUsed
     tmpdistance = targetexp
     tmpargument = 15
     SendMessageNear
-    
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -87,17 +86,19 @@ IfCrushed
   GoPoof
   tmpargument = 2
   SendMessageNear
-  
-IfCleanedUp				// Respawn
-  IfTargetIsAlive			  // Make sure killer is away
+
+// Respawn
+IfCleanedUp
+  IfTargetIsAlive              // Make sure killer is away
     tmpx = 1100
     tmpy = targetdistance
     IfXIsLessThanY
       RespawnCharacter
-  Else					  // Killer is far away
+  Else                      // Killer is far away
     RespawnCharacter
-    
-IfKilled				// This reduces the height of the char
+
+// This reduces the height of the char
+IfKilled
   IfNameIsKnown
     SetOldTarget
     SetTargetToOwner
@@ -108,25 +109,28 @@ IfKilled				// This reduces the height of the char
   Else
     tmpargument = 1
     SendMessageNear
-  tmpargument = 30			  // Dead height
+  tmpargument = 30              // Dead height
   SetBumpHeight
-  tmpargument = 5			  // Sound
+  tmpargument = 5              // Sound
   tmpdistance = rand & 2047 + 12000
   PlaySound
-  
-IfAttacked				// Don't take kindly to attackers
+
+// Don't take kindly to attackers
+IfAttacked
   SetTargetToWhoeverAttacked
-    tmpargument = 4			    // Sound
+    tmpargument = 4                // Sound
     tmpdistance = rand & 2047 + 9300
     PlaySound
-    
-IfBumped				// Scooch around
+
+// Scooch around
+IfBumped
   tmpx = rand & 1023 + targetx - 512
   tmpy = rand & 1023 + targety - 512
   ClearWaypoints
   AddWaypoint
-  
-IfTimeOut				// This is done every so often
+
+// This is done every so often
+IfTimeOut
   // Do clucking
   GetContent
   tmpx = tmpargument
@@ -185,7 +189,7 @@ IfTimeOut				// This is done every so often
         Else
           // No item, so find one
           tmpargument = [NONE]
-          tmpdistance = BLAHITEMS         //Any item will do
+          tmpdistance = BLAHITEMS         // Any item will do
           SetTargetToWideBlahID
             // Don't grab kursed items
             IfTargetIsKursed
@@ -213,5 +217,6 @@ IfTimeOut				// This is done every so often
             tmpy = ownery
     ClearWaypoints
     AddWaypoint
-    
-End					// Finished with this character
+
+// Finished with this character
+End

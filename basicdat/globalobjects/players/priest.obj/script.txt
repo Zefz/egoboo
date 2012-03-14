@@ -4,7 +4,6 @@ IfCleanedUp
   tmpdistance = 8000
   PlayFullSound
 
-
 // Talk to player
 IfBored
   tmpx = rand & 1
@@ -15,13 +14,13 @@ IfBored
   PlaySound
   tmpargument = ACTIONMC
   DoAction
+
 IfTooMuchBaggage
   tmpargument = 6
   SendMessageNear
   tmpargument = 8
   tmpdistance = rand & 1023 + 11000
   PlaySound
-
 
 // Heal sound
 IfUsed
@@ -33,15 +32,12 @@ IfUsed
   tmpargument = 50 - tmpargument
   SetReloadTime
 
-
-
 // Handle death
 IfKilled
   // Sound
   tmpargument = 7
   tmpdistance = rand & 1023 + 11000
   PlaySound
-
 
   // Message
   tmpargument = 3
@@ -55,7 +51,6 @@ IfKilled
       tmpargument = MESSAGEACCIDENT
   SendMessage
 
-
   // Misc.
   tmpargument = 65535
   DropMoney
@@ -63,11 +58,9 @@ IfKilled
   tmpargument = 45
   SetBumpHeight
 
-
 // Just because...
 IfLeaderKilled
   BecomeLeader
-
 
 // Yell at friends
 IfAttacked
@@ -82,7 +75,6 @@ IfAttacked
     tmpargument = rand & 1 + 2
     tmpdistance = rand & 1023 + 11000
     PlaySound
-
 
 // All done
 End

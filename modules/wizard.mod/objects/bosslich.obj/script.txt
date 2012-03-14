@@ -10,7 +10,7 @@
 // Bit 1 -  Range
 // Bit 0 - /
 
-//Haha! Player was killed
+// Haha! Player was killed
 IfTargetIsAPlayer
   tmpargument = 0
   GetXY
@@ -29,13 +29,13 @@ IfTargetIsAPlayer
     SetTargetToSelf
     tmpargument = 0
     SetState
-    
-    //Return to the start point
+
+    // Return to the start point
     tmpx = selfspawnx
     tmpy = selfspawny
     tmpdistance = selfz
     Teleport
-    
+
 IfTargetIsAMount
   tmpargument = 1
   GetXY
@@ -82,11 +82,11 @@ IfKilled
   // Finish it up
   BeatModule
   EnableExport
-  
+
   // Mark this module as beaten, hidden modules may open up
   tmpargument = [BEAT]
   AddIDSZ
-  
+
   // Fix the end text
   ClearEndMessage
   tmpargument = 6
@@ -126,7 +126,7 @@ IfAttacked
 
   SetTargetToWhoeverAttacked
   tmpargument = [BRAZ]
-  IfTargetHasID                 //Braziers =(
+  IfTargetHasID                 // Braziers =(
     // Teleport away...
     tmpargument = 1
     SetState
@@ -146,15 +146,15 @@ IfAttacked
       tmpargument = 1
       SetState
       tmpargument = 20
-      SetTime 
+      SetTime
 
 //------------------------------------------------------------------------------
 // ZZ> Find something to do...
 IfTimeOut
 
-  //Make ghouls ressurect
-  CleanUp     
-  
+  // Make ghouls ressurect
+  CleanUp
+
   // Charging a left hand spell?
   IfStateIs10
     // Release the spell?
@@ -184,7 +184,7 @@ IfTimeOut
     SetTime
 
   // Charging a right hand spell?
-  IfStateIs11  
+  IfStateIs11
     // Release the spell?
     tmpx = targetdistance - 128
     GetContent
@@ -209,8 +209,8 @@ IfTimeOut
     ClearWaypoints
     AddWaypoint
     tmpargument = 10
-    SetTime  
-    
+    SetTime
+
   // Fall through to normal state
   IfStateIs15
     tmpargument = 0
@@ -255,7 +255,7 @@ IfTimeOut
       SetState
 
   // Pick a spell to use on the enemy...  Left or right
-  IfStateIs3  
+  IfStateIs3
     IfTargetIsOnHatedTeam
       GetContent
       tmpx = tmpargument & 32896
@@ -371,7 +371,7 @@ IfTimeOut
         tmpy = rand & 511 - 256 + selfspawny
       ClearWaypoints
       AddWaypoint
-      
+
 Else
 
   // Continue timed action actions
@@ -384,7 +384,7 @@ Else
     tmpy = targety - selfy > 1 + selfy
     ClearWaypoints
     AddWaypoint
-    
+
   // Keep charging left hand spell
   IfStateIs10
     tmpargument = LATCHLEFT
@@ -392,8 +392,8 @@ Else
     tmpx = targetx - selfx > 1 + selfx
     tmpy = targety - selfy > 1 + selfy
     ClearWaypoints
-    AddWaypoint 
-    
+    AddWaypoint
+
 //------------------------------------------------------------------------------
 End
 //------------------------------------------------------------------------------

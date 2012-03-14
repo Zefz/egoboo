@@ -63,7 +63,7 @@ IfKilled
     tmpargument = 8
     AddEndMessage
 
-    //Make enemy cheer
+    // Make enemy cheer
     IfTargetIsAlive
       tmpargument = ACTIONMC
       TargetDoAction
@@ -73,7 +73,7 @@ IfKilled
     tmpargument = 3
     SendMessageNear
 
-    //Award bonus xp if captain survived
+    // Award bonus xp if captain survived
     tmpargument = [CAPT]
     tmpdistance = 2
     SetTargetToNearestBlahID
@@ -82,7 +82,7 @@ IfKilled
       tmpargument = 20
     tmpdistance = EXPQUEST
     GiveExperienceToTargetTeam
-    
+
   Else
     IfTargetIsOnOtherTeam
       tmpargument = MESSAGEDEATH
@@ -101,7 +101,7 @@ IfCleanedUp
   RespawnCharacter
 
 //------------------------------------------------------------------------------
-//Handle being bumped by countering or wandering
+// Handle being bumped by countering or wandering
 IfBumped
   IfStateIsRetreat
     DoNothing
@@ -119,7 +119,7 @@ IfAttacked
   // Scream
   tmpargument = 2
   PlaySound
-  
+
   // Pick either 0 or 7, Parry or Combat
   SetTargetToWhoeverAttacked
   IfStateIsRetreat
@@ -138,8 +138,8 @@ IfAttacked
         SetContent
         tmpargument = STATERETREAT
       SetState
-      
-  //Dismount if attacked
+
+  // Dismount if attacked
   IfSitting
     tmpargument = LATCHJUMP
     PressLatchButton
@@ -177,7 +177,7 @@ IfTargetIsAttacking
       tmpargument = STATECOMBAT
       tmpx = targetdistance
       tmpy = 600
-      IfXIsLessThanY    
+      IfXIsLessThanY
         // Are the character and enemy facing opposite directions?
         tmpturn = targetturn - selfturn
         tmpx = tmpturn
@@ -202,7 +202,7 @@ IfTimeOut
   // Look for enemies
   SetTurnModeToVelocity
 
-  //Handle the lumpkin in the Gatling Gonne
+  // Handle the lumpkin in the Gatling Gonne
   IfSitting
     SetTargetToWideEnemy
       SetTurnModeToWatchTarget
@@ -235,7 +235,7 @@ IfTimeOut
     Else
       SetTargetToNearbyEnemy
         tmpx = 1
-        
+
     tmpy = 0
     IfXIsMoreThanY
       // Default to previous state
@@ -370,16 +370,16 @@ IfTimeOut
         Else
           // Find a weapon!!!
           tmpx = 0
-          tmpargument = [GONN]      //Gonne
+          tmpargument = [GONN]      // Gonne
           tmpdistance = BLAHITEMS
           SetTargetToWideBlahID
             tmpx = 1
           Else
-            tmpargument = [CLAW]    //Claw
+            tmpargument = [CLAW]    // Claw
             SetTargetToWideBlahID
               tmpx = 1
             Else
-              tmpargument = [TORC]  //Torch
+              tmpargument = [TORC]  // Torch
               SetTargetToWideBlahID
                 tmpx = 1
           tmpy = 1

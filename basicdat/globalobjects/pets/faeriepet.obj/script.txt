@@ -1,4 +1,4 @@
-//Spawned in hands/inventory of the owner
+// Spawned in hands/inventory of the owner
 IfSpawned
   IfHeld
     SetTargetToWhoeverIsHolding
@@ -8,26 +8,26 @@ IfSpawned
       tmpargument = 1
       SetState
       MakeAmmoKnown
-      
-//Someone took us
+
+// Someone took us
 IfGrabbed
   SetTargetToWhoeverIsHolding
   IfNameIsKnown
     SetOldTarget
     SetTargetToOwner
-    IfTargetIsOldTarget  //Say hello
+    IfTargetIsOldTarget  // Say hello
       tmpargument = 10
       SendMessageNear
-      IfSpawned             //Dont when just spawned
+      IfSpawned             // Dont when just spawned
         DoNothing
       Else
         tmpargument = 2
-        PlaySound             //Giggle
+        PlaySound             // Giggle
     Else
-      DetachFromHolder      //Can't get me!
+      DetachFromHolder      // Can't get me!
       tmpargument = 9
       SendMessageNear
-  Else                      //We got a new owner!   
+  Else                      // We got a new owner!
     SetOwnerToTarget
     tmpargument = 12
     SendMessageNear
@@ -35,29 +35,29 @@ IfGrabbed
     tmpargument = 1
     SetState
     MakeAmmoKnown
-    
-//Let the player know what this is
+
+// Let the player know what this is
 IfTakenOut
   SetTargetToWhoeverIsHolding
     IfTargetIsAPlayer
       tmpargument = 11
       SendMessageNear
-      
-//bye bye :(
+
+// bye bye :(
 IfKilled
   GoPoof
   tmpargument = 0
   SendMessage
   tmpargument = 1
   PlayFullSound
-    
-//Sparkle friendlies
+
+// Sparkle friendlies
 IfUsed
   SetTargetToWhoeverIsHolding
     tmpargument = 50
     SetTargetReloadTime
-  
-    //Enchant them
+
+    // Enchant them
     IfTargetIsAPlayer
       tmpargument = 0
       IfContentIs
@@ -76,12 +76,12 @@ IfUsed
         tmpargument = 0
         SetContent
 
-  //Show stats
+  // Show stats
   IfTargetIsAPlayer
     // Print =NAME=
     SetTargetToSelf
     tmpargument = 1
-    SendMessageNear      
+    SendMessageNear
 
     // Level
     tmpx = targetlevel+1
@@ -104,51 +104,52 @@ IfUsed
     tmpy = targetwis > 8
     tmpargument = 8
     SendMessageNear
-  
-//Dont sparkle
+
+// Dont sparkle
 tmpargument = 0
+
 IfContentIs
   UnsparkleIcon
-  
-//Remove sparklies
+
+// Remove sparklies
 IfDropped
   tmpargument = 1
   IfContentIs
     UndoEnchant
     tmpargument = 0
     SetContent
+
 IfPutAway
   tmpargument = 1
   IfContentIs
     UndoEnchant
     tmpargument = 0
     SetContent
-    
-//Begin to glow
+
+// Begin to glow
 IfTakenOut
   ReaffirmCharacter
 
-      
 // ZZ> This controls the faerie AI
 IfTimeOut
   tmpargument = rand & 15 + 25
   SetTime
-  
-  //Handle charging
+
+  // Handle charging
   tmpargument = 1
   IfContentIs
     CostAmmo
   Else
     IncreaseAmmo
-  
-  //Out of charge
+
+  // Out of charge
   tmpx = selfammo
   tmpy = 0
   IfXIsEqualToY
     UndoEnchant
     tmpargument = 0
     SetContent
-    
+
   IfStateIs0
     // Circle around start location
     tmpx = rand & 511 + selfx - 256
@@ -174,6 +175,6 @@ IfTimeOut
       Compass
     ClearWaypoints
     AddWaypoint
-      
+
 // All done
 End

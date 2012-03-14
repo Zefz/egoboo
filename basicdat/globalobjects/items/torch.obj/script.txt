@@ -1,9 +1,10 @@
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -16,25 +17,34 @@ IfCrushed
   GoPoof
   tmpargument = 1
   SendMessageNear
+
 IfDisaffirmed
   tmpargument = 2
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-IfHitGround				// Make a sound
-  tmpargument = 0			  //
-  PlaySound				  //
-IfUsed					// Spawn damage particle
-  tmpx = selfattached			  //
-  tmpy = 0				  //
-  tmpargument = 0			  //
-  IfXIsMoreThanY			  // Is the flame still there?
-    tmpargument = 1			    // Yes
-  tmpdistance = SPAWNLAST		  // Model vertex to attach to
-  SpawnAttachedParticle			  //
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-    tmpargument = [XFIR]		    // Burn hands...
+
+// Make it lie on floor
+IfDropped
+  KeepAction
+
+// Make a sound
+IfHitGround
+  tmpargument = 0
+  PlaySound
+
+// Spawn damage particle
+IfUsed
+  tmpx = selfattached
+  tmpy = 0
+  tmpargument = 0
+  IfXIsMoreThanY              // Is the flame still there?
+    tmpargument = 1                // Yes
+  tmpdistance = SPAWNLAST          // Model vertex to attach to
+  SpawnAttachedParticle
+
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+    tmpargument = [XFIR]            // Burn hands...
     IfTargetHasAnyID
       tmpargument = 3
       SendMessageNear
@@ -45,4 +55,7 @@ IfGrabbed				// Tell them what they've won...
       IfTargetIsAPlayer
         tmpargument = 0
         SendMessageNear
-End					// All done
+
+// All done
+End
+

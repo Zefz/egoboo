@@ -1,34 +1,34 @@
-//Make it throw or used in melee
+// Make it throw or used in melee
 IfUsed
   tmpargument = selfcontent +1
   SetContent
 
-  //Tell its ready to be thrown
+  // Tell its ready to be thrown
   tmpx = selfcontent
-  tmpy = 60             //50 is 1 second
+  tmpy = 60             // 50 is 1 second
   IfXIsMoreThanY
     tmpargument = YELLOW
     SparkleIcon
-    
+
 Else
   tmpx = selfcontent
   tmpy = 1
   IfXIsMoreThanY
-    tmpy = 60               //The time needed before it's thrown
+    tmpy = 60               // The time needed before it's thrown
     IfXIsMoreThanY
       SetTargetToWhoeverIsHolding
         tmpargument = ACTIONTA  // Must be an A...  ZA, BA, CA, DA, etc...
         CorrectActionForHand    // ZA or ZB if in left hand, ZC or ZD if in right
         TargetDoAction
       DetachFromHolder
-        
-      //Make it fly
+
+      // Make it fly
       tmpargument = targetstr > 7
-      tmpdistance = 50 + tmpargument          //+2 range pr. strength     
-      //SetTargetToNearestEnemy
-      //IfFacingTarget
+      tmpdistance = 50 + tmpargument          // +2 range pr. strength
+      // SetTargetToNearestEnemy
+      // IfFacingTarget
       //  tmpturn = targetturnto
-      //Else
+      // Else
       //  SetTargetToWhoeverIsHolding
       //  tmpturn = targetturn
       tmpdistance = -1600
@@ -39,12 +39,12 @@ Else
       SetTargetToSelf
       AccelerateTarget
 
-      //Throwing particle
+      // Throwing particle
       tmpargument = 2
       tmpdistance = SPAWNLAST
       SpawnAttachedParticle
 
-      //Return
+      // Return
       tmpargument = 300
       SetSpeedPercent
       tmpargument = 40
@@ -58,19 +58,20 @@ Else
   SetContent
   UnsparkleIcon
 
-IfHitGround				  // Make a sound
+// Make a sound
+IfHitGround
   tmpargument = 1
   PlaySound
-  DisaffirmCharacter			  // Stop thrown attack
+  DisaffirmCharacter              // Stop thrown attack
 
-//This function makes an item fall to the floor when spawned
+// This function makes an item fall to the floor when spawned
 IfSpawned
   tmpargument = ACTIONJB
   DoAction
   KeepAction
   MakeCrushValid
 
-//Crushing stuff
+// Crushing stuff
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -84,14 +85,16 @@ IfCrushed
   tmpargument = 1
   SendMessageNear
 
-IfDropped				  // Make it lie on floor
+// Make it lie on floor
+IfDropped
   KeepAction
   tmpx = selfx
   tmpy = selfy
   ClearWaypoints
   AddWaypoint
 
-IfTakenOut				  // Make a sound
+// Make a sound
+IfTakenOut
   tmpargument = 2
   PlaySound
   SetTargetToWhoeverIsHolding
@@ -99,7 +102,8 @@ IfTakenOut				  // Make a sound
     tmpargument = 2
     SendMessageNear
 
-IfGrabbed				  // Tell them what they've won...
+// Tell them what they've won...
+IfGrabbed
   SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer
     tmpargument = 0
@@ -107,4 +111,7 @@ IfGrabbed				  // Tell them what they've won...
   tmpargument = 0
   SetFlyHeight
   SetSpeedPercent
-End					  // All done
+
+// All done
+End
+

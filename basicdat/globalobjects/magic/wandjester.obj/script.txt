@@ -1,25 +1,25 @@
-//The diffrent effects of the Jester Wand (States)
-//0: No effect
-//1: Heal Life
-//2: Heal Mana
-//3: Enchantment (Speed Increase)
-//4: Tomatoes!
-//5: Red Missle
-//6: Ice Ray
-//7: Daze user
-//8: Gain xp
-//9: User gain dex
-//10: ALL (Chaotic!)
+// The diffrent effects of the Jester Wand (States)
+// 0: No effect
+// 1: Heal Life
+// 2: Heal Mana
+// 3: Enchantment (Speed Increase)
+// 4: Tomatoes!
+// 5: Red Missle
+// 6: Ice Ray
+// 7: Daze user
+// 8: Gain xp
+// 9: User gain dex
+// 10: ALL (Chaotic!)
 
 //-----------------------------------------------------------------------------
-//Tell the players what they found
+// Tell the players what they found
 IfGrabbed
   SetTargetToWhoeverIsHolding
   tmpargument = 0
   SendMessageNear
 
 //-----------------------------------------------------------------------------
-//Wand Sound when dropped
+// Wand Sound when dropped
 IfHitGround
   tmpargument = ACTIONJB
   DoAction
@@ -34,69 +34,69 @@ IfSpawned
   DoAction
   KeepAction
 
-  //Randomize next spell
+  // Randomize next spell
   tmpargument = rand % 11
   SetState
 
 //-----------------------------------------------------------------------------
-//Effects of the wand
+// Effects of the wand
 IfUsed
 
-  //Randomize next spell
+  // Randomize next spell
   tmpargument = rand % 11
   SetState
-  
+
   tmpargument = 50
   SetReloadTime
 
   SetTargetToWhoeverIsHolding
 
-  //No effect
+  // No effect
   IfStateIs0
     tmpargument = 6
-    SendMessageNear	//Display a message
+    SendMessageNear    // Display a message
     tmpargument = 3
-    PlaySound		//Play a sound
+    PlaySound        // Play a sound
 
-  //Heal Life
+  // Heal Life
   IfStateIs1
     tmpargument = 1
-    SendMessageNear			//Display a message
+    SendMessageNear            // Display a message
     tmpargument = 1
-    PlaySound				//Play a sound
-    tmpargument = 1			//Spawn some particles
+    PlaySound                // Play a sound
+    tmpargument = 1            // Spawn some particles
     tmpdistance = targetz
     tmpx = targetx
     tmpy = targety
     SpawnExactParticle
-    tmpargument = rand & 1023 + 1024	//4-8
-    HealTarget				//Heal 'em!
+    tmpargument = rand & 1023 + 1024    // 4-8
+    HealTarget                // Heal 'em!
 
-  //Heal Mana
+  // Heal Mana
   IfStateIs2
     tmpargument = 2
-    SendMessageNear	//Display a message
-    PlaySound		//Play a sound
-    tmpargument = 2	//Spawn some particles
+    SendMessageNear    // Display a message
+    PlaySound        // Play a sound
+    tmpargument = 2    // Spawn some particles
     tmpdistance = targetz
     tmpx = targetx
     tmpy = targety
     SpawnExactParticle
-    tmpargument = rand & 1023 + 1024	//4-8
-    PumpTarget		//Charge 'em
+    tmpargument = rand & 1023 + 1024    // 4-8
+    PumpTarget        // Charge 'em
 
-  //Increase Speed
+  // Increase Speed
   IfStateIs3
     tmpargument = 4
-    SendMessageNear	//Display a message
-    PlaySound		//Play a sound
-    EnchantTarget                 //Increase the target's speed
+    SendMessageNear    // Display a message
+    PlaySound        // Play a sound
+    EnchantTarget                 // Increase the target's speed
 
-  //Tomatoes!!
+  // Tomatoes!!
   IfStateIs4
     tmpargument = 3
-    SendMessageNear	//Display a message
-    tmpargument = 3	//Spawn some particles
+    SendMessageNear    // Display a message
+    tmpargument = 3    // Spawn some particles
     tmpdistance = rand & 70 + 150
     tmpx = rand & 255 + selfx - 128
     tmpy = rand & 255 + selfy - 128
@@ -114,9 +114,9 @@ IfUsed
     tmpy = rand & 255 + selfy - 128
     SpawnExactParticle
 
-  //Red Missle
+  // Red Missle
   IfStateIs5
-    tmpargument = 4	//Spawn some particles
+    tmpargument = 4    // Spawn some particles
     tmpdistance = SPAWNLAST
     SpawnParticle
     SpawnParticle
@@ -124,25 +124,25 @@ IfUsed
     SpawnParticle
     SpawnParticle
 
-  //Ice Ray
+  // Ice Ray
   IfStateIs6
-    tmpargument = 6	//Spawn some particles
+    tmpargument = 6    // Spawn some particles
     tmpdistance = targetz
     tmpx = selfx
     tmpy = selfy
     SpawnExactParticle
 
-  //Daze user
+  // Daze user
   IfStateIs7
-    tmpargument = 15		//15 seconds
+    tmpargument = 15        // 15 seconds
     DazeTarget
     tmpargument = 8
     SendMessageNear
     PlaySound
 
-  //Gain xp
+  // Gain xp
   IfStateIs8
-    tmpargument = 1			//Spawn some particles
+    tmpargument = 1            // Spawn some particles
     tmpdistance = targetz
     tmpx = targetx
     tmpy = targety
@@ -154,7 +154,7 @@ IfUsed
     SendMessageNear
     PlaySound
 
-  //Gain dex
+  // Gain dex
   IfStateIs9
     tmpargument = 256
     GiveDexterityToTarget
@@ -162,7 +162,7 @@ IfUsed
     PlaySound
     SendMessageNear
 
-  //Damage user
+  // Damage user
   IfStateIs10
     tmpargument = rand & 511 + 256
     DamageTarget
@@ -170,24 +170,24 @@ IfUsed
     PlaySound
     SendMessageNear
 
-  //Lots of effects (Chaos?)
+  // Lots of effects (Chaos?)
   IfStateIs11
     tmpargument = 7
     SendMessageNear
 
-    //Gain dex
+    // Gain dex
     tmpargument = 256
     GiveDexterityToTarget
 
-    //The ice ray
-    tmpargument = 6	//Spawn some particles
+    // The ice ray
+    tmpargument = 6    // Spawn some particles
     tmpdistance = targetz
     tmpx = selfx
     tmpy = selfy
     SpawnExactParticle
 
-    //Red Missles
-    tmpargument = 4	//Spawn some particles
+    // Red Missles
+    tmpargument = 4    // Spawn some particles
     tmpdistance = targetz
     tmpx = selfx
     tmpy = selfy
@@ -197,8 +197,8 @@ IfUsed
     SpawnExactParticle
     SpawnExactParticle
 
-    //And some tomatoes
-    tmpargument = 3	//Spawn some particles
+    // And some tomatoes
+    tmpargument = 3    // Spawn some particles
     tmpdistance = rand & 70 + 150
     tmpx = rand & 255 + selfx - 128
     tmpy = rand & 255 + selfy - 128
@@ -216,37 +216,37 @@ IfUsed
     tmpy = rand & 255 + selfy - 128
     SpawnExactParticle
 
-    //Speed bost
-    EnchantTarget                 //Increase the target's speed
+    // Speed bost
+    EnchantTarget                 // Increase the target's speed
 
-    //Charge mana
-    tmpargument = 2	//Spawn some particles
+    // Charge mana
+    tmpargument = 2    // Spawn some particles
     tmpdistance = targetz
     tmpx = selfx
     tmpy = selfy
     SpawnExactParticle
-    tmpargument = rand & 1023 + 1024	//4-8
-    PumpTarget		//Charge 'em
+    tmpargument = rand & 1023 + 1024    // 4-8
+    PumpTarget        // Charge 'em
 
-    //Heal
-    tmpargument = 1			//Spawn some particles
+    // Heal
+    tmpargument = 1            // Spawn some particles
     tmpdistance = targetz
     tmpx = selfx
     tmpy = selfy
     SpawnExactParticle
-    tmpargument = rand & 1023 + 1024	//4-8
-    HealTarget				//Heal 'em!
+    tmpargument = rand & 1023 + 1024    // 4-8
+    HealTarget                // Heal 'em!
 
-    //Daze user
-    tmpargument = 15		//15 seconds
+    // Daze user
+    tmpargument = 15        // 15 seconds
     DazeTarget
 
-    //Gain xp
+    // Gain xp
     tmpargument = 100
     tmpdistance = EXPROLEPLAY
     GiveExperienceToTarget
 
-  //Cost one charge
+  // Cost one charge
   IfAmmoOut
     GoPoof
     tmpargument = 11

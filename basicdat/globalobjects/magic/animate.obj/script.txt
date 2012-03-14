@@ -23,6 +23,7 @@ IfSpawned
     SetSpeedPercent
     tmpargument = 50
     SetTime
+
 IfChanged
   // It's a spell in hand
   tmpargument = 0

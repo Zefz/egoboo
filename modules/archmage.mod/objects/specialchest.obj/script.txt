@@ -1,6 +1,6 @@
-//!!NOTE: MODULE MODIFIED SCRIPT!!
+// !!NOTE: MODULE MODIFIED SCRIPT!!
 //------------------------------------------------------------------------------------
-//Invisible chest
+// Invisible chest
 IfSpawned
   tmpx = selfcontent & 16
   tmpy = 16
@@ -26,16 +26,16 @@ IfOrdered
         KeepAction
         tmpargument = 0
         PlaySound
-        
+
         // Wait a while
         tmpargument = 40
         SetTime
-        
+
         // Tell the players...
         tmpargument = 3
         SendMessageNear
 
-        //Unlock?
+        // Unlock?
         tmpx = selfcontent & 1
         tmpy = 1
         IfXIsEqualToY
@@ -52,66 +52,66 @@ IfBumped
       // Is it closed?
       tmpargument = 0
       IfStateIs
-        //Animate the target
+        // Animate the target
         tmpargument = ACTIONMG
-        TargetDoAction      
-        
-        //Locked?
+        TargetDoAction
+
+        // Locked?
         tmpx = selfcontent & 1
         tmpy = 1
         IfXIsEqualToY
           tmpargument = [DISA]
-          IfTargetHasSkillID          //They picked the lock
-          
-            //Unlock it
+          IfTargetHasSkillID          // They picked the lock
+
+            // Unlock it
             tmpargument = selfcontent - 1
             SetContent
             tmpargument = 1
             PlaySound
             tmpargument = 6
             SendMessageNear
-            
-            //Award some xp
+
+            // Award some xp
             tmpargument = 25
             tmpdistance = EXPROLEPLAY
             GiveExperienceToTarget
-            
-          Else          
+
+          Else
             tmpargument = [KEYC]
-            CostTargetItemID          //They used a key
-            
-              //Unlock it
+            CostTargetItemID          // They used a key
+
+              // Unlock it
               tmpargument = selfcontent - 1
               SetContent
               tmpargument = 1
               PlaySound
               tmpargument = 5
               SendMessageNear
-              
-              //Award some xp
+
+              // Award some xp
               tmpargument = 10
               tmpdistance = EXPSECRET
               GiveExperienceToTarget
-      
+
             Else
-              IfTimeOut           //Tell it's locked
+              IfTimeOut           // Tell it's locked
                 tmpargument = 1
                 SendMessageNear
                 tmpargument = 40
                 SetTime
-                              
-        //Unlocked!
-        Else 
+
+        // Unlocked!
+        Else
           // Give some experience
           tmpargument = 5
           tmpdistance = EXPDARE
           GiveExperienceToTarget
-          
-          //Animate
+
+          // Animate
           tmpargument = ACTIONMG
           TargetDoAction
 
-          //Invisible chests!
+          // Invisible chests!
           tmpx = selfcontent & 16
           tmpy = 16
           IfXIsEqualToY
@@ -121,8 +121,8 @@ IfBumped
             tmpdistance = EXPSECRET
             GiveExperienceToTarget
             tmpargument = selfcontent - 16
-            SetContent            
-          
+            SetContent
+
           // Open it up
           tmpargument = ACTIONMG
           DoAction
@@ -133,27 +133,27 @@ IfBumped
             KeepAction
             tmpargument = 0
             PlaySound
-        
+
             // Wait a while
             tmpargument = 40
             SetTime
-    
+
             // Tell the players...
             tmpargument = 4
             SendMessageNear
-      Else                
+      Else
         // Wait before allowing loot
         IfTimeOut
           // Reset the timer
           tmpargument = 40
           SetTime
-            
+
           // Make target crouch
           IfFacingTarget
             tmpargument = ACTIONMG
             TargetDoAction
 
-            //Secret bottom
+            // Secret bottom
             tmpx = selfstate
             tmpy = 2
             IfXIsMoreThanY
@@ -164,27 +164,27 @@ IfBumped
                 tmpx = targetwis
               tmpy = rand & 4095 + 3584   // Need between 14 and 30 wisdom
               IfXIsMoreThanY
-              
-                //Drop opposite of last
+
+                // Drop opposite of last
                 IfStateIs3
                   tmpargument = selfmoney
                   DropMoney
                 Else
                   DropItems
                   DropKeys
-                
-                //Truly empty now
+
+                // Truly empty now
                 tmpargument = 2
                 SetState
-                
-                //award some xp
+
+                // award some xp
                 tmpargument = 10
                 tmpdistance = EXPSECRET
                 GiveExperienceToTarget
               Else
-                tmpargument = 2       //They did not find it... tell its empty
+                tmpargument = 2       // They did not find it... tell its empty
                 SendMessageNear
-              
+
             // Say it's empty...
             IfStateIs2
               // Say the chest is empty...
@@ -193,8 +193,8 @@ IfBumped
 
             // Drop the contents
             IfStateIs1
-            
-              //Contains map
+
+              // Contains map
               tmpx = selfcontent & 2
               tmpy = 2
               IfXIsEqualToY
@@ -215,34 +215,34 @@ IfBumped
                   tmpargument = 8
                   SendMessageNear
               Else
-              
-                //Secret bottom?
+
+                // Secret bottom?
                 tmpx = selfcontent & 8
                 tmpy = 8
                 IfXIsEqualToY
                   tmpargument = 2
                   SendMessageNear
-                  tmpargument = rand & 1 + 3    //Set the secret bottom
+                  tmpargument = rand & 1 + 3    // Set the secret bottom
                   SetState
-                  IfStateIs3    //Drop items first
+                  IfStateIs3    // Drop items first
                     DropItems
                     DropKeys
-                  IfStateIs4    //Drop money first
+                  IfStateIs4    // Drop money first
                     tmpargument = selfmoney
                     DropMoney
                 Else
                   tmpargument = 2
                   SendMessageNear
-                  
-                  //SPAWN THE ANCIENT SCROLL
+
+                  // SPAWN THE ANCIENT SCROLL
                   tmpargument = 108
                   tmpdistance = selfz + 75
                   tmpy = rand & 128 + selfy - 64
                   tmpx = rand & 128 + selfx - 64
                   SpawnExactCharacterXYZ
-              
-              //Empty now...
-              IfStateIs1          //no secret bottom
+
+              // Empty now...
+              IfStateIs1          // no secret bottom
                 tmpargument = 2
                 SetState
 

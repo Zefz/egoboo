@@ -1,6 +1,6 @@
 // ZZ> This function controls the burning of the fire holder
 IfSpawned
-  tmpargument = rand & 15		  // Initial flicker
+  tmpargument = rand & 15          // Initial flicker
   SetFrame
   GetContent
   SetState
@@ -22,7 +22,7 @@ IfStateIs0
   IfReaffirmed
     tmpargument = 1
     SetState
-    tmpargument = 200			  // Burn for 4 seconds
+    tmpargument = 200              // Burn for 4 seconds
     SetTime
     // Open the passage
     tmpargument = [OPEN]
@@ -61,4 +61,7 @@ IfStateIs1
 IfReaffirmed
   tmpargument = 50
   SetReloadTime
-End					// All done
+
+// All done
+End
+

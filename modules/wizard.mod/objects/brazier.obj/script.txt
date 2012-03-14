@@ -2,5 +2,7 @@
 
 IfSpawned
   ReaffirmCharacter
-  
-End					// All done
+
+// All done
+End
+

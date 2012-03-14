@@ -1,5 +1,5 @@
-//NOTE: The dimlock caster is both a clerical and wizard caster.
-//Armor 0 = wizard and Armor 1 = cleric
+// NOTE: The dimlock caster is both a clerical and wizard caster.
+// Armor 0 = wizard and Armor 1 = cleric
 //------------------------------------------------------------------------------
 // Each hand has a spell usage list, which is stored in content.  8 bits
 // for each hand, bits 0-7 for left, 8-15 for right.
@@ -25,7 +25,7 @@ IfBumped
       tmpargument = LATCHJUMP
       PressLatchButton
     SetTargetToOldTarget
-      
+
 //------------------------------------------------------------------------------
 // ZZ> Handle death by sending a message and other stuff
 IfKilled
@@ -35,12 +35,12 @@ IfKilled
   // Send messages
   tmpargument = 0
   IfArmorIs
-    IfTargetIsOnHatedTeam       //Wizard death
+    IfTargetIsOnHatedTeam       // Wizard death
       tmpargument = 0
     Else
       tmpargument = 1
   Else
-    IfTargetIsOnHatedTeam       //Priest death
+    IfTargetIsOnHatedTeam       // Priest death
       tmpargument = 4
     Else
       tmpargument = 3
@@ -80,7 +80,6 @@ IfAttacked
   Compass
   ClearWaypoints
   AddWaypoint
-
 
 //------------------------------------------------------------------------------
 // ZZ> For charging a spell...
@@ -126,6 +125,7 @@ IfStateIs10
     tmpy = targety - selfy > 1 + selfy
     ClearWaypoints
     AddWaypoint
+
 IfStateIs11
   // Right hand
   IfTimeOut
@@ -266,11 +266,10 @@ IfTimeOut
           tmpargument = tmpturn
           SetState
 
-
   IfStateIs0
     tmpargument = 20
     SetTime
-    
+
     // Go after enemies
     SetTargetToWideEnemy
       SetTurnModeToWatchTarget
@@ -294,7 +293,7 @@ IfTimeOut
     ClearWaypoints
     AddWaypoint
 
-  //Clerical AI
+  // Clerical AI
   tmpargument = 1
   IfArmorIs
     tmpx = selfmana
@@ -311,21 +310,21 @@ IfTimeOut
           Compass
           ClearWaypoints
           AddWaypoint
-          
-          //Heal them?
+
+          // Heal them?
           tmpx = targetdistance
           tmpy = 200
           IfXIsLessThanY
             IfFacingTarget
               tmpargument = ACTIONZA
               DoAction
-              tmpargument = rand % 2091 + 4192    //8-16 life points (dimlock heal 1/8 due magic resist)
+              tmpargument = rand % 2091 + 4192    // 8-16 life points (dimlock heal 1/8 due magic resist)
               HealTarget
-              
+
               tmpargument = rand & 15 + 35
               SetTime
-              
-              //Spell effect
+
+              // Spell effect
               tmpargument = 6
               tmpx = targetx
               tmpy = targety
@@ -333,12 +332,12 @@ IfTimeOut
               SpawnExactParticle
               tmpargument = 4
               PlaySound
-              
-              //Cost some mana
+
+              // Cost some mana
               SetTargetToSelf
               tmpargument = 256
               CostTargetMana
-              
+
       SetTargetToOldTarget
 
 //------------------------------------------------------------------------------

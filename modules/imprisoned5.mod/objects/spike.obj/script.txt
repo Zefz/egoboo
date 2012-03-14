@@ -4,23 +4,25 @@ IfSpawned
   KeepAction
   tmpargument = 100
   SetTime
-  
+
   tmpargument = 0
   PlaySound
-  
-  //Ouchie particle
+
+  // Ouchie particle
   tmpargument = 3
   tmpdistance = SPAWNLAST
   SpawnAttachedParticle
 
-  //Dirt cloud
+  // Dirt cloud
   tmpargument = 0
   tmpx = selfx
   tmpy = selfy
   tmpdistance = 0
   SpawnExactParticle
-  
+
 IfTimeOut
   GoPoof
 
-End				// Finished with this character
+// Finished with this character
+End
+

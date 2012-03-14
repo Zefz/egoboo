@@ -19,23 +19,23 @@ IfTimeOut
         AddEndMessage
         tmpargument = 3
         AddEndMessage
-        
-        //Special ending, unlock G'nome Starter
+
+        // Special ending, unlock G'nome Starter
         tmpargument = [KNIF]
         AddIDSZ
 
-        //Also, if the player has looted enough, K'nife will offer a job
-        tmpx = targetmoney          //225 is total gold in module
-        tmpy = 135                  //Need to grab at least 60% of the money
+        // Also, if the player has looted enough, K'nife will offer a job
+        tmpx = targetmoney          // 225 is total gold in module
+        tmpy = 135                  // Need to grab at least 60% of the money
         IfXIsMoreThanY
           tmpargument = 7
           AddEndMessage
           tmpargument = 8
           AddEndMessage
-          tmpdistance = 0           //The quest level
-          AddQuestAllPlayers        //Add it
-        
-        //And give some bonus XP
+          tmpdistance = 0           // The quest level
+          AddQuestAllPlayers        // Add it
+
+        // And give some bonus XP
         tmpargument = 50
         tmpdistance = EXPQUEST
         GiveExperienceToGoodTeam
@@ -46,12 +46,12 @@ IfTimeOut
         AddEndMessage
         tmpargument = 6
         AddEndMessage
-              
-      //Play victory tune
+
+      // Play victory tune
       tmpargument = 14
       tmpdistance = 0
       PlayMusic
-      
+
       tmpargument = [BEAT]
       AddIDSZ
       GoPoof

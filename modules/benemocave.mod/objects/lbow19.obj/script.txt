@@ -1,19 +1,20 @@
 // ZZ> This function makes an item fall to the floor when spawned
 
 IfUsed
-  tmpargument = 35	//Set attack speed
+  tmpargument = 35    // Set attack speed
   SetReloadTime
   IfAmmoOut
-    tmpargument = 3	//No ammo, play string sound
+    tmpargument = 3    // No ammo, play string sound
     tmpdistance = 11025
     PlaySound
 
-IfSpawned				//
-  MakeAmmoKnown				  //
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  MakeAmmoKnown
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -26,16 +27,24 @@ IfCrushed
   GoPoof
   tmpargument = 1
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-IfHitGround				// Play the drop sound
-  tmpargument = 2			  //
-  tmpdistance = rand % 2047 + 7000	  //
-  PlaySound				  //
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
 
-End					// All done
+// Make it lie on floor
+IfDropped
+  KeepAction
+
+// Play the drop sound
+IfHitGround
+  tmpargument = 2
+  tmpdistance = rand % 2047 + 7000
+  PlaySound
+
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
+
+// All done
+End
+

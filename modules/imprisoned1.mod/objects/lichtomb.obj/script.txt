@@ -43,30 +43,30 @@ IfKilled
   SpawnExactParticle
   PlaySound
 
-  //Release the lich inside!
-  tmpargument = 81		//Lich
+  // Release the lich inside!
+  tmpargument = 81        // Lich
   tmpx = selfx
   tmpy = selfy
   tmpdistance = selfz
   tmpturn = selfturn
   SpawnExactCharacterXYZ
-  
-  //Give the lich some toys to play with
+
+  // Give the lich some toys to play with
   SetTargetToChild
-  tmpargument = 83		//Frostblast
+  tmpargument = 83        // Frostblast
   tmpdistance = RIGHT
   SpawnAttachedCharacter
-  tmpargument = 82		//Fire dart
+  tmpargument = 82        // Fire dart
   tmpdistance = LEFT
   SpawnAttachedCharacter
 
-  //Tell them what they have done
+  // Tell them what they have done
   tmpargument = 0
   SendMessageNear
   tmpargument = 1
   PlaySound
 
-//Make it destroyable
+// Make it destroyable
 IfSpawned
   JoinEvilTeam
 

@@ -20,7 +20,7 @@ IfBumped
     IfTargetIsAPlatform
       tmpargument = LATCHJUMP
       PressLatchButton
-      
+
 //------------------------------------------------------------------------------
 // ZZ> Handle death by sending a message and other stuff
 IfKilled
@@ -69,7 +69,6 @@ IfAttacked
   ClearWaypoints
   AddWaypoint
 
-
 //------------------------------------------------------------------------------
 // ZZ> For charging a spell...
 IfStateIs10
@@ -114,6 +113,7 @@ IfStateIs10
     tmpy = targety - selfy > 1 + selfy
     ClearWaypoints
     AddWaypoint
+
 IfStateIs11
   // Right hand
   IfTimeOut
@@ -254,11 +254,10 @@ IfTimeOut
           tmpargument = tmpturn
           SetState
 
-
   IfStateIs0
     tmpargument = 20
     SetTime
-    
+
     // Go after enemies
     SetTargetToWideEnemy
       SetTurnModeToWatchTarget

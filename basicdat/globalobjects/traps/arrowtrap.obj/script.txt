@@ -1,5 +1,6 @@
-//Spawn trap warnings
+// Spawn trap warnings
 tmpargument = 1
+
 IfArmorIs
   tmpargument = 4
   tmpx = selfx
@@ -9,7 +10,7 @@ IfArmorIs
 
 IfTimeOut
 
-  //Check for trap finders to find it
+  // Check for trap finders to find it
   tmpargument = 0
   IfArmorIs
     tmpdistance = BLAHPLAYERS + BLAHENEMIES + BLAHFRIENDS + BLAHSKILL
@@ -17,34 +18,34 @@ IfTimeOut
     tmpargument = [NONE]
     SetTargetToWideBlahID
       tmpx = targetdistance
-      tmpy = 500			//Detect range
+      tmpy = 500            // Detect range
       IfXIsLessThanY
         tmpx = rand & 255
-        tmpy = 25			//How often to check
+        tmpy = 25            // How often to check
         IfXIsLessThanY
-          tmpx = rand & 255 * 10 + targetint	//0-10 + the characters intelligence
-          tmpy = 5888				//need to be more than 23 points added together
+          tmpx = rand & 255 * 10 + targetint    // 0-10 + the characters intelligence
+          tmpy = 5888                // need to be more than 23 points added together
           IfXIsMoreThanY
-            tmpargument = 1   //Detected!
+            tmpargument = 1   // Detected!
             SendMessageNear
             tmpargument = 15
             tmpdistance = EXPDARE
-            GiveExperienceToTarget		//Award some xp
+            GiveExperienceToTarget        // Award some xp
             tmpargument = 2
-            PlaySound				//Play sound effect
+            PlaySound                // Play sound effect
             tmpargument = 1
-            ChangeArmor				//Mark as detected
+            ChangeArmor                // Mark as detected
 
-            //Draw the text
-            tmpdistance = 3         //Duration
-            tmpargument = 2         //Message 8
-            tmpturn = RED           //Message color
+            // Draw the text
+            tmpdistance = 3         // Duration
+            tmpargument = 2         // Message 8
+            tmpturn = RED           // Message color
             DrawBillboard
-            
+
   tmpx = selfcontent
   tmpy = 1
   IfXIsEqualToY
-    //Stop shooting
+    // Stop shooting
     tmpargument = 0
     SetContent
 
@@ -63,10 +64,10 @@ IfTimeOut
         tmpargument = 0
         SendMessageNear
         PlaySound
-        tmpargument = rand & 2 + 4			//How many arrows to spawn
+        tmpargument = rand & 2 + 4            // How many arrows to spawn
         SetContent
 
-      //Wait some
+      // Wait some
       tmpargument = 5
       SetTime
 
@@ -75,15 +76,15 @@ IfTimeOut
       tmpargument = tmpx - 1
       SetContent
 
-      //Shoot an arrow
+      // Shoot an arrow
       tmpargument = 0
       tmpdistance = 600
       tmpx = selfx
       tmpy = selfy
       SpawnExactParticle
       SpawnExactParticle
-      
-      //Time between each arrow shot
+
+      // Time between each arrow shot
       tmpargument = 15
       SetTime
 

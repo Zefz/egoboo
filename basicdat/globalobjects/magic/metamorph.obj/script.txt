@@ -7,18 +7,18 @@ IfTakenOut
       tmpargument = 6
       SendMessageNear
 
-//tell them what they found
+// tell them what they found
 IfGrabbed
   SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer
     tmpargument = 0
     SendMessageNear
-    
-//Clank!
+
+// Clank!
 IfHitGround
   tmpargument = 0
   PlaySound
-    
+
 // Allow it to be used
 IfUsed
   UndoEnchant
@@ -28,11 +28,11 @@ IfUsed
   Else
     SetTargetToWhoeverIsHolding
     tmpx = selfcontent
-    tmpy = 1280			//Max charge
+    tmpy = 1280            // Max charge
     IfXIsLessThanY
       tmpy = targetmanaflow
       IfXIsLessThanY
-        tmpx = 4			//Cast speed
+        tmpx = 4            // Cast speed
         tmpargument = tmpx
         CostTargetMana
           tmpargument = selfcontent + tmpx
@@ -41,7 +41,7 @@ IfUsed
 // Allow it to be cast or fizzle
 Else
   tmpx = selfcontent
-  tmpy = 1279						//Needed charge
+  tmpy = 1279                        // Needed charge
   IfXIsMoreThanY
     // Make the holder cast it
     SetTargetToWhoeverIsHolding
@@ -55,7 +55,7 @@ Else
       tmpy = targety
       tmpdistance = targetz
       tmpargument = 2
-      SpawnExactParticle		//Spawn some Dust
+      SpawnExactParticle        // Spawn some Dust
       tmpargument = 1
       SendMessageNear
       tmpargument = 1
@@ -76,29 +76,29 @@ Else
       tmpargument = 2
       SendMessageNear
       PlaySound
-	  
+
   // Reset the charge counter
   tmpargument = 0
   SetContent
-  
+
 // Put the little mana ball on the
 // character's hand
 GetContent
 tmpx = tmpargument
 tmpy = 0
+
 IfXIsMoreThanY
   tmpturn = tmpargument * 10 + 5800
   tmpdistance = SPAWNLAST
   tmpargument = 1
   SpawnAttachedSizedParticle
-  
-  //And spawn particles around the target
+
+  // And spawn particles around the target
   SetTargetToWhoeverIsHolding
     tmpx = targetx
     tmpy = targety
     tmpdistance = targetz
     tmpargument = 0
     SpawnExactParticle
-
 
 End

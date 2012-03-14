@@ -1,8 +1,9 @@
-//Script that makes camera poof when not held by AI
+// Script that makes camera poof when not held by AI
 IfDropped
   GoPoof
+
 IfUsed
-  tmpargument = rand % 3 + 2      //2-4 second cooldown
+  tmpargument = rand % 3 + 2      // 2-4 second cooldown
   tmpargument = tmpargument * 50
   SetReloadTime
   tmpargument = 0
@@ -10,4 +11,7 @@ IfUsed
   tmpx = 0
   tmpy = 0
   SpawnParticle
-End					// All done
+
+// All done
+End
+

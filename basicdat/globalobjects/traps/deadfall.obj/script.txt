@@ -15,6 +15,7 @@ IfSpawned
   SpawnExactParticle
   SpawnExactParticle
   SpawnExactParticle
+
 IfTimeOut
   tmpx = selfcontent
   tmpy = 1

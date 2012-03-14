@@ -1,4 +1,4 @@
-//Magical effect
+// Magical effect
 IfHeld
   SetTargetToWhoeverIsHolding
   IfTargetIsMounted
@@ -10,15 +10,16 @@ IfHeld
 Else
   UndoEnchant
 
-//Rest of the normal script
+// Rest of the normal script
 SetTargetToWhoeverIsHolding
 
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -31,27 +32,37 @@ IfCrushed
   GoPoof
   tmpargument = 1
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
+
+// Make it lie on floor
+IfDropped
+  KeepAction
   tmpargument = 0
   SetState
-IfHitGround				// Make a sound
-  tmpargument = 0			  //
-  PlaySound				  //
+
+// Make a sound
+IfHitGround
+  tmpargument = 0
+  PlaySound
+
 IfNotDropped
   tmpargument = 2
   SendMessageNear
+
+// No longer needed, this is handled by the sourcecode now...
 //IfNotPutAway
-//  tmpargument = 3         //No longer needed, this is handled by the sourcecode now...
+//  tmpargument = 3
 //  SendMessageNear
+
 IfTakenOut
   tmpargument = 1
   SetState
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
+
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
   tmpargument = 1
   SetState
 
@@ -59,14 +70,14 @@ IfGrabbed				// Tell them what they've won...
 IfStateIs1
   SetTargetToWhoeverIsHolding
 
-  //Make it usable in foot melee
+  // Make it usable in foot melee
   IfUsed
-    tmpargument = 57               //Albeit with a slow speed
+    tmpargument = 57               // Albeit with a slow speed
     SetReloadTime
     tmpargument = 1
     PlaySound
   Else
-    tmpargument = ACTIONDA         //Return to normal held position
+    tmpargument = ACTIONDA         // Return to normal held position
     DoActionOverride
     KeepAction
 
@@ -93,7 +104,7 @@ IfStateIs1
 // Item is held by a cavalier
 IfStateIs2
   IfTargetIsMounted
-    //Make no attack possible
+    // Make no attack possible
     tmpargument = 10
     SetReloadTime
 

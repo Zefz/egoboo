@@ -9,33 +9,36 @@ IfAttacked
   SetTargetToWhoeverAttacked
     IfTargetIsAPlayer
       CallForHelp
-      tmpargument = TEAME   //Team EVIL
+      tmpargument = TEAME   // Team EVIL
       TargetJoinTeam
   SetTargetToOldTarget
-IfCalledForHelp
-  SetTargetToWhoeverCalledForHelp	  //
-    IfTargetIsAlive			    // Go heal 'em
-      tmpargument = 2			      //
-      SetState				      // State 2 ( Helper )
-    Else				    // Too late
-      SetTargetToOldTarget		      //
 
-IfKilled				// This reduces the height of the char
+IfCalledForHelp
+  SetTargetToWhoeverCalledForHelp
+    IfTargetIsAlive                // Go heal 'em
+      tmpargument = 2
+      SetState                      // State 2 ( Helper )
+    Else                    // Too late
+      SetTargetToOldTarget
+
+// This reduces the height of the char
+IfKilled
   tmpargument = 1
   PlaySound
 
-  tmpargument = 0			  // Last words...
-  SetState				  //
-  DropMoney				  //
-  tmpargument = 45			  //
-  SetBumpHeight				  //
-  
-  tmpargument = TEAME   //Team EVIL
+  tmpargument = 0              // Last words...
+  SetState
+  DropMoney
+  tmpargument = 45
+  SetBumpHeight
+
+  tmpargument = TEAME   // Team EVIL
   TargetJoinTeam
 
-IfTimeOut				// This is done every so often
-  
-  //Manage talking about restoration
+// This is done every so often
+IfTimeOut
+
+  // Manage talking about restoration
   tmpargument = 1
   IfContentIs
     tmpargument = 2
@@ -45,54 +48,54 @@ IfTimeOut				// This is done every so often
     tmpargument = 0
     SetContent
 
-  //First priority is to heal!
+  // First priority is to heal!
   SetTargetToNearestFriend
     IfTargetIsHurt
-      IfTargetIsAPlayer       //We are mean... players have to pay!
+      IfTargetIsAPlayer       // We are mean... players have to pay!
         DoNothing
       Else
         tmpargument = 2
         SetState
-  
-  IfStateIs2				  // State 2 ( Helper )
-    IfTargetIsHurt			    // Heal wounded
+
+  IfStateIs2                  // State 2 ( Helper )
+    IfTargetIsHurt                // Heal wounded
       tmpx = targetx
       tmpy = targety
-      ClearWaypoints			  //
-      AddWaypoint				  //
-      tmpx = targetdistance		      //
-      tmpy = 300			      //
-      IfXIsLessThanY			      // In Range?
-        tmpx = 260			        //
-        tmpy = selfmana			        //
-        IfXIsLessThanY				// Enough to cast?
+      ClearWaypoints
+      AddWaypoint
+      tmpx = targetdistance
+      tmpy = 300
+      IfXIsLessThanY                  // In Range?
+        tmpx = 260
+        tmpy = selfmana
+        IfXIsLessThanY                // Enough to cast?
           IfFacingTarget
-            tmpargument = LATCHLEFT	          // Left Attack == 1
-            PressLatchButton		          //
-        Else					// Do something else
-          tmpargument = 0		          //
-          SetState			          //
-    Else				    // Switch to follow
-      tmpargument = 0			      //
-      SetState				      //
-    tmpx = targetx			    //
-    tmpy = targety			    //
-  Else					  // Find someone to bash
-    SetTargetToNearbyEnemy		    //
-      tmpargument = 1			      //
-      SetState				      //
-  IfStateIs0				  // State 0 ( Follow )
-    tmpx = selfspawnx			    //
-    tmpy = selfspawny			    //
-    tmpturn = 49152	    // Stand to side
-    tmpdistance = 1			    //
-    Compass				    //
-  IfStateIs1				  // State 1 ( Combat )
-    tmpx = targetdistance		    // Close enough to attack?
-    tmpy = 200				    //
-    IfXIsLessThanY			    //
-      tmpargument = LATCHRIGHT		      // Right Attack == 2
-      PressLatchButton			      //
+            tmpargument = LATCHLEFT              // Left Attack == 1
+            PressLatchButton
+        Else                    // Do something else
+          tmpargument = 0
+          SetState
+    Else                    // Switch to follow
+      tmpargument = 0
+      SetState
+    tmpx = targetx
+    tmpy = targety
+  Else                      // Find someone to bash
+    SetTargetToNearbyEnemy
+      tmpargument = 1
+      SetState
+  IfStateIs0                  // State 0 ( Follow )
+    tmpx = selfspawnx
+    tmpy = selfspawny
+    tmpturn = 49152        // Stand to side
+    tmpdistance = 1
+    Compass
+  IfStateIs1                  // State 1 ( Combat )
+    tmpx = targetdistance            // Close enough to attack?
+    tmpy = 200
+    IfXIsLessThanY
+      tmpargument = LATCHRIGHT              // Right Attack == 2
+      PressLatchButton
     tmpy = 700
     IfXIsMoreThanY
       tmpargument = 0
@@ -101,44 +104,46 @@ IfTimeOut				// This is done every so often
     IfXIsMoreThanY
       tmpargument = 0
       SetState
-    tmpx = targetx			    // Move towards enemy
-    tmpy = targety			    //
-    tmpturn = targetturnto		    //
-    tmpdistance = 200			    //
-    Compass				    //
-  ClearWaypoints			  //
-  AddWaypoint				  //
-  tmpargument = rand & 15 + 15		  // Try again later
-  SetTime				  //
+    tmpx = targetx                // Move towards enemy
+    tmpy = targety
+    tmpturn = targetturnto
+    tmpdistance = 200
+    Compass
+  ClearWaypoints
+  AddWaypoint
+  tmpargument = rand & 15 + 15          // Try again later
+  SetTime
 
-IfAttacked				// Counter attack if not healing
-  tmpargument = 0			  //
-  IfStateIs				  //
-    SetTargetToWhoeverAttacked		    //
-      IfTargetIsAlive			      //
-        IfTargetIsOnHatedTeam		        // Go get 'em
-          tmpargument = 1		          //
-          SetState			          //
+// Counter attack if not healing
+IfAttacked
+  tmpargument = 0
+  IfStateIs
+    SetTargetToWhoeverAttacked
+      IfTargetIsAlive
+        IfTargetIsOnHatedTeam                // Go get 'em
+          tmpargument = 1
+          SetState
           tmpargument = rand & 1 + 2
           PlaySound
-        IfTargetIsOnSameTeam		        // Yell at 'em
-          tmpargument = MESSAGEOUCH	          //
-          SendMessageNear		          //
-          SetTargetToOldTarget		          //
+        IfTargetIsOnSameTeam                // Yell at 'em
+          tmpargument = MESSAGEOUCH
+          SendMessageNear
+          SetTargetToOldTarget
           tmpargument = 4
           PlaySound
-      Else				      // Attacker dead already
-        SetTargetToOldTarget		        //
+      Else                      // Attacker dead already
+        SetTargetToOldTarget
 
-IfBumped				// Bumped
-  SetTargetToWhoeverBumped		  //
+// Bumped
+IfBumped
+  SetTargetToWhoeverBumped
   IfTargetIsOnOtherTeam
     SetTargetToOldTarget
   Else
-    //Check for people who want Restoration
+    // Check for people who want Restoration
     IfTargetIsAPlayer
       tmpargument = 0
-      IfContentIs         //First bump = "want restoration?"
+      IfContentIs         // First bump = "want restoration?"
         tmpargument = 5
         SendMessageNear
         tmpargument = 1
@@ -146,9 +151,9 @@ IfBumped				// Bumped
         tmpargument = 50
         SetTime
         tmpargument = 4
-        PlaySound             //hey now!
+        PlaySound             // hey now!
       tmpargument = 2
-      IfContentIs         //Second bump = Restore!
+      IfContentIs         // Second bump = Restore!
         tmpx = targetmoney
         tmpy = 9
         IfXIsMoreThanY
@@ -170,38 +175,39 @@ IfBumped				// Bumped
           HealTarget
           tmpargument = -10
           GiveMoneyToTarget
-        
-        //Not enough money!
+
+        // Not enough money!
         Else
           tmpargument = 3
           SetContent
           tmpargument = 50
           SetTime
-          tmpx = 10 - targetmoney  //Money needed
+          tmpx = 10 - targetmoney  // Money needed
           tmpargument = 7
           SendMessageNear
           tmpargument = 4
-          PlaySound             //hey now!
-    
-    //Non players get healing for free!
+          PlaySound             // hey now!
+
+    // Non players get healing for free!
     Else
-      IfTargetIsHurt			  //
-        tmpargument = 2			      // State 2 ( Helper )
-        SetState				      //
+      IfTargetIsHurt
+        tmpargument = 2                  // State 2 ( Helper )
+        SetState
       Else
         SetTargetToOldTarget
 
-      tmpx = rand & 511 + selfx - 256		  //
-      tmpy = rand & 511 + selfy - 256		  //
-      ClearWaypoints			  //
-      AddWaypoint				  //
-      
-    tmpargument = 40			  // Try again soon
+      tmpx = rand & 511 + selfx - 256
+      tmpy = rand & 511 + selfy - 256
+      ClearWaypoints
+      AddWaypoint
+
+    tmpargument = 40              // Try again soon
     SetTime
- 
-IfTargetKilled				// Mode switch
-  tmpargument = 0			  // Return to follow mode
-  SetState				  //
+
+// Mode switch
+IfTargetKilled
+  tmpargument = 0              // Return to follow mode
+  SetState
 
 // Heal sound and effect
 IfUsed
@@ -216,7 +222,9 @@ IfUsed
     tmpargument = 0
     SpawnExactParticle
 
-    tmpargument = rand & 511 + 512  //2-4 HP
+    tmpargument = rand & 511 + 512  // 2-4 HP
     HealTarget
 
-End					// Finished with this character
+// Finished with this character
+End
+

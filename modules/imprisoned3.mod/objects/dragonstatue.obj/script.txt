@@ -1,5 +1,8 @@
 IfSpawned
-  DoNothing      
+  DoNothing
 //---------------------------------------------------------------------------------
-End					// Finished with this character
+
+// Finished with this character
+End
+
 //---------------------------------------------------------------------------------

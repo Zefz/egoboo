@@ -1,8 +1,8 @@
 IfSpawned
   SetTargetToSelf
   SetOwnerToTarget
-  
-//Give the target some kurses
+
+// Give the target some kurses
 IfHeld
   SetTargetToWhoeverIsHolding
   IfStateIs0
@@ -15,8 +15,9 @@ Else
     SetState
     UndoEnchant
 
+// No longer needed, this is handled by the sourcecode now...
 //IfNotPutAway
-//  tmpargument = 4         //No longer needed, this is handled by the sourcecode now...
+//  tmpargument = 4
 //  SendMessageNear
 
 IfNotDropped
@@ -27,12 +28,12 @@ IfUsed
   tmpargument = 75
   SetReloadTime
 
-//The usual stuff
-IfSpawned				//
+// The usual stuff
+IfSpawned
   SetTargetToSelf
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
 
 IfCrushed
@@ -48,7 +49,8 @@ IfCrushed
   tmpargument = 1
   SendMessageNear
 
-IfDropped				// Make it lie on floor
+// Make it lie on floor
+IfDropped
   GetContent
   tmpx = tmpargument
   tmpy = 255
@@ -56,26 +58,31 @@ IfDropped				// Make it lie on floor
     tmpargument = 255
     SetContent
   SetTargetToSelf
-  KeepAction				  //
+  KeepAction
 
-IfHitGround				// Make a sound
-  tmpargument = 1			  //
-  tmpdistance = rand & 2047 + 10000	  //
-  PlaySound				  //
+// Make a sound
+IfHitGround
+  tmpargument = 1
+  tmpdistance = rand & 2047 + 10000
+  PlaySound
 
-IfTakenOut				// Make a sound
-  tmpargument = 2			  // 
-  tmpdistance = rand & 2047 + 10000	  //
-  PlaySound				  //
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 2			  //
-    SendMessageNear			  //
+// Make a sound
+IfTakenOut
+  tmpargument = 2
+  tmpdistance = rand & 2047 + 10000
+  PlaySound
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 2
+    SendMessageNear
 
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
- 
-End					// All done
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
+
+// All done
+End
+

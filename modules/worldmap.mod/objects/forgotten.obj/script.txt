@@ -1,15 +1,14 @@
 // ZZ> This function anounces your location
 IfTimeOut
-  IfBumped			// 
-    SetTargetToWhoeverBumped	  //
+  IfBumped
+    SetTargetToWhoeverBumped
       IfTargetIsAPlayer
-        tmpargument = rand & 3		        //
-        SendMessage		        //
+        tmpargument = rand & 3
+        SendMessage
         tmpargument = 180
         SetTime
-        
-        
-//This makes the player enter the module
+
+// This makes the player enter the module
 IfAttacked
   SetTargetToWhoeverAttacked
   IfTargetIsAPlayer
@@ -22,8 +21,11 @@ IfAttacked
     ClearEndMessage
     GetContent
     AddEndMessage
-    
-    //bishopia.mod
+
+    // bishopia.mod
     tmpargument = 4
     FollowLink
-End				// Finished with this character
+
+// Finished with this character
+End
+

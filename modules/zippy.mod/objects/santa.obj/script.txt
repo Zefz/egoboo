@@ -1,9 +1,9 @@
-//Santa is nice
+// Santa is nice
 IfSpawned
   JoinGoodTeam
-  
+
 //-----------------------------------------------------------------------------
-//Show where you are on the map
+// Show where you are on the map
 tmpargument = RED
 tmpx = selfx
 tmpy = selfy
@@ -18,15 +18,15 @@ IfBumped
       IfTargetIsAPlayer
         tmpargument = 250
         SetContent
-        
-        //Give present!
+
+        // Give present!
         tmpargument = [XMAS]
         IfTargetHasQuest
           tmpx = tmpdistance
-          tmpy = 999          //only get this once
+          tmpy = 999          // only get this once
           IfXIsLessThanY
-            
-            //Give present on xmas evening only!
+
+            // Give present on xmas evening only!
             tmpx = dateday
             tmpy = 24
             IfXIsEqualToY
@@ -35,16 +35,16 @@ IfBumped
               tmpy = targety
               tmpdistance = 203
               SpawnExactCharacterXYZ
-              
-              //Only once!
+
+              // Only once!
               tmpargument = [XMAS]
-              tmpdistance = 999       //no more candy or presents
+              tmpdistance = 999       // no more candy or presents
               AddTargetQuest
-              
+
               tmpargument = 1
               SendMessage
-              
-            //Up to two more times!
+
+            // Up to two more times!
             Else
               tmpx = tmpdistance
               tmpy = 2
@@ -52,13 +52,13 @@ IfBumped
                 tmpdistance = tmpx + 1
                 tmpargument = [XMAS]
                 AddTargetQuest
-                
+
                 tmpargument = 96
                 tmpx = targetx
                 tmpy = targety
                 tmpdistance = 200
                 SpawnExactCharacterXYZ
-                
+
                 tmpargument = 2
                 SendMessage
               Else
@@ -67,24 +67,24 @@ IfBumped
           Else
             tmpargument = 3
             SendMessage
-            
-        //Give candy cane!      
+
+        // Give candy cane!
         Else
           tmpdistance = 0
           tmpargument = [XMAS]
           AddTargetQuest
-          
+
           tmpargument = 96
           tmpx = targetx
           tmpy = targety
           tmpdistance = 200
           SpawnExactCharacterXYZ
-          
+
           tmpargument = 2
           SendMessage
-          
+
 //------------------------------------------------------------------------------
-//The main AI loop
+// The main AI loop
 IfTimeOut
   tmpargument = rand & 31 + 15
   SetTime
@@ -93,25 +93,26 @@ IfTimeOut
   tmpy = selfspawny
   ClearWaypoints
   AddWaypoint
-  
-  //Yell out the xmas stuff
+
+  // Yell out the xmas stuff
   tmpargument = 0
   PlaySound
   SendMessageNear
   tmpargument = ACTIONJA
   DoAction
-  
-  //Timeout
+
+  // Timeout
   tmpargument = 350
   SetTime
 
-//Talk cooldown
+// Talk cooldown
 tmpx = selfcontent
 tmpy = 0
+
 IfXIsMoreThanY
   tmpargument = tmpx - 1
   SetContent
-  
+
 //------------------------------------------------------------------------------
 End
 //------------------------------------------------------------------------------

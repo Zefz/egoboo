@@ -6,11 +6,14 @@ IfSpawned
   DoAction
   KeepAction
   MakeCrushValid
+
 IfDropped
   KeepAction
+
 IfHitGround
   tmpargument = 0
   PlaySound
+
 IfGrabbed
   SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer
@@ -78,7 +81,7 @@ IfTakenOut
   tmpargument = 0
   SetState
 
-// Say it's kursed  
+// Say it's kursed
 IfNotTakenOut
   IfTargetIsAPlayer
     tmpargument = 6

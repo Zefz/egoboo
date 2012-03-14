@@ -42,7 +42,8 @@ IfTimeOut
         SendMessageNear
         PoofTarget
 
-IfBumped				// Eat the enemy
+// Eat the enemy
+IfBumped
   SetTargetToWhoeverBumped
   tmpx = targetz
   tmpy = selfz + 30
@@ -52,19 +53,23 @@ IfBumped				// Eat the enemy
       DoAction
       tmpargument = 0
       PlaySound
-    
-IfSpawned				// This is done once in a lifetime
-  ClearWaypoints			  // Now go there
-  tmpx = 18*128				  // Waypoint 0
-  tmpy = 20*128				  //
-  AddWaypoint				  //
-  tmpx = 18*128				  // Waypoint 1
-  tmpy = 23*128				  //
-  AddWaypoint				  //
-  tmpx = 16*128				  // Waypoint 2
-  tmpy = 23*128				  //
-  AddWaypoint				  //
-  tmpx = 16*128				  // Waypoint 3
-  tmpy = 20*128				  //
-  AddWaypoint				  //
-End					// Finished with this character
+
+// This is done once in a lifetime
+IfSpawned
+  ClearWaypoints              // Now go there
+  tmpx = 18*128                  // Waypoint 0
+  tmpy = 20*128
+  AddWaypoint
+  tmpx = 18*128                  // Waypoint 1
+  tmpy = 23*128
+  AddWaypoint
+  tmpx = 16*128                  // Waypoint 2
+  tmpy = 23*128
+  AddWaypoint
+  tmpx = 16*128                  // Waypoint 3
+  tmpy = 20*128
+  AddWaypoint
+
+// Finished with this character
+End
+

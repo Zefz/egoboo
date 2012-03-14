@@ -1,18 +1,18 @@
 //------------------------------------------------------------------------------
-//Make owner same as leader...
+// Make owner same as leader...
 IfSpawned
   SetTargetToLeader
   SetOwnerToTarget
 
-  //Play the music
+  // Play the music
   tmpargument = 5
   tmpdistance = 0
   PlayMusic
 
 //------------------------------------------------------------------------------
-//Move around...  Start at state 0
+// Move around...  Start at state 0
 IfTimeOut
-  
+
   // Load more bullets
   IfHoldingRangedWeapon
     DoNothing
@@ -26,7 +26,7 @@ IfTimeOut
       SendMessageNear
     SetTargetToOldTarget
   SetTurnModeToVelocity
-  
+
   IfStateIs6
     // Kill 'em all!
     IfTargetIsAlive
@@ -52,7 +52,7 @@ IfTimeOut
     Else
       tmpargument = 3
       SetState
-      
+
   // Fire at enemy
   IfStateIs5
     IfTargetIsOnHatedTeam
@@ -136,10 +136,10 @@ IfTimeOut
             AddWaypoint
             tmpargument = 10
     Else
-      //Not an enemy target
+      // Not an enemy target
       tmpargument = 4
       SetState
-      
+
   IfStateIs4
     // Check pit
     tmpx = selfz
@@ -227,14 +227,14 @@ IfTimeOut
           ClearWaypoints
           AddWaypoint
     tmpargument = 10
-    
+
   IfStateIs2
     // Jump out of the pit
     tmpx = selfx
     tmpy = 3968
     ClearWaypoints
     AddWaypoint
-    
+
     // Help a little...
     tmpy = 12
     tmpx = 0
@@ -282,7 +282,7 @@ IfTimeOut
       tmpargument = 1
       SetState
       tmpargument = 40
-      
+
   IfStateIs0
     // Check for enemies in the pit
     SetTargetToWideEnemy
@@ -310,7 +310,7 @@ IfTimeOut
   SetTime
 
 //------------------------------------------------------------------------------
-//Handle death by sending a message and other stuff
+// Handle death by sending a message and other stuff
 IfKilled
   tmpargument = 3
   PlaySound
@@ -330,7 +330,7 @@ IfKilled
   SetBumpHeight
 
 //------------------------------------------------------------------------------
-//Handle being attacked by blocking or countering or running away
+// Handle being attacked by blocking or countering or running away
 IfAttacked
   SetTargetToWhoeverAttacked
   IfTargetIsOnSameTeam

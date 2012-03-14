@@ -18,9 +18,9 @@ IfHealed
     tmpargument = 2
     SendMessageNear
 
-//Hit by bashing weapons?
+// Hit by bashing weapons?
 IfAttacked
-  
+
   // Spawn a defense ping
   IfStateIs0
     tmpx = selfx
@@ -35,21 +35,21 @@ IfAttacked
     tmpargument = 2
     SendMessageNear
 
-//Reset message and ping timer
+// Reset message and ping timer
 IfTimeOut
   tmpargument = 0
   SetState
 
 IfKilled
   SetTargetToWhoeverAttacked
-    
-  //Message and such
+
+  // Message and such
   tmpargument = 2
   PlaySound
   tmpargument = 1
   SendMessageNear
 
-  //Fancy spell effect
+  // Fancy spell effect
   tmpargument = 4
   SpawnParticle
 
@@ -69,13 +69,13 @@ IfKilled
   GoPoof
 
   SetTargetToWhoeverAttacked
-  tmpargument = 150			//Award some quest xp
+  tmpargument = 150            // Award some quest xp
   tmpdistance = EXPQUEST
   GiveExperienceToGoodTeam
-  tmpargument = 768			//Give abillity to cast divine spells!
+  tmpargument = 768            // Give abillity to cast divine spells!
   GiveManaToTarget
 
-  //Make the module spawn monsters!
+  // Make the module spawn monsters!
   tmpargument = [EXIT]
   tmpdistance = [EXIT]
   OrderSpecialID

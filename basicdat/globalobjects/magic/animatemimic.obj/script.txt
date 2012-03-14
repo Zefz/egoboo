@@ -23,6 +23,7 @@ IfSpawned
     SetSpeedPercent
     tmpargument = 50
     SetTime
+
 IfChanged
   // It's a spell in hand
   tmpargument = 0
@@ -200,7 +201,7 @@ IfStateIs0
             SpawnExactParticle
       // Put particles around the target
       tmpargument = [CHES]
-      tmpdistance = BLAHITEMS         //Items and scenery
+      tmpdistance = BLAHITEMS         // Items and scenery
       SetTargetToWideBlahID
         tmpx = targetx
         tmpy = targety
@@ -227,7 +228,7 @@ IfStateIs0
         tmpy = targety
         tmpturn = targetturn
         tmpdistance = targetz
-        DropTargetKeys          //Some modules might get broke if not
+        DropTargetKeys          // Some modules might get broke if not
         PoofTarget
           // Replace the target with a mimic
           SetTargetToWhoeverIsHolding

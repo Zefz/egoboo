@@ -1,4 +1,4 @@
-//Boss icicle. This is what the yeti boss uses to spawn icicles in his chamber
+// Boss icicle. This is what the yeti boss uses to spawn icicles in his chamber
 // Based off icicle spell. The States:
 //  2 Icicle in the sky
 //  3 Icicle falling
@@ -19,7 +19,7 @@ IfSpawned
   JoinEvilTeam
 
 // Icicle event handling
-IfStateIs4				// 4. Pinned somebody and waiting
+IfStateIs4                // 4. Pinned somebody and waiting
   tmpx = 0
   tmpy = 1
   IfTimeOut
@@ -35,21 +35,23 @@ IfStateIs4				// 4. Pinned somebody and waiting
     tmpdistance = selfz
     tmpargument = 3
     SpawnExactParticle
-    tmpargument = 2			// *CRASH! tinkle-tinkle-tinkle...*
+    tmpargument = 2            // *CRASH! tinkle-tinkle-tinkle...*
     PlaySound
     tmpargument = ACTIONKA
     DoActionOverride
     KeepAction
     tmpargument = 5
     SetState
-IfStateIs3				// 3. Falling
+
+// 3. Falling
+IfStateIs3
   IfScoredAHit
     SetTargetToSelf
     SetOwnerToTarget
     SetTargetToWhoeverWasHit
     StopTargetMovement
     EnchantTarget
-    tmpargument = 4			// Don't shatter on impact if I've pinned somebody
+    tmpargument = 4            // Don't shatter on impact if I've pinned somebody
     SetState
     IfTargetIsAlive
       tmpargument = 3
@@ -75,7 +77,7 @@ IfStateIs3				// 3. Falling
       tmpdistance = selfz
       tmpargument = 3
       SpawnExactParticle
-      tmpargument = 2			// *CRASH! tinkle-tinkle-tinkle...*
+      tmpargument = 2            // *CRASH! tinkle-tinkle-tinkle...*
       PlaySound
       tmpargument = ACTIONKA
       DoActionOverride
@@ -83,9 +85,10 @@ IfStateIs3				// 3. Falling
       tmpargument = 5
       SetState
       tmpargument = [ICIC]
-      IssueOrder		//Tell the yeti the icicle is no more
+      IssueOrder        // Tell the yeti the icicle is no more
 
-IfStateIs2				// 2. Floating on high
+// 2. Floating on high
+IfStateIs2
   tmpx = 500
   tmpy = selfaltitude
   IfXIsLessThanY
@@ -102,20 +105,20 @@ IfStateIs2				// 2. Floating on high
     Else
       SetTargetToSelf
       tmpargument = 1 - targetspeedz
-      tmpargument = tmpargument < 1 + tmpargument < 3 + tmpargument < 2 //long-way multiply by 100
+      tmpargument = tmpargument < 1 + tmpargument < 3 + tmpargument < 2 // long-way multiply by 100
     AccelerateUp
-  tmpargument = 1			// Don't fall until I'm actually floating on high
+  tmpargument = 1            // Don't fall until I'm actually floating on high
   IfContentIs
     tmpargument = 3
     SetTime
-    SetTargetToNearestLifeform		// Anybody to fall on?
+    SetTargetToNearestLifeform        // Anybody to fall on?
       tmpx = targetdistance
       tmpy = 50
       IfXIsLessThanY
         IfTargetIsFlying
           DoNothing
         Else
-          IfTargetIsOnHatedTeam		//Dont hit the yeti
+          IfTargetIsOnHatedTeam        // Dont hit the yeti
             SetTargetToSelf
             StopTargetMovement
             tmpargument = 0 - 400
@@ -135,7 +138,7 @@ IfStateIs2				// 2. Floating on high
     tmpdistance = selfz
     tmpargument = 3
     SpawnExactParticle
-    tmpargument = 2			// *CRASH! tinkle-tinkle-tinkle...*
+    tmpargument = 2            // *CRASH! tinkle-tinkle-tinkle...*
     PlaySound
     tmpargument = ACTIONKA
     DoActionOverride

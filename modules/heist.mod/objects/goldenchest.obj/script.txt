@@ -1,4 +1,4 @@
-//Spawn sparklies
+// Spawn sparklies
 IfTimeOut
   IfStateIs0
     tmpargument = 0
@@ -10,15 +10,15 @@ IfTimeOut
       tmpargument = 7
       SetTime
 
-//Open yourself
+// Open yourself
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetCanOpenStuff
-    IfFacingTarget			//Open up
+    IfFacingTarget            // Open up
       tmpargument = ACTIONMG
-      TargetDoAction			//Make target crouch
+      TargetDoAction            // Make target crouch
 
-      IfStateIs0			//Unopened
+      IfStateIs0            // Unopened
         tmpargument = ACTIONMG
         DoAction
         tmpargument = 60
@@ -27,7 +27,7 @@ IfBumped
         tmpargument = 1
         SetState
 
-        //Wait some time
+        // Wait some time
         tmpargument = 40
         SetTime
 
@@ -36,17 +36,17 @@ IfBumped
         SendMessageNear
         tmpargument = 0
         IfArmorIs
-          tmpargument = 0		//Magic chest sound
+          tmpargument = 0        // Magic chest sound
         Else
-          tmpargument = 3		//Normal chest sound
+          tmpargument = 3        // Normal chest sound
         PlaySound
 
     IfTimeOut
 
-      //Unlooted Open Chest
+      // Unlooted Open Chest
       IfStateIs1
 
-        tmpargument = 0              //Treasure Chest
+        tmpargument = 0              // Treasure Chest
         IfContentIs
           tmpargument = selfmoney
           DropMoney
@@ -64,7 +64,7 @@ IfBumped
           tmpargument = 2
           SetState
 
-        tmpargument = 1              //Regular Chest
+        tmpargument = 1              // Regular Chest
         IfContentIs
           tmpargument = selfmoney
           DropItems
@@ -77,7 +77,7 @@ IfBumped
           tmpargument = 50
           SetTime
 
-        tmpargument = 2              //Armor Chest
+        tmpargument = 2              // Armor Chest
         IfContentIs
           tmpargument = [ROGU]
           IfTargetHasID
@@ -90,26 +90,26 @@ IfBumped
             tmpargument = 50
             SetTime
           Else
-            tmpargument = 4		//Wrong armor type
+            tmpargument = 4        // Wrong armor type
             SendMessageNear
             tmpargument = 50
             SetTime
 
-        tmpargument = 3              //Special Chest
+        tmpargument = 3              // Special Chest
         IfContentIs
           tmpx = rand % 4
           tmpy = 0
           IfXIsEqualToY
-            tmpargument = 67		//Chiuaua X2
+            tmpargument = 67        // Chiuaua X2
           tmpy = 1
           IfXIsEqualToY
-            tmpargument = 69		//Magic Pick
+            tmpargument = 69        // Magic Pick
           tmpy = 2
           IfXIsEqualToY
-            tmpargument = 67		//Chiuaua
+            tmpargument = 67        // Chiuaua
           tmpy = 3
           IfXIsEqualToY
-            tmpargument = 68		//Everburn torch
+            tmpargument = 68        // Everburn torch
           tmpdistance = selfz + 30
           tmpx = selfx - 37
           tmpy = selfy
@@ -121,7 +121,7 @@ IfBumped
           tmpargument = 50
           SetTime
 
-          //And drop treasure!
+          // And drop treasure!
           tmpargument = selfmoney
           DropMoney
           tmpargument = rand & 3 + 1
@@ -136,7 +136,7 @@ IfBumped
           tmpargument = rand % 3 + 1
           SpawnParticle
 
-      //Empty chest
+      // Empty chest
       IfTimeOut
         IfStateIs2
           tmpargument = 1

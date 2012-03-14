@@ -6,7 +6,7 @@ IfOrdered
     SetTargetToSelf
     KillTarget
 
-//Spawn clones when delivering a killing blow
+// Spawn clones when delivering a killing blow
 IfScoredAHit
   SetTargetToWhoeverWasHit
   IfTargetKilled
@@ -39,7 +39,7 @@ IfKilled
     IfXIsEqualToY
       tmpargument = 0 - 500
       SetContent // Won't come back...
-      SetTargetToWhoeverAttacked		//Give exp
+      SetTargetToWhoeverAttacked        // Give exp
       tmpargument = 50
       tmpdistance = EXPREVENGE
       GiveExperienceToTarget
@@ -82,7 +82,7 @@ IfTimeOut
         tmpargument = rand & 1 + LATCHLEFT
         PressLatchButton
     tmpy = 500
-    IfXIsMoreThanY				//Charge
+    IfXIsMoreThanY                // Charge
       tmpargument = 100
       SetTime
       tmpx = rand & 1023 - 512 + targetx
@@ -90,7 +90,7 @@ IfTimeOut
       tmpdistance = 1500
       tmpturn = rand % 31000 + targetturnto - 15000
       Compass
-    Else					//Attack
+    Else                    // Attack
       tmpargument = 10
       SetTime
       tmpx = rand & 511 - 256 + targetx
@@ -106,6 +106,7 @@ IfTimeOut
 
   ClearWaypoints
   AddWaypoint
+
 IfAtLastWaypoint
   tmpargument = 0
   SetTime

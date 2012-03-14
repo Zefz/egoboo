@@ -1,43 +1,43 @@
-//Wizard special abillties:
-//LEVEL   ABILLITY
-//1     - Alchemy, Arcane Magic, Arch Magic, Teleport Mastery
-//2     - n/a
-//3     - Magical Ampitude
-//4     - n/a
-//5     - n/a
-//6     - n/a
-//7     - n/a
-//8     - Elemental Staff
-//9     - n/a
-//10    - n/a
-//11    - Mystic Intellect
-//12    - n/a
-//13    - n/a
-//14    - Wizard's Missile
+// Wizard special abillties:
+// LEVEL   ABILLITY
+// 1     - Alchemy, Arcane Magic, Arch Magic, Teleport Mastery
+// 2     - n/a
+// 3     - Magical Ampitude
+// 4     - n/a
+// 5     - n/a
+// 6     - n/a
+// 7     - n/a
+// 8     - Elemental Staff
+// 9     - n/a
+// 10    - n/a
+// 11    - Mystic Intellect
+// 12    - n/a
+// 13    - n/a
+// 14    - Wizard's Missile
 //-----------------------------------------------------------------------------
-//Reset
+// Reset
 IfSpawned
   tmpargument = 0
   SetState
   SetContent
 
 //------------------------------------------------------------------------------
-//Mystic Intellect skill
+// Mystic Intellect skill
 IfStateIs0
   SetTargetToSelf
   tmpx = selflevel
-  tmpy = 9              //Level 11
+  tmpy = 9              // Level 11
   IfXIsMoreThanY
     SetOwnerToTarget
-    EnchantTarget 	//Give the special bonus
+    EnchantTarget     // Give the special bonus
     tmpargument = 1
     SetState
-    
+
 //------------------------------------------------------------------------------
-//Wizard's missile skill
+// Wizard's missile skill
 IfUsed
   tmpx = selflevel
-  tmpy = 12          //Need level 14
+  tmpy = 12          // Need level 14
   IfXIsMoreThanY
     SetTargetToSelf
     tmpx = targetmana
@@ -45,8 +45,8 @@ IfUsed
     IfXIsMoreThanY
       tmpargument = 256
       CostTargetMana
-      
-      //Spawn a homing missile
+
+      // Spawn a homing missile
       tmpargument = 3
       tmpdistance = selfz
       tmpx = selfx
@@ -54,16 +54,16 @@ IfUsed
       SpawnExactParticle
 
 //-----------------------------------------------------------------------------
-//Elemental staff skill
+// Elemental staff skill
 tmpx = selflevel
-tmpy = 6                //Need level 8
-IfXIsMoreThanY   
+tmpy = 6                // Need level 8
+IfXIsMoreThanY
   IfScoredAHit
     SetTargetToLastItemUsed
-      tmpargument = [STAFF]         //Only with quarter staffs
+      tmpargument = [STAFF]         // Only with quarter staffs
       IfTargetHasID
         SetTargetToWhoeverWasHit
-        tmpargument = rand % 3 + 6  //Randomize element type
+        tmpargument = rand % 3 + 6  // Randomize element type
         tmpx = targetx
         tmpy = targety
         tmpdistance = targetz
@@ -72,45 +72,47 @@ IfXIsMoreThanY
 //-----------------------------------------------------------------------------
 // Alchemy special abillity
 SetTargetToSelf
+
 IfTargetIsAlive
-  SetTargetToTargetLeftHand	//Check left hand first
+  SetTargetToTargetLeftHand    // Check left hand first
     tmpargument = [POTI]
     IfTargetHasID
-      IdentifyTarget		//Identify potions
+      IdentifyTarget        // Identify potions
       SetTargetToSelf
     tmpargument = [FLAS]
     IfTargetHasID
-      IdentifyTarget		//And flasks
-  SetTargetToTargetRightHand	//Repeat with other hand
+      IdentifyTarget        // And flasks
+  SetTargetToTargetRightHand    // Repeat with other hand
     tmpargument = [POTI]
     IfTargetHasID
-      IdentifyTarget		//Identify potions
+      IdentifyTarget        // Identify potions
     tmpargument = [FLAS]
     IfTargetHasID
-      IdentifyTarget		//And flasks
+      IdentifyTarget        // And flasks
 
 //-----------------------------------------------------------------------------
 // Magical Ampitude
 tmpx = selflevel
-tmpy = 1            //Need level 3
+tmpy = 1            // Need level 3
 IfXIsMoreThanY
 SetTargetToSelf
+
 IfTargetIsAlive
-  SetTargetToTargetLeftHand	//Check left hand first
+  SetTargetToTargetLeftHand    // Check left hand first
     tmpargument = [WAND]
     IfTargetHasID
-      IdentifyTarget		//Identify wands
+      IdentifyTarget        // Identify wands
       SetTargetToSelf
     tmpargument = [SCRO]
     IfTargetHasID
-      IdentifyTarget		//And scrolls
-  SetTargetToTargetRightHand	//Repeat with other hand
+      IdentifyTarget        // And scrolls
+  SetTargetToTargetRightHand    // Repeat with other hand
     tmpargument = [WAND]
     IfTargetHasID
-      IdentifyTarget		//Identify wands
+      IdentifyTarget        // Identify wands
     tmpargument = [SCRO]
     IfTargetHasID
-      IdentifyTarget		//And scrolls
+      IdentifyTarget        // And scrolls
 
 //-----------------------------------------------------------------------------
 // ZZ> Gong sound
@@ -123,7 +125,7 @@ IfCleanedUp
 IfUsed
   tmpargument = 10
   PlaySound
-  
+
 //------------------------------------------------------------------------------
 // ZZ> Handle being bored by cheering or sneezing
 IfBored
@@ -157,7 +159,7 @@ IfKilled
   SendMessage
 
   // Drop goodies
-  tmpargument = 1+selflevel*selflevel*100		//The money loss formula
+  tmpargument = 1+selflevel*selflevel*100        // The money loss formula
   DropMoney
   DropKeys
 

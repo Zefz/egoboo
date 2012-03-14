@@ -64,7 +64,7 @@ IfUsed
     GiveExperienceToTarget
   SetTargetToWhoeverIsHolding
 
-    //Do the effects
+    // Do the effects
     tmpargument = 256
     GiveManaToTarget
     tmpargument = 63560

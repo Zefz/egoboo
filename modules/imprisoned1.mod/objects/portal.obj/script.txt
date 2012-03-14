@@ -4,31 +4,31 @@
 
 IfSpawned
   tmpargument = 50
-  SetTime  
-  
+  SetTime
+
   tmpargument = 0
   PlaySoundLooped
-  
-  //Win!
+
+  // Win!
   tmpargument = 100
   tmpdistance = EXPQUEST
   GiveExperienceToGoodTeam
   tmpargument = 14
   tmpdistance = 500
   PlayMusic
-  
+
   tmpargument = ACTIONMJ
   DoAction
   KeepAction
 
-//Sucking effect
+// Sucking effect
 tmpargument = 0
 tmpdistance = SPAWNORIGIN
 tmpx = 0
 tmpy = 0
 SpawnParticle
 
-//End the module if entered
+// End the module if entered
 IfBumped
   tmpargument = [BEAT]
   tmpdistance = [BEAT]

@@ -72,8 +72,8 @@ Else
       // Tell it to open
       tmpargument = 491 // The special unlock order
       OrderTarget
-      
-      //Identify it
+
+      // Identify it
       IfNameIsKnown
         DoNothing
       Else

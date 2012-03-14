@@ -1,4 +1,4 @@
-//This function makes an item fall to the floor when spawned
+// This function makes an item fall to the floor when spawned
 IfSpawned
   tmpargument = ACTIONJB
   DoAction
@@ -40,12 +40,14 @@ IfGrabbed
     tmpargument = 0
     SendMessageNear
 
-//Is it kursed?
+// Is it kursed?
 IfNotDropped
   tmpargument = 3
   SendMessageNear
+
+// No longer needed, this is handled by the sourcecode now...
 //IfNotPutAway
-//  tmpargument = 4         //No longer needed, this is handled by the sourcecode now...
+//  tmpargument = 4
 //  SendMessageNear
 
 // Finish

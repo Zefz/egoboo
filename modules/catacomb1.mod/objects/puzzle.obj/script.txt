@@ -86,7 +86,7 @@ IfTimeOut
                   GetTileXY
                   tmpx = tmpargument
                   tmpy = 187
-                  IfXIsEqualToY		//The tile is unused yet
+                  IfXIsEqualToY        // The tile is unused yet
                     GetContent
                     tmpargument = tmpargument & 1 + 188
                     tmpx = targetx
@@ -108,18 +108,17 @@ IfTimeOut
                       tmpargument = tmpx
                       SetState
 
-
                     // Increase the count
                     GetContent
                     tmpargument = tmpargument + 1
                     SetContent
                     tmpx = tmpargument
                     tmpy = 17
-                    IfXIsEqualToY			//The number of tiles pressed
+                    IfXIsEqualToY            // The number of tiles pressed
                       // We are done...
                       tmpargument = 0
                       GetXY
-                      tmpy = 60072 //38505	//The answer (Two snakes)
+                      tmpy = 60072 // 38505    // The answer (Two snakes)
                       IfXIsEqualToY
                         // The player won...
                         tmpargument = 0
@@ -129,97 +128,97 @@ IfTimeOut
                         tmpargument = 2
                         PlayFullSound
 
-                        //Award some xp
+                        // Award some xp
                         tmpargument = 50
                         tmpdistance = EXPSECRET
                         GiveExperienceToGoodTeam
 
-                        //Spawn the gift key
-                        tmpargument = 63		//Slot number
-                        tmpx = 62 < 7			//X
-                        tmpy = 11 < 7			//Y
-                        tmpdistance = 700		//Z
+                        // Spawn the gift key
+                        tmpargument = 63        // Slot number
+                        tmpx = 62 < 7            // X
+                        tmpy = 11 < 7            // Y
+                        tmpdistance = 700        // Z
                         SpawnExactCharacterXYZ
 
-                        //Also spawn some random treasure loot
+                        // Also spawn some random treasure loot
                         tmpargument = rand % 6
                         SetState
                         IfStateIs0
-                          tmpargument = 61	//Scroll of identify
+                          tmpargument = 61    // Scroll of identify
                         IfStateIs1
-                          tmpargument = 69	//Silver scimitar
+                          tmpargument = 69    // Silver scimitar
                         IfStateIs2
-                          tmpargument = 59	//Life potion
+                          tmpargument = 59    // Life potion
                         IfStateIs3
-                          tmpargument = 37	//Levitation potion
+                          tmpargument = 37    // Levitation potion
                         IfStateIs4
-                          tmpargument = 77	//Rune of Combat bless
+                          tmpargument = 77    // Rune of Combat bless
                         IfStateIs5
-                          tmpargument = 78	//Rune of Holy Bolt
+                          tmpargument = 78    // Rune of Holy Bolt
 
-                        tmpx = 61 < 7			//X
-                        tmpy = 10 < 7			//Y
-                        tmpdistance = 700		//Z
+                        tmpx = 61 < 7            // X
+                        tmpy = 10 < 7            // Y
+                        tmpdistance = 700        // Z
                         SpawnExactCharacterXYZ
 
-			//Second item
+            // Second item
                         tmpargument = rand % 6
                         SetState
                         IfStateIs0
-                          tmpargument = 61	//Scroll of identify
+                          tmpargument = 61    // Scroll of identify
                         IfStateIs1
-                          tmpargument = 69	//Silver scimitar
+                          tmpargument = 69    // Silver scimitar
                         IfStateIs2
-                          tmpargument = 59	//Life potion
+                          tmpargument = 59    // Life potion
                         IfStateIs3
-                          tmpargument = 37	//Levitation potion
+                          tmpargument = 37    // Levitation potion
                         IfStateIs4
-                          tmpargument = 77	//Rune of Combat bless
+                          tmpargument = 77    // Rune of Combat bless
                         IfStateIs5
-                          tmpargument = 78	//Rune of Holy Bolt
+                          tmpargument = 78    // Rune of Holy Bolt
 
-                        tmpx = 61 < 7			//X
-                        tmpy = 12 < 7			//Y
+                        tmpx = 61 < 7            // X
+                        tmpy = 12 < 7            // Y
                         SpawnExactCharacterXYZ
 
-			//Third item
+            // Third item
                         tmpargument = rand % 6
                         SetState
                         IfStateIs0
-                          tmpargument = 61	//Scroll of identify
+                          tmpargument = 61    // Scroll of identify
                         IfStateIs1
-                          tmpargument = 69	//Silver scimitar
+                          tmpargument = 69    // Silver scimitar
                         IfStateIs2
-                          tmpargument = 59	//Life potion
+                          tmpargument = 59    // Life potion
                         IfStateIs3
-                          tmpargument = 37	//Levitation potion
+                          tmpargument = 37    // Levitation potion
                         IfStateIs4
-                          tmpargument = 77	//Rune of Combat bless
+                          tmpargument = 77    // Rune of Combat bless
                         IfStateIs5
-                          tmpargument = 78	//Rune of Holy Bolt
+                          tmpargument = 78    // Rune of Holy Bolt
 
-                        tmpx = 63 < 7			//X
-                        tmpy = 10 < 7			//Y
+                        tmpx = 63 < 7            // X
+                        tmpy = 10 < 7            // Y
                         SpawnExactCharacterXYZ
 
-			//Last and fourth item
+            // Last and fourth item
                         tmpargument = rand % 6
                         SetState
                         IfStateIs0
-                          tmpargument = 61	//Scroll of identify
+                          tmpargument = 61    // Scroll of identify
                         IfStateIs1
-                          tmpargument = 69	//Silver scimitar
+                          tmpargument = 69    // Silver scimitar
                         IfStateIs2
-                          tmpargument = 59	//Life potion
+                          tmpargument = 59    // Life potion
                         IfStateIs3
-                          tmpargument = 37	//Levitation potion
+                          tmpargument = 37    // Levitation potion
                         IfStateIs4
-                          tmpargument = 77	//Rune of Combat bless
+                          tmpargument = 77    // Rune of Combat bless
                         IfStateIs5
-                          tmpargument = 78	//Rune of Holy Bolt
+                          tmpargument = 78    // Rune of Holy Bolt
 
-                        tmpx = 63 < 7			//X
-                        tmpy = 12 < 7			//Y
+                        tmpx = 63 < 7            // X
+                        tmpy = 12 < 7            // Y
                         SpawnExactCharacterXYZ
 
                         // Open a master passage
@@ -247,4 +246,6 @@ IfTimeOut
                       tmpargument = 0
                       PlaySound
 
-End					// Finished with this character
+// Finished with this character
+End
+

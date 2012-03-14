@@ -34,33 +34,36 @@ IfTimeOut
           SendMessageNear
           GoPoof
       Else
-        tmpargument = [FRTN]    //Fortune cookie!
-        IfTargetHasID  
+        tmpargument = [FRTN]    // Fortune cookie!
+        IfTargetHasID
           PoofTarget
           tmpargument = 0
-          PlaySound            
+          PlaySound
           tmpargument = selfstate + 1
           SetState
-          IfStateIs5          //sacrificed 5 cookies
-            DropItems     //cant spawn spellbooks
+          IfStateIs5          // sacrificed 5 cookies
+            DropItems     // cant spawn spellbooks
             SpawnPoof
             GoPoof
             tmpargument = 2
           Else
-            tmpargument = 4       //keep on feedin!
+            tmpargument = 4       // keep on feedin!
           SendMessageNear
         Else
           PoofTarget
             tmpargument = 1
             SendMessageNear
-            tmpargument = 0     //reset the sacrifical counter
+            tmpargument = 0     // reset the sacrifical counter
             SetContent
             SetState
           Else
             tmpargument = 3
-            SendMessageNear       //A player was sacrificed!
+            SendMessageNear       // A player was sacrificed!
             GoPoof
 
   tmpargument = 50
   SetTime
-End					// All done
+
+// All done
+End
+

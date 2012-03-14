@@ -43,7 +43,8 @@ IfTimeOut
         SendMessageNear
         PoofTarget
 
-IfBumped				// Eat the enemy
+// Eat the enemy
+IfBumped
   SetTargetToWhoeverBumped
   tmpx = targetz
   tmpy = selfz + 30
@@ -53,30 +54,35 @@ IfBumped				// Eat the enemy
       DoAction
       tmpargument = 0
       PlaySound
-IfSpawned				// This is done once in a lifetime
-  ClearWaypoints			  // Now go there
-  tmpx = 7735				  // Waypoint 0
-  tmpy = 5287				  //
-  AddWaypoint				  //
-  tmpx = 7735				  // Waypoint 1
-  tmpy = 6469				  //
-  AddWaypoint				  //
-  tmpx = 6627				  // Waypoint 2
-  tmpy = 6469				  //
-  AddWaypoint				  //
-  tmpx = 6627				  // Waypoint 3
-  tmpy = 5287				  //
-  AddWaypoint				  //
-  tmpx = 7435				  // Waypoint 4
-  tmpy = 5587				  //
-  AddWaypoint				  //
-  tmpx = 7435				  // Waypoint 5
-  tmpy = 6169				  //
-  AddWaypoint				  //
-  tmpx = 6927				  // Waypoint 6
-  tmpy = 6169				  //
-  AddWaypoint				  //
-  tmpx = 6927				  // Waypoint 7
-  tmpy = 5587				  //
-  AddWaypoint				  //
-End					// Finished with this character
+
+// This is done once in a lifetime
+IfSpawned
+  ClearWaypoints              // Now go there
+  tmpx = 7735                  // Waypoint 0
+  tmpy = 5287
+  AddWaypoint
+  tmpx = 7735                  // Waypoint 1
+  tmpy = 6469
+  AddWaypoint
+  tmpx = 6627                  // Waypoint 2
+  tmpy = 6469
+  AddWaypoint
+  tmpx = 6627                  // Waypoint 3
+  tmpy = 5287
+  AddWaypoint
+  tmpx = 7435                  // Waypoint 4
+  tmpy = 5587
+  AddWaypoint
+  tmpx = 7435                  // Waypoint 5
+  tmpy = 6169
+  AddWaypoint
+  tmpx = 6927                  // Waypoint 6
+  tmpy = 6169
+  AddWaypoint
+  tmpx = 6927                  // Waypoint 7
+  tmpy = 5587
+  AddWaypoint
+
+// Finished with this character
+End
+

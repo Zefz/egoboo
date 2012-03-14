@@ -3,12 +3,13 @@ IfSpawned
   IfStateIs0
     // It's an imported spell in hand
     KeepAction
-  Else		// Overlay object
+  Else        // Overlay object
     NotAnItem
     JoinNullTeam
     MakeNameUnknown
     tmpargument = 1
     SetState
+
 IfChanged
   // It's a spell in hand
   tmpargument = 0
@@ -38,7 +39,7 @@ IfStateIs0
       tmpx = tmpargument
       tmpy = targetmanaflow
       IfXIsLessThanY
-        tmpy = 1024			// Maximum charge
+        tmpy = 1024            // Maximum charge
         IfXIsLessThanY
           tmpy = tmpargument
           tmpx = 8

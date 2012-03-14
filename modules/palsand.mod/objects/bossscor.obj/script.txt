@@ -132,11 +132,11 @@ IfTimeOut
       tmpy = tmpy + targety + targety + targety > 2
       tmpx = tmpx - selfx < 1 + selfx
       tmpy = tmpy - selfy < 1 + selfy
-  
-    //Play boss music
+
+    // Play boss music
     tmpargument = 25
     tmpdistance = 400
-    PlayMusic  
+    PlayMusic
   Else
     // Circle to guard terrain
     Sneak
@@ -148,8 +148,8 @@ IfTimeOut
     Compass
     tmpargument = 5
     SetTime
-    
-    //Play normal music
+
+    // Play normal music
     tmpargument = 4
     tmpdistance = 1500
     PlayMusic
@@ -163,12 +163,12 @@ IfAttacked
   tmpargument = 0
   PlaySound
 
-  //Only if damaged by SLASH damage
+  // Only if damaged by SLASH damage
   GetDamageType
   tmpx = tmpargument
   tmpy = DAMAGESLASH
   IfXIsEqualToY
-    tmpx = rand & 255   //50% chance
+    tmpx = rand & 255   // 50% chance
     tmpy = 128
     IfXIsMoreThanY
       // Drop a claw

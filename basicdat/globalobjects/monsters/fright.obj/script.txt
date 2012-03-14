@@ -22,7 +22,7 @@ IfKilled
   tmpdistance = [WAKE]
   OrderSpecialID
 
-//What to do if mooshed in a passage
+// What to do if mooshed in a passage
 IfCrushed
   tmpargument = MESSAGEDEATH
   SendMessageNear
@@ -78,7 +78,7 @@ IfBumped
         SendMessageNear
         tmpargument = 1
         SetState
-        tmpargument = selflevel * 15 + 250     //5 seconds + 0.3 seconds per level
+        tmpargument = selflevel * 15 + 250     // 5 seconds + 0.3 seconds per level
         SetTargetReloadTime
         tmpargument = 40
         SetTime

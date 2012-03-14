@@ -1,10 +1,10 @@
 //------------------------------------------------------------------------------
-//Setup where to roll, we use a randomized timer to make the boulder movement
-//more random
+// Setup where to roll, we use a randomized timer to make the boulder movement
+// more random
 IfSpawned
   tmpargument = rand % 200
   SetTime
-  
+
 IfTimeOut
   IfStateIs0
     ClearWaypoints
@@ -14,23 +14,25 @@ IfTimeOut
     tmpx = selfspawnx
     tmpy = selfspawny
     AddWaypoint
-    
-    //Dont repeat
+
+    // Dont repeat
     tmpargument = 1
     SetState
 
 //------------------------------------------------------------------------------
-//Make it roll
+// Make it roll
 IfHitGround
   tmpargument = 0
   PlaySound
-   
+
 //------------------------------------------------------------------------------
-//Crush folks
+// Crush folks
 IfBumped
   SetTargetToWhoeverBumped
   KillTarget
   tmpargument = LATCHJUMP
-  PressLatchButton			//"bump" over them
+  PressLatchButton            // "bump" over them
 
-End					// All done
+// All done
+End
+

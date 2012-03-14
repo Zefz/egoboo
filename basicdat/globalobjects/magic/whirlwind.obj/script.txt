@@ -1,5 +1,5 @@
 // Whirlwind Spell
-//    By Pteromys of Melon Island - http://melonisland.net
+//    By Pteromys of Melon Island - http:// melonisland.net
 //  Usage:
 //    Hold down ATTACK to charge up a spell. When the smokies
 //     start moving vertically, release it to make a little
@@ -14,10 +14,10 @@
 //   dimensions of zero.
 
 IfSpawned
-  IfStateIs0					// A spellbook
+  IfStateIs0                    // A spellbook
     KeepAction
-  Else						// Or a howling gale?
-    NotAnItem					// Don't let anyone pick it up
+  Else                        // Or a howling gale?
+    NotAnItem                    // Don't let anyone pick it up
     MakeNameUnknown
     MakeCrushValid
     tmpargument = 254
@@ -26,7 +26,8 @@ IfSpawned
     tmpargument = 50
     SetTime
 
-IfChanged					// It's a spell in hand
+// It's a spell in hand
+IfChanged
   tmpargument = 0
   SetState
   KeepAction
@@ -43,7 +44,7 @@ IfStateIs0
 
   IfUsed
     UnsparkleIcon
-    UndoEnchant					// Kill the previous one
+    UndoEnchant                    // Kill the previous one
       tmpargument = 50
       SetReloadTime
     Else
@@ -53,13 +54,13 @@ IfStateIs0
       tmpy = 1536
       IfXIsMoreThanY
         tmpargument = 1536
-        IfContentIs				// Fully charged?
+        IfContentIs                // Fully charged?
           tmpx = targetx
           tmpy = targety
           tmpdistance = targetz
           tmpargument = 2
           SpawnExactParticle
-        Else					// Keep pumping
+        Else                    // Keep pumping
           tmpargument = 12
           CostTargetMana
             GetContent
@@ -72,7 +73,7 @@ IfStateIs0
             tmpargument = 1
             SpawnExactParticle
       Else
-        tmpargument = 50			// Too advanced of a spell
+        tmpargument = 50            // Too advanced of a spell
         SetReloadTime
         tmpargument = 1
         SendMessageNear
@@ -87,7 +88,7 @@ IfStateIs0
       IfContentIs
         SetTargetToWhoeverIsHolding
         SetOwnerToTarget
-        StopTargetMovement			// Recoil
+        StopTargetMovement            // Recoil
         tmpx = 0
         tmpy = 0
         tmpturn = targetturn + 32767
@@ -95,8 +96,8 @@ IfStateIs0
         Compass
         AccelerateTarget
 
-        SetTargetToWideEnemy  //Try to find a enemy (targets caster if failed)
-        tmpx = rand & 511 + targetx	- 256			// Attempt to spawn a whirlwind
+        SetTargetToWideEnemy  // Try to find a enemy (targets caster if failed)
+        tmpx = rand & 511 + targetx    - 256            // Attempt to spawn a whirlwind
         tmpy = rand & 511 + targety - 256
         tmpdistance = targetz + 15
         SetTargetToWhoeverIsHolding
@@ -111,7 +112,7 @@ IfStateIs0
             SendMessageNear
           tmpargument = 0
           PlaySound
-        Else					// Backfire if the spell was cast into a wall
+        Else                    // Backfire if the spell was cast into a wall
           tmpargument = rand & 1023 + 1536
           DamageTarget
           tmpargument = 3
@@ -137,19 +138,19 @@ IfStateIs0
         tmpargument = 0
         SetContent
 
-Else					// AI for the blast of wind
+Else                    // AI for the blast of wind
   IfTimeOut
     tmpx = selfspawnx
     tmpy = selfspawny
     tmpturn = rand % 65535
-    tmpdistance = 200			// Do not stray more than 200 units from home
+    tmpdistance = 200            // Do not stray more than 200 units from home
     Compass
     ClearWaypoints
     AddWaypoint
     tmpargument = rand & 31 + 32
     SetTime
 
-  IfInWater				// Become a waterspout
+  IfInWater                // Become a waterspout
     tmpargument = 1
     ChangeArmor
 
@@ -166,7 +167,7 @@ Else					// AI for the blast of wind
     SendMessageNear
 
 IfStateIs0
-  IfDropped				// Turn back into a spellbook (do last)
+  IfDropped                // Turn back into a spellbook (do last)
     tmpargument = 0
     SetContent
     BecomeSpellbook

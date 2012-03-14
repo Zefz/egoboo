@@ -34,6 +34,7 @@ IfKilled
   tmpargument = [WAKE]
   tmpdistance = [WAKE]
   OrderSpecialID
+
 IfCrushed
   tmpargument = MESSAGEDEATH
   SendMessageNear
@@ -95,7 +96,7 @@ IfBumped
         SetTime
         tmpargument = 2
         PlaySound
-        tmpargument = rand & 255 + 768  //3-4 damage
+        tmpargument = rand & 255 + 768  // 3-4 damage
         DamageTarget
     tmpturn = targetturnto + 32768
     tmpx = selfx

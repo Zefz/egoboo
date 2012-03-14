@@ -1,9 +1,9 @@
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				//
-  MakeAmmoKnown				  //
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  MakeAmmoKnown
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
 
 IfCrushed
@@ -18,30 +18,37 @@ IfCrushed
   GoPoof
   tmpargument = 1
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-IfHitGround				// Play the drop sound
-  tmpargument = 2			  //
-  PlaySound				  //
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
+
+// Make it lie on floor
+IfDropped
+  KeepAction
+
+// Play the drop sound
+IfHitGround
+  tmpargument = 2
+  PlaySound
+
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
+
 IfUsed
   IfAmmoOut
     tmpargument = 3
     PlaySound
 
-//Check if user poisoned himself
+// Check if user poisoned himself
 IfUsed
   SetTargetToWhoeverIsHolding
   tmpargument = [POIS]
-  IfTargetHasSkillID		//Poison skill?
+  IfTargetHasSkillID        // Poison skill?
     MakeNameKnown
   Else
-    tmpx = rand % 2816 + 2048 	//Wisdom determines the chance, 19 is never and 8 is almost always
-    tmpy = rand % 512 + targetwis	//Randomness to decrease chance
+    tmpx = rand % 2816 + 2048     // Wisdom determines the chance, 19 is never and 8 is almost always
+    tmpy = rand % 512 + targetwis    // Randomness to decrease chance
     IfXIsMoreThanY
       SetOwnerToTarget
       EnchantTarget
@@ -56,7 +63,7 @@ Else
   tmpargument = 0
 ChangeArmor
 
-//Guys with a code dont use poisoned weapons
+// Guys with a code dont use poisoned weapons
 IfGrabbed
   SetTargetToWhoeverIsHolding
   tmpargument = [CODE]
@@ -64,5 +71,7 @@ IfGrabbed
     DetachFromHolder
     tmpargument = 3
     SendMessageNear
-  
-End					// All done
+
+// All done
+End
+

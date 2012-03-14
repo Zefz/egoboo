@@ -1,15 +1,15 @@
 IfSpawned
-  
+
   EnableExport
   ShowMap
   ShowYouAreHere
 
-  //Play music
+  // Play music
   tmpargument = 26
   tmpdistance = 0
   PlayMusic
-  
-  //Check if any outlaws have entered town
+
+  // Check if any outlaws have entered town
   tmpargument = 9
   SetTargetToWhoeverIsInPassage
     tmpargument = [EVIL]
@@ -21,7 +21,7 @@ IfTimeOut
   SetTargetToSelf
   tmpargument = 25
   SetTime
-  
+
   tmpargument = passage + 1
   SetTargetToWhoeverIsInPassage
   tmpargument = [HMAG]
@@ -31,8 +31,8 @@ IfTimeOut
   Else
     tmpargument = passage
     ClosePassage
-    
-  //Check the two exits for runners
+
+  // Check the two exits for runners
   tmpargument = 7
   SetTargetToWhoeverIsInPassage
     IfTargetIsAPlayer
@@ -47,8 +47,8 @@ IfTimeOut
         AddEndMessage
         tmpargument = 1
         AddEndMessage
-        
-        //Remember them for next time
+
+        // Remember them for next time
         tmpargument = [EVIL]
         tmpdistance = 0
         AddQuestAllPlayers
@@ -66,10 +66,12 @@ IfTimeOut
         AddEndMessage
         tmpargument = 1
         AddEndMessage
-        
-        //Remember them for next time
+
+        // Remember them for next time
         tmpargument = [EVIL]
         tmpdistance = 0
         AddQuestAllPlayers
-    
-End					// All done
+
+// All done
+End
+

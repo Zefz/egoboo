@@ -1,8 +1,8 @@
-//Any damage below 3 is ignored
+// Any damage below 3 is ignored
 IfSpawned
   tmpargument = 767
   SetDamageThreshold
-  
+
 IfHealed
   // Spawn a defense ping
   IfStateIs0
@@ -45,13 +45,13 @@ IfKilled
   SpawnExactParticle
   PlaySound
 
-  //Drop loot
+  // Drop loot
   DropItems
   DropKeys
   tmpargument = selfmoney
   DropMoney
 
-//Make it destroyable
+// Make it destroyable
 IfSpawned
   JoinEvilTeam
 

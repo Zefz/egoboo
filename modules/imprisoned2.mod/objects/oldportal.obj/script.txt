@@ -1,10 +1,10 @@
 IfSpawned
   tmpargument = 50
-  SetTime  
-  
+  SetTime
+
   tmpargument = 0
   PlaySoundLooped
-    
+
   tmpargument = ACTIONMJ
   DoAction
   KeepAction
@@ -17,6 +17,5 @@ IfBumped
       SetTime
       tmpargument = 0
       SendMessageNear
-    
-    
+
 End

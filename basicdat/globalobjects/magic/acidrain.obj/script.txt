@@ -13,35 +13,36 @@ IfTakenOut
     IfTargetIsAPlayer
       tmpargument = 0
       SendMessageNear
-      
-//Spawn another acid drop
+
+// Spawn another acid drop
 tmpx = selfstate
 tmpy = 0
+
 IfXIsMoreThanY
   tmpx = rand & 1023 + targetx - 512
   tmpy = rand & 1023 + targety - 512
-  tmpdistance = rand & 511 + targetz + 700      
+  tmpdistance = rand & 511 + targetz + 700
   SpawnExactParticle
-  
+
   tmpargument = selfstate - 1
-  SetState  
-      
+  SetState
+
 // Allow it to be used
 IfUsed
   SetTargetToWhoeverIsHolding
     tmpargument = 128
     CostTargetMana
       tmpargument = 0
-      
-      //Spawn 1 raindrop per caster int
+
+      // Spawn 1 raindrop per caster int
       tmpx = targetint > 8
       tmpargument = selfstate + tmpx
       SetState
-      
-      //Sound effect
+
+      // Sound effect
       tmpargument = 0
       PlaySound
-      
+
       // Give experience...
       IfNameIsKnown
         DoNothing
@@ -51,8 +52,8 @@ IfUsed
         tmpargument = 30
         tmpdistance = EXPSECRET
         GiveExperienceToTarget
-        
-    //Not enough mana!
+
+    // Not enough mana!
     Else
       tmpargument = 1
       SendMessageNear

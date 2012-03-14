@@ -1,17 +1,16 @@
-//Set type of chest at spawn
+// Set type of chest at spawn
 IfSpawned
-  tmpargument = 2		//Randomize the chest type
-  tmpx = rand % 100		//55% chance for artifact
+  tmpargument = 2        // Randomize the chest type
+  tmpx = rand % 100        // 55% chance for artifact
   tmpy = 55
-  IfXIsMoreThanY		      //35% for armor chest
+  IfXIsMoreThanY              // 35% for armor chest
     tmpargument = 1
     tmpy = 90
-    IfXIsMoreThanY		//10% for mere gold & treasure
+    IfXIsMoreThanY        // 10% for mere gold & treasure
       tmpargument = 0
   SetContent
 
-
-//Spawn sparklies
+// Spawn sparklies
 IfTimeOut
   IfStateIs0
     tmpargument = 0
@@ -23,15 +22,15 @@ IfTimeOut
       tmpargument = 7
       SetTime
 
-//Open yourself
+// Open yourself
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetCanOpenStuff
-    IfFacingTarget			//Open up
+    IfFacingTarget            // Open up
       tmpargument = ACTIONMG
-      TargetDoAction			//Make target crouch
+      TargetDoAction            // Make target crouch
 
-      IfStateIs0			//Unopened
+      IfStateIs0            // Unopened
         tmpargument = ACTIONMG
         DoAction
         tmpargument = 60
@@ -40,7 +39,7 @@ IfBumped
         tmpargument = 1
         SetState
 
-        //Wait some time
+        // Wait some time
         tmpargument = 40
         SetTime
 
@@ -49,17 +48,17 @@ IfBumped
         SendMessageNear
         tmpargument = 0
         IfArmorIs
-          tmpargument = 0		//Magic chest sound
+          tmpargument = 0        // Magic chest sound
         Else
-          tmpargument = 3		//Normal chest sound
+          tmpargument = 3        // Normal chest sound
         PlaySound
 
     IfTimeOut
 
-      //Unlooted Open Chest
+      // Unlooted Open Chest
       IfStateIs1
 
-        tmpargument = 0              //Treasure Chest
+        tmpargument = 0              // Treasure Chest
         IfContentIs
           tmpargument = selfmoney
           DropMoney
@@ -83,31 +82,31 @@ IfBumped
           tmpargument = 2
           SetState
 
-	      //Random artifact chest
+          // Random artifact chest
         tmpargument = 1
         IfContentIs
           tmpx = rand % 7
           tmpy = 0
           IfXIsEqualToY
-            tmpargument = 86		//Mana Elixir
+            tmpargument = 86        // Mana Elixir
           tmpy = 1
           IfXIsEqualToY
-            tmpargument = 85		//Vorporal Blade!
+            tmpargument = 85        // Vorporal Blade!
           tmpy = 2
           IfXIsEqualToY
-            tmpargument = 87     //Metamorph orb
+            tmpargument = 87     // Metamorph orb
           tmpy = 3
           IfXIsEqualToY
-            tmpargument = 88		//The Pike
+            tmpargument = 88        // The Pike
           tmpy = 4
           IfXIsEqualToY
-            tmpargument = 89		//Sojurn
+            tmpargument = 89        // Sojurn
           tmpy = 5
           IfXIsEqualToY
-            tmpargument = 90		//Gemstonebow
+            tmpargument = 90        // Gemstonebow
           tmpy = 6
           IfXIsEqualToY
-            tmpargument = 91		//Iceball Wand
+            tmpargument = 91        // Iceball Wand
           tmpdistance = selfz + 30
           tmpx = selfx - 37
           tmpy = selfy
@@ -119,18 +118,18 @@ IfBumped
           tmpargument = 50
           SetTime
 
-	      //Armor chest (level 4)
+          // Armor chest (level 4)
         tmpx = selfcontent
         tmpy = 1
         IfXIsMoreThanY
 
-          //randomize armor type
+          // randomize armor type
           tmpargument = 2
           IfContentIs
             tmpargument = rand % 13 + 4
             SetContent
 
-          //It's already set
+          // It's already set
           tmpx = selfcontent
           tmpy = 4
           IfXIsEqualToY
@@ -161,9 +160,9 @@ IfBumped
             tmpargument = [ELFF]
           tmpy = 12
           IfXIsMoreThanY
-            tmpargument = [XXXX]    //Fits all classes
+            tmpargument = [XXXX]    // Fits all classes
 
-          //Try to give it
+          // Try to give it
           IfTargetHasID
             tmpargument = 3
             ChangeTargetArmor
@@ -176,7 +175,7 @@ IfBumped
           Else
             tmpturn = tmpx
             tmpx = tmpargument
-            tmpy = [XXXX]         //Do it anyways, fits all classes
+            tmpy = [XXXX]         // Do it anyways, fits all classes
             IfXIsEqualToY
               tmpargument = 3
               ChangeTargetArmor
@@ -187,12 +186,12 @@ IfBumped
               tmpargument = 50
               SetTime
             Else
-              tmpargument = tmpturn		//Wrong armor type
+              tmpargument = tmpturn        // Wrong armor type
               SendMessageNear
               tmpargument = 80
               SetTime
 
-      //Empty chest
+      // Empty chest
       IfTimeOut
         IfStateIs2
           tmpargument = 1

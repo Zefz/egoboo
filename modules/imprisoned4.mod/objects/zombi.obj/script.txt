@@ -1,16 +1,16 @@
-//The states define zombi intelligence, strenght and speed
-//State 0 is nothing, 1 is stupid, 2 normal and 3 badass nasty
-//State 4 means a badass zombie is using breath attack
+// The states define zombi intelligence, strenght and speed
+// State 0 is nothing, 1 is stupid, 2 normal and 3 badass nasty
+// State 4 means a badass zombie is using breath attack
 
-//This makes badass zombi mount mountable creatures
-IfStateIs3				//Zombi is a badass
+// This makes badass zombi mount mountable creatures
+IfStateIs3                // Zombi is a badass
   IfBumped
     SetTargetToWhoeverBumped
-    IfTargetIsAMount			//Bumper is a mount?
+    IfTargetIsAMount            // Bumper is a mount?
       tmpargument = LATCHJUMP
-      PressLatchButton			//Try to mount
+      PressLatchButton            // Try to mount
     Else
-      SetTargetToOldTarget		//Nope, continue
+      SetTargetToOldTarget        // Nope, continue
 
 // Create the character
 IfSpawned
@@ -19,24 +19,24 @@ IfSpawned
   SetOwnerToTarget
   EnchantTarget
 
-  //Randomize level
+  // Randomize level
   tmpx = rand & 100
   tmpy = 30
   IfXIsLessThanY
     tmpargument = 1
-    SetState		//Become stupid zombi (30% chance)
+    SetState        // Become stupid zombi (30% chance)
   Else
     tmpy = 85
     IfXIsLessThanY
       tmpargument = 2
-      SetState		//Become normal zombi (55% chance)
+      SetState        // Become normal zombi (55% chance)
       ChangeArmor
     Else
       tmpargument = 3
-      SetState		//Become badass zombi (15% chance)
+      SetState        // Become badass zombi (15% chance)
       ChangeArmor
-      
-  //Speed and HP is also determined by zombi type
+
+  // Speed and HP is also determined by zombi type
   tmpx = selfstate
   IfStateIs1
     tmpargument = 0 - 1500
@@ -47,13 +47,13 @@ IfSpawned
     GiveLifeToTarget
     tmpargument = 50
   IfStateIs3
-    tmpargument = -1		//Special red skin
+    tmpargument = -1        // Special red skin
     SetGreenShift
     SetBlueShift
     tmpargument = 1
     SetRedShift
     tmpargument = 750
-    GiveManaToTarget		//For breath attacks
+    GiveManaToTarget        // For breath attacks
     tmpargument = 100
   SetSpeedPercent
   tmpargument = 50
@@ -61,7 +61,9 @@ IfSpawned
 
 // Monster AI
 tmpargument = 0
-IfStateIsNot			//If not acting as a dead body
+
+// If not acting as a dead body
+IfStateIsNot
   // Character screams
   IfAttacked
     tmpargument = 3
@@ -81,16 +83,16 @@ IfStateIsNot			//If not acting as a dead body
       IfTargetIsSelf
         tmpargument = 2
     SendMessageNear
-    DropMoney		//Drop the loot
+    DropMoney        // Drop the loot
     IfStateIs3
-      tmpargument = 45		//Award some extra xp for super zombi's
+      tmpargument = 45        // Award some extra xp for super zombi's
       tmpdistance = EXPKILL
       GiveExperienceToGoodTeam
 
 //--------------------------------------------------------------------------------------------
 // Do different Zombi AI's
 //--------------------------------------------------------------------------------------------
-  //STUPID AI
+  // STUPID AI
   IfStateIs1
     IfTimeOut
       // Movement
@@ -108,7 +110,7 @@ IfStateIsNot			//If not acting as a dead body
       tmpargument = rand & 2 + ACTIONBA
       DoAction  // Couldn't use latches...
 
-  //MIDDLE LEVEL AI
+  // MIDDLE LEVEL AI
   IfStateIs2
     IfTimeOut
       // Movement
@@ -140,7 +142,7 @@ IfStateIsNot			//If not acting as a dead body
       tmpargument = 100
       SetTime
 
-  //BAD BOY AI
+  // BAD BOY AI
   IfStateIs3
     Run
     IfTimeOut
@@ -150,7 +152,7 @@ IfStateIsNot			//If not acting as a dead body
       tmpdistance = selfz
       tmpargument = 3
       SpawnExactParticle
-      
+
       // Movement
       tmpx = 32*128
       tmpy = 30*128
@@ -158,7 +160,7 @@ IfStateIsNot			//If not acting as a dead body
         tmpturn = targetturnto + 32768
         tmpdistance = 100
         Compass
-        
+
       // Save the values for X and Y...
       tmpargument = 0
       SetXY
@@ -174,13 +176,13 @@ IfStateIsNot			//If not acting as a dead body
             IfFacingTarget
               tmpx = rand & 100
               tmpy = 4
-              IfXIsLessThanY		//Ready for breath attack
+              IfXIsLessThanY        // Ready for breath attack
                 tmpx = selfmana
                 tmpy = 300
                 IfXIsMoreThanY
                   tmpargument = 4
                   SetState
-                  //Make the zombi green
+                  // Make the zombi green
                   tmpargument = 2
                   SetGreenShift
                   tmpargument = -2
@@ -261,10 +263,10 @@ IfStateIsNot			//If not acting as a dead body
                   SetTargetToNearestBlahID
                     tmpx = 1
             tmpy = 1
-            IfXIsEqualToY			//If tmpx is 1, then a weapon was found
+            IfXIsEqualToY            // If tmpx is 1, then a weapon was found
               tmpx = targetdistance
               tmpy = 50
-              IfXIsLessThanY			//Close enough to grab it?
+              IfXIsLessThanY            // Close enough to grab it?
                 tmpargument = rand & 1 + ACTIONME
                 DoAction
               tmpx = targetx
@@ -286,56 +288,56 @@ IfStateIsNot			//If not acting as a dead body
       tmpargument = 10
       SetTime
 
-//Badass zombi is ready for breath attack
+// Badass zombi is ready for breath attack
 IfStateIs4
   tmpx = selfcontent
   tmpy = 150
-  IfXIsMoreThanY		//Long enough charge?
-    Sneak			//33% speed
+  IfXIsMoreThanY        // Long enough charge?
+    Sneak            // 33% speed
     SetTargetToSelf
     tmpargument = 5
     tmpx = selfx
     tmpy = selfy
     tmpdistance = selfz
-    SpawnExactParticle		//Unleash the breath attack!
+    SpawnExactParticle        // Unleash the breath attack!
       tmpargument = 7
-      CostTargetMana		//Use soma mana
+      CostTargetMana        // Use soma mana
     tmpx = targetmana
     tmpy = 20
-    IfXIsLessThanY		//Revert to normal combat form
+    IfXIsLessThanY        // Revert to normal combat form
       tmpargument = 3
       SetState
       tmpargument = 0
-      SetContent		//reset charge
+      SetContent        // reset charge
   Else
-    Run			//100% speed
+    Run            // 100% speed
     tmpargument = selfcontent +1
-    SetContent		//need more charge
+    SetContent        // need more charge
     tmpargument = 4
     tmpx = selfx
     tmpy = selfy
     tmpdistance = selfz
-    SpawnExactParticle		//Charging effect
-    
+    SpawnExactParticle        // Charging effect
+
     tmpx = selfcontent
     tmpy = 150
-    IfXIsMoreThanY		//Begin playing breath sound?
+    IfXIsMoreThanY        // Begin playing breath sound?
       tmpargument = 6
       PlaySound
-      tmpargument = -1		//Normalise skin again
+      tmpargument = -1        // Normalise skin again
       SetGreenShift
       SetBlueShift
       tmpargument = 1
       SetRedShift
 
-  //Move towards target
+  // Move towards target
   SetTargetToNearestEnemy
   tmpx = targetx
   tmpy = targety
   ClearWaypoints
   AddWaypoint
 
-//Explode on death
+// Explode on death
 IfStateIs3
   tmpx = selflife
   tmpy = 270
@@ -347,7 +349,7 @@ IfStateIs3
     tmpx = selfx
     tmpy = selfy
     tmpdistance = selfz
-    tmpargument = 6		//Fire
+    tmpargument = 6        // Fire
     SpawnExactParticle
     SpawnExactParticle
     SpawnExactParticle
@@ -356,7 +358,7 @@ IfStateIs3
     SpawnExactParticle
     GoPoof
 
-//Use gas explosion for death while charging
+// Use gas explosion for death while charging
 IfStateIs4
   tmpx = selflife
   tmpy = 270
@@ -368,7 +370,7 @@ IfStateIs4
     tmpx = selfx
     tmpy = selfy
     tmpdistance = selfz
-    tmpargument = 7		//Gas
+    tmpargument = 7        // Gas
     SpawnExactParticle
     SpawnExactParticle
     SpawnExactParticle

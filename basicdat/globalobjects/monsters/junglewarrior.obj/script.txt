@@ -1,26 +1,26 @@
 //------------------------------------------------------------------------------
-//NOTES
-//Armor 2 is a shaman with special magic abillities
-//Armor 1 is captain/elite soldier with super dodging
-//The object's content is how many spears it has left (or recharge if shaman)
+// NOTES
+// Armor 2 is a shaman with special magic abillities
+// Armor 1 is captain/elite soldier with super dodging
+// The object's content is how many spears it has left (or recharge if shaman)
 //------------------------------------------------------------------------------
-//Spawn stuff
+// Spawn stuff
 IfSpawned
-  tmpargument = 1			//Elite
+  tmpargument = 1            // Elite
   IfArmorIs
     SetTargetToSelf
-    tmpargument = rand & 511 + 512 	//2-4 bonus
+    tmpargument = rand & 511 + 512     // 2-4 bonus
     GiveLifeToTarget
     GiveStrengthToTarget
     GiveDexterityToTarget
-  tmpargument = 2			//Shaman
+  tmpargument = 2            // Shaman
   IfArmorIs
     SetTargetToSelf
-    tmpargument = rand & 1023 + 1024 	//4-8 bonus
+    tmpargument = rand & 1023 + 1024     // 4-8 bonus
     GiveWisdomToTarget
     GiveIntelligenceToTarget
 
-  //Figure out how many spears we have to spare
+  // Figure out how many spears we have to spare
   SetTargetToSelf
   SetTargetToTargetLeftHand
     tmpargument = [SPEA]
@@ -32,15 +32,15 @@ IfSpawned
     IfTargetHasID
       tmpargument = targetammo
       SetContent
-      
+
 //------------------------------------------------------------------------------
-//Growl
+// Growl
 IfUsed
   tmpargument = rand & 1 + 5
   PlaySound
 
 //------------------------------------------------------------------------------
-//Jumping
+// Jumping
 IfBumped
   SetTargetToWhoeverBumped
    // Jump over barriers, onto mounts
@@ -56,25 +56,25 @@ IfBumped
   SetTargetToOldTarget
 
 //------------------------------------------------------------------------------
-//Target is dead
+// Target is dead
 IfTargetKilled
   tmpargument = 0
   SetState
 
 //------------------------------------------------------------------------------
-//Use shield
+// Use shield
 IfTargetIsAttacking
   IfTargetIsOnHatedTeam
     IfFacingTarget
       IfTargetIsFacingSelf
         IfHoldingShield
-          tmpx = selfdex			//Check dexterity to block, 10 is average
+          tmpx = selfdex            // Check dexterity to block, 10 is average
           tmpy = rand & 7120
           IfXIsMoreThanY
             PressLatchButton
 
 //------------------------------------------------------------------------------
-//Handle death and stuff
+// Handle death and stuff
 IfKilled
   // Drop goodies
   tmpargument = selfmoney
@@ -87,31 +87,31 @@ IfKilled
   SetBumpHeight
 
   tmpargument = 0
-  IfArmorIs			//Normal dude
+  IfArmorIs            // Normal dude
     IfTargetIsOnOtherTeam
-      tmpargument = 0		//Enemy killed
+      tmpargument = 0        // Enemy killed
     Else
       tmpargument = 1
-    SendMessageNear		//Friendly fire
-  Else				//Killed captain or shaman
-    tmpargument = 25		//Bonus xp
+    SendMessageNear        // Friendly fire
+  Else                // Killed captain or shaman
+    tmpargument = 25        // Bonus xp
     tmpdistance = EXPKILL
     GiveExperienceToTargetTeam
     tmpargument = 1
     IfArmorIs
-      tmpargument = 5		//Elite
+      tmpargument = 5        // Elite
     Else
-      tmpargument = 3		//Shaman
+      tmpargument = 3        // Shaman
     SendMessageNear
 
-
-  //Death sound
+  // Death sound
   tmpargument = 4
   PlaySound
 
 //------------------------------------------------------------------------------
-//Shaman spells
+// Shaman spells
 tmpargument = 2
+
 IfArmorIs
 
   // Put the little mana ball on the
@@ -125,24 +125,24 @@ IfArmorIs
     tmpargument = 3
     SpawnAttachedSizedParticle
     SetTurnModeToWatchTarget
-    
+
   IfTimeOut
-    //Recharge spells
+    // Recharge spells
     tmpx = selfcontent
     tmpy = 0
     IfXIsMoreThanY
-      tmpargument = selfcontent - 1		//Recharge some...
+      tmpargument = selfcontent - 1        // Recharge some...
       SetContent
 
-    //Grasping grass spell
+    // Grasping grass spell
     tmpx = selfmana
     tmpy = 512
-    IfXIsMoreThanY				              // Enough mana to cast?
+    IfXIsMoreThanY                              // Enough mana to cast?
       IfTargetIsOnHatedTeam
         IfFacingTarget
           tmpx = selfcontent
           tmpy = 0
-          IfXIsEqualToY                 //No cooldown?
+          IfXIsEqualToY                 // No cooldown?
             tmpargument = LATCHLEFT
             PressLatchButton
               tmpargument = 4
@@ -150,7 +150,7 @@ IfArmorIs
               tmpy = 0
               tmpdistance = GRIPLEFT
               SpawnParticle
-              tmpargument = 10		      //Set recharge time
+              tmpargument = 10              // Set recharge time
               SetContent
               tmpargument = 1
               SetState
@@ -158,15 +158,15 @@ IfArmorIs
               tmpargument = 512
               CostTargetMana
 
-    //Heal spell
+    // Heal spell
     tmpx = selfmana
     tmpy = 256
-    IfXIsMoreThanY				// Enough mana to cast?
+    IfXIsMoreThanY                // Enough mana to cast?
       SetTargetToNearestFriend
       IfTargetIsHurt
         tmpx = targetdistance
         tmpy = 300
-        IfXIsLessThanY			      //In Range?
+        IfXIsLessThanY                  // In Range?
           IfFacingTarget
             tmpargument = LATCHLEFT
             PressLatchButton
@@ -175,14 +175,14 @@ IfArmorIs
               tmpdistance = targetz
               tmpargument = 6
               SpawnExactParticle
-              tmpargument = rand & 511 + 1024   //Heal 4-6 life
+              tmpargument = rand & 511 + 1024   // Heal 4-6 life
               HealTarget
-              
+
               SetTargetToSelf
               tmpargument = 256
               CostTargetMana
 
-        //move towards the target
+        // move towards the target
         tmpx = targetx
         tmpy = targety
         ClearWaypoints
@@ -191,19 +191,19 @@ IfArmorIs
         SetTargetToOldTarget
 
 //------------------------------------------------------------------------------
-//New round
+// New round
 IfTimeOut
   tmpargument = rand % 20 + 15
   SetTime
 
-  //Growl
+  // Growl
   tmpx = rand & 255
   tmpy = 25
-  IfXIsLessThanY			  // Play a random grunt?
+  IfXIsLessThanY              // Play a random grunt?
     tmpargument = rand & 1 + 2
     PlaySound
 
-  //GUARD
+  // GUARD
   IfStateIs0
     tmpargument = 50
     SetTime
@@ -211,23 +211,23 @@ IfTimeOut
     tmpx = rand % 2047 + selfspawnx - 1024
     tmpy = rand % 2047 + selfspawny - 1024
     ClearWaypoints
-    AddWaypoint					//Wander around and guarding
+    AddWaypoint                    // Wander around and guarding
     SetTargetToWideEnemy
-      tmpx = selfcontent			//Number of spears left
+      tmpx = selfcontent            // Number of spears left
       tmpy = 1
       IfXIsMoreThanY
-        tmpargument = 3				//Throw spear
+        tmpargument = 3                // Throw spear
         SetState
       Else
-        tmpargument = 1		//Charge enemy
+        tmpargument = 1        // Charge enemy
         SetState
 
-  //CHARGE ENEMY
+  // CHARGE ENEMY
   IfStateIs1
     SetTurnModeToVelocity
     tmpx = targetdistance
     tmpy = 400
-    IfXIsMoreThanY		//Move towards the enemy
+    IfXIsMoreThanY        // Move towards the enemy
       tmpx = rand & 511 + targetx - 255
       tmpy = rand & 511 + targety - 255
       tmpturn = targetturnto
@@ -237,18 +237,18 @@ IfTimeOut
       AddWaypoint
       Run
     Else
-      tmpargument = 2		//close combat
+      tmpargument = 2        // close combat
       SetState
 
-  //COMBAT - MELEE
+  // COMBAT - MELEE
   IfStateIs2
     SetTurnModeToWatchTarget
     tmpargument = 15
-    SetTime			//Quick reaction in close combat
+    SetTime            // Quick reaction in close combat
     tmpx = targetdistance
     tmpy = 250
-    IfXIsLessThanY		//Close enough?
-      IfFacingTarget		//Looking at enemy?
+    IfXIsLessThanY        // Close enough?
+      IfFacingTarget        // Looking at enemy?
         IfHoldingMeleeWeapon
           PressLatchButton
     tmpx = targetx
@@ -257,57 +257,57 @@ IfTimeOut
     tmpturn = targetturnto
     Compass
     ClearWaypoints
-    AddWaypoint			//Move towards enemy
+    AddWaypoint            // Move towards enemy
 
-    //Enemy ran away?
+    // Enemy ran away?
     tmpx = targetdistance
     tmpy = 500
     IfXIsMoreThanY
       tmpargument = 1
-      SetState			//Charge
+      SetState            // Charge
 
-  //COMBAT - THROW SPEAR
+  // COMBAT - THROW SPEAR
   IfStateIs3
 
-    //Are we in wrong mode?
+    // Are we in wrong mode?
     tmpx = selfcontent
     tmpy = 1
     IfXIsLessThanY
       tmpargument = 1
-      SetState			//Yes!!
+      SetState            // Yes!!
 
     SetTurnModeToWatchTarget
     tmpx = targetdistance
     tmpy = 400
-    IfXIsLessThanY		//Target coming too close
+    IfXIsLessThanY        // Target coming too close
       tmpx = selfx
       tmpy = selfy
       tmpturn = targetturnto
       tmpdistance = 0 - 800
       Compass
       ClearWaypoints
-      AddWaypoint				//Aim attack
+      AddWaypoint                // Aim attack
 
-      //Shoot when target is closer
-      IfFacingTarget				//Looking at enemy?
+      // Shoot when target is closer
+      IfFacingTarget                // Looking at enemy?
         IfHoldingMeleeWeapon
           PressLatchButton
             GetContent
-            tmpargument = tmpargument -1	//Reduce ammo with 1
-            SetContent			        //Remember that he has used a spear
+            tmpargument = tmpargument -1    // Reduce ammo with 1
+            SetContent                    // Remember that he has used a spear
             tmpargument = 50
             SetTime
 
     tmpx = targetdistance
     tmpy = 800
-    IfXIsMoreThanY		//Enemy too far away?
+    IfXIsMoreThanY        // Enemy too far away?
       tmpx = targetx
       tmpy = targety
       ClearWaypoints
-      AddWaypoint		//Move towards enemy
+      AddWaypoint        // Move towards enemy
 
 //------------------------------------------------------------------------------
-//Sneaky bastirds
+// Sneaky bastirds
 IfBackstabbed
   tmpargument = 2
   SendMessageNear
@@ -318,36 +318,36 @@ IfBackstabbed
   KillTarget
 
 //------------------------------------------------------------------------------
-//Return attack
+// Return attack
 IfAttacked
   SetTargetToWhoeverAttacked
   IfTargetIsOnSameTeam
     SetTargetToOldTarget
 
-  //Say ouch (meow!)
+  // Say ouch (meow!)
   tmpargument = rand & 2 + 5
   PlaySound
 
 //------------------------------------------------------------------------------
-//Dodge bullets?
+// Dodge bullets?
 IfTargetIsAttacking
   IfTargetIsOnHatedTeam
     tmpx = targetdistance
     tmpy = 300
-    IfXIsMoreThanY			//Target doing ranged attack?
+    IfXIsMoreThanY            // Target doing ranged attack?
       tmpargument = 1
-      IfArmorIs				//Elites always dodge
+      IfArmorIs                // Elites always dodge
         tmpx = 1
       Else
         tmpturn = selfdex - targetdex
         tmpx = 30 + tmpturn > 8
         tmpy = rand % 100
-        IfXIsMoreThanY			//Others must make a dex check
+        IfXIsMoreThanY            // Others must make a dex check
           tmpx = 1
         Else
-          tmpx = 0			//Failed!
+          tmpx = 0            // Failed!
       tmpy = 1
-      IfXIsEqualToY			//Success!
+      IfXIsEqualToY            // Success!
         tmpx = rand & 1023 + selfx - 512
         tmpy = rand & 1023 + selfy - 512
         tmpturn = rand
@@ -361,15 +361,16 @@ IfTargetIsAttacking
         PressLatchButton
 
 //------------------------------------------------------------------------------
-//We dont like water =(
+// We dont like water =(
 tmpargument = 0
+
 IfStateIsNot
   IfOverWater
 
-    //Jump over?
+    // Jump over?
     IfTargetIsOnHatedTeam
       tmpx = targetdistance
-      tmpy = 128*4            //Try to jump over up to 4 water tiles
+      tmpy = 128*4            // Try to jump over up to 4 water tiles
       IfXIsLessThanY
         tmpx = targetx
         tmpy = targety
@@ -378,10 +379,10 @@ IfStateIsNot
         Compass
         ClearWaypoints
         AddWaypoint
-        tmpargument = LATCHJUMP		//Leap!
+        tmpargument = LATCHJUMP        // Leap!
         PressLatchButton
       Else
-        tmpx = selfx			//eew! water!
+        tmpx = selfx            // eew! water!
         tmpy = selfy
         tmpdistance = -300
         tmpturn = targetturnto
@@ -392,20 +393,21 @@ IfStateIsNot
       AddWaypoint
 
 //------------------------------------------------------------------------------
-//Claw attacks for last resort... meow!
+// Claw attacks for last resort... meow!
 tmpargument = 0
+
 IfStateIsNot
   IfUnarmed
     SetTargetToWideEnemy
       tmpx = targetdistance
       tmpy = 100
-      IfXIsLessThanY				//Scratch!
+      IfXIsLessThanY                // Scratch!
         IfFacingTarget
           tmpargument = rand & 1 + LATCHLEFT
           PressLatchButton
       Else
         tmpy = 400
-        IfXIsLessThanY				//Move in closer
+        IfXIsLessThanY                // Move in closer
           tmpx = targetx
           tmpy = targety
           tmpdistance = 0-50
@@ -415,9 +417,10 @@ IfStateIsNot
           AddWaypoint
 
 //------------------------------------------------------------------------------
-//More realistic behaviour
+// More realistic behaviour
 IfDazed
   SetTurnModeToVelocity
+
 IfGrogged
   SetTurnModeToVelocity
 

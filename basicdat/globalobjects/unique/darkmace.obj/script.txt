@@ -1,7 +1,7 @@
-//Make it glow
+// Make it glow
 IfSpawned
   ReaffirmCharacter
-//Damage good people
+// Damage good people
 IfTimeOut
   tmpargument = 50
   SetTime
@@ -11,13 +11,14 @@ IfTimeOut
     IfTargetHasSpecialID
       tmpargument = 128
       DamageTarget
-      
+
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -30,14 +31,23 @@ IfCrushed
   GoPoof
   tmpargument = 1
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
-IfHitGround				// Make a sound
-  tmpargument = 1			  //
-  PlaySound				  //
-End					// All done
+
+// Make it lie on floor
+IfDropped
+  KeepAction
+
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
+
+// Make a sound
+IfHitGround
+  tmpargument = 1
+  PlaySound
+
+// All done
+End
+

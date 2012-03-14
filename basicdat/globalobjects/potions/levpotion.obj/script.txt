@@ -64,7 +64,7 @@ IfUsed
     GiveExperienceToTarget
 
   SetTargetToWhoeverIsHolding
-    SetOwnerToTarget		// Enchant the target
+    SetOwnerToTarget        // Enchant the target
     EnchantTarget
     tmpargument = ACTIONMC
     TargetDoAction

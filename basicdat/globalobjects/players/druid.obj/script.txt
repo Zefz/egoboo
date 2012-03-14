@@ -5,14 +5,12 @@ IfCleanedUp
   tmpdistance = 8000
   PlayFullSound
 
-
 //------------------------------------------------------------------------------
 // ZZ> Scream and shout
 IfUsed
   tmpdistance = rand & 2047 + 15000
   tmpargument = 10
   PlaySound
-
 
 //------------------------------------------------------------------------------
 // ZZ> Handle being bored by cheering or sneezing
@@ -25,7 +23,6 @@ IfBored
   tmpargument = ACTIONMC
   DoAction
 
-
 //------------------------------------------------------------------------------
 // ZZ> Handle death by sending a message and other stuff
 IfKilled
@@ -36,7 +33,6 @@ IfKilled
     tmpargument = 3
   tmpdistance = rand & 2047 + 15000
   PlaySound
-
 
   // Message
   tmpargument = 3
@@ -50,23 +46,19 @@ IfKilled
       tmpargument = MESSAGEACCIDENT
   SendMessage
 
-
   // Drop goodies
   tmpargument = 65535
   DropMoney
   DropKeys
 
-
   // Make the character body
   tmpargument = 45
   SetBumpHeight
-
 
 //------------------------------------------------------------------------------
 // ZZ> For helper AIs
 IfLeaderKilled
   BecomeLeader
-
 
 //------------------------------------------------------------------------------
 // ZZ> Handle being attacked by blocking or countering or running away
@@ -83,7 +75,6 @@ IfAttacked
     tmpdistance = rand & 2047 + 15000
     PlaySound
 
-
 //------------------------------------------------------------------------------
 // ZZ> Handle being healed by spitting out a message and stopping retreat
 IfHealed
@@ -93,7 +84,6 @@ IfHealed
   tmpdistance = rand & 2047 + 15000
   PlaySound
 
-
 //------------------------------------------------------------------------------
 // ZZ> Handle not being able to carry something
 IfTooMuchBaggage
@@ -102,7 +92,6 @@ IfTooMuchBaggage
   tmpargument = 7
   tmpdistance = rand & 2047 + 15000
   PlaySound
-
 
 //------------------------------------------------------------------------------
 End

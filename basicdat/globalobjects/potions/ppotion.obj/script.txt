@@ -4,16 +4,16 @@ IfSpawned
   DoAction
   KeepAction
 
-  //Normal
+  // Normal
   IfStateIs0
     MakeCrushValid
     MakeAmmoKnown
-  
-  //Thrown
+
+  // Thrown
   IfStateIs1
     tmpargument = rand & 511 + 1300
     AccelerateUp
-    
+
 // Make it poof
 IfCrushed
   tmpx = selfx
@@ -35,26 +35,26 @@ IfDropped
 // Play a clink or be destroyed
 IfHitGround
 
-  //It was dropped
+  // It was dropped
   IfStateIs0
     tmpargument = 0
     PlaySound
-    
-  //It was thrown
+
+  // It was thrown
   IfStateIs1
     tmpargument = 2
     PlaySound
-    
-    //Spawns a gassy cloud
+
+    // Spawns a gassy cloud
     tmpargument = 3
     tmpx = 0
     tmpy = 0
     tmpdistance = SPAWNORIGIN
     SpawnParticle
 
-    //go away
+    // go away
     GoPoof
-    
+
 // Alert others to draw
 IfTakenOut
   SetTargetToWhoeverIsHolding
@@ -64,10 +64,10 @@ IfTakenOut
 
 // Tell them what they've won...
 IfGrabbed
-  SetTargetToWhoeverIsHolding    
+  SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer
-  
-    //Characters with poison skill knows what this is
+
+    // Characters with poison skill knows what this is
     IfNameIsKnown
       DoNothing
     Else
@@ -75,27 +75,27 @@ IfGrabbed
       IfTargetHasSkillID
         MakeSimilarNamesKnown
 
-    //the message
+    // the message
     tmpargument = 0
     SendMessageNear
 
-//Either throw or drink it
+// Either throw or drink it
 IfUsed
   SetTargetToWhoeverIsHolding
 
-  //Characters with poison skill can throw these
+  // Characters with poison skill can throw these
   tmpargument = [POIS]
   IfTargetHasSkillID
     tmpx = selfcontent
-    tmpy = targetstr > 7 + 30         //Max charge depends on strength
+    tmpy = targetstr > 7 + 30         // Max charge depends on strength
     IfXIsLessThanY
       tmpargument = selfcontent + 1
       SetContent
-    
-  //Others stupidly drink it!
+
+  // Others stupidly drink it!
   Else
-    
-    //tell them what they did
+
+    // tell them what they did
     IfUsageIsKnown
       tmpargument = 3
       SendMessageNear
@@ -109,8 +109,8 @@ IfUsed
       tmpdistance = EXPDARE
       GiveExperienceToTarget
       MakeSimilarNamesKnown
-      
-    //Do the effects
+
+    // Do the effects
     SetOwnerToTarget
     EnchantTarget
 
@@ -119,19 +119,19 @@ IfUsed
     tmpdistance = SPAWNORIGIN
     tmpargument = 1
     SpawnAttachedHolderParticle
-      
+
     tmpargument = 1
     PlaySound
     tmpargument = 40
     SetReloadTime
-    
-    //Use one bottle and go away if it was the last one
+
+    // Use one bottle and go away if it was the last one
     CostAmmo
     IfAmmoOut
       GoPoof
 
 Else
-  tmpx = selfcontent      //self content is throw charge
+  tmpx = selfcontent      // self content is throw charge
   tmpy = 20
   IfXIsMoreThanY
     tmpx = selfx
@@ -139,28 +139,28 @@ Else
     tmpturn = targetturn
     tmpdistance = selfcontent > 1
     SpawnCharacter
-    
-    //Make it break when hit ground
+
+    // Make it break when hit ground
     tmpargument = 1
     SetChildState
     SetChildAmmo
 
-    //Set some delay
+    // Set some delay
     tmpargument = 40
     SetReloadTime
-    
-    //Play throwing swish
+
+    // Play throwing swish
     tmpargument = 3
     PlaySound
-    
-    //Use one bottle and go away if it was the last one
+
+    // Use one bottle and go away if it was the last one
     CostAmmo
     IfAmmoOut
       GoPoof
-      
-  //Reset charge
+
+  // Reset charge
   tmpargument = 0
   SetContent
-    
+
 // Finish up
 End

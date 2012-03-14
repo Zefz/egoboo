@@ -1,11 +1,11 @@
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
   MakeAmmoKnown
-  
+
   IfNameIsKnown
     tmpargument = 1
     ChangeArmor
@@ -22,11 +22,16 @@ IfCrushed
   GoPoof
   tmpargument = 6
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-IfHitGround				// Make a sound
+
+// Make it lie on floor
+IfDropped
+  KeepAction
+
+// Make a sound
+IfHitGround
   tmpargument = 0
-  PlaySound		  
+  PlaySound
+
 IfInWater
   IfHeld
     DoNothing
@@ -41,12 +46,13 @@ IfInWater
       tmpargument = 5
       SendMessageNear
       MakeNameKnown      // To keep messages okay
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
+IfGrabbed                // Tell them what they've won...
+  SetTargetToWhoeverIsHolding
   SetOwnerToTarget
-  IfTargetIsAPlayer			  //
+  IfTargetIsAPlayer
     GetContent
-    SendMessageNear			  //
+    SendMessageNear
+
 IfUsed
   GetContent
   tmpx = tmpargument
@@ -77,19 +83,19 @@ IfUsed
 
     SetTargetToWhoeverIsHolding
     tmpargument = [UNDE]
-    IfTargetHasID           //Undead actually gain bonuses!
+    IfTargetHasID           // Undead actually gain bonuses!
       tmpargument = 256*4
-      HealTarget            //Heal 4 hp
+      HealTarget            // Heal 4 hp
       tmpargument = 8
       SendMessage
       tmpargument = 128
-      GiveLifeToTarget      //Give 1/2 permanent hp
+      GiveLifeToTarget      // Give 1/2 permanent hp
     Else
       SetOwnerToTarget
-      EnchantTarget         //Reduce max hp by 4
+      EnchantTarget         // Reduce max hp by 4
       tmpargument = 2
       SendMessage
-    
+
     CostAmmo
     IfAmmoOut
       GoPoof
@@ -101,6 +107,7 @@ IfUsed
     SendMessageNear
     tmpargument = 50
     SetReloadTime
+
 IfReaffirmed
   IfHeld
     DoNothing
@@ -116,4 +123,7 @@ IfReaffirmed
     GoPoof
     tmpargument = 4
     SendMessageNear
-End					// All done
+
+// All done
+End
+

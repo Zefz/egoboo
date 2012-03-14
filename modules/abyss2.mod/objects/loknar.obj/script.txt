@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-//Use shields
+// Use shields
 IfTargetIsAttacking
   IfHoldingShield
     IfTargetIsOnHatedTeam
@@ -11,7 +11,7 @@ IfTargetIsAttacking
           PressLatchButton
 
 //------------------------------------------------------------------------------
-//Get out of those ugly cubes!
+// Get out of those ugly cubes!
 IfSitting
   SetOldTarget
   SetTargetToWhoeverIsHolding
@@ -22,7 +22,7 @@ IfSitting
   SetTargetToOldTarget
 
 //------------------------------------------------------------------------------
-//Join the noble saviours!
+// Join the noble saviours!
 IfOrdered
   tmpx = selforder
   tmpy = [FREE]
@@ -33,19 +33,19 @@ IfOrdered
     tmpargument = 8
     PlayFullSound
     SendMessage
-    tmpargument = 3             //Follow mode
+    tmpargument = 3             // Follow mode
     SetState
     tmpargument = 70
     tmpdistance = EXPDARE
     GiveExperienceToGoodTeam
-    SetOwnerToTarget            //Make the nearest saviour the new boss
+    SetOwnerToTarget            // Make the nearest saviour the new boss
 
 //------------------------------------------------------------------------------
-//Jump over bodies and obstacles
+// Jump over bodies and obstacles
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsAPlatform
-    tmpargument = [CUBE]		//Dont jump into gelfeets!
+    tmpargument = [CUBE]        // Dont jump into gelfeets!
     IfTargetHasID
       DoNothing
     Else
@@ -53,7 +53,7 @@ IfBumped
       PressLatchButton
 
 //------------------------------------------------------------------------------
-//Move out of lava
+// Move out of lava
 IfOverWater
   tmpx = ownerx
   tmpy = ownery
@@ -63,9 +63,10 @@ IfOverWater
   PressLatchButton
 
 //------------------------------------------------------------------------------
-//Show where you are on the map
+// Show where you are on the map
 tmpx = selfstate
 tmpy = 2
+
 IfXIsMoreThanY
   tmpx = selfx
   tmpy = selfy
@@ -73,19 +74,19 @@ IfXIsMoreThanY
   ShowBlipXY
 
 //------------------------------------------------------------------------------
-//Main AI loop
+// Main AI loop
 IfTimeOut
   tmpargument = 50
   SetTime
 
-  //Tell the player to release him (or else!)
+  // Tell the player to release him (or else!)
   tmpx = selfstate
   tmpy = 3
   IfXIsLessThanY
     tmpargument = 250
     SetTime
     tmpdistance = 128*7
-    SetTargetToDistantEnemy                //SetTargetToWhoeverIsInPassage
+    SetTargetToDistantEnemy                // SetTargetToWhoeverIsInPassage
       IfTargetIsAPlayer
         IfStateIs0
           tmpargument = 7
@@ -107,30 +108,29 @@ IfTimeOut
         SendMessage
     SetTurnModeToWatchTarget
 
-  //When not imprisoned, draw our gear
+  // When not imprisoned, draw our gear
   Else
     IfHoldingMeleeWeapon
       IfHoldingShield
         DoNothing
       Else
-        tmpargument = LATCHPACKLEFT		//shield
+        tmpargument = LATCHPACKLEFT        // shield
         PressLatchButton
     Else
-      tmpargument = LATCHPACKRIGHT		//weapon
+      tmpargument = LATCHPACKRIGHT        // weapon
       PressLatchButton
 
-
-  //Follow
+  // Follow
   IfStateIs3
     tmpargument = rand & 15 + 35
     SetTime
     SetTargetToOwner
     tmpx = targetdistance
     tmpy = 1500
-    IfXIsLessThanY                  //Follow player if he is far away
+    IfXIsLessThanY                  // Follow player if he is far away
       SetTargetToWideEnemy
         tmpargument = [CUBE]
-        IfTargetHasID			//Don't attack cubes
+        IfTargetHasID            // Don't attack cubes
           SetTargetToOwner
         Else
           tmpargument = 4
@@ -144,25 +144,25 @@ IfTimeOut
     ClearWaypoints
     AddWaypoint
 
-  //Combat Mode
+  // Combat Mode
   IfStateIs4
     tmpargument = rand & 15 + 15
     SetTime
     tmpx = targetdistance
     tmpy = 250
-    IfXIsMoreThanY              //Never run away from melee
+    IfXIsMoreThanY              // Never run away from melee
       SetTargetToOwner
       tmpx = targetdistance
       tmpy = 1500
-      IfXIsMoreThanY            //See if we need to go after the player
+      IfXIsMoreThanY            // See if we need to go after the player
         tmpargument = 3
         SetState
 
-    //We are still in combat! Do the usual combat stuff
+    // We are still in combat! Do the usual combat stuff
     IfStateIs4
       SetTargetToWideEnemy
       tmpargument = [CUBE]
-      IfTargetHasID				//Keep away from cubes
+      IfTargetHasID                // Keep away from cubes
         tmpx = rand & 511 + ownerx - 256
         tmpy = rand & 511 + ownery - 256
         tmpturn = targetturnto
@@ -179,7 +179,7 @@ IfTimeOut
         ClearWaypoints
         AddWaypoint
 
-        //Attack!
+        // Attack!
         IfHoldingMeleeWeapon
           IfFacingTarget
             tmpx = targetdistance
@@ -187,7 +187,7 @@ IfTimeOut
             IfXIsLessThanY
               PressLatchButton
 
-        //Randomly growl combat stuff (this guy has anger issues!)
+        // Randomly growl combat stuff (this guy has anger issues!)
         tmpx = rand & 255
         tmpy = 15
         IfXIsLessThanY
@@ -195,12 +195,12 @@ IfTimeOut
           PlaySound
           SendMessageNear
 
-      //No more enemies around
+      // No more enemies around
       Else
         tmpargument = 3
         SetState
 
-        //End of combat cheer! (33% chance)
+        // End of combat cheer! (33% chance)
         tmpx = rand % 3
         tmpy = 0
         IfXIsEqualToY
@@ -209,10 +209,10 @@ IfTimeOut
           SendMessageNear
 
 //------------------------------------------------------------------------------
-//Handle death by sending a message and other stuff
+// Handle death by sending a message and other stuff
 IfKilled
   tmpargument = 1
-  PlaySound			//death cry
+  PlaySound            // death cry
 
   tmpargument = 0
   IfTargetIsOnSameTeam
@@ -231,17 +231,17 @@ IfKilled
   tmpargument = 45
   SetBumpHeight
 
-  //Make no body! (for ressurections)
+  // Make no body! (for ressurections)
   GoPoof
 
 //------------------------------------------------------------------------------
-//Say ouch
+// Say ouch
 IfAttacked
   SetTargetToWhoeverAttacked
   tmpargument = rand & 1 + 1
   PlaySound
 
-  //Become angry when friendly fire at low life
+  // Become angry when friendly fire at low life
   IfTargetIsOnSameTeam
     tmpx = selflife
     tmpy = 1024

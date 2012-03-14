@@ -13,7 +13,7 @@ IfSpawned
 IfTimeOut
   tmpargument = rand & 3 + 2
   SetTime
-  
+
   SetTargetToNearestLifeform
     tmpx = targetdistance
     tmpy = 64
@@ -72,5 +72,7 @@ IfTimeOut
         SetTileXY
 
       GoPoof
-      
-End					// All done
+
+// All done
+End
+

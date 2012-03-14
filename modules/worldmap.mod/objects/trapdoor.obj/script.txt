@@ -4,18 +4,20 @@ IfSpawned
   tmpx = rand & 4000 - 2000 + selfx
   tmpy = rand & 4000 - 2000 + selfy
   Teleport
+
 IfTimeOut
-  IfBumped			// 
-    SetTargetToWhoeverBumped	  //
-      IfTargetCanOpenStuff	    //
-        tmpargument = rand & 3		        //
-        SendMessage		        //
+  IfBumped
+    SetTargetToWhoeverBumped
+      IfTargetCanOpenStuff
+        tmpargument = rand & 3
+        SendMessage
         tmpargument = 180
         SetTime
+
 IfAttacked
   GetContent
   tmpargument = 5
-  //GetState
+  // GetState
   BeatModule
   EnableExport
   // Fix the end text
@@ -23,6 +25,7 @@ IfAttacked
   GetContent
   AddEndMessage
   EndModule
+
 IfStateIs0
   SetTargetToNearbyEnemy
     tmpargument = ACTIONMJ
@@ -41,4 +44,7 @@ Else
     tmpargument = 0
     PlaySound
     SetState
-End				// Finished with this character
+
+// Finished with this character
+End
+

@@ -1,21 +1,22 @@
-//State 0 = mounted
+// State 0 = mounted
 IfDismounted
   tmpargument = 1
   SetState
+
 IfSitting
   IfStateIs1
     tmpargument = 0
     SetState
     SetTargetToWhoeverIsHolding
-    SetOwnerToTarget            //Make this your mount
+    SetOwnerToTarget            // Make this your mount
 
 IfSpawned
   tmpargument = 150
-  SetTime                       //Give some time to get on the mount
+  SetTime                       // Give some time to get on the mount
   tmpargument = 1
   SetState
-  
-  //Assume that we spawn on a mount
+
+  // Assume that we spawn on a mount
   SetTargetToNearestFriend
   SetOwnerToTarget
 
@@ -52,7 +53,7 @@ IfKilled
   tmpargument = 0
   SendMessageNear
 
-  //Death sound
+  // Death sound
   tmpargument = 0
   PlaySound
 
@@ -63,7 +64,7 @@ IfKilled
   GoPoof
   SpawnPoof
 
-//If someone blocks, there is a chance we get thrown of the mount
+// If someone blocks, there is a chance we get thrown of the mount
 IfTargetIsDefending
   IfScoredAHit
     SetTargetToNearbyEnemy
@@ -82,11 +83,11 @@ IfAttacked
       DoNothing
     Else
       SetTargetToOldTarget
-  //Play ouch sound
+  // Play ouch sound
   tmpargument = rand & 1 + 1
   PlaySound
 
-//Don't hack dead bodies
+// Don't hack dead bodies
 IfTargetIsAlive
   DoNothing
 Else
@@ -94,7 +95,7 @@ Else
   SetState
 
 //------------------------------------------------------------------------------
-//This is the Main AI loop
+// This is the Main AI loop
 IfTimeOut
 
   // Riding some type of animal...
@@ -119,7 +120,7 @@ IfTimeOut
         tmpargument = 75
         SetTime
       Else
-        //Move away for a mounted charge
+        // Move away for a mounted charge
         tmpx = targetx
         tmpy = targety
         tmpturn = rand
@@ -146,20 +147,20 @@ IfTimeOut
       ClearWaypoints
       AddWaypoint
 
-  //Unmounted!
+  // Unmounted!
   IfStateIs1
     tmpargument = rand & 15 + 15 // Time
     SetTime
 
-    //Find a mount!
-    tmpdistance = 0         //If tmpdistance = 1 we go foot soldier tactic
+    // Find a mount!
+    tmpdistance = 0         // If tmpdistance = 1 we go foot soldier tactic
     SetTargetToOwner
     IfTargetIsAlive
-      IfTargetIsOnHatedTeam           //They took our mount!
+      IfTargetIsOnHatedTeam           // They took our mount!
         SetTargetToTargetLeftHand
           tmpdistance = 1
     Else
-      tmpdistance = 1                 //They killed our mount!
+      tmpdistance = 1                 // They killed our mount!
     tmpturn = 0
     IfDistanceIsMoreThanTurn
       SetTargetToWideEnemy

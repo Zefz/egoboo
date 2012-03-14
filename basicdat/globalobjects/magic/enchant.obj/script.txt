@@ -56,7 +56,7 @@ Else
         SetTargetToTargetLeftHand
       tmpargument = [XWEP]
       IfTargetHasAnyID
-        
+
         // Do the spell
         EnchantTarget
           MakeUsageKnown
@@ -74,12 +74,11 @@ Else
         PlaySound
         tmpargument = 60
         SetReloadTime
-     
-      
-      //It isn't a weapon!
+
+      // It isn't a weapon!
       Else
-      
-        //Allow potions to be enchanted
+
+        // Allow potions to be enchanted
         tmpargument = [POTI]
         IfTargetHasAnyID
           tmpargument = [ENCH]
@@ -90,21 +89,21 @@ Else
           SetReloadTime
           tmpargument = 4
           SendMessageNear
-        
-        //Neither a potion!
+
+        // Neither a potion!
         Else
-          
-          //Allow wands to be recharged
+
+          // Allow wands to be recharged
           tmpargument = [WAND]
           IfTargetHasAnyID
-            
-            //Get the holder's INT without losing our current target
+
+            // Get the holder's INT without losing our current target
             SetOldTarget
             SetTargetToWhoeverIsHolding
             tmpturn = targetint > 9
             SetTargetToOldTarget
-            
-            //1 in INT/2 to blow it up
+
+            // 1 in INT/2 to blow it up
             tmpx = rand % tmpturn
             tmpy = 0
             IfXIsEqualToY
@@ -112,8 +111,8 @@ Else
               SendMessageNear
               tmpargument = 1
               PlaySound
-              
-              //Now make it explode
+
+              // Now make it explode
               PoofTarget
                 tmpargument = 2
                 tmpdistance = targetz
@@ -122,19 +121,19 @@ Else
                 SpawnExactParticle
                 SpawnExactParticle
                 SetTargetToWhoeverIsHolding
-                tmpargument = rand % 1024 + 2048      //8-12 base damage
+                tmpargument = rand % 1024 + 2048      // 8-12 base damage
                 DamageTarget
-                tmpargument = 3             //Apply some confusion as well
+                tmpargument = 3             // Apply some confusion as well
                 DazeTarget
               Else
                 tmpargument = 0
                 SendMessageNear
               tmpargument = 120
               SetReloadTime
-            Else    
+            Else
               tmpargument = 5
               SendMessageNear
-              
+
               SetTargetToWhoeverIsHolding
               tmpargument = [WAND]
               RestockTargetAmmoIDFirst
@@ -142,16 +141,16 @@ Else
               PlaySound
               tmpargument = 60
               SetReloadTime
-              
-              //And pay the price!
-              tmpargument = -50         //5 recharges = 1 mana point
+
+              // And pay the price!
+              tmpargument = -50         // 5 recharges = 1 mana point
               GiveManaToTarget
-            
+
           // No valid target...
           Else
             tmpargument = 0
             SendMessageNear
-          
+
     // Nothing happens...
     Else
       tmpargument = 0

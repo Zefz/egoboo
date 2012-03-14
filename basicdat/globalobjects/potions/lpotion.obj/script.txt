@@ -51,13 +51,13 @@ IfUsed
   MakeSimilarNamesKnown
   IfUsageIsKnown
     IfTargetIsHurt
-      tmpargument = 1		//Make them drink it
+      tmpargument = 1        // Make them drink it
       SetState
       tmpargument = 3
     Else
       tmpargument = 6
     SendMessageNear
-  Else			//They don't know what it was
+  Else            // They don't know what it was
     MakeUsageKnown
     tmpargument = 4
     IfTargetIsAPlayer
@@ -66,65 +66,66 @@ IfUsed
     tmpargument = 40
     tmpdistance = EXPDARE
     GiveExperienceToTarget
-    tmpargument = 1		//Make them drink it
+    tmpargument = 1        // Make them drink it
     SetState
 
-  //This proceeds if the player drank the potion
+  // This proceeds if the player drank the potion
   IfStateIs1
-  
-    //Normal potion
+
+    // Normal potion
     tmpargument = 0
     IfArmorIs
       // Decrease max life a little
-      tmpargument = -16		      
+      tmpargument = -16
       GiveLifeToTarget
 
       // Increase current life
-      tmpargument = rand % 2047 + 2048	//Amount of life healed
+      tmpargument = rand % 2047 + 2048    // Amount of life healed
       HealTarget
-      
-      //Do flashy effects      
+
+      // Do flashy effects
       tmpargument = 1
-      PlaySound      
-    
-    //Super potion
+      PlaySound
+
+    // Super potion
     tmpargument = 1
     IfArmorIs
 
       // Heal all damage
-      tmpargument = targetmaxlife	//Amount of life healed
+      tmpargument = targetmaxlife    // Amount of life healed
       HealTarget
 
-      //Do flashy effects      
+      // Do flashy effects
       tmpargument = 2
       PlaySound
-      
-    tmpargument = ACTIONMC		//Drink animation
+
+    tmpargument = ACTIONMC        // Drink animation
     TargetDoAction
     tmpdistance = SPAWNORIGIN
     tmpargument = 1
     SpawnAttachedHolderParticle
-  Else				//This makes them drop it if not set to use
-    tmpx = selfx	//Where to spawn the object
+  Else                // This makes them drop it if not set to use
+    tmpx = selfx    // Where to spawn the object
     tmpy = selfy
     tmpturn = selfturn
-    tmpdistance = 0	//Velocity speed of the spawned object
-    SpawnCharacter	//Spawn a copy of the flask
+    tmpdistance = 0    // Velocity speed of the spawned object
+    SpawnCharacter    // Spawn a copy of the flask
       tmpargument = 1
       SetChildAmmo
       IfNameIsKnown
-        SetChildState     //Remember that it is identified already
+        SetChildState     // Remember that it is identified already
 
-  //Use one "charge"
+  // Use one "charge"
   CostAmmo
   IfAmmoOut
     GoPoof
 
   tmpargument = 0
-  SetState				//Reset for next use
+  SetState                // Reset for next use
 
-//Allow to become a super potion
+// Allow to become a super potion
 tmpargument = 0
+
 IfArmorIs
   IfOrdered
     tmpx = selforder
@@ -134,8 +135,8 @@ IfArmorIs
       ChangeArmor
       tmpargument = RED
       SparkleIcon
-      
-//This make super potions sparkle
+
+// This make super potions sparkle
 Else
   tmpx = rand & 2
   tmpy = 0
@@ -145,6 +146,6 @@ Else
     tmpy = rand % 50 - 25
     tmpdistance = rand & 31
     SpawnParticle
-  
+
 // Finish up
 End

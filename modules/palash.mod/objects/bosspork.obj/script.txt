@@ -2,12 +2,13 @@
 IfSpawned
   SetTurnModeToSpin
   DisableExport
+
 IfTimeOut
   // Make sparklies
   SpawnPoof
   tmpargument = 10
   SetTime
-  
+
 IfGrabbed
   EnableExport
   BeatModule
@@ -36,16 +37,18 @@ IfGrabbed
 
   // Mark this module as beaten, hidden modules may open up
   tmpargument = [MAIN]
-  tmpdistance = 3           //The quest level
-  AddQuestAllPlayers        //Add it
-  
-  //This unlocks the ash domain
+  tmpdistance = 3           // The quest level
+  AddQuestAllPlayers        // Add it
+
+  // This unlocks the ash domain
   tmpargument = [BEAT]
   AddIDSZ
-  
+
   // Become the export object
   SetTargetToSelf
   tmpargument = 117
   ChangeTargetClass
-  
-End					// All done
+
+// All done
+End
+

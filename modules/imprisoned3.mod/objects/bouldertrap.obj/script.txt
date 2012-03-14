@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-//Setup where to roll
+// Setup where to roll
 IfSpawned
   ClearWaypoints
   tmpx = selfmoney
@@ -10,17 +10,19 @@ IfSpawned
   AddWaypoint
 
 //------------------------------------------------------------------------------
-//Make it roll
+// Make it roll
 IfHitGround
   tmpargument = 0
   PlaySound
-   
+
 //------------------------------------------------------------------------------
-//Crush folks
+// Crush folks
 IfBumped
   SetTargetToWhoeverBumped
   KillTarget
   tmpargument = LATCHJUMP
-  PressLatchButton			//"bump" over them
+  PressLatchButton            // "bump" over them
 
-End					// All done
+// All done
+End
+

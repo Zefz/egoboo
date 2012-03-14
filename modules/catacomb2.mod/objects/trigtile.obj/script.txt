@@ -1,4 +1,4 @@
-//Check if enemies are nearby
+// Check if enemies are nearby
 IfStateIs0
   IfTimeOut
     tmpargument = rand % 45 + 45
@@ -158,4 +158,6 @@ IfStateIs3
       tmpargument = 8
       SetTime
 
-End					// Finished with this character
+// Finished with this character
+End
+

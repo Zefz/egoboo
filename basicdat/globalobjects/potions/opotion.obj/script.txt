@@ -1,25 +1,25 @@
-//When drunk
+// When drunk
 IfUsed
-  
-  //Effect 1 - show map and location
+
+  // Effect 1 - show map and location
   ShowMap
   ShowYouAreHere
-  
-  //Effect 2 - see invisible and kurses (permanent until death)
+
+  // Effect 2 - see invisible and kurses (permanent until death)
   SetTargetToWhoeverIsHolding
   SetOwnerToTarget
   EnchantTarget
-  
-  //Effect 3 - Reveal all enemies on the map
-  tmpargument = [NONE]              //All types
+
+  // Effect 3 - Reveal all enemies on the map
+  tmpargument = [NONE]              // All types
   AddBlipAllEnemies
-  
-  //Always give some xp for insight
+
+  // Always give some xp for insight
   tmpargument = 30
   tmpdistance = EXPSECRET
   GiveExperienceToTarget
-  
-  //The usual potion stuff
+
+  // The usual potion stuff
   MakeSimilarNamesKnown
   tmpargument = ACTIONMC
   TargetDoAction
@@ -30,13 +30,13 @@ IfUsed
   PlaySound
   tmpargument = 3
   SendMessageNear
-        
-  //Ammo stuff
+
+  // Ammo stuff
   CostAmmo
   IfAmmoOut
     GoPoof
-    
-  //Permanently lower some stats
+
+  // Permanently lower some stats
   tmpargument = 0 - 32
   GiveWisdomToTarget
   GiveIntelligenceToTarget
@@ -47,8 +47,8 @@ IfSpawned
   DoAction
   KeepAction
   MakeCrushValid
-  
-//Mooshed in a door
+
+// Mooshed in a door
 IfCrushed
   SpawnPoof
   tmpargument = 1

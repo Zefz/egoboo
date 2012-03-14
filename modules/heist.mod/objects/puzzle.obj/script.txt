@@ -1,8 +1,8 @@
 // Make it stay open or close
 IfSpawned
-  KeepAction			//Start at off
+  KeepAction            // Start at off
 
-//Turn switch when bumped
+// Turn switch when bumped
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetCanOpenStuff
@@ -17,15 +17,18 @@ IfBumped
         SetState
         GetContent
         tmpargument = tmpargument + 1
-        IssueOrder  
-        tmpargument = ACTIONMJ	    //Turn back
+        IssueOrder
+        tmpargument = ACTIONMJ        // Turn back
         DoAction
-      Else		//Unactivated
+      Else        // Unactivated
         tmpargument = 1
         SetState
         GetContent
         tmpargument = tmpargument
         IssueOrder
-        tmpargument = ACTIONMG	    //Turn
+        tmpargument = ACTIONMG        // Turn
         DoAction
-End				// Finished with this character
+
+// Finished with this character
+End
+

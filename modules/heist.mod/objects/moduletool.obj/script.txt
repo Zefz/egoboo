@@ -1,15 +1,15 @@
-//Object is module specified and must be modified to be used
-//elsewhere...
-//Module Setting: K'nife's Heist
+// Object is module specified and must be modified to be used
+// elsewhere...
+// Module Setting: K'nife's Heist
 
 //------------------------------------------------------------------------------------
-//Play Music
+// Play Music
 IfSpawned
-  tmpargument = 4		//Track
-  tmpdistance = 0		//Fadein time
-  PlayMusic	
+  tmpargument = 4        // Track
+  tmpdistance = 0        // Fadein time
+  PlayMusic
 
-//Check passage for falling monsters
+// Check passage for falling monsters
 IfTimeOut
   tmpargument = 25
   SetTime
@@ -34,20 +34,20 @@ IfTimeOut
         tmpx = selfx + 75
         tmpy = selfy + 75
         tmpdistance = rand & 255 + 800
-        SpawnExactCharacterXYZ		//Tranch
+        SpawnExactCharacterXYZ        // Tranch
 
         tmpargument = 0
         PlaySound
         JoinGoodTeam
         tmpargument = 2
-        SetState	//Dont repeat
+        SetState    // Dont repeat
 
   IfStateIs1
     tmpargument = 1
     PlayFullSound
     tmpargument = 0
     SendMessage
-    GoPoof		//No longer needed
+    GoPoof        // No longer needed
 
 IfOrdered
   tmpx = selforder
@@ -58,5 +58,8 @@ IfOrdered
     tmpargument = 100
     SetTime
 //------------------------------------------------------------------------------------
-End					// All done
+
+// All done
+End
+
 //------------------------------------------------------------------------------------

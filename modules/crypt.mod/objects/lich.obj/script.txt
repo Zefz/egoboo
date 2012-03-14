@@ -1,9 +1,9 @@
 //-----------------------------------------------------------------------
-//AI was modified to have 50% to pick either hand
-//Hand 1 = Charge a big spell very long and throw on long range
-//Hand 2 = Cast a instant spell on medium range. Cooldown.
+// AI was modified to have 50% to pick either hand
+// Hand 1 = Charge a big spell very long and throw on long range
+// Hand 2 = Cast a instant spell on medium range. Cooldown.
 
-//Haha! Player was killed
+// Haha! Player was killed
 IfTargetIsAPlayer
   tmpargument = 0
   GetXY
@@ -154,7 +154,7 @@ IfStateIs10
 //------------------------------------------------------------------------------
 // ZZ> Find something to do...
 IfTimeOut
-  CleanUp     //Make ghouls ressurect
+  CleanUp     // Make ghouls ressurect
 
   IfStateIs15
     // Fall through to normal state
@@ -179,13 +179,13 @@ IfTimeOut
     Else
       tmpargument = 0
       SetState
-      
+
   IfStateIs3
     // Pick a spell to use on the enemy...  Left or right
     IfTargetIsOnHatedTeam
       tmpx = rand & 1
       tmpy = 0
-      IfXIsEqualToY           //50% to pick either
+      IfXIsEqualToY           // 50% to pick either
         tmpargument = 11
         SetState
         tmpargument = 40
@@ -197,7 +197,7 @@ IfTimeOut
       tmpargument = 0
       SetState
 
-  //Instant cast close spell
+  // Instant cast close spell
   IfStateIs4
     IfTargetIsOnHatedTeam
       IfFacingTarget
@@ -215,7 +215,7 @@ IfTimeOut
     Else
       tmpargument = 0
       SetState
-      
+
   IfStateIs2
     // Halfway through a teleport
     tmpargument = rand & 15 + 35

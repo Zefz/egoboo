@@ -3,19 +3,19 @@ IfOrdered
   tmpy = [SPOR]
   IfXIsEqualToY
     GetContent
-    tmpargument = tmpargument +1		//Remember the number of sporks used
+    tmpargument = tmpargument +1        // Remember the number of sporks used
     SetContent
 
-//Do spelly effects
+// Do spelly effects
 IfTimeOut
 
-  //STAGE 0 - Waiting for sporks
+  // STAGE 0 - Waiting for sporks
   IfStateIs0
     tmpargument = 50
     SetTime
     tmpargument = 5
-    IfContentIs					//All 5 are in place
-      tmpargument = 1				//Goto spell effect stage 1
+    IfContentIs                    // All 5 are in place
+      tmpargument = 1                // Goto spell effect stage 1
       SetState
   Else
     GetContent
@@ -27,25 +27,25 @@ IfTimeOut
       tmpargument = 1
       PlaySound
 
-  //STAGE 3 - Final Stage
+  // STAGE 3 - Final Stage
   IfStateIs14
     tmpargument = 7
     tmpx = 1100
     tmpy = 3570
-    tmpturn = 33000			//Make it face towards the doors
-    SpawnExactParticle			//Blast the door!
+    tmpturn = 33000            // Make it face towards the doors
+    SpawnExactParticle            // Blast the door!
     GoPoof
-    SpawnPoof				//Make it destroyed
+    SpawnPoof                // Make it destroyed
     SpawnPoof
-    tmpargument = 300			//Award some xp
+    tmpargument = 300            // Award some xp
     tmpdistance = EXPQUEST
     GiveExperienceToGoodTeam
-    tmpargument = 2			//Door explodes
+    tmpargument = 2            // Door explodes
     PlayFullSound
-    tmpargument = passage		//Make it open
+    tmpargument = passage        // Make it open
     OpenPassage
 
-  //STAGE 2 - Random lightnings
+  // STAGE 2 - Random lightnings
   tmpx = selfstate
   tmpy = 1
   IfXIsMoreThanY
@@ -60,7 +60,7 @@ IfTimeOut
     tmpdistance = rand & 128 + 50
     SpawnExactParticle
 
-  //STAGE 1 - Big blast
+  // STAGE 1 - Big blast
   IfStateIs1
     tmpargument = 50
     SetTime
@@ -74,8 +74,7 @@ IfTimeOut
     tmpargument = 1
     PlaySound
 
-
-//Just to make sure
+// Just to make sure
 IfSpawned
   tmpargument = passage
   ClosePassage
@@ -95,5 +94,7 @@ IfTimeOut
     tmpargument = passage
     IfPassageOpen
       ClosePassage
-		      //
-End				// Finished with this character
+
+// Finished with this character
+End
+

@@ -11,7 +11,7 @@ IfTimeOut
     tmpy = rand & 511 + selfy - 256
     ClearWaypoints
     AddWaypoint
-    
+
     // Look for a player to follow
     tmpargument = [ELFF]
     tmpdistance = BLAHFRIENDS // Items, friends and enemies

@@ -28,70 +28,71 @@ IfKilled
 IfAttacked
   SetTargetToWhoeverAttacked
   IfTargetIsOnSameTeam
-    SetTargetToOldTarget        //ooops friendly
+    SetTargetToOldTarget        // ooops friendly
   tmpargument = rand & 1 + 1
   PlaySound
 
 //---------------------------------------------------------------------------------------
-//Recharge brain attack
+// Recharge brain attack
 tmpx = selfcontent
 tmpy = 0
+
 IfXIsMoreThanY
   tmpargument = selfcontent -1
   SetContent
-  
+
 //---------------------------------------------------------------------------------------
-//Handle Backstabs
+// Handle Backstabs
 IfBackstabbed
   SetTargetToWhoeverAttacked
   GetDamageType
-  tmpdistance = tmpargument       //Same damage type as the stab
-  tmpargument = targetdex         //+1 damage per dex
+  tmpdistance = tmpargument       // Same damage type as the stab
+  tmpargument = targetdex         // +1 damage per dex
   TargetDamageSelf
   tmpargument = 4
   SendMessageNear
-  
+
 //---------------------------------------------------------------------------------------
 IfBumped
   SetTargetToWhoeverBumped
-  
+
   // Scooch around
   tmpx = rand & 255 + targetx - 128
   tmpy = rand & 255 + targety - 128
   ClearWaypoints
   AddWaypoint
 
-  //Suck their brains
+  // Suck their brains
   IfTargetIsOnHatedTeam
     tmpargument = 0
     IfContentIs
       tmpargument = ACTIONUA
       DoAction
-      EnchantTarget     
+      EnchantTarget
       tmpargument = 50
       SetContent
       tmpargument = 3
       PlaySound
       tmpargument = rand & 255 + 128
       DamageTarget
-      
+
       tmpx = targetx
       tmpy = targety
       tmpdistance = targetz + 64
       tmpargument = 2
       SpawnExactParticle
       SpawnExactParticle
-      
-      //Did we suck it all out?
+
+      // Did we suck it all out?
       tmpx = targetint
       tmpy = 256
       IfXIsLessThanY
         tmpargument = 2
         SendMessageNear
-        KillTarget                      //insta kill.. ouch!
+        KillTarget                      // insta kill.. ouch!
         tmpargument = STATEGUARD
         SetState
-        tmpargument = 1+targetlevel*128   //Heal 1/2 hp per level
+        tmpargument = 1+targetlevel*128   // Heal 1/2 hp per level
         HealSelf
         tmpx = targetx
         tmpy = targety
@@ -105,7 +106,7 @@ IfBumped
         SpawnExactParticle
       Else
         tmpargument = 3
-        SendMessageNear           //Still working on it...
+        SendMessageNear           // Still working on it...
   Else
     SetTargetToOldTarget
 
@@ -118,14 +119,14 @@ IfTimeOut
   IfStateIsGuard
     SetTurnModeToVelocity
     tmpx = rand & 511 - 256 + selfspawnx
-    tmpy = rand & 511 - 256 + selfspawny      
+    tmpy = rand & 511 - 256 + selfspawny
     ClearWaypoints
     AddWaypoint
 
     SetTargetToWideEnemy
       tmpargument = STATECOMBAT
       SetState
-      tmpargument = 4     //battle cry
+      tmpargument = 4     // battle cry
       PlaySound
 
   IfStateIsCombat
@@ -133,18 +134,18 @@ IfTimeOut
     tmpx = targetdistance
     tmpy = 200
     IfXIsLessThanY
-      tmpargument = STATECHARGE         //attack if they come too close
+      tmpargument = STATECHARGE         // attack if they come too close
       SetState
     Else
       tmpx = targetx
       tmpy = targety
       tmpturn = rand % 32000 + targetturnto - 16000
-      tmpdistance = -600                //stay at a distance and bombard them
+      tmpdistance = -600                // stay at a distance and bombard them
       Compass
       ClearWaypoints
       AddWaypoint
-      
-    //Charge em if they are confuzzled
+
+    // Charge em if they are confuzzled
     tmpx = 0
     GetTargetDazeTime
       tmpx = 1
@@ -154,8 +155,8 @@ IfTimeOut
     IfXIsMoreThanY
       tmpargument = STATECHARGE
       SetState
-      
-    //Confuse ray
+
+    // Confuse ray
     tmpargument = 0
     IfContentIs
       tmpx = targetdistance
@@ -168,26 +169,26 @@ IfTimeOut
         SpawnExactParticle
         tmpargument = 60
         SetContent
-        
-    //Target enemies with the biggest brain (most INT)
+
+    // Target enemies with the biggest brain (most INT)
     SetOldTarget
     tmpx = targetint
     SetTargetToWideEnemy
       tmpy = targetint
       IfXIsMoreThanY
-        SetTargetToOldTarget      
-      
+        SetTargetToOldTarget
+
   IfStateIsCharge
     SetTurnModeToVelocity
     tmpx = targetx
     tmpy = targety
     tmpturn = targetturnto
-    tmpdistance = 1500      
+    tmpdistance = 1500
     Compass
     ClearWaypoints
     AddWaypoint
-    
-    //Keep distance and confuse them again!
+
+    // Keep distance and confuse them again!
     tmpx = 0
     GetTargetDazeTime
       tmpx = 1
@@ -199,16 +200,16 @@ IfTimeOut
       tmpy = 200
       IfXIsMoreThanY
         tmpargument = STATECOMBAT
-        SetState                            //they ran away
+        SetState                            // they ran away
       Else
         tmpx = selflife
         tmpy = 256*3
         IfXIsLessThanY
-          tmpargument = STATECOMBAT         //Retreat
+          tmpargument = STATECOMBAT         // Retreat
           SetState
-      
+
 //---------------------------------------------------------------------------------------
-//Hit someone with confusion ray
+// Hit someone with confusion ray
 IfScoredAHit
   SetTargetToWhoeverWasHit
   IfTargetIsAPlayer
@@ -216,12 +217,12 @@ IfScoredAHit
     SendMessageNear
   tmpargument = STATECHARGE
   SetState
-  
+
 //---------------------------------------------------------------------------------------
-//We killed em
+// We killed em
 IfTargetKilled
   tmpargument = STATEGUARD
-  SetState  
-    
+  SetState
+
 // All done
 End

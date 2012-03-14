@@ -1,4 +1,4 @@
-//Betray the suckers!!
+// Betray the suckers!!
 IfOrdered
   tmpx = selforder
   tmpy = [FREE]
@@ -16,12 +16,12 @@ IfOrdered
       tmpdistance = EXPDARE
       GiveExperienceToGoodTeam
 
-//Main AI loop
+// Main AI loop
 IfTimeOut
-  //This makes the betrayer teleport behind enemy defences
+  // This makes the betrayer teleport behind enemy defences
   IfTargetIsDefending
     IfStateIs3
-      //Do we have enough mana?
+      // Do we have enough mana?
       tmpx = selfmana
       tmpy = 700
       IfXIsMoreThanY
@@ -38,9 +38,9 @@ IfTimeOut
           SpawnParticle
           SpawnParticle
           SpawnParticle
-          tmpargument = 10		//Spelly effects
+          tmpargument = 10        // Spelly effects
           PlaySound
-          tmpargument = 700		//Cost some mana
+          tmpargument = 700        // Cost some mana
           SetTargetToSelf
           CostTargetMana
           SetTargetToOldTarget
@@ -55,20 +55,20 @@ IfTimeOut
             SpawnParticle
             SpawnParticle
             SpawnParticle
-            tmpargument = 10		//Spelly effects
+            tmpargument = 10        // Spelly effects
             PlaySound
-            tmpargument = 700		//Cost some mana
+            tmpargument = 700        // Cost some mana
             SetTargetToSelf
             CostTargetMana
             SetTargetToOldTarget
 
-  //Lure the player into releasing him
+  // Lure the player into releasing him
   tmpargument = 3
   IfStateIsNot
     tmpargument = 250
     SetTime
     tmpdistance = 128*7
-    SetTargetToDistantEnemy                //SetTargetToWhoeverIsInPassage
+    SetTargetToDistantEnemy                // SetTargetToWhoeverIsInPassage
       IfTargetIsAPlayer
         IfStateIs0
           tmpargument = 7
@@ -93,7 +93,7 @@ IfTimeOut
 
     SetTurnModeToWatchTarget
 
-  //Betrayal mode
+  // Betrayal mode
   Else
     tmpargument = rand % 15 + 35
     SetTime
@@ -106,7 +106,7 @@ IfTimeOut
       ClearWaypoints
       AddWaypoint
 
-      //Attack!
+      // Attack!
       IfHoldingMeleeWeapon
         IfFacingTarget
           tmpx = targetdistance
@@ -114,24 +114,24 @@ IfTimeOut
           IfXIsLessThanY
             PressLatchButton
       Else
-        tmpargument = LATCHPACKRIGHT		//uh oh, not holding a weapon
+        tmpargument = LATCHPACKRIGHT        // uh oh, not holding a weapon
         PressLatchButton
     Else
-      GoPoof					//Player lost the battle, dissapear
+      GoPoof                    // Player lost the battle, dissapear
       tmpargument = 3
       SendMessage
       tmpdistance = SPAWNORIGIN
       SpawnParticle
       SpawnParticle
       SpawnParticle
-      tmpargument = 10		//Spelly effects
+      tmpargument = 10        // Spelly effects
       PlaySound
 
 //------------------------------------------------------------------------------
 // ZZ> Handle death by sending a message and other stuff
 IfKilled
   tmpargument = 1
-  PlaySound			//death cry
+  PlaySound            // death cry
 
   tmpargument = 0
   IfTargetIsOnSameTeam
@@ -146,20 +146,20 @@ IfKilled
   DropMoney
   DropKeys
 
-  //Create a reward chest =)
+  // Create a reward chest =)
   tmpx = selfspawnx
   tmpy = selfspawny
   tmpdistance = 700
   tmpargument = 86
   SpawnExactCharacterXYZ
 
-  tmpargument = 2		//Randomize the chest type
-  tmpx = rand % 100		//55% chance for artifact
+  tmpargument = 2        // Randomize the chest type
+  tmpx = rand % 100        // 55% chance for artifact
   tmpy = 55
-  IfXIsMoreThanY		//35% for armor chest
+  IfXIsMoreThanY        // 35% for armor chest
     tmpargument = 1
     tmpy = 90
-    IfXIsMoreThanY		//10% for mere gold & treasure
+    IfXIsMoreThanY        // 10% for mere gold & treasure
       tmpargument = 0
   SetChildState
 
@@ -167,7 +167,7 @@ IfKilled
   tmpargument = 45
   SetBumpHeight
 
-//Spawn some fancy sparklies
+// Spawn some fancy sparklies
 tmpargument = 2
 tmpx = selfx
 tmpy = selfy
@@ -175,15 +175,16 @@ tmpdistance = selfz
 SpawnExactParticle
 
 //------------------------------------------------------------------------------
-//Say ouch
+// Say ouch
 IfAttacked
   SetTargetToWhoeverAttacked
   tmpargument = rand & 1 + 1
   PlaySound
 
 //------------------------------------------------------------------------------
-//Released out of the cage somehow and attacked or bumped (disenchant)
+// Released out of the cage somehow and attacked or bumped (disenchant)
 tmpargument = 3
+
 IfStateIsNot
   IfBumped
     tmpargument = [FREE]

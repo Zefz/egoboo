@@ -6,6 +6,7 @@
 GetWaterLevel
 tmpx = tmpargument
 tmpy = 850
+
 IfXIsLessThanY
   // The button should be up, ready to be pressed
   IfStateIs2
@@ -51,6 +52,7 @@ IfStateIs1
 // Detect button press
 tmpx = weight
 tmpy = 30
+
 IfXIsMoreThanY
   IfStateIs0
     // Press the button
@@ -69,4 +71,7 @@ IfXIsMoreThanY
       SetState
       tmpargument = 150
       SetTime
-End					// Finished with this character
+
+// Finished with this character
+End
+

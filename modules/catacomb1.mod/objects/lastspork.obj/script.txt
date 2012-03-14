@@ -22,4 +22,7 @@ IfTimeOut
   SpawnPoof
   tmpargument = 10
   SetTime
-End					// All done
+
+// All done
+End
+

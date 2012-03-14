@@ -1,31 +1,31 @@
-//Eat the candy!
+// Eat the candy!
 IfUsed
   tmpargument = 50
   SetReloadTime
-  
-  //Heal some life and mana
+
+  // Heal some life and mana
   SetTargetToWhoeverIsHolding
-  tmpargument = 768       //3 life and mana regained
+  tmpargument = 768       // 3 life and mana regained
   HealTarget
   PumpTarget
-  
-  tmpargument = ACTIONMC		//Drink animation
+
+  tmpargument = ACTIONMC        // Drink animation
   TargetDoAction
-    
+
   tmpargument = 0
   PlaySound
   tmpargument = 2
   SendMessageNear
-  
+
   CostAmmo
   IfAmmoOut
     GoPoof
-	
+
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
   MakeAmmoKnown
 
@@ -42,17 +42,22 @@ IfCrushed
   tmpargument = 1
   SendMessageNear
 
-IfDropped				// Make it lie on floor
-  KeepAction				  //
+// Make it lie on floor
+IfDropped
+  KeepAction
 
-IfHitGround				// Make a sound
-  tmpargument = 1			  //
-  PlaySound				  //
+// Make a sound
+IfHitGround
+  tmpargument = 1
+  PlaySound
 
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
 
-End					// All done
+// All done
+End
+

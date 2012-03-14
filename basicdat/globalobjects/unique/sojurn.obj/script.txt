@@ -1,34 +1,34 @@
-//Set magic properties
+// Set magic properties
 IfSpawned
   SetTargetToSelf
   SetOwnerToTarget
-    
-  //Unidentified!
+
+  // Unidentified!
   IfNameIsKnown
     DoNothing
   Else
     tmpargument = 2
     ChangeArmor
-    UnsparkleIcon    
-    
-  //Make it glow!
+    UnsparkleIcon
+
+  // Make it glow!
   tmpargument = 1
   IfArmorIs
     EnchantTarget
     tmpargument = BLUE
     SparkleIcon
 
-//Electric sound
+// Electric sound
 IfUsed
   tmpargument = 1
   IfArmorIs
     tmpargument = 3
     PlaySound
-  
-//Do kill count
+
+// Do kill count
 IfScoredAHit
-  
-  //Normal blade
+
+  // Normal blade
   tmpargument = 0
   IfArmorIs
     IfTargetIsAlive
@@ -48,8 +48,8 @@ IfScoredAHit
       EnchantTarget
       tmpargument = BLUE
       SparkleIcon
-  
-  //Magical blade
+
+  // Magical blade
   tmpargument = 1
   IfArmorIs
     tmpargument = selfcontent - 1
@@ -65,7 +65,7 @@ IfScoredAHit
       UndoEnchant
       UnsparkleIcon
 
-    //Do magic sparklies
+    // Do magic sparklies
     tmpargument = 2
     tmpdistance = targetz
     tmpx = targetx
@@ -73,19 +73,20 @@ IfScoredAHit
     SpawnExactParticle
     SpawnExactParticle
     SpawnExactParticle
-      
-  //Unidentified blade
+
+  // Unidentified blade
   tmpargument = 2
   IfArmorIs
     IfNameIsKnown
       tmpargument = 0
       ChangeArmor
-    
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -98,19 +99,27 @@ IfCrushed
   GoPoof
   tmpargument = 1
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
-IfHitGround				// Make a sound
-  tmpargument = 1			  //
-  PlaySound				  //
+
+// Make it lie on floor
+IfDropped
+  KeepAction
+
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
+
+// Make a sound
+IfHitGround
+  tmpargument = 1
+  PlaySound
+
 IfNotDropped
   tmpargument = 2
   SendMessageNear
+
 IfTakenOut
   tmpargument = 2
   PlaySound
@@ -118,9 +127,12 @@ IfTakenOut
   IfTargetIsAPlayer
     tmpargument = 4
     SendMessageNear
-    
+
+// No longer needed, this is handled by the sourcecode now...
 //IfNotPutAway
-//  tmpargument = 3         //No longer needed, this is handled by the sourcecode now...
+//  tmpargument = 3
 //  SendMessageNear
 
-End					// All done
+// All done
+End
+

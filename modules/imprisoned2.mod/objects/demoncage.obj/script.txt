@@ -4,8 +4,8 @@ IfOrdered
   IfXIsEqualToY
     tmpargument = selfcontent + 1
     SetContent
-    
-    //All staffs have been placed
+
+    // All staffs have been placed
     tmpargument = 4
     IfContentIs
       tmpargument = 50
@@ -13,15 +13,18 @@ IfOrdered
       GiveExperienceToGoodTeam
       tmpargument = passage
       OpenPassage
-      
-      //Tell them it's done
+
+      // Tell them it's done
       tmpargument = 0
       PlayFullSound
       SendMessage
-      
-      //Make the cage go away
+
+      // Make the cage go away
       GoPoof
-      
+
 //--------------------------------------------------------------------------------
-End					// All done
+
+// All done
+End
+
 //--------------------------------------------------------------------------------

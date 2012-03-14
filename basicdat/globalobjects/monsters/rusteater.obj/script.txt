@@ -5,28 +5,29 @@ IfSpawned
   SetState
 
 //------------------------------------------------------------------------------
-//Content > 0 means we got poisoned by eating a kursed item
+// Content > 0 means we got poisoned by eating a kursed item
 tmpx = selfcontent
 tmpy = 0
+
 IfXIsMoreThanY
   tmpargument = selfcontent - 1
   SetContent
-  
-  //Deal 4 posion damage to ourselves each update
+
+  // Deal 4 posion damage to ourselves each update
   SetTargetToOwner
   tmpargument = 4
   tmpdistance = DAMAGEEVIL
   TargetDamageSelf
   HealSelf
-  
-  //Make us green
+
+  // Make us green
   tmpargument = 2
   SetGreenShift
   tmpargument = -2
   SetRedShift
   SetBlueShift
-  
-  //End poison effect?
+
+  // End poison effect?
   tmpargument = 0
   IfContentIs
     tmpargument = 2
@@ -40,7 +41,7 @@ IfXIsMoreThanY
 IfStateIs8
   IfTimeOut
     tmpargument = ACTIONMK
-    DoAction   
+    DoAction
     KeepAction
 
     // Sleepy Z's
@@ -59,7 +60,7 @@ IfStateIs8
     tmpdistance = 128*7
     SetTargetToDistantEnemy
       IfTargetIsSneaking
-        //don't wake up
+        // don't wake up
       Else
         tmpargument = 1
         SetState
@@ -71,13 +72,13 @@ IfStateIs8
 
 //------------------------------------------------------------------------------
 // ZZ> Attack enemy
-IfBumped				// Attack whoever it bumped
-  SetTargetToWhoeverBumped		  //
-  IfTargetIsOnHatedTeam			  // Make sure it's an enemy
-    tmpargument = LATCHLEFT		    // Bite 'em
-    PressLatchButton			    //
-  
-  //Zefz: I have no idea what this is for...
+IfBumped                // Attack whoever it bumped
+  SetTargetToWhoeverBumped
+  IfTargetIsOnHatedTeam              // Make sure it's an enemy
+    tmpargument = LATCHLEFT            // Bite 'em
+    PressLatchButton
+
+  // Zefz: I have no idea what this is for...
   tmpargument = [RUST]
   IfTargetHasID
     tmpargument = 512
@@ -85,23 +86,23 @@ IfBumped				// Attack whoever it bumped
 
 IfScoredAHit
   SetTargetToWhoeverWasHit
-    SetTargetToTargetLeftHand           //Look for Metal to eat
+    SetTargetToTargetLeftHand           // Look for Metal to eat
       tmpargument = [RUST]
       IfTargetHasVulnerabilityID
         tmpargument = 3
         SendMessage
-        
-        //We get poisoned if we eat kursed stuff
+
+        // We get poisoned if we eat kursed stuff
         IfTargetIsKursed
-          tmpargument = 1500            //30 seconds
+          tmpargument = 1500            // 30 seconds
           SetContent
           tmpargument = 4
           SendMessage
-          SetOldTarget                  //Make them the poisoner
+          SetOldTarget                  // Make them the poisoner
           SetTargetToWhoeverWasHit
           SetOwnerToTarget
           SetTargetToOldTarget
-          
+
         PoofTarget
         tmpx = selfx
         tmpy = selfy
@@ -115,18 +116,18 @@ IfScoredAHit
           IfTargetHasVulnerabilityID
             tmpargument = 3
             SendMessage
-            
-            //We get poisoned if we eat kursed stuff
+
+            // We get poisoned if we eat kursed stuff
             IfTargetIsKursed
-              tmpargument = 1500            //30 seconds
+              tmpargument = 1500            // 30 seconds
               SetContent
               tmpargument = 4
               SendMessage
-              SetOldTarget                  //Make them the poisoner
+              SetOldTarget                  // Make them the poisoner
               SetTargetToWhoeverWasHit
               SetOwnerToTarget
               SetTargetToOldTarget
-              
+
             PoofTarget
             tmpx = selfx
             tmpy = selfy
@@ -146,13 +147,13 @@ IfScoredAHit
           tmpdistance = selfz
           tmpargument = 5
           SpawnExactParticle
-    
-    //Deal extra damage to metal armored folks
+
+    // Deal extra damage to metal armored folks
     IfTargetIsDressedUp
-      tmpargument = rand % 512 + 512    //2-4 extra damage
+      tmpargument = rand % 512 + 512    // 2-4 extra damage
       DamageTarget
-      EnchantTarget           //Make their armor less effective from now on
-      
+      EnchantTarget           // Make their armor less effective from now on
+
     SetTargetToOldTarget
 
 IfAttacked
@@ -161,7 +162,7 @@ IfAttacked
     tmpx = tmpargument
     tmpy = 2
     IfXIsLessThanY
-      SetTargetToTargetLeftHand           //Look for Metal to eat
+      SetTargetToTargetLeftHand           // Look for Metal to eat
         tmpargument = [RUST]
         IfTargetHasVulnerabilityID
           tmpargument = 3
@@ -208,7 +209,7 @@ IfAttacked
   AddWaypoint
 
 //------------------------------------------------------------------------------
-//Death
+// Death
 IfKilled
   tmpargument = 34
   SetBumpHeight
@@ -220,19 +221,19 @@ IfKilled
 // ZZ> Handle wandering around
 IfStateIs1
   // Wander around
-  IfTimeOut				// This is done every so often
+  IfTimeOut                // This is done every so often
     tmpdistance = 128*7
     SetTargetToDistantEnemy
-      tmpx = rand & 511 - 256 + targetx	    //
-      tmpy = rand & 511 - 256 + targety	    //
-      tmpargument = rand & 63 + 50		  // Wait a while and try again
-    Else					  // Wander around home position
-      tmpx = rand & 1023 - 512 + selfspawnx   //
-      tmpy = rand & 1023 - 512 + selfspawny   //
-      tmpargument = rand % 20 + 10		  // Wait a while and try again
-    ClearWaypoints			  //
-    AddWaypoint				  //
-    SetTime				  //
+      tmpx = rand & 511 - 256 + targetx
+      tmpy = rand & 511 - 256 + targety
+      tmpargument = rand & 63 + 50          // Wait a while and try again
+    Else                      // Wander around home position
+      tmpx = rand & 1023 - 512 + selfspawnx
+      tmpy = rand & 1023 - 512 + selfspawny
+      tmpargument = rand % 20 + 10          // Wait a while and try again
+    ClearWaypoints
+    AddWaypoint
+    SetTime
 
 //------------------------------------------------------------------------------
 End

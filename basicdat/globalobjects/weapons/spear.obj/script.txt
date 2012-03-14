@@ -1,12 +1,12 @@
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
   MakeAmmoKnown
-  
-  //Allow module makers to specify stacks of spears here
+
+  // Allow module makers to specify stacks of spears here
   tmpx = selfcontent
   tmpy = 0
   IfXIsMoreThanY
@@ -14,8 +14,8 @@ IfSpawned				//
     SetTargetToSelf
     SetTargetAmmo
     tmpargument = 0
-    SetContent  
-    
+    SetContent
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -28,27 +28,40 @@ IfCrushed
   GoPoof
   tmpargument = 2
   SendMessageNear
-IfThrown				// Make it attack
+
+// Make it attack
+IfThrown
   tmpargument = 2
   tmpdistance = 1
   SpawnAttachedParticle
-IfNotDropped				// Say oops, that's kursed
-  SetTargetToWhoeverIsHolding		  //
-  tmpargument = 1			  //
-  SendMessageNear			  //
-IfNotPutAway				// Say oops, that's kursed
-  SetTargetToWhoeverIsHolding		  //
-  tmpargument = 3			  //
-  SendMessageNear			  //
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-IfHitGround				// Make a sound
-  tmpargument = 1			  //
-  PlaySound				  //
-  DisaffirmCharacter			  // Stop thrown attack
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
-End					// All done
+
+// Say oops, that's kursed
+IfNotDropped
+  SetTargetToWhoeverIsHolding
+  tmpargument = 1
+  SendMessageNear
+
+// Say oops, that's kursed
+IfNotPutAway
+  SetTargetToWhoeverIsHolding
+  tmpargument = 3
+  SendMessageNear
+
+// Make it lie on floor
+IfDropped
+  KeepAction
+
+// Make a sound
+IfHitGround
+  tmpargument = 1
+  PlaySound
+  DisaffirmCharacter              // Stop thrown attack
+IfGrabbed                // Tell them what they've won...
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
+
+// All done
+End
+

@@ -7,9 +7,10 @@ IfTakenOut
       tmpargument = 2
       SendMessageNear
 
-//Crushed in passages
+// Crushed in passages
 IfSpawned
   MakeCrushValid
+
 IfCrushed
   GoPoof
   tmpargument = 1
@@ -19,25 +20,25 @@ IfCrushed
 IfUsed
   GetContent
   tmpx = tmpargument
-  tmpy = 1024                   //Max charge
+  tmpy = 1024                   // Max charge
   IfXIsLessThanY
     SetTargetToWhoeverIsHolding
     tmpargument = [WMAG]
-    IfTargetHasSkillID			//Arcane casters only
+    IfTargetHasSkillID            // Arcane casters only
       tmpx = tmpx*3
       tmpy = targetmanaflow*2
-      IfXIsLessThanY			//Enough manaflow?
+      IfXIsLessThanY            // Enough manaflow?
         tmpx = targetint
         GetContent
-        tmpy = tmpargument * 7		//Enough intelligence to reach next spell power level?
+        tmpy = tmpargument * 7        // Enough intelligence to reach next spell power level?
         IfXIsMoreThanY
           tmpargument = 13
-          CostTargetMana		//Mana cost
+          CostTargetMana        // Mana cost
             GetContent
             tmpargument = tmpargument + 7
-            SetContent			//Casting Time
+            SetContent            // Casting Time
             tmpargument = tmpargument > 8
-            SetState			//Set spell power
+            SetState            // Set spell power
 Else
   GetContent
   tmpx = tmpargument
@@ -64,7 +65,7 @@ Else
     tmpdistance = selfz
     tmpx = selfx
     tmpy = selfy
-    IfStateIs1		//Spell power level 1 (4 orbs)
+    IfStateIs1        // Spell power level 1 (4 orbs)
       tmpargument = 3
       tmpturn = rand & 1250
       SpawnExactParticle
@@ -77,32 +78,7 @@ Else
       tmpargument = 6
       tmpturn = rand & 1250
       SpawnExactParticle
-    IfStateIs2		//Spell power level 2 (8 orbs)
-      tmpargument = 3
-      tmpturn = rand & 1250
-      SpawnExactParticle
-      tmpargument = 4
-      tmpturn = rand & 1250
-      SpawnExactParticle
-      tmpargument = 5
-      tmpturn = rand & 1250
-      SpawnExactParticle
-      tmpargument = 6
-      tmpturn = rand & 1250
-      SpawnExactParticle
-      tmpargument = 3
-      tmpturn = rand & 1250
-      SpawnExactParticle
-      tmpargument = 4
-      tmpturn = rand & 1250
-      SpawnExactParticle
-      tmpargument = 5
-      tmpturn = rand & 1250
-      SpawnExactParticle
-      tmpargument = 6
-      tmpturn = rand & 1250
-      SpawnExactParticle
-    IfStateIs3	//Spell power level 3 (12 orbs)
+    IfStateIs2        // Spell power level 2 (8 orbs)
       tmpargument = 3
       tmpturn = rand & 1250
       SpawnExactParticle
@@ -127,6 +103,7 @@ Else
       tmpargument = 6
       tmpturn = rand & 1250
       SpawnExactParticle
+    IfStateIs3    // Spell power level 3 (12 orbs)
       tmpargument = 3
       tmpturn = rand & 1250
       SpawnExactParticle
@@ -139,7 +116,31 @@ Else
       tmpargument = 6
       tmpturn = rand & 1250
       SpawnExactParticle
-    IfStateIs4		//Spell power level 4 (16 orbs! :P)
+      tmpargument = 3
+      tmpturn = rand & 1250
+      SpawnExactParticle
+      tmpargument = 4
+      tmpturn = rand & 1250
+      SpawnExactParticle
+      tmpargument = 5
+      tmpturn = rand & 1250
+      SpawnExactParticle
+      tmpargument = 6
+      tmpturn = rand & 1250
+      SpawnExactParticle
+      tmpargument = 3
+      tmpturn = rand & 1250
+      SpawnExactParticle
+      tmpargument = 4
+      tmpturn = rand & 1250
+      SpawnExactParticle
+      tmpargument = 5
+      tmpturn = rand & 1250
+      SpawnExactParticle
+      tmpargument = 6
+      tmpturn = rand & 1250
+      SpawnExactParticle
+    IfStateIs4        // Spell power level 4 (16 orbs! :P)
       tmpargument = 3
       tmpturn = rand & 1250
       SpawnExactParticle
@@ -199,6 +200,7 @@ Else
 GetContent
 tmpx = tmpargument
 tmpy = 0
+
 IfXIsMoreThanY
   tmpturn = tmpargument < 4 + 5000
   tmpdistance = SPAWNORIGIN

@@ -1,6 +1,7 @@
 // ZZ> This function makes the button open the passage
 tmpx = weight
 tmpy = 80
+
 IfXIsMoreThanY
   tmpargument = passage
   OpenPassage
@@ -15,24 +16,29 @@ Else
       ClosePassage
 
 tmpargument = passage
-IfPassageOpen				// Go down
-  tmpargument = 0			  //
-  IfStateIs				  //
-    tmpargument = ACTIONMG		    //
-    DoAction				    //
-      tmpargument = 1			      // 1 is down
-      SetState				      //
-      KeepAction			      // Make it stay on last frame
-      tmpargument = 0			      //
-      SetBumpHeight			      //
-Else					// Pop up
-  tmpargument = 1			  //
-  IfStateIs				  //
-    tmpargument = ACTIONMJ		    //
-    DoAction				    //
-      tmpargument = 0			      // 0 is up
-      SetState				      //
-      KeepAction			      // Make it stay on last frame
-      tmpargument = 60			      //
-      SetBumpHeight			      //
-End					// Finished with this character
+
+// Go down
+IfPassageOpen
+  tmpargument = 0
+  IfStateIs
+    tmpargument = ACTIONMG
+    DoAction
+      tmpargument = 1                  // 1 is down
+      SetState
+      KeepAction                  // Make it stay on last frame
+      tmpargument = 0
+      SetBumpHeight
+Else                    // Pop up
+  tmpargument = 1
+  IfStateIs
+    tmpargument = ACTIONMJ
+    DoAction
+      tmpargument = 0                  // 0 is up
+      SetState
+      KeepAction                  // Make it stay on last frame
+      tmpargument = 60
+      SetBumpHeight
+
+// Finished with this character
+End
+

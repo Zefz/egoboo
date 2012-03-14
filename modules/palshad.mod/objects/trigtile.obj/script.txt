@@ -170,4 +170,6 @@ IfStateIs3
       tmpargument = 8
       SetTime
 
-End					// Finished with this character
+// Finished with this character
+End
+

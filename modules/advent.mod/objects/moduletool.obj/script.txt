@@ -1,10 +1,13 @@
-//Drop the spellbook we are holding
+// Drop the spellbook we are holding
 DropItems
 
-//Play the default module music track
+// Play the default module music track
 tmpargument = 2
 tmpdistance = 0
 PlayMusic
 
 GoPoof
-End					// All done
+
+// All done
+End
+

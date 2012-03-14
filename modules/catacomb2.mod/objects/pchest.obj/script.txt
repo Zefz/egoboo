@@ -30,7 +30,7 @@ IfOrdered
 IfBumped
   // Can they open the chest?
   SetTargetToWhoeverBumped
-  IfTargetIsAPlayer		//Replaced by: IfTargetCanOpenStuff
+  IfTargetIsAPlayer        // Replaced by: IfTargetCanOpenStuff
 
     // Is it closed?
     tmpargument = 0

@@ -1,57 +1,57 @@
-//Mount level         Bonus
-//1 (2 mana)          Normal
-//2 (4 mana)          Bite attack
-//3 (6 mana)          EVIL resist, Rider Regeneration
-//4 (8 mana)          EVIL Immune, Fly
+// Mount level         Bonus
+// 1 (2 mana)          Normal
+// 2 (4 mana)          Bite attack
+// 3 (6 mana)          EVIL resist, Rider Regeneration
+// 4 (8 mana)          EVIL Immune, Fly
 
 // Create the character
 IfSpawned
   IfStateIs0
     // It's an imported spell in hand
     KeepAction
-  Else			//Setup monster!
-    
-    //This is a monster
+  Else            // Setup monster!
+
+    // This is a monster
     MakeNameUnknown
     SetTargetToSelf
     NotAnItem
-    
-    //Spell effect
-    SpawnPoof		  
-    
-    //Use summoner stats to determine power
+
+    // Spell effect
+    SpawnPoof
+
+    // Use summoner stats to determine power
     tmpargument = selfstate
-    tmpdistance = 255               //255 = Direct XP, ignore any modifications
+    tmpdistance = 255               // 255 = Direct XP, ignore any modifications
     GiveExperienceToTarget
-        
-    //Level 3 or 4 mounts get 25% bonus speed!
+
+    // Level 3 or 4 mounts get 25% bonus speed!
     SetTargetToOwner
-    tmpdistance = targetwis > 8           //Every point of wisdom adds 1% speed
+    tmpdistance = targetwis > 8           // Every point of wisdom adds 1% speed
     tmpx = selfstate
     tmpy = 3
     IfXIsMoreThanY
-      tmpdistance = tmpdistance + 25       
+      tmpdistance = tmpdistance + 25
     tmpargument = 100 + tmpdistance
     SetContent
-    
-    //Make him look right
+
+    // Make him look right
     tmpargument = selfstate - 1
     ChangeArmor
-    
-    //Tell them what they got
+
+    // Tell them what they got
     SetTargetToOwner
     tmpargument = selfstate - 1
     SendMessageNear
-    
-    //Slow reaction time when summoned
+
+    // Slow reaction time when summoned
     tmpargument = 50
     SetTime
-    
-    //Summon sound effect
+
+    // Summon sound effect
     tmpargument = 2
     PlaySound
-    
-    //Show our life and stats
+
+    // Show our life and stats
     AddStat
 
 // It's a spell in hand
@@ -63,14 +63,16 @@ IfChanged
 //--------------------------------------------------------------------------------------------
 // MONSTER AI
 tmpargument = 0
-IfStateIsNot		//State 0 is spellbook
+
+// State 0 is spellbook
+IfStateIsNot
 
   // Mount got hurt
   IfAttacked
     tmpargument = rand & 1
     PlaySound
-    
-    //33% per level not to buckle rider
+
+    // 33% per level not to buckle rider
     tmpx = rand % 100
     tmpy = selfstate * 33
     IfXIsMoreThanY
@@ -79,45 +81,45 @@ IfStateIsNot		//State 0 is spellbook
   // Character death
   IfKilled
     tmpargument = 30
-    SetBumpHeight		// Make the character body
+    SetBumpHeight        // Make the character body
     tmpargument = 4
     PlaySound
 
-    //Get rid of our rider
+    // Get rid of our rider
     DropWeapons
-    
-    //Death message
+
+    // Death message
     tmpargument = 7
     SendMessageNear
-    
-    //Owner gets hurt too!
+
+    // Owner gets hurt too!
     SetTargetToOwner
     JoinEvilTeam
-    tmpargument = selfstate * 256     //1 damage per level
+    tmpargument = selfstate * 256     // 1 damage per level
     DamageTarget
 
-    //Unsummon body
+    // Unsummon body
     SpawnPoof
     GoPoof
-    
-  //Natural attack
+
+  // Natural attack
   IfUsed
     tmpargument = 3
     PlaySound
     tmpargument = 25
     SetReloadTime
 
-  //New round
-  IfTimeOut				// This is done every so often
+  // New round
+  IfTimeOut                // This is done every so often
     SetTargetToOwner
-    
-    //We are always on our creators side
+
+    // We are always on our creators side
     tmpargument = targetteam
     JoinTeam
     SetTargetToRider
     IfTargetIsOnHatedTeam
       DropWeapons
-    
+
     tmpx = targetdistance
     tmpy = 512
     IfXIsMoreThanY
@@ -125,10 +127,10 @@ IfStateIsNot		//State 0 is spellbook
       tmpy = rand & 1023 - 512 + ownery
       ClearWaypoints
       AddWaypoint
-    tmpargument = rand & 63 + 20		  // Wait a while and try again
+    tmpargument = rand & 63 + 20          // Wait a while and try again
     SetTime
-        
-    //Regeneration at level 3 or 4
+
+    // Regeneration at level 3 or 4
     tmpx = selfstate
     tmpy = 2
     IfXIsMoreThanY
@@ -137,12 +139,12 @@ IfStateIsNot		//State 0 is spellbook
       SetTargetToRider
         HealTarget
         PumpTarget
-      
-    //Movement speed
+
+    // Movement speed
     GetContent
     SetSpeedPercent
-    
-  //Bite attack at level 2, 3 and 4
+
+  // Bite attack at level 2, 3 and 4
   IfBumped
     tmpx = selfstate
     tmpy = 1
@@ -150,16 +152,16 @@ IfStateIsNot		//State 0 is spellbook
       SetTargetToWhoeverBumped
       IfTargetIsOnHatedTeam
         IfFacingTarget
-          tmpargument = selfstate * 256 + 256     //1 damage +1 per level
+          tmpargument = selfstate * 256 + 256     // 1 damage +1 per level
           DamageTarget
           tmpargument = 3
           PlaySound
 
-  //Holy shit it flies as well!?
+  // Holy shit it flies as well!?
   IfStateIs4
     SetTargetToRider
-      
-      //Magic sparkles
+
+      // Magic sparkles
       tmpx = rand & 1
       tmpy = 0
       IfXIsEqualToY
@@ -168,15 +170,14 @@ IfStateIsNot		//State 0 is spellbook
         tmpy = selfy
         tmpdistance = selfz
         SpawnExactParticle
-        
+
       tmpargument = 30
     Else
       tmpargument = 0
     SetFlyHeight
 
-
 //--------------------------------------------------------------------------------------------
-//SPELL AI
+// SPELL AI
 IfStateIs0
 
   // Remove the charge
@@ -192,59 +193,59 @@ IfStateIs0
 
   // Allow it to be used
   IfUsed
-  
-    //Unsummon any existing mount
+
+    // Unsummon any existing mount
     UndoEnchant
       tmpargument = 50
       SetReloadTime
       UnsparkleIcon
-      
-    Else    
+
+    Else
       SetTargetToWhoeverIsHolding
       tmpargument = [HMAG]
       IfTargetHasSkillID
-        tmpx = selfcontent			//Current spellpower
-        tmpy = 2048				      //8 spellpower is max
-        IfXIsLessThanY				//Not already max power?
-          tmpy = targetmanaflow			//High enough level to continue casting?
+        tmpx = selfcontent            // Current spellpower
+        tmpy = 2048                      // 8 spellpower is max
+        IfXIsLessThanY                // Not already max power?
+          tmpy = targetmanaflow            // High enough level to continue casting?
           IfXIsLessThanY
-            tmpargument = 6				//Casting cost
+            tmpargument = 6                // Casting cost
             CostTargetMana
               GetContent
-              tmpargument = tmpargument + 6		//Casting speed
+              tmpargument = tmpargument + 6        // Casting speed
               SetContent
 
-        //Spell effect around caster
+        // Spell effect around caster
         SetTargetToWhoeverIsHolding
           tmpx = targetx
           tmpy = targety
           tmpdistance = targetz
           tmpargument = 3
           SpawnExactParticle
-          
-      //Tell them they need HMAG
+
+      // Tell them they need HMAG
       Else
         tmpargument = 8
         SendMessageNear
         tmpargument = 50
         SetReloadTime
-  Else				//Spell released
+  Else                // Spell released
     tmpx = selfcontent
-    tmpy = 512			//Minimum needed casting
+    tmpy = 512            // Minimum needed casting
     IfXIsMoreThanY
-      
+
       // Make the holder cast it
       SetTargetToWhoeverIsHolding
         tmpargument = ACTIONMC // MC because ZA/ZC spawns an attack... ZA03AL
         TargetDoAction
-      
+
       SetTargetToSelf
-          
-        //New owner
+
+        // New owner
         SetTargetToWhoeverIsHolding
         SetOwnerToTarget
-        
-        //Identify as spellbook
+
+        // Identify as spellbook
         IfTargetIsAPlayer
           IfNameIsKnown
             DoNothing
@@ -254,30 +255,30 @@ IfStateIs0
             tmpargument = 15
             tmpdistance = EXPDARE
             GiveExperienceToTarget
-        
-        //Where to summon it
+
+        // Where to summon it
         tmpx = targetx
         tmpy = targety
         tmpturn = rand
         tmpdistance = 256
         Compass
         tmpdistance = targetz
-        SpawnCharacterXYZ		//Summon!
-          EnchantChild			//Set the drain
-            tmpargument = 0 - selfcontent > 4	//How much mana to drain
+        SpawnCharacterXYZ        // Summon!
+          EnchantChild            // Set the drain
+            tmpargument = 0 - selfcontent > 4    // How much mana to drain
             tmpdistance = 0
             tmpx = 0
             tmpy = 0
-            SetEnchantBoostValues		//Drain is determined by amount of monsters
-            tmpargument = selfcontent > 9	//Monster level = (charge-1)/2
+            SetEnchantBoostValues        // Drain is determined by amount of monsters
+            tmpargument = selfcontent > 9    // Monster level = (charge-1)/2
             SetChildState
-            
-            //Sparklies!
+
+            // Sparklies!
             tmpargument = YELLOW
             SparkleIcon
-            
+
           tmpargument = 50
-          SetReloadTime		//Delay before next use
+          SetReloadTime        // Delay before next use
     Else
       tmpy = 0
       IfXIsMoreThanY
@@ -285,11 +286,11 @@ IfStateIs0
         IfTargetIsAPlayer
           tmpargument = 4
           SendMessageNear
-    
+
     // Reset the charge counter
     tmpargument = 0
     SetContent
-    
+
   // Return to spellbook, Do last!
   IfDropped
     tmpargument = 0

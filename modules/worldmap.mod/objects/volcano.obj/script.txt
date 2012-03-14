@@ -1,8 +1,8 @@
 IfTimeOut
   tmpargument = 30
   SetTime
-  
-  //bubbling sound
+
+  // bubbling sound
   tmpargument = 0
   IfContentIs
     tmpargument = 1
@@ -13,12 +13,12 @@ IfTimeOut
     tmpargument = selfcontent - 1
     SetContent
 
-  //Either check for a outburst or spawn fireballs
+  // Either check for a outburst or spawn fireballs
   IfStateIs0
     SetTargetToNearbyEnemy
       tmpx = rand & 255
       tmpy = 20
-      IfXIsLessThanY        //Erupt!
+      IfXIsLessThanY        // Erupt!
         tmpargument = 8
         SetState
         tmpargument = 0
@@ -26,8 +26,8 @@ IfTimeOut
   Else
     tmpargument = selfstate - 1
     SetState
-    
-    //Spawn a fireball
+
+    // Spawn a fireball
     tmpargument = 0
     tmpdistance = selfz + 100
     tmpx = selfx
@@ -40,30 +40,31 @@ IfTimeOut
     SpawnExactParticle
     SpawnExactParticle
     SpawnExactParticle
-    
+
 // ZZ> This function anounces your location
-IfBumped			// 
+IfBumped
   tmpargument = 0
   GetXY
   IfXIsEqualToY
-    SetTargetToWhoeverBumped	  //
+    SetTargetToWhoeverBumped
       IfTargetIsAPlayer
-        tmpargument = rand & 3 + 1		        //
-        SendMessage		        //
+        tmpargument = rand & 3 + 1
+        SendMessage
         tmpargument = 0
         tmpx = 180
         tmpy = 0
         SetXY
 
-//Countdown the timer        
+// Countdown the timer
 tmpargument = 0
 GetXY
+
 IfXIsMoreThanY
     tmpx = tmpx - 1
     tmpy = 0
-    SetXY    
-        
-//This makes the player enter the module
+    SetXY
+
+// This makes the player enter the module
 IfAttacked
   SetTargetToWhoeverAttacked
   IfTargetIsAPlayer
@@ -76,10 +77,11 @@ IfAttacked
     ClearEndMessage
     GetContent
     AddEndMessage
-    
-    //palwater.mod
+
+    // palwater.mod
     tmpargument = 5
     FollowLink
-End				// Finished with this character
 
-End				// Finished with this character
+// Finished with this character
+End
+           

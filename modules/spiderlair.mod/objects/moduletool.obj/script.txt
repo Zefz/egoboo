@@ -3,9 +3,10 @@ IfSpawned
   tmpargument = 7
   tmpdistance = 0
   PlayMusic
-  
-  //No longer needed
+
+  // No longer needed
   GoPoof
-  
-  
-End					// All done
+
+// All done
+End
+

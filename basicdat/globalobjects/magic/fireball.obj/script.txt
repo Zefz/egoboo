@@ -58,7 +58,7 @@ IfStateIs0
       tmpx = tmpargument
       tmpy = targetmanaflow
       IfXIsLessThanY
-        tmpy = 2000			// Maximum charge
+        tmpy = 2000            // Maximum charge
         IfXIsLessThanY
           tmpy = tmpargument
           tmpx = 8
@@ -75,7 +75,7 @@ IfStateIs0
       Else
         // Exceeded mana flow rate...
         tmpx = targetmanaflow
-        tmpy = 1000              //Lose control if less than 3.5 flow
+        tmpy = 1000              // Lose control if less than 3.5 flow
         IfXIsLessThanY
           tmpargument = 1
           SendMessageNear
@@ -91,22 +91,22 @@ IfStateIs0
     IfXIsMoreThanY
       tmpx = tmpx - 512
       IfXIsMoreThanY
-      
+
         // Figure out the charge state, and spawn accordingly
-        tmpturn = tmpx > 9 + 1		// State 1, 2, or 3 for child
-        tmpargument = tmpturn + 1	// Particle 2, 3, or 4 for fireball
+        tmpturn = tmpx > 9 + 1        // State 1, 2, or 3 for child
+        tmpargument = tmpturn + 1    // Particle 2, 3, or 4 for fireball
         tmpargument = 2 // !!!BAD!!!
         tmpx = selfx
         tmpy = selfy
         tmpdistance = selfz
         SpawnExactParticleEndSpawn
-        
-        //Make it cast
+
+        // Make it cast
         tmpargument = ACTIONZA
         CorrectActionForHand
         TargetDoAction
-        
-        //Learn what it was
+
+        // Learn what it was
         IfUsageIsKnown
           DoNothing
         Else
@@ -142,5 +142,5 @@ IfDropped
   tmpargument = ACTIONJB
   DoAction
   KeepAction
-  
+
 End

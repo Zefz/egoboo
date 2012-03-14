@@ -1,16 +1,17 @@
-//METEOR SWARM AI
-tmpx = selfstate		//number of meteors to spawn minus 1
+// METEOR SWARM AI
+tmpx = selfstate        // number of meteors to spawn minus 1
 tmpy = 1
+
 IfXIsMoreThanY
   NotAnItem
   tmpargument = 1
-  ChangeArmor			//invisible
+  ChangeArmor            // invisible
 
   IfTimeOut
-    tmpargument = rand % 15 + 35    //time between every meteor
+    tmpargument = rand % 15 + 35    // time between every meteor
     SetTime
 
-    //Spawn one meteor
+    // Spawn one meteor
     tmpargument = 0
     SetTargetToNearbyEnemy
       tmpdistance = targetz
@@ -22,23 +23,22 @@ IfXIsMoreThanY
       tmpy = rand % 250 + selfy - 125
     SpawnExactParticle
 
-    tmpargument = selfstate - 1		//1 meteor used
+    tmpargument = selfstate - 1        // 1 meteor used
     SetState
 
     tmpx = selfstate
     tmpy = 1
     IfXIsEqualToY
-      GoPoof			//swarm is finished
+      GoPoof            // swarm is finished
 
-
-//SPELL AI
+// SPELL AI
 Else
-  
-  //Clong
+
+  // Clong
   IfHitGround
     tmpargument = 1
     PlaySound
-	
+
   // Remove the charge
   IfTakenOut
     tmpargument = 0
@@ -47,7 +47,6 @@ Else
       IfTargetIsAPlayer
         tmpargument = 0
         SendMessageNear
-
 
   // Tell them what they've won...
   IfGrabbed
@@ -60,9 +59,9 @@ Else
   IfUsed
     SetTargetToWhoeverIsHolding
     tmpargument = [WMAG]
-    IfTargetHasSkillID		//Can cast spell?
+    IfTargetHasSkillID        // Can cast spell?
 
-      //Aiming Cursor
+      // Aiming Cursor
       SetTargetToOwner
       GetContent
       tmpdistance = 500
@@ -74,24 +73,24 @@ Else
       tmpargument = 7
       SpawnExactParticle
 
-      //Charge it up!
+      // Charge it up!
       SetTargetToWhoeverIsHolding
       tmpx = selfcontent
-      tmpy = 3840					//Max charge
+      tmpy = 3840                    // Max charge
       IfXIsLessThanY
         tmpy = targetmanaflow
-        IfXIsLessThanY		//Enough power?
+        IfXIsLessThanY        // Enough power?
           tmpy = 10
           tmpx = targetmana
           IfXIsMoreThanY
-            tmpargument = 9			//Mana cost
-            CostTargetMana   
-            tmpargument = selfcontent + 7		//Casting speed
+            tmpargument = 9            // Mana cost
+            CostTargetMana
+            tmpargument = selfcontent + 7        // Casting speed
             SetContent
 
-  Else			//Player released the charge
+  Else            // Player released the charge
     tmpx = selfcontent
-    tmpy = 1024		//minimum needed charge
+    tmpy = 1024        // minimum needed charge
     IfXIsMoreThanY
 
       // Make the target shoot
@@ -100,30 +99,29 @@ Else
         CorrectActionForHand
         TargetDoAction
 
-      //Spawn a meteor swarm spawner
+      // Spawn a meteor swarm spawner
       SetTargetToWhoeverIsHolding
       GetContent
-      tmpdistance = 500			//How far away from caster
+      tmpdistance = 500            // How far away from caster
       tmpturn = targetturn
       tmpx = targetx
       tmpy = targety
       Compass
 
-      tmpdistance = 0			//velocity
+      tmpdistance = 0            // velocity
       SpawnCharacter
       GetContent
       tmpargument = tmpargument > 7
       tmpargument = tmpargument
-      SetChildState			//Tell him how many to spawn
+      SetChildState            // Tell him how many to spawn
 
       tmpargument = 300
       SetReloadTime
 
-
-    Else			//Not enough charged
+    Else            // Not enough charged
       tmpx = selfcontent
       tmpy = 12
-      IfXIsMoreThanY	//Only display message if charged
+      IfXIsMoreThanY    // Only display message if charged
         tmpargument = 3
         SendMessageNear
     tmpargument = 0

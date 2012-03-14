@@ -1,10 +1,10 @@
-//This object does some module updates
+// This object does some module updates
 IfTimeOut
   CleanUp
   tmpargument = 50
   SetTime
-  
-  //Players escaped the crypt?
+
+  // Players escaped the crypt?
   tmpargument = passage
   SetTargetToWhoeverIsInPassage
     IfTargetIsAPlayer
@@ -21,21 +21,21 @@ IfTimeOut
       AddIDSZ
       EndModule
 
-//This starts the music
+// This starts the music
 IfSpawned
   tmpargument = 10
   tmpdistance = 0
-  PlayMusic  
+  PlayMusic
   DisableExport
-  
-//Spawn monsters?
+
+// Spawn monsters?
 IfOrdered
   tmpx = selforder
   tmpy = [EXIT]
   IfXIsEqualToY
     tmpargument = 0
     SendMessage
-    
+
     // Little music blurb
     tmpargument = 0
     PlayFullSound
@@ -70,4 +70,6 @@ IfOrdered
     SpawnExactCharacterXYZ
     SpawnExactCharacterXYZ
 
-End					// All done
+// All done
+End
+

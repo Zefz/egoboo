@@ -1,5 +1,5 @@
 // Magic Spell: Bridge of Light
-//  by Pteromys of Melon Island... http://melonisland.net
+//  by Pteromys of Melon Island... http:// melonisland.net
 // Usage: Hold down attack to charge up a spell.  A glow
 //   will show the bridge's extent.  Release to create a
 //   bridge.
@@ -19,7 +19,7 @@
 //     before expiring.
 //   You can still sustain a bridge if the spellbook is put
 //     away, but not if it is dropped from your hands.
-//
+
 // Guide to object states:
 //  0  Spellbook
 //  1  Bridge segment falling into position
@@ -35,31 +35,30 @@
 //  Going "trigger happy" and casting hundreds of bridges
 //    in quick succession has a small chance of crashing
 //    the game.
-//
 
 IfSpawned
-  IfStateIs0				// Spellbook
+  IfStateIs0                // Spellbook
     tmpargument = 0
     SetState
     KeepAction
-  Else					// Energy Beam
+  Else                    // Energy Beam
     // Bridge segment
     MakeNameUnknown
     NotAnItem
     MakeCrushValid
 
-    tmpargument = 0			// Make it invisible while it's falling
+    tmpargument = 0            // Make it invisible while it's falling
     SetLight
 
     SetTargetToOwner
     tmpargument = targetz + 16
-    SetContent				// Store the original z position.
+    SetContent                // Store the original z position.
     tmpx = selfx
     tmpy = selfy
     tmpargument = 0
-    SetXY				// Store the original xy position
+    SetXY                // Store the original xy position
 
-    GetState				// More bridge segments?
+    GetState                // More bridge segments?
     tmpx = tmpargument
     tmpy = 5
     IfXIsMoreThanY
@@ -71,23 +70,23 @@ IfSpawned
       tmpdistance = selfz + 100
       SpawnCharacterXYZ
         GetState
-        tmpargument = tmpargument - 1	// Child will spawn more
+        tmpargument = tmpargument - 1    // Child will spawn more
         SetChildState
         EnchantChild
     Else
-      tmpargument = 2			// Make the last segment glow
+      tmpargument = 2            // Make the last segment glow
       tmpdistance = 1
       SpawnAttachedParticle
 
-    GetContent				// Very clever, IMHO, test to find if it's the first segment
-    tmpx = selfz - tmpargument		// First thing was spawned 100 above the owner, so dist must be near
-    tmpy = 120				// Tolerance of 20
+    GetContent                // Very clever, IMHO, test to find if it's the first segment
+    tmpx = selfz - tmpargument        // First thing was spawned 100 above the owner, so dist must be near
+    tmpy = 120                // Tolerance of 20
     IfXIsLessThanY
-      SetTargetToOwner			// Tell the spellmaster (the spellbook, actually) "I'm here"
+      SetTargetToOwner            // Tell the spellmaster (the spellbook, actually) "I'm here"
         SetTargetToTargetLeftHand
           tmpargument = [BRDG]
           IfTargetHasSpecialID
-            tmpargument = selfindex < 24	// CreateOrder seems funky. Did it by hand instead.
+            tmpargument = selfindex < 24    // CreateOrder seems funky. Did it by hand instead.
             OrderTarget
       SetTargetToOwner
         SetTargetToTargetRightHand
@@ -95,22 +94,22 @@ IfSpawned
           IfTargetHasSpecialID
             tmpargument = selfindex < 24
             OrderTarget
-      tmpargument = 2			// Make the first segment glow
+      tmpargument = 2            // Make the first segment glow
       tmpdistance = 1
       SpawnAttachedParticle
 
       tmpx = 1
       tmpy = 1
       tmpargument = 1
-      SetXY				// Remember that it's the first segment
+      SetXY                // Remember that it's the first segment
     Else
       tmpx = 1
       tmpy = 0
       tmpargument = 1
-      SetXY				// Remember that it's not the first segment
+      SetXY                // Remember that it's not the first segment
     tmpargument = 1
     SetState
-    tmpargument = 100			// Wait before incompletion kill.
+    tmpargument = 100            // Wait before incompletion kill.
     SetTime
 
 IfChanged
@@ -119,12 +118,12 @@ IfChanged
   SetState
   KeepAction
 
-//Bridge segment event handling
+// Bridge segment event handling
 IfStateIs0
-  GetState //nop
+  GetState // nop
 Else
   IfStateIs1
-    IfTimeOut				// If incomplete, then kill from this point forward.
+    IfTimeOut                // If incomplete, then kill from this point forward.
       UndoEnchant
       tmpargument = 5
       SetTime
@@ -141,7 +140,7 @@ Else
       SpawnExactParticle
     tmpx = selflife
     tmpy = 512
-    IfXIsLessThanY			// If disenchanted
+    IfXIsLessThanY            // If disenchanted
       UndoEnchant
       tmpx = selfx
       tmpy = selfy
@@ -186,7 +185,7 @@ Else
       SpawnExactParticle
     tmpx = selflife
     tmpy = 768
-    IfXIsLessThanY			// If disenchanted
+    IfXIsLessThanY            // If disenchanted
       UndoEnchant
       tmpx = selfx
       tmpy = selfy
@@ -234,10 +233,10 @@ Else
 
       tmpargument = ACTIONKA
       DoActionOverride
-      tmpargument = 100			// So I don't call this part again
+      tmpargument = 100            // So I don't call this part again
       SetTime
 
-  IfCrushed				// Doors can truncate the bridge
+  IfCrushed                // Doors can truncate the bridge
     tmpargument = 1
     tmpdistance = 11025
     PlaySound
@@ -250,14 +249,14 @@ Else
     UndoEnchant
 
   tmpargument = 0
-  GetXY			// set x,y to original
-  tmpdistance = tmpy	// original y
-  tmpy = selfx		// current x
-  IfXIsEqualToY		// compare current to orig
-    tmpy = tmpdistance	// original y
-    tmpx = selfy	// current y
-    IfXIsEqualToY	// compare current to orig
-      GetState //nop
+  GetXY            // set x,y to original
+  tmpdistance = tmpy    // original y
+  tmpy = selfx        // current x
+  IfXIsEqualToY        // compare current to orig
+    tmpy = tmpdistance    // original y
+    tmpx = selfy    // current y
+    IfXIsEqualToY    // compare current to orig
+      GetState // nop
     Else
       GetXY
       Teleport
@@ -265,7 +264,7 @@ Else
     GetXY
     Teleport
 
-  GetContent		//stay at height
+  GetContent        // stay at height
   tmpx = tmpargument
   tmpy = selfz
   IfXIsMoreThanY
@@ -279,7 +278,7 @@ Else
       SetState
     SetTargetToSelf
     tmpargument = 1 - targetspeedz
-    tmpargument = tmpargument < 1 + tmpargument < 3 + tmpargument < 2 //long-way multiply by 100
+    tmpargument = tmpargument < 1 + tmpargument < 3 + tmpargument < 2 // long-way multiply by 100
     AccelerateUp
 
 // Spell AI
@@ -315,7 +314,7 @@ IfStateIs0
     IfXIsEqualToY
       GetContent
       tmpx = tmpargument
-      tmpy = 2048			// Max charge
+      tmpy = 2048            // Max charge
       IfXIsLessThanY
         tmpy = targetmanaflow
         IfXIsLessThanY
@@ -327,11 +326,11 @@ IfStateIs0
             SetContent
 
       tmpargument = 0
-      SetTargetToOldTarget		// Restore first-child from old target slot
+      SetTargetToOldTarget        // Restore first-child from old target slot
       IfFacingTarget
         SetTargetToWhoeverIsHolding
         IfTargetIsOldTarget
-          GetState //nop
+          GetState // nop
         Else
           SetTargetToOldTarget
           tmpx = targetdistance
@@ -350,11 +349,11 @@ IfStateIs0
               tmpargument = 1
       tmpx = tmpargument
       tmpy = 0
-      IfXIsEqualToY			// If failed to find bridge to cut
+      IfXIsEqualToY            // If failed to find bridge to cut
         IfTimeOut
           SetTargetToOwner
           GetContent
-          tmpdistance = tmpargument > 2 + 128 //tmpargument > 8 + 2 < 6
+          tmpdistance = tmpargument > 2 + 128 // tmpargument > 8 + 2 < 6
           tmpturn = targetturn
           tmpx = targetx
           tmpy = targety
@@ -371,18 +370,18 @@ IfStateIs0
     tmpy = 255
     IfXIsMoreThanY
       tmpargument = 0
-      IfFacingTarget			// If I'm facing the old bridge's first segment
+      IfFacingTarget            // If I'm facing the old bridge's first segment
         SetTargetToWhoeverIsHolding
         IfTargetIsOldTarget
-          GetState //nop
+          GetState // nop
         Else
           SetTargetToOldTarget
           tmpx = targetdistance
           tmpy = 100
-          IfXIsMoreThanY		// If the spellmaster is at a safe distance
+          IfXIsMoreThanY        // If the spellmaster is at a safe distance
             tmpy = 700
-            IfXIsLessThanY		// If we're not *too* far
-              UndoEnchant			// Cut the bridge!
+            IfXIsLessThanY        // If we're not *too* far
+              UndoEnchant            // Cut the bridge!
               SetTargetToWhoeverIsHolding
               tmpargument = 6
               SendMessageNear
@@ -391,13 +390,13 @@ IfStateIs0
               tmpargument = tmpargument - 256 > 1
               PumpTarget
               tmpargument = 1
-      tmpx = tmpargument		// If I could not find a bridge to cut...
+      tmpx = tmpargument        // If I could not find a bridge to cut...
       tmpy = 0
       IfXIsEqualToY
         SetTargetToOldTarget
         tmpargument = [BRDG]
         IfTargetHasSpecialID
-          tmpargument = 3349		// Arbitrary order number to disconnect link to bridge (hex D15)
+          tmpargument = 3349        // Arbitrary order number to disconnect link to bridge (hex D15)
           OrderTarget
           UnsparkleIcon
         SetTargetToWhoeverIsHolding
@@ -411,10 +410,10 @@ IfStateIs0
         tmpdistance = 60
         Compass
         tmpdistance = targetz + 100
-        SpawnCharacterXYZ			// Make the first bridge segment
+        SpawnCharacterXYZ            // Make the first bridge segment
           // Set starting state
           GetContent
-          tmpargument = tmpargument > 8 + 6	// (d5) Child will spawn more
+          tmpargument = tmpargument > 8 + 6    // (d5) Child will spawn more
           SetChildState
           EnchantChild
             tmpargument = YELLOW
@@ -436,7 +435,7 @@ IfStateIs0
           SendMessageNear
     Else
       tmpy = 0
-      IfXIsMoreThanY			// If it was actually pumped at all
+      IfXIsMoreThanY            // If it was actually pumped at all
         // Didn't pump it enough
         tmpargument = 0
         SendMessageNear

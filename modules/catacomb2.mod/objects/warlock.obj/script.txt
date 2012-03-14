@@ -115,6 +115,7 @@ IfStateIs10
     tmpy = targety - selfy > 1 + selfy
     ClearWaypoints
     AddWaypoint
+
 IfStateIs11
   // Right hand
   IfTimeOut

@@ -5,7 +5,7 @@ IfOrdered
   IfXIsEqualToY
     UndoEnchant
     tmpargument = -1
-    SetContent            //Won't come back...
+    SetContent            // Won't come back...
 
 //------------------------------------------------------------------------------
 // ZZ> Most undead have an enchantment sustaining them
@@ -15,7 +15,7 @@ IfSpawned
   EnchantTarget         // Enchant self...
 
 //------------------------------------------------------------------------------
-//Rise from the dead...  Takes several times to wake...
+// Rise from the dead...  Takes several times to wake...
 IfCleanedUp
   tmpx = selfcontent
   tmpy = 0
@@ -33,9 +33,9 @@ IfCleanedUp
         tmpargument = 1
         SendMessageNear
         SetTargetToSelf
-        RespawnTarget 		// Same location, RespawnCharacter returns to start...
-        EnchantTarget  		// Enchant self...
-        tmpargument = 244  	// Frame 61...
+        RespawnTarget         // Same location, RespawnCharacter returns to start...
+        EnchantTarget          // Enchant self...
+        tmpargument = 244      // Frame 61...
         SetFrame
         tmpargument = ACTIONMD
         DoActionOverride
@@ -67,7 +67,7 @@ IfKilled
     IfXIsEqualToY
       tmpargument = -500
       SetContent // Won't come back...
-      SetTargetToWhoeverAttacked		//Give exp
+      SetTargetToWhoeverAttacked        // Give exp
       tmpargument = 20
       tmpdistance = EXPREVENGE
       GiveExperienceToTarget
@@ -87,14 +87,13 @@ IfKilled
   // Make the character body
   tmpargument = 25
   SetBumpHeight
-  
-  //return from the dead?
+
+  // return from the dead?
   tmpx = selfcontent
   tmpy = -1
   IfXIsMoreThanY
-    tmpargument = rand & 7 + 7    //How many CleanUp updates needed
+    tmpargument = rand & 7 + 7    // How many CleanUp updates needed
     SetContent
-    
 
 //------------------------------------------------------------------------------
 // ZZ> Let the character walk around
@@ -112,7 +111,7 @@ IfTimeOut
     tmpy = 140
     IfXIsLessThanY
       IfFacingTarget
-        tmpargument = rand & 1 + LATCHLEFT    //Random attack
+        tmpargument = rand & 1 + LATCHLEFT    // Random attack
         PressLatchButton
     tmpargument = 20
     SetTime
@@ -128,6 +127,7 @@ IfTimeOut
     tmpy = rand & 1023 - 512 + selfspawny
   ClearWaypoints
   AddWaypoint
+
 IfAtLastWaypoint
   tmpargument = 0
   SetTime

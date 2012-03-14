@@ -1,42 +1,44 @@
-//SPECIAL ABYSS SCRIPT !!BAD!! SHOULD BE MOVED ELSEWHERE !!BAD!!
+// SPECIAL ABYSS SCRIPT !!BAD!! SHOULD BE MOVED ELSEWHERE !!BAD!!
 tmpx = 0
 tmpy = selfmorale
+
 IfXIsEqualToY
   tmpargument = 4
-  OpenPassage		//This opens the vampire gate when all vampires are killed
-//BAD SCRIPT END!!
-  
-//Tactics: Wait until enemy show up, when he does, always follow it until it is
-//defeated
+  OpenPassage        // This opens the vampire gate when all vampires are killed
+// BAD SCRIPT END!!
 
-//Randomize ghost skin
+// Tactics: Wait until enemy show up, when he does, always follow it until it is
+// defeated
+
+// Randomize ghost skin
 IfSpawned
   tmpargument = rand & 3
   ChangeArmor
 
-//This makes ghosts fly up and down
+// This makes ghosts fly up and down
 tmpx = targetz
 tmpy = selfz
+
 IfXIsMoreThanY
   IfTargetIsOnHatedTeam
     tmpargument = rand & 30 - 15 + targetz
     SetFlyHeight
 Else
   tmpargument = 38
-  SetFlyHeight		//Reset to normal
+  SetFlyHeight        // Reset to normal
 
 //------------------------------------------------------------------------------
-//New round
+// New round
 IfTimeOut
   tmpargument = rand % 20 +  32
-  SetTime				//Redo timer
+  SetTime                // Redo timer
 
-  tmpx = rand & 100			//Moaning sound?
+  tmpx = rand & 100            // Moaning sound?
   tmpy = rand & 1
   IfXIsLessThanY
     tmpargument = 3
-    IfContentIs			//Dont if timer is short becuase
-      tmpargument = rand % 5 + 3		//of attacking
+    IfContentIs            // Dont if timer is short becuase
+      tmpargument = rand % 5 + 3        // of attacking
       PlaySound
     Else
       GetContent
@@ -46,7 +48,7 @@ IfTimeOut
         tmpargument = 3
         SetContent
 
-  //Dorment
+  // Dorment
   IfStateIs0
     SetTargetToWideEnemy
       tmpx = targetx
@@ -62,16 +64,16 @@ IfTimeOut
     ClearWaypoints
     AddWaypoint
 
-  //Hunting
+  // Hunting
   IfStateIs1
     tmpx = targetx
-    tmpy = targety			//Move towards enemy
+    tmpy = targety            // Move towards enemy
     ClearWaypoints
     AddWaypoint
-    tmpx = rand & 100			//Sometimes charge instead
-    tmpy = 10				//10%
+    tmpx = rand & 100            // Sometimes charge instead
+    tmpy = 10                // 10%
     IfXIsLessThanY
-      tmpargument = 100				//charges are fast
+      tmpargument = 100                // charges are fast
       SetSpeedPercent
       tmpx = targetx
       tmpy = targety
@@ -80,37 +82,37 @@ IfTimeOut
       ClearWaypoints
       AddWaypoint
 
-    //Dont flock
-    SetOldTarget			//Remember enemy
+    // Dont flock
+    SetOldTarget            // Remember enemy
     SetTargetToNearestFriend
     tmpx = targetdistance
     tmpy = 90
-    IfXIsLessThanY			//To close to friend?
+    IfXIsLessThanY            // To close to friend?
       tmpx = rand % 500 + targetx - 250
       tmpy = rand % 500 + targety - 250
-      SetTargetToOldTarget		//Enemy
+      SetTargetToOldTarget        // Enemy
       tmpturn = targetturnto
       tmpdistance = rand % 1000
       Compass
       ClearWaypoints
-      AddWaypoint			//Move randomly away from him
+      AddWaypoint            // Move randomly away from him
       tmpargument = rand & 30 + 30
       SetTime
     Else
-      SetTargetToOldTarget		//Set target back to enemy
+      SetTargetToOldTarget        // Set target back to enemy
 
-//Attack enemy
+// Attack enemy
 IfStateIs1
   IfTargetIsOnHatedTeam
-    tmpx = targetdistance		//Close enough?
+    tmpx = targetdistance        // Close enough?
     tmpy = 150
     IfXIsLessThanY
-      tmpargument = rand & 1		//Randomize attack left or right hand
+      tmpargument = rand & 1        // Randomize attack left or right hand
       SetContent
       tmpargument = 1
-      IfContentIs			//Attack right
+      IfContentIs            // Attack right
         tmpargument = LATCHRIGHT
-      Else				//Attack left
+      Else                // Attack left
         tmpargument = LATCHLEFT
       IfTargetIsAlive
         PressLatchButton
@@ -118,20 +120,20 @@ IfStateIs1
       SetTime
 
 //------------------------------------------------------------------------------
-//Hit by silver
+// Hit by silver
 IfHitVulnerable
-  tmpargument = rand & 1280 + 1024	//4-9 damage
+  tmpargument = rand & 1280 + 1024    // 4-9 damage
   tmpdistance = DAMAGEHOLY
   SetTargetToSelf
   DamageTarget
   tmpargument = 9
   tmpdistance = rand % 8000 + 11000
-  PlaySound			//Special feared sound
+  PlaySound            // Special feared sound
   tmpargument = 3
   SendMessageNear
 
 //------------------------------------------------------------------------------
-//Return to dorment state when enemy is defeated
+// Return to dorment state when enemy is defeated
 IfTargetIsAlive
   DoNothing
 Else
@@ -139,7 +141,7 @@ Else
   SetState
 
 //------------------------------------------------------------------------------
-//Holy damage makes ghosts scared
+// Holy damage makes ghosts scared
 IfAttacked
   GetDamageType
   tmpy = tmpargument
@@ -147,7 +149,7 @@ IfAttacked
   IfXIsEqualToY
     tmpx = targetx
     tmpy = targety
-    tmpturn = targetturnto + 36780		//TargetTurnAway
+    tmpturn = targetturnto + 36780        // TargetTurnAway
     tmpdistance = 12000
     Compass
     ClearWaypoints
@@ -155,18 +157,18 @@ IfAttacked
     tmpargument = rand % 80 + 50
     SetTime
     tmpargument = 9
-    PlaySound			//Special feared sound
+    PlaySound            // Special feared sound
     tmpargument = 3
     SendMessageNear
-  Else						//Normal ouch
+  Else                        // Normal ouch
     tmpargument = rand & 1
-    PlaySound			//Ouch sound
+    PlaySound            // Ouch sound
 
 //------------------------------------------------------------------------------
-//Death stuff
+// Death stuff
 IfKilled
   tmpargument = 2
-  PlaySound			//death sound
+  PlaySound            // death sound
   tmpargument = 0
   IfTargetIsOnSameTeam
     tmpargument = 1

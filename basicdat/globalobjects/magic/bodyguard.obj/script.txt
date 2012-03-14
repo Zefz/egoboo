@@ -1,51 +1,58 @@
-//This function makes an item fall to the floor when spawned
+// This function makes an item fall to the floor when spawned
 IfSpawned
   tmpargument = ACTIONJB
   DoAction
   KeepAction
   MakeCrushValid
-IfDropped				// Make it lie on floor
+
+// Make it lie on floor
+IfDropped
   KeepAction
-IfGrabbed				// Tell them what they've won, Johnny!
+
+// Tell them what they've won, Johnny!
+IfGrabbed
   SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer
     tmpargument = 0
     SendMessageNear
+
 IfHitGround
   tmpargument = 0
   PlaySound
   tmpargument = ACTIONDB
   DoAction
-IfHeld			//Hide in hand
+
+// Hide in hand
+IfHeld
   tmpargument = 1
   SetState
 Else
   tmpargument = 0
   SetState
 
-//Spell stuff
+// Spell stuff
 IfUsed
   UndoEnchant
   UnsparkleIcon
-  
+
   SetTargetToWhoeverIsHolding
   tmpargument = [HMAG]
-  IfTargetHasSkillID				//Need divine spell skill
+  IfTargetHasSkillID                // Need divine spell skill
     tmpx = selfcontent
-    tmpy = 768					//Don't overcharge
+    tmpy = 768                    // Don't overcharge
     IfXIsLessThanY
-      tmpy = targetmanaflow			//Enough spell power?
+      tmpy = targetmanaflow            // Enough spell power?
       IfYIsMoreThanX
-        tmpargument = 6				//Mana cost
-        CostTargetMana      //Increase the charge
-          tmpargument = selfcontent + 6		//Casting Time
+        tmpargument = 6                // Mana cost
+        CostTargetMana      // Increase the charge
+          tmpargument = selfcontent + 6        // Casting Time
           SetContent
 
           // Spawn particles around target
           SetTargetToNearestFriend
           tmpx = targetdistance
           tmpy = 375
-          IfXIsMoreThanY			//No target in range, select caster
+          IfXIsMoreThanY            // No target in range, select caster
             SetTargetToWhoeverIsHolding
           tmpx = targetx
           tmpy = targety
@@ -56,26 +63,26 @@ IfUsed
 Else
   tmpx = selfcontent
   tmpy = 750
-  IfXIsMoreThanY		//Enough power to activate?
+  IfXIsMoreThanY        // Enough power to activate?
 
-    SetOldTarget			//Remember the spell target
+    SetOldTarget            // Remember the spell target
     SetTargetToWhoeverIsHolding
-    SetOwnerToTarget			//Make the caster sustain the spell
-    SetTargetToOldTarget		//Retarget the spell target
-    EnchantTarget		//Do the enchant
+    SetOwnerToTarget            // Make the caster sustain the spell
+    SetTargetToOldTarget        // Retarget the spell target
+    EnchantTarget        // Do the enchant
 
-    tmpargument = 100		//Set cooldown time
+    tmpargument = 100        // Set cooldown time
     SetReloadTime
 
     tmpargument = 3
-    SendMessageNear		//Tell what happened
+    SendMessageNear        // Tell what happened
     tmpargument = 1
     PlaySound
-      
-    tmpargument = BLUE			//Icon sparkles
+
+    tmpargument = BLUE            // Icon sparkles
     SparkleIcon
-      
-    //Award xp and stuff for daring to do it
+
+    // Award xp and stuff for daring to do it
     IfNameIsKnown
       DoNothing
     Else
@@ -87,12 +94,14 @@ Else
   Else
     tmpx = selfcontent
     tmpy = 0
-    IfXIsMoreThanY		//Only if there was a charge
+    IfXIsMoreThanY        // Only if there was a charge
       tmpargument = 1
-      SendMessageNear		//Tell it didn't work
+      SendMessageNear        // Tell it didn't work
       tmpargument = 2
       PlaySound
   tmpargument = 0
-  SetContent			//Reset counter
+  SetContent            // Reset counter
 
-End					// All done
+// All done
+End
+

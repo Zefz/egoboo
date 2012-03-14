@@ -9,12 +9,12 @@ IfTimeOut
   AddWaypoint
   tmpargument = rand & 15 + 30
   SetTime
-  
+
 IfSomeoneIsStealing
   tmpargument = TEAME
   TargetJoinTeam
-  CallForHelp  
-  
+  CallForHelp
+
 // Show the character's location
 tmpx = selfx
 tmpy = selfy
@@ -22,7 +22,7 @@ tmpargument = YELLOW
 ShowBlipXY
 
 //------------------------------------------------------------------------------
-//Handle orders ( purchases )
+// Handle orders ( purchases )
 IfOrdered
   // Counter specifies transaction ( 0, 1, or 2 )
   // Order specifies price
@@ -62,7 +62,7 @@ IfUsed
 //------------------------------------------------------------------------------
 // ZZ> Handle death by sending a message and other stuff
 IfKilled
-  CallForHelp			//Warn friends
+  CallForHelp            // Warn friends
   tmpargument = 7
   PlaySound
   tmpargument = MESSAGEDEATH
@@ -80,7 +80,7 @@ IfKilled
   // Make the character body
   tmpargument = 45
   SetBumpHeight
-  
+
   tmpargument = TEAME
   TargetJoinTeam
 

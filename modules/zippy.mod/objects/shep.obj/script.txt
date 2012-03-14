@@ -2,11 +2,12 @@
 IfAttacked
   CallForHelp
   SetTargetToWhoeverAttacked
-  tmpargument = TEAME       //Team EVIL
+  tmpargument = TEAME       // Team EVIL
   TargetJoinTeam
+
 IfKilled
   SetTargetToWhoeverAttacked
-  tmpargument = TEAME       //Team EVIL
+  tmpargument = TEAME       // Team EVIL
   TargetJoinTeam
 
 IfSpawned
@@ -105,7 +106,7 @@ IfStateIs0
     tmpx=selfx
     tmpy=selfy
     SetXY
-    
+
 //------------------------------------------------------------------------------
 End
 //------------------------------------------------------------------------------

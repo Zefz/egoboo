@@ -1,13 +1,13 @@
-//The States and Contents
-//State 0: Closed chest
-//State 1: Opened Chest
-//State 2: Empty Chest
-//Content 0: Locked chest
-//Content 1: Unlocked Chest
+// The States and Contents
+// State 0: Closed chest
+// State 1: Opened Chest
+// State 2: Empty Chest
+// Content 0: Locked chest
+// Content 1: Unlocked Chest
 
-//This chest is open
+// This chest is open
 IfSpawned
-  tmpargument = 1  //Unlocked
+  tmpargument = 1  // Unlocked
   SetContent
 
 // Someone cast an unlock spell
@@ -42,12 +42,11 @@ IfBumped
   SetTargetToWhoeverBumped
   IfTargetCanOpenStuff
 
-
     // Is it closed?
     tmpargument = 0
     IfStateIs
       tmpargument = 0
-      IfContentIs  //LOCKED
+      IfContentIs  // LOCKED
         // Are they in front?
         IfFacingTarget
           // Make target crouch and tell the players...
@@ -56,22 +55,18 @@ IfBumped
           tmpargument = 1
           SendMessageNear
 
-
-      Else //UNLOCKED
+      Else // UNLOCKED
         // Are they in front?
         IfFacingTarget
-
 
           // Make target crouch
           tmpargument = ACTIONMG
           TargetDoAction
 
-
           // Give some experience
           tmpargument = 5
           tmpdistance = EXPDARE
           GiveExperienceToTarget
-
 
           // Open it up
           tmpargument = ACTIONMG
@@ -91,7 +86,6 @@ IfBumped
             tmpargument = 4
             SendMessageNear
 
-
     // Wait before allowing loot
     IfTimeOut
       // Reset the timer
@@ -107,7 +101,6 @@ IfBumped
         tmpargument = 0
         SendMessageNear
 
-
     // Drop the contents
     IfStateIs1
       DropItems
@@ -115,7 +108,7 @@ IfBumped
       DropKeys
       tmpargument = 2
       SendMessageNear
-      tmpargument = 2 //It's empty now...
+      tmpargument = 2 // It's empty now...
       SetState
 
 // All done

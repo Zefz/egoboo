@@ -1,16 +1,17 @@
-//We are supposed to activate secret?
+// We are supposed to activate secret?
 IfOrdered
   tmpx = selforder
   tmpy = [ARCH]
   IfXIsEqualToY
     tmpargument = 1
     SetState
-    tmpargument = 13500     //5 minutes
+    tmpargument = 13500     // 5 minutes
     SetContent
-    
-//Update timer
+
+// Update timer
 tmpx = selfcontent
 tmpy = 0
+
 IfXIsMoreThanY
   tmpargument = selfcontent -1
   SetContent
@@ -19,12 +20,13 @@ IfXIsMoreThanY
 IfSpawned
   SetTurnModeToSpin
   DisableExport
+
 IfTimeOut
   // Make sparklies
   SpawnPoof
   tmpargument = 10
   SetTime
-  
+
 IfGrabbed
   EnableExport
   BeatModule
@@ -32,11 +34,11 @@ IfGrabbed
   PlayFullSound
   StopMusic
 
-  //Check if they made it within the time limit!
+  // Check if they made it within the time limit!
   IfStateIs1
     tmpx = selfcontent
     tmpy = 0
-    IfXIsMoreThanY    
+    IfXIsMoreThanY
       tmpargument = 100
       tmpdistance = EXPSECRET
       GiveExperienceToGoodTeam
@@ -45,8 +47,8 @@ IfGrabbed
       tmpargument = 1
       PlayFullSound
       tmpargument = 3
-      SendMessage  
-  
+      SendMessage
+
   SetTargetToWhoeverIsHolding
   tmpargument = 0
   SendMessageNear
@@ -68,15 +70,17 @@ IfGrabbed
 
   // Mark this module as beaten, hidden modules may open up
   tmpargument = [MAIN]
-  tmpdistance = 0           //The quest level
-  AddQuestAllPlayers        //Add it
-  
+  tmpdistance = 0           // The quest level
+  AddQuestAllPlayers        // Add it
+
   tmpargument = [BEAT]
   AddIDSZ
-  
+
   // Become the export object
   SetTargetToSelf
   tmpargument = 125
   ChangeTargetClass
-  
-End					// All done
+
+// All done
+End
+

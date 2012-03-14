@@ -2,8 +2,8 @@
 IfSpawned
   tmpargument = 30
   SetTime
-  
-  //Randomize skin
+
+  // Randomize skin
   tmpargument = rand % 4
   ChangeArmor
 
@@ -328,24 +328,24 @@ IfTimeOut
       Else
         // Find a weapon!!!
         tmpx = 0
-        tmpargument = [GONN]      //Gonne
+        tmpargument = [GONN]      // Gonne
         tmpdistance = BLAHITEMS
         SetTargetToWideBlahID
           tmpx = 1
         Else
-          tmpargument = [CLAW]    //Claw
+          tmpargument = [CLAW]    // Claw
           SetTargetToWideBlahID
             tmpx = 1
           Else
-            tmpargument = [TORC]  //Torch
+            tmpargument = [TORC]  // Torch
             SetTargetToWideBlahID
               tmpx = 1
             Else
-              tmpargument = [HAMM]  //Hammer weapons
+              tmpargument = [HAMM]  // Hammer weapons
               SetTargetToWideBlahID
                 tmpx = 1
               Else
-                tmpargument = [SWOR]  //Swords
+                tmpargument = [SWOR]  // Swords
                 SetTargetToWideBlahID
                   tmpx = 1
         tmpy = 1

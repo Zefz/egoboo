@@ -2,13 +2,13 @@ IfKilled
   tmpargument = [FAER]
   IssueOrder
   tmpdistance = [FAER]
-  OrderSpecialID            //Tell the faerie ring that its done
+  OrderSpecialID            // Tell the faerie ring that its done
 
-//Need at least 1.5 full damage in 1 hit to die
+// Need at least 1.5 full damage in 1 hit to die
 IfSpawned
   tmpargument = 384
   SetDamageThreshold
-  
+
 IfKilled
   // Smash open
   tmpargument = [GOOD]
@@ -30,11 +30,11 @@ IfKilled
   Else
     tmpargument = tmpx
     OpenPassage
-    
+
     // Play the secret music
     tmpargument = 1
     PlaySound
-    
+
     // Give experience
     tmpargument = 20
     tmpdistance = EXPSECRET

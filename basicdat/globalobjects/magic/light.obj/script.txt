@@ -12,6 +12,7 @@ IfSpawned
     tmpdistance = SPAWNLAST
     SpawnAttachedParticle
     SpawnPoof
+
 IfChanged
   // It's a spell in hand
   tmpargument = 0
@@ -63,7 +64,7 @@ IfStateIs0
     SetReloadTime
     tmpargument = ACTIONMC
     TargetDoAction
-    
+
     // Kill the old one
     UndoEnchant
       UnsparkleIcon

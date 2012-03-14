@@ -6,7 +6,7 @@ IfAttacked
   PlaySound
 
 IfReaffirmed
-  tmpargument = 1	//On Fire!
+  tmpargument = 1    // On Fire!
   SetState
 
 IfStateIs1

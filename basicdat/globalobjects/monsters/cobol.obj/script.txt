@@ -130,10 +130,10 @@ IfKilled
   tmpargument = 50
   SetTime
 
-  //Make em crushable
+  // Make em crushable
   MakeCrushValid
-  
-//Mooshed in a passage
+
+// Mooshed in a passage
 IfCrushed
   tmpargument = 1
   tmpx = 0
@@ -177,7 +177,7 @@ IfAttacked
 
       // Check for instant death
       IfBackstabbed
-        // Allow Rogues to backstab 
+        // Allow Rogues to backstab
         tmpargument = 8
         SendMessageNear
 

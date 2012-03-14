@@ -1,4 +1,4 @@
-//This adds to the amount of spells the dracolich can use
+// This adds to the amount of spells the dracolich can use
 IfSpawned
   JoinEvilTeam
 
@@ -8,19 +8,19 @@ IfDropped
 IfUsed
   SetTargetToNearestEnemy
   IfStateIs0
-    tmpx = rand & 1           //Reduce disenchant by 50%
+    tmpx = rand & 1           // Reduce disenchant by 50%
     tmpy = 0
     IfXIsEqualToY
-      tmpargument = rand % 3 + 1      //Disallow disenchant
+      tmpargument = rand % 3 + 1      // Disallow disenchant
     Else
-      tmpargument = rand & 3 + 1      //Allow disenchant
+      tmpargument = rand & 3 + 1      // Allow disenchant
     SetState
 
-  //Death Cloud
+  // Death Cloud
   IfStateIs1
     GetContent
     tmpx = tmpargument
-    tmpy = 150			//3 seconds
+    tmpy = 150            // 3 seconds
     IfXIsMoreThanY
       tmpx = selfx
       tmpy = selfy
@@ -34,21 +34,21 @@ IfUsed
       SpawnExactParticle
       SpawnExactParticle
       SpawnExactParticle
-      SpawnExactParticle		//8 clouds
+      SpawnExactParticle        // 8 clouds
       SpawnExactParticle
       SpawnExactParticle
       SpawnExactParticle
 
-      //Sound effect
+      // Sound effect
       tmpargument = 0
       PlaySound
 
-      //Animation
+      // Animation
       tmpargument = ACTIONMD  // Must be an A...  ZA, BA, CA, DA, etc...
       SetTargetToWhoeverIsHolding
       TargetDoAction
 
-      //Now reset
+      // Now reset
       tmpargument = 0
       SetState
       SetContent
@@ -56,13 +56,13 @@ IfUsed
       tmpargument = tmpargument + 1
       SetContent
 
-      //The charge particle
+      // The charge particle
       tmpturn = tmpargument < 8 + 10000
       tmpargument = 0
       tmpdistance = SPAWNORIGIN
       SpawnAttachedSizedParticle
 
-      //Targeting cursor
+      // Targeting cursor
       tmpx = selfx
       tmpy = selfy
       GetContent
@@ -73,92 +73,92 @@ IfUsed
       tmpdistance = selfz
       SpawnExactParticle
 
-  //Lightning bolt
+  // Lightning bolt
   IfStateIs2
     tmpdistance = 0
-    tmpargument = 0		//Cast once at first second
+    tmpargument = 0        // Cast once at first second
     IfContentIs
       tmpdistance = 1
-    tmpargument = 50		//Cast once at second second
+    tmpargument = 50        // Cast once at second second
     IfContentIs
       tmpdistance = 1
-    tmpargument = 100		//Cast once at third second
+    tmpargument = 100        // Cast once at third second
     IfContentIs
       tmpdistance = 1
 
     tmpturn = 0
-    IfDistanceIsMoreThanTurn	//If tmpdistance = 1 then cast lighting
+    IfDistanceIsMoreThanTurn    // If tmpdistance = 1 then cast lighting
       tmpargument = 3
       tmpx = selfx
       tmpy = selfy
       tmpdistance = selfz - 128
       SpawnExactParticle
 
-      //Animation
+      // Animation
       tmpargument = ACTIONTA  // Must be an A...  ZA, BA, CA, DA, etc...
       CorrectActionForHand
       SetTargetToWhoeverIsHolding
       TargetDoAction
 
-    //Increase timer
+    // Increase timer
     GetContent
     tmpargument = tmpargument + 1
     SetContent
 
-  //Ice attack
+  // Ice attack
   IfStateIs3
     GetContent
     tmpx = tmpargument * 3
-    tmpy = 100			//2 seconds
+    tmpy = 100            // 2 seconds
     IfXIsMoreThanY
       tmpargument = 50
       SetReloadTime
 
-      //Cone of cold
+      // Cone of cold
       tmpargument = 6
       tmpx = selfx
       tmpy = selfy
       tmpdistance = selfz - 128
       SpawnExactParticle
 
-      //Animation
+      // Animation
       tmpargument = ACTIONTA  // Must be an A...  ZA, BA, CA, DA, etc...
       CorrectActionForHand
       SetTargetToWhoeverIsHolding
       TargetDoAction
     Else
-      //Increase timer
+      // Increase timer
       GetContent
       tmpargument = tmpargument + 1
       SetContent
 
-      //The charge particle
+      // The charge particle
       tmpturn = tmpargument < 8 + 10000
       tmpargument = 9
       tmpdistance = SPAWNORIGIN
       SpawnAttachedSizedParticle
 
-  //Disenchant
+  // Disenchant
   IfStateIs4
     tmpx = selfcontent
-    tmpy = 150			//3 seconds
+    tmpy = 150            // 3 seconds
     IfXIsMoreThanY
       tmpargument = [DISP]
       DispelTargetEnchantID
 
-      //Sound effect
+      // Sound effect
       tmpargument = 3
       PlaySound
 
       tmpargument = 0
       SendMessage
 
-      //Animation
+      // Animation
       tmpargument = ACTIONMD  // Must be an A...  ZA, BA, CA, DA, etc...
       SetTargetToWhoeverIsHolding
       TargetDoAction
 
-      //Now reset
+      // Now reset
       tmpargument = 0
       SetState
       SetContent
@@ -166,24 +166,25 @@ IfUsed
       tmpargument = tmpargument + 1
       SetContent
 
-      //The charge particle
+      // The charge particle
       tmpturn = tmpargument < 8 + 10000
       tmpargument = 0
       tmpdistance = SPAWNORIGIN
       SpawnAttachedSizedParticle
 
-      //Targeting circle
+      // Targeting circle
       tmpx = targetx
       tmpy = targety
       tmpargument = 10
       tmpdistance = targetz
       SpawnExactParticle
 
-
-//Holder aborted casting
+// Holder aborted casting
 Else
   tmpargument = 0
   SetState
   SetContent
 
-End					// All done
+// All done
+End
+

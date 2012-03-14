@@ -10,7 +10,7 @@ IfTakenOut
     IfTargetIsAPlayer
       tmpargument = 3
       SendMessageNear
-      
+
 // Allow it to be charged up
 IfUsed
   // Does it have one going?
@@ -29,14 +29,14 @@ IfUsed
         IfXIsLessThanY
           tmpargument = 8
           CostTargetMana
-            tmpargument = selfcontent + 8             //Cast speed
+            tmpargument = selfcontent + 8             // Cast speed
             SetContent
             tmpx = targetx
             tmpy = targety
             tmpdistance = targetz
             tmpargument = 2
             SpawnExactParticle
-            
+
       // Spawn particles around target
       SetTargetToNearestFriend
       tmpx = targetdistance

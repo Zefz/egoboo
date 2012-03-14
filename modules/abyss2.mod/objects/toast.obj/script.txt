@@ -7,7 +7,7 @@ IfSpawned
     SpawnAttachedParticle
     SetTurnModeToSpin
   Else
-    tmpargument = 2		//Invisible
+    tmpargument = 2        // Invisible
     ChangeArmor
     tmpargument = 0
     SetAlpha
@@ -19,20 +19,20 @@ IfStateIs0
     SetAlpha
     SetLight
     SetBumpSize
-    tmpargument = rand % 20 + 15		//How often to spawn
+    tmpargument = rand % 20 + 15        // How often to spawn
     SetTime
     tmpdistance = 128*6
     SetTargetToDistantEnemy
       tmpx = rand & 15
       tmpy = 0
-      IfXIsEqualToY         //7% chance for direct hit
+      IfXIsEqualToY         // 7% chance for direct hit
         tmpx = targetx
         tmpy = targety
       Else
         tmpx = rand & 511 + selfx - 256
-        tmpx = rand & 1023 + tmpx	//lessen the randomness
+        tmpx = rand & 1023 + tmpx    // lessen the randomness
         tmpy = rand & 511 + selfy - 256
-        tmpy = rand & 1023 + tmpy	//lessen the randomness
+        tmpy = rand & 1023 + tmpy    // lessen the randomness
       tmpdistance = selfz + 600
       tmpturn = rand % 65535
       SpawnCharacterXYZ

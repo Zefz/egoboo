@@ -69,7 +69,7 @@ IfUsed
     SetOwnerToTarget
     EnchantTarget
 
-    //Give special bonus if target is magic user
+    // Give special bonus if target is magic user
     tmpx = targetmana
     tmpy = 0
     IfXIsMoreThanY
@@ -83,7 +83,6 @@ IfUsed
         tmpargument = 10
         tmpdistance = EXPSECRET
         GiveExperienceToTarget
-
 
     tmpargument = ACTIONMC
     TargetDoAction

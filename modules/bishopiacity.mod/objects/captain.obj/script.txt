@@ -1,33 +1,33 @@
-//The different states
-//0: Guard Captain
-//1: Ranged Combat: Get in position
-//2: Ranged Combat: Aim
-//3: Ranged Combat: Shoot
-//4: Melee Combat
-//7: Move towards the trouble
+// The different states
+// 0: Guard Captain
+// 1: Ranged Combat: Get in position
+// 2: Ranged Combat: Aim
+// 3: Ranged Combat: Shoot
+// 4: Melee Combat
+// 7: Move towards the trouble
 
 //-----------------------------------------------------------------------------------------
-//Just in case
+// Just in case
 IfSpawned
   JoinGoodTeam
 
 //-----------------------------------------------------------------------------------------
-//Handle death
+// Handle death
 IfKilled
   tmpargument = TEAME
   TargetJoinTeam
 
-  //Drop goodies
+  // Drop goodies
   tmpargument = selfmoney
   DropMoney
   DropItems
   DropKeys
 
-  //Death sound
+  // Death sound
   tmpargument = 1
   PlaySound
 
-  //Send message
+  // Send message
   tmpargument = 0
   IfTargetIsOnSameTeam
     tmpargument = 5
@@ -45,13 +45,13 @@ IfAttacked
   tmpargument = rand & 1 + 4
   PlaySound
   SetTargetToWhoeverAttacked
-  IfTargetIsAPlayer		//Player got into trouble
+  IfTargetIsAPlayer        // Player got into trouble
     CallForHelp
     tmpargument = TEAME
     TargetJoinTeam
     tmpargument = 1
     SetState
-  Else			//Wops, a friendly NPC attacked
+  Else            // Wops, a friendly NPC attacked
     SetTargetToOldTarget
 
 IfCalledForHelp
@@ -60,34 +60,34 @@ IfCalledForHelp
   SetState
 
 //-----------------------------------------------------------------------------------------
-//Main AI loop
+// Main AI loop
 IfTimeOut
 
-  //Reset speech
+  // Reset speech
   IfStateIs2
     tmpargument = 0
     SetState
 
-  //MOVE AROUND - GUARD
+  // MOVE AROUND - GUARD
   IfStateIs0
-    Sneak			//Move at 33% speed
+    Sneak            // Move at 33% speed
     tmpargument = rand & 63 + 40
     SetTime
     SetTargetToNearestEnemy
       tmpargument = 1
-      SetState			//Charge in melee!
+      SetState            // Charge in melee!
     Else
       tmpx = selfspawnx
       tmpy = selfspawny
       ClearWaypoints
       AddWaypoint
 
-  //MELEE COMBAT - CHARGE AND FIGHT
+  // MELEE COMBAT - CHARGE AND FIGHT
   IfStateIs1
     Run
     tmpargument = 15
     SetTime
-    SetTargetToNearestEnemy	//Move towards enemy
+    SetTargetToNearestEnemy    // Move towards enemy
       tmpx = targetx
       tmpy = targety
       tmpturn = targetturnto
@@ -95,33 +95,33 @@ IfTimeOut
       Compass
       ClearWaypoints
       AddWaypoint
-    Else				//No enemies in sight
-      tmpargument = 0			//begin guarding again
+    Else                // No enemies in sight
+      tmpargument = 0            // begin guarding again
       SetState
 
     tmpx = targetdistance
-    tmpy = 200			//Can we attack?
+    tmpy = 200            // Can we attack?
     IfXIsLessThanY
       IfFacingTarget
         IfTargetIsAlive
           IfTargetIsOnHatedTeam
-            tmpargument = LATCHRIGHT	//Yep!
+            tmpargument = LATCHRIGHT    // Yep!
             PressLatchButton
 
 //-----------------------------------------------------------------------------------------
-//Use shield against attacking enemies
-IfTargetIsAttacking		//Must be attacking
-  IfTargetIsOnHatedTeam		//Must be enemy
-    tmpargument = [SHIE]	//Holding shield?
+// Use shield against attacking enemies
+IfTargetIsAttacking        // Must be attacking
+  IfTargetIsOnHatedTeam        // Must be enemy
+    tmpargument = [SHIE]    // Holding shield?
     IfHoldingItemID
       IfFacingTarget
         tmpx = targetdistance
-        tmpy = rand % 500 + 300 
+        tmpy = rand % 500 + 300
         IfXIsLessThanY
           tmpargument = LATCHLEFT
-          PressLatchButton	//Yep, defend!
+          PressLatchButton    // Yep, defend!
       Else
-        GetAttackTurn		//Position from the attack
+        GetAttackTurn        // Position from the attack
         tmpx = selfx
         tmpy = selfy
         tmpdistance = 0 - 200
@@ -129,52 +129,51 @@ IfTargetIsAttacking		//Must be attacking
         ClearWaypoints
         AddWaypoint
 
-
 //-----------------------------------------------------------------------------------------
-//How to react if bumped
-IfBumped				// Bumped
+// How to react if bumped
+IfBumped                // Bumped
   SetTargetToWhoeverBumped
 
-  //If its a player, find out what to say
-  IfStateIs0					//Not in combat
-    IfTargetIsAPlayer				//Only talk to players
+  // If its a player, find out what to say
+  IfStateIs0                    // Not in combat
+    IfTargetIsAPlayer                // Only talk to players
       tmpargument = 120
       SetTime
 
-      //Bringing in the required quest item?
+      // Bringing in the required quest item?
       tmpargument = [DIAR]
       CostTargetItemID
         tmpargument = 9
         SendMessage
-        PlayFullSound			//Level up sound
+        PlayFullSound            // Level up sound
         tmpargument = 150
         tmpdistance = EXPQUEST
         GiveExperienceToTarget
         tmpargument = 8
         SendMessage
         tmpargument = 7
-        PlayFullSound			//"It is done!"
+        PlayFullSound            // "It is done!"
         tmpargument = 256
-        GiveLifeToTarget		//Permanent life gain
+        GiveLifeToTarget        // Permanent life gain
         tmpargument = 4
-        SetContent            //It is done now
+        SetContent            // It is done now
         tmpargument = [GRIF]
         BeatQuestAllPlayers
       Else
         tmpx = targetlevel
-        tmpy = 3                  //Need to be level 5
-        IfXIsMoreThanY			//Tell them about the need
+        tmpy = 3                  // Need to be level 5
+        IfXIsMoreThanY            // Tell them about the need
 
           tmpargument = [GRIF]
           IfTargetHasQuest
             tmpx = tmpdistance
             tmpy = 1
-            IfXIsEqualToY        //Repeat that it's done
+            IfXIsEqualToY        // Repeat that it's done
               tmpargument = 7
-              PlayFullSound			//"It is done!"
+              PlayFullSound            // "It is done!"
               tmpargument = 9
               SendMessage
-            Else                    //Repeat the long quest speech
+            Else                    // Repeat the long quest speech
               tmpargument = 5
               SendMessage
               tmpargument = 6
@@ -185,7 +184,7 @@ IfBumped				// Bumped
               PlayFullSound
           Else
 
-            //CONTENT 2 - Give quest
+            // CONTENT 2 - Give quest
             tmpargument = 2
             IfContentIs
               tmpargument = 1
@@ -196,10 +195,10 @@ IfBumped				// Bumped
               tmpdistance = 0
               AddQuestAllPlayers
 
-            //CONTENT 1 - Present quest
+            // CONTENT 1 - Present quest
             tmpargument = 1
             IfContentIs
-              tmpargument = 2        	//Not quest engaged yet
+              tmpargument = 2            // Not quest engaged yet
               SetContent
               tmpargument = 5
               SendMessage
@@ -208,28 +207,31 @@ IfBumped				// Bumped
               tmpargument = 7
               SendMessage
               tmpargument = 8
-              PlayFullSound			//The long quest speech
+              PlayFullSound            // The long quest speech
 
-            //CONTENT 0 - Introdouce
+            // CONTENT 0 - Introdouce
             tmpargument = 0
             IfContentIs
-              tmpargument = 1        	//Not quest engaged yet
+              tmpargument = 1            // Not quest engaged yet
               SetContent
               tmpargument = 4
               SendMessage
               tmpargument = 11
-              PlayFullSound			//"Praise aaron a hero!"
+              PlayFullSound            // "Praise aaron a hero!"
         Else
           tmpargument = 2
           SendMessage
           tmpargument = 6
-          PlayFullSound			//"Don't need low levels..."
+          PlayFullSound            // "Don't need low levels..."
 
-        tmpargument = 2		//Don't loop
+        tmpargument = 2        // Don't loop
         SetState
 
     SetTargetToOldTarget
 
 //  -----------------------------------------------------------------------------------------
-End					// All done
+
+// All done
+End
+
 //-----------------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-//STATUE AI
+// STATUE AI
 IfSpawned
   tmpargument = 1
   ChangeArmor
@@ -12,11 +12,12 @@ IfSpawned
   SetLight
 
 //------------------------------------------------------------------------------
-//BOSS AI
+// BOSS AI
 tmpargument = 1
+
 IfArmorIs
   IfOrdered
-    tmpx = [WIER]           //Become alive?
+    tmpx = [WIER]           // Become alive?
     tmpy = selforder
     IfXIsEqualToY
       tmpargument = 0
@@ -69,7 +70,7 @@ Else
     tmpdistance = 72
     SpawnAttachedParticle
 
-    //Tell the dracolich we are dead
+    // Tell the dracolich we are dead
     tmpargument = [BDIE]
     IssueOrder
 
@@ -80,7 +81,6 @@ Else
     // Make a noise
     tmpargument = 3
     PlaySound
-
 
   IfBumped
     IfStateIs0
@@ -102,18 +102,14 @@ Else
         AddWaypoint
         SetTargetToOldTarget
 
-
-
   // Make the bottom fade out
-  tmpturn = 0		// Use this intensity
-  tmpx = 1200		// Below this height,
-  tmpdistance = 255	// Use this intensity
-  tmpy = 5000		// Above this height,
-  FlashVariableHeight	// Interpolate between
+  tmpturn = 0        // Use this intensity
+  tmpx = 1200        // Below this height,
+  tmpdistance = 255    // Use this intensity
+  tmpy = 5000        // Above this height,
+  FlashVariableHeight    // Interpolate between
 
-
-
-  //Main AI loop
+  // Main AI loop
   IfTimeOut
 
     // Throw the target
@@ -121,7 +117,7 @@ Else
       tmpx = 0
       tmpy = 0
       tmpturn = selfturn
-      tmpdistance = 50        //speed
+      tmpdistance = 50        // speed
       Compass
       AccelerateTarget
       tmpargument = 0
@@ -187,7 +183,7 @@ Else
       IfTargetIsOnHatedTeam
         tmpx = targetdistance
         tmpy = 350
-        IfXIsLessThanY      //Too close! Get away fast
+        IfXIsLessThanY      // Too close! Get away fast
           tmpx = rand & 1023 + selfspawnx - 512
           tmpy = rand & 1023 + selfspawny - 512
           tmpturn = xyturnto
@@ -205,7 +201,7 @@ Else
         tmpy = selfspawny
         SetTurnModeToVelocity
 
-      //Throwing something overrides the above
+      // Throwing something overrides the above
       IfStateIs3
         tmpx = selfx
         tmpy = selfy
@@ -214,7 +210,6 @@ Else
 
       ClearWaypoints
       AddWaypoint
-
 
 // All done
 End

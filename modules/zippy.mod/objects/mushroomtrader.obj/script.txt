@@ -2,88 +2,89 @@
 IfAttacked
   SetTargetToWhoeverAttacked
   CallForHelp
-  tmpargument = TEAME       //Team EVIL
+  tmpargument = TEAME       // Team EVIL
   TargetJoinTeam
+
 IfKilled
   SetTargetToWhoeverAttacked
   CallForHelp
-  tmpargument = TEAME       //Team EVIL
+  tmpargument = TEAME       // Team EVIL
   TargetJoinTeam
-  
-//Talk
+
+// Talk
 IfBumped
   SetTargetToWhoeverBumped
   IfStateIs0
     IfTargetIsOnSameTeam
       IfTargetIsAPlayer
         tmpx = selfcontent
-        
-        //Hey there!
+
+        // Hey there!
         tmpy = 0
         IfXIsEqualToY
           tmpargument = 1
           SetContent
           tmpargument = 5
           PlayFullSound
-          tmpargument = 1          
+          tmpargument = 1
           SendMessage
-          
-        //I need mushrooms
+
+        // I need mushrooms
         tmpy = 1
         IfXIsEqualToY
           tmpargument = 2
           SetContent
           tmpargument = 6
           PlayFullSound
-          tmpargument = 2          
+          tmpargument = 2
           SendMessage
-          
-        //I'll trade em for..
+
+        // I'll trade em for..
         tmpy = 2
         IfXIsEqualToY
           tmpargument = 3
           SetContent
           tmpargument = 7
           PlayFullSound
-          tmpargument = 3          
+          tmpargument = 3
           SendMessage
-          
-        //Try to trade
+
+        // Try to trade
         tmpy = 3
         IfXIsEqualToY
           tmpargument = [MUSH]
-          CostTargetItemID          //Traded 1 mushroom
-            tmpargument = rand % 5 + 86         //Randomize the potion gain
+          CostTargetItemID          // Traded 1 mushroom
+            tmpargument = rand % 5 + 86         // Randomize the potion gain
             tmpx = targetx
             tmpy = targety
             tmpdistance = selfz + 50
             SpawnExactCharacterXYZ
             tmpargument = 8
             PlayFullSound
-            tmpargument = 4          
+            tmpargument = 4
             SendMessage
-          Else                      //Failed, repeat the "quest"
+          Else                      // Failed, repeat the "quest"
             tmpargument = 2
             SetContent
             tmpargument = 6
             PlayFullSound
-            tmpargument = 2          
+            tmpargument = 2
             SendMessage
-            
-        //Wait before talking again
+
+        // Wait before talking again
         tmpargument = 1
         SetState
         tmpargument = 140
         SetTime
 
 //------------------------------------------------------------------------------
-//Main AI loop
+// Main AI loop
 IfTimeOut
   tmpargument = 30
   SetTime
   IfStateIs0
     SetTargetToNearbyEnemy
-      IfHoldingMeleeWeapon          //Attack enemies
+      IfHoldingMeleeWeapon          // Attack enemies
         IfFacingTarget
           tmpx = targetdistance
           tmpy = 200
@@ -95,15 +96,15 @@ IfTimeOut
       tmpx = targetx
       tmpy = targety
     Else
-      tmpx = selfspawnx             //Stand still
+      tmpx = selfspawnx             // Stand still
       tmpy = selfspawny
     ClearWaypoints
     AddWaypoint
   Else
-    tmpargument = 0             //Reset talking
+    tmpargument = 0             // Reset talking
     SetState
 //------------------------------------------------------------------------------
-//Show where you are on the map
+// Show where you are on the map
 tmpx = selfx
 tmpy = selfy
 tmpargument = YELLOW

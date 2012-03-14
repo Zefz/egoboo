@@ -2,14 +2,22 @@
 IfUsed
   tmpargument = 30
   SetReloadTime
+
 IfDropped
   KeepAction
-IfHitGround				// Make a sound
-  tmpargument = 0			  //
-  PlaySound				  //
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
-End					// All done
+
+// Make a sound
+IfHitGround
+  tmpargument = 0
+  PlaySound
+
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
+
+// All done
+End
+

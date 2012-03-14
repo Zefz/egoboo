@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------------------------
-//Unsummon order
+// Unsummon order
 IfOrdered
   tmpx = selforder
   tmpy = [UNDO]
@@ -8,7 +8,7 @@ IfOrdered
     KillTarget
 
 //-------------------------------------------------------------------------------------
-//Drain Mana Power (and convert 1/2 damage to healing)
+// Drain Mana Power (and convert 1/2 damage to healing)
 IfScoredAHit
   SetTargetToWhoeverWasHit
   tmpx = targetmana
@@ -16,20 +16,20 @@ IfScoredAHit
   IfXIsMoreThanY
     tmpargument = 6
     PlaySound
-    tmpargument = 128*selflevel + 768	//Increases by level = 3 + 1/2 per level
+    tmpargument = 128*selflevel + 768    // Increases by level = 3 + 1/2 per level
     CostTargetMana
-    tmpargument = tmpargument > 1  //Heal self half of it
+    tmpargument = tmpargument > 1  // Heal self half of it
     HealSelf
 
 //-------------------------------------------------------------------------------------
-//Death stuff
+// Death stuff
 IfKilled
 
-  //Messaging
+  // Messaging
   tmpargument = 0
   SendMessageNear
 
-  //Make the body
+  // Make the body
   tmpargument = 40
   SetBumpSize
   tmpargument = 45
@@ -39,11 +39,11 @@ IfKilled
   tmpargument = selfmoney
   DropMoney
 
-  //Death sound
+  // Death sound
   tmpargument = 2
   PlaySound
 
-  //Death effect
+  // Death effect
   GoPoof
   tmpargument = 7
   tmpx = selfx
@@ -53,15 +53,15 @@ IfKilled
   SpawnExactParticle
 
 //-------------------------------------------------------------------------------------
-//Ouch and panic
+// Ouch and panic
 IfAttacked
   SetTargetToWhoeverAttacked
     IfTargetIsOnHatedTeam
-      tmpargument = 1			      // Enter combat mode
+      tmpargument = 1                  // Enter combat mode
       SetState
     Else
       SetTargetToOldTarget
-  tmpargument = rand & 1		  //Ouch sound
+  tmpargument = rand & 1          // Ouch sound
   PlaySound
 
   tmpx = targetx
@@ -75,16 +75,16 @@ IfAttacked
   SetTime
 
 //-------------------------------------------------------------------------------------
-//Target eliminated
-IfTargetKilled				// Return to follow mode
-  tmpargument = 0			  //
+// Target eliminated
+IfTargetKilled                // Return to follow mode
+  tmpargument = 0
   SetState
 
 //-------------------------------------------------------------------------------------
 // This is done every so often
 IfTimeOut
-  SetTargetToWideEnemy		  // Look for enemies
-    tmpargument = 1			  // Enter combat mode
+  SetTargetToWideEnemy          // Look for enemies
+    tmpargument = 1              // Enter combat mode
     SetState
 
   // Play a random grunt?
@@ -94,22 +94,22 @@ IfTimeOut
     tmpargument = rand & 1 + 3
     PlaySound
 
-  //GUARD
+  // GUARD
   IfStateIs0
     tmpx = rand & 1023 - 512 + selfspawnx
     tmpy = rand & 1023 - 512 + selfspawny
     ClearWaypoints
     AddWaypoint
 
-  //COMBAT
+  // COMBAT
   IfStateIs1
     tmpx = targetdistance
     tmpy = 150
-    IfXIsLessThanY			//Close enough to attack?
-      IfFacingTarget			//Facing the enemy?
-        IfTargetIsOnHatedTeam		//Make sure its a enemy
+    IfXIsLessThanY            // Close enough to attack?
+      IfFacingTarget            // Facing the enemy?
+        IfTargetIsOnHatedTeam        // Make sure its a enemy
           tmpargument = ACTIONUA
-          DoAction			//Attack unarmed
+          DoAction            // Attack unarmed
     Else
       tmpx = targetx
       tmpy = targety
@@ -119,21 +119,21 @@ IfTimeOut
       ClearWaypoints
       AddWaypoint
 
-    //Enemy too far away?
+    // Enemy too far away?
     tmpx = targetdistance
     tmpy = 2000
     IfXIsMoreThanY
-      tmpargument = 0			    //Yes, return to follow leader mode
+      tmpargument = 0                // Yes, return to follow leader mode
       SetState
       tmpx = leaderx
       tmpy = leadery
       ClearWaypoints
       AddWaypoint
-  tmpargument = rand & 15 + 30		  //Set timer
+  tmpargument = rand & 15 + 30          // Set timer
   SetTime
 
 //-------------------------------------------------------------------------------------
-//Move out of friendlies and target enemy bumpers
+// Move out of friendlies and target enemy bumpers
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsOnSameTeam
@@ -146,4 +146,6 @@ IfBumped
     tmpargument = 1
     SetState
 
-End					// Finished with this character
+// Finished with this character
+End
+

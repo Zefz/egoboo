@@ -1,9 +1,11 @@
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				// General stuff
+IfSpawned                // General stuff
   MakeAmmoKnown
   MakeCrushValid
+
 IfDropped
   KeepAction
+
 IfGrabbed
   UnkeepAction
 
@@ -12,8 +14,8 @@ IfCrushed
   SendMessageNear
   GoPoof
 
-//Effects
-IfUsed					// Set number of shells to drop
+// Effects
+IfUsed                    // Set number of shells to drop
   UnkeepAction
   tmpargument = 7
   SetContent
@@ -39,12 +41,12 @@ IfUsed					// Set number of shells to drop
       SetState
       tmpargument = 2
       PlayFullSound
-    //Wake up sleepers
+    // Wake up sleepers
     tmpargument = [WAKE]
     tmpdistance = [WAKE]
-    OrderSpecialID  
+    OrderSpecialID
 
-//Stop whirring
+// Stop whirring
 Else
   IfStateIs0
     IfTimeOut
@@ -56,7 +58,6 @@ Else
       tmpargument = 5
       SetTime
 
- 
 // Firing state
 IfStateIs1
   SetTargetToWhoeverIsHolding
@@ -77,12 +78,12 @@ IfStateIs1
       tmpargument = 0
       SetState
 
-    //Fire a bullet and drop a shell
+    // Fire a bullet and drop a shell
     Else
       tmpx = selfx
       tmpy = selfy
       tmpdistance = selfz
-      tmpargument = 3			//shell
+      tmpargument = 3            // shell
       SpawnExactParticle
       tmpargument = 0
       tmpx = 0
@@ -94,8 +95,8 @@ IfStateIs1
     // Do again in 9 frames
     tmpargument = 11
     SetTime
-    
-    //Make some smoke
+
+    // Make some smoke
     tmpargument = 5
     tmpx = 0
     tmpy = 0
@@ -108,16 +109,17 @@ IfStateIs1
       SetState
       tmpargument = 4
       PlayFullSound
-    
+
 IfHitGround
   tmpargument = 6
   PlaySound
+
 IfDropped
   UndoEnchant
   tmpargument = 0
   SetState
 
-//Need 17 strength to carry
+// Need 17 strength to carry
 IfGrabbed
   SetTargetToWhoeverIsHolding
   tmpx = 256*19
@@ -142,4 +144,6 @@ IfGrabbed
         tmpargument = 0
         SendMessageNear
 
-End					// All done
+// All done
+End
+

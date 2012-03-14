@@ -1,16 +1,16 @@
-//Magical effects
+// Magical effects
 IfTimeOut
   tmpargument = rand % 10 + 5
   SetTime
 
-  //Lightning along the blade
+  // Lightning along the blade
   tmpargument = 2
   tmpx = 0
   tmpy = 0
   tmpdistance = rand % 9 + 5 // Pick a vertex along the blade ( look at model )
   SpawnParticle
 
-  //Sound effect?
+  // Sound effect?
   tmpx = selfcontent
   tmpy = 175
   IfXIsMoreThanY
@@ -22,17 +22,18 @@ IfTimeOut
     tmpargument = rand & 3 + selfcontent
     SetContent
 
-//Lightning sound
+// Lightning sound
 IfUsed
   tmpargument = 4
   PlaySound
 
-//Standard weapon AI
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+// Standard weapon AI
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -45,19 +46,27 @@ IfCrushed
   GoPoof
   tmpargument = 1
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
-IfHitGround				// Make a sound
-  tmpargument = 1			  //
-  PlaySound				  //
+
+// Make it lie on floor
+IfDropped
+  KeepAction
+
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
+
+// Make a sound
+IfHitGround
+  tmpargument = 1
+  PlaySound
+
 IfNotDropped
   tmpargument = 2
   SendMessageNear
+
 IfTakenOut
   tmpargument = 2
   PlaySound
@@ -65,7 +74,12 @@ IfTakenOut
   IfTargetIsAPlayer
     tmpargument = 4
     SendMessageNear
+
+// No longer needed, this is handled by the sourcecode now...
 //IfNotPutAway
-//  tmpargument = 3         //No longer needed, this is handled by the sourcecode now...
+//  tmpargument = 3
 //  SendMessageNear
-End					// All done
+
+// All done
+End
+

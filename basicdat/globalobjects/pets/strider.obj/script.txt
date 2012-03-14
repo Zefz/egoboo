@@ -17,16 +17,16 @@ IfTimeOut
   AddWaypoint
   tmpargument = 75
   SetTime
-  
-  //Bite enemies
-  SetTargetToRider      
+
+  // Bite enemies
+  SetTargetToRider
     SetTargetToNearbyEnemy
       tmpx = targetdistance
       tmpy = 128
       IfXIsLessThanY
         IfFacingTarget
           tmpargument = ACTIONTC
-          DoAction  
+          DoAction
 //------------------------------------------------------------------------------
 // Bite characters that it bumps
 IfBumped
@@ -44,7 +44,7 @@ IfSpawned
   JoinNullTeam  // For rebirth...
   tmpargument = 0
   ChangeArmor
-  
+
 IfKilled
   JoinGoodTeam  // For rebirth...
 
@@ -62,8 +62,8 @@ IfKilled
   SetBumpHeight
   tmpargument = 43
   SetBumpSize
-  
-  //Dead
+
+  // Dead
   tmpargument = 1
   ChangeArmor
 
@@ -71,7 +71,7 @@ IfKilled
 IfAttacked
   // Drop rider
   tmpx = rand % 100
-  tmpy = 75           //25% chance
+  tmpy = 75           // 25% chance
   IfXIsMoreThanY
     DropWeapons
 

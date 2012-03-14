@@ -1,9 +1,8 @@
-//Bodies are dead (Duh)
+// Bodies are dead (Duh)
 IfSpawned
-  tmpargument = ACTIONKA	//Killed
+  tmpargument = ACTIONKA    // Killed
   DoActionOverride
   KeepAction
-
 
 //------------------------------------------------------------------------------
 End

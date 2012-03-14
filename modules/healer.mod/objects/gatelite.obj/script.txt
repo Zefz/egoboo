@@ -34,6 +34,7 @@ IfSpawned
   SetXY
   tmpargument = 50
   SetTime
+
 IfTimeOut
   IfStateIs0
     // Wait until the closest player moves
@@ -42,7 +43,7 @@ IfTimeOut
     tmpargument = [HUMA]
     tmpdistance = 14  // Items, Friends, Enemies
     SetTargetToNearestBlahID
-      tmpx = targetx - 4608 
+      tmpx = targetx - 4608
       tmpy = targety - 7104
       tmpx = xydistance
       tmpy = 80
@@ -80,5 +81,5 @@ IfTimeOut
       tmpx = tmpx - 8 * 42
       tmpargument = 254 - tmpx
       SetLight
-      
+
 End

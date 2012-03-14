@@ -5,8 +5,10 @@ IfSpawned
   KeepAction
   MakeCrushValid
   ReaffirmCharacter
+
 IfTakenOut
   ReaffirmCharacter
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -24,7 +26,7 @@ IfCrushed
 IfDropped
   KeepAction
 
-//Remove if out of charges
+// Remove if out of charges
 IfAmmoOut
   GoPoof
   tmpargument = 2
@@ -35,12 +37,12 @@ IfHitGround
   tmpargument = 3
   PlaySound
 
-//The wand was used
+// The wand was used
 IfUsed
-  tmpargument = 74		//Wait a while before used again
+  tmpargument = 74        // Wait a while before used again
   SetReloadTime
 
-  IfNameIsKnown		// Found out what it was
+  IfNameIsKnown        // Found out what it was
     DoNothing
   Else
     MakeNameKnown
@@ -49,7 +51,7 @@ IfUsed
     tmpdistance = EXPDARE
     GiveExperienceToTarget
 
-  //Spawn some random magical globes
+  // Spawn some random magical globes
   tmpx = selfx
   tmpy = selfy
   tmpdistance = selfz
@@ -70,7 +72,7 @@ IfUsed
   tmpturn = rand & 1250
   SpawnExactParticle
 
-  //Sound effect
+  // Sound effect
   tmpargument = 0
   PlaySound
 
@@ -80,4 +82,7 @@ IfGrabbed
   IfTargetIsAPlayer
     tmpargument = 0
     SendMessageNear
-End					// All done
+
+// All done
+End
+

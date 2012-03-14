@@ -1,6 +1,6 @@
 IfSpawned
 
-  //Play Music
+  // Play Music
   tmpargument = 13
   tmpdistance = 0
   PlayMusic
@@ -112,16 +112,16 @@ IfSpawned
   tmpy = 7  < 7 + 85
   SpawnExactParticle
 
-  //Do we turn the player into a Jiive Elf?
+  // Do we turn the player into a Jiive Elf?
   tmpx = timehours
-  tmpy = 7            //Only after 0 AM and before 6 AM
+  tmpy = 7            // Only after 0 AM and before 6 AM
   IfXIsLessThanY
     tmpargument = [ELFF]
-    tmpdistance = BLAHPLAYERS + BLAHENEMIES + BLAHFRIENDS  //SetTargetToNearestPlayer
+    tmpdistance = BLAHPLAYERS + BLAHENEMIES + BLAHFRIENDS  // SetTargetToNearestPlayer
     SetTargetToNearestBlahID
-      tmpargument = 33        //jiiveelf.obj
+      tmpargument = 33        // jiiveelf.obj
       ChangeTargetClass
 
   GoPoof
-  //say bye
+  // say bye
 End

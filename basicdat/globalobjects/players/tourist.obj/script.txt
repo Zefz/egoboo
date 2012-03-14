@@ -1,44 +1,45 @@
-//TOURIST
+// TOURIST
 //-------------------------------------------
-//Level       Abillity
-//1			Use Technological Items, Use Poison, Backstab
-//2			Mobility
-//3			n/a
-//4			n/a
-//5			Improvised Weapons
-//6			n/a
-//7     n/a
-//8     Cartography
-//9     n/a
-//10    n/a
-//11    Lucky
-//12    n/a
-//13    n/a
-//14    Backpacker
-//15    n/a
+// Level       Abillity
+// 1            Use Technological Items, Use Poison, Backstab
+// 2            Mobility
+// 3            n/a
+// 4            n/a
+// 5            Improvised Weapons
+// 6            n/a
+// 7     n/a
+// 8     Cartography
+// 9     n/a
+// 10    n/a
+// 11    Lucky
+// 12    n/a
+// 13    n/a
+// 14    Backpacker
+// 15    n/a
 //-----------------------------------------------------------------------------
-//Carography skill
+// Carography skill
 IfLevelUp
   tmpx = selflevel
-  tmpy = 6            //Need level 8
+  tmpy = 6            // Need level 8
   IfXIsMoreThanY
     ShowMap
     ShowYouAreHere
+
 IfSpawned
   tmpx = selflevel
-  tmpy = 6            //Need level 8
+  tmpy = 6            // Need level 8
   IfXIsMoreThanY
     ShowMap
     ShowYouAreHere
-    
+
 //-------------------------------------------
-//To Silly To Die skill
+// To Silly To Die skill
 IfKilled
   tmpx = selflevel
-  tmpy = 8            //Need level 10
+  tmpy = 8            // Need level 10
   IfXIsMoreThanY
     tmpx = rand % 100
-    tmpy = selflevel          //% chance equal to level
+    tmpy = selflevel          // % chance equal to level
     IfXIsLessThanY
       SetTargetToSelf
       RespawnTarget
@@ -46,42 +47,42 @@ IfKilled
       SendMessage
       tmpargument = 11
       PlayFullSound
-      
+
 //-----------------------------------------------------------------------------
-//Invoke Lucky skill if enough xp gained
+// Invoke Lucky skill if enough xp gained
 tmpx = selflevel
-tmpy = 7                //Need level 9
+tmpy = 7                // Need level 9
 IfXIsMoreThanY
   tmpargument = 0
   IfContentIs
     SetTargetToSelf
     SetOwnerToTarget
-    EnchantTarget		//Give the special bonus
+    EnchantTarget        // Give the special bonus
     tmpargument = 1
     SetContent
 
 //-----------------------------------------------------------------------------
-//Improvised weapons skill
+// Improvised weapons skill
 tmpx = selflevel
-tmpy = 3            //Need level 5
+tmpy = 3            // Need level 5
 IfXIsMoreThanY
   IfScoredAHit
     SetTargetToLastItemUsed
       tmpdistance = 0
-      tmpargument = [PLUN]      //Toilet plunger
+      tmpargument = [PLUN]      // Toilet plunger
       IfTargetHasID
         tmpdistance = 1
-      tmpargument = [SHOV]      //Shovel
+      tmpargument = [SHOV]      // Shovel
       IfTargetHasID
         tmpdistance = 1
-      tmpargument = [TORC]      //Torch
+      tmpargument = [TORC]      // Torch
       IfTargetHasID
         tmpdistance = 1
-      tmpargument = [CROW]      //Crowbar
+      tmpargument = [CROW]      // Crowbar
       IfTargetHasID
         tmpdistance = 1
-        
-      //Check if we used a valid weapon
+
+      // Check if we used a valid weapon
       tmpturn = 0
       IfDistanceIsMoreThanTurn
         SetTargetToWhoeverWasHit
@@ -89,9 +90,9 @@ IfXIsMoreThanY
         DamageTarget
 
 //-----------------------------------------------------------------------------
-//Auto jump over corpses (Mobility skill)
+// Auto jump over corpses (Mobility skill)
 tmpx = selflevel
-tmpy = 1          //Need level 2
+tmpy = 1          // Need level 2
 IfXIsLessThanY
   DoNothing
 Else
@@ -104,11 +105,10 @@ Else
       PressLatchButton
 
 //-----------------------------------------------------------------------------
-//Gong sound
+// Gong sound
 IfCleanedUp
   tmpargument = 2
   PlayFullSound
-
 
 //------------------------------------------------------------------------------
 // ZZ> Yell at player
@@ -154,7 +154,7 @@ IfKilled
 
   // Drop goodies
   tmpx = selflevel
-  tmpy = 13           //Level 14 and above is immune to this
+  tmpy = 13           // Level 14 and above is immune to this
   IfXIsLessThanY
     tmpargument = 1+selflevel*selflevel*100
     DropMoney
@@ -164,7 +164,7 @@ IfKilled
   tmpargument = 45
   SetBumpHeight
 
-   //Redo the Lucky skill when respawned
+   // Redo the Lucky skill when respawned
   UndoEnchant
   tmpargument = 0
   SetContent

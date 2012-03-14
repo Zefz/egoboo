@@ -8,22 +8,22 @@ IfBumped
     IfStateIs0
       tmpargument = 1
       SetState
-      tmpargument = 100		//2 seconds
+      tmpargument = 100        // 2 seconds
       SetTime
       tmpx = selfcontent
 
-      //Royal crypt
+      // Royal crypt
       tmpy = 0
       IfXIsEqualToY
         tmpargument = 0
         SendMessageNear
 
-      //Crypt Quest Unlock
+      // Crypt Quest Unlock
       tmpy = 1
       IfXIsEqualToY
         tmpargument = [CRYP]
         IfTargetHasQuest
-          //Unlock the module if it isnt already
+          // Unlock the module if it isnt already
           tmpargument = [CRYP]
           tmpdistance = 1
           AddQuestAllPlayers
@@ -35,17 +35,17 @@ IfBumped
           SetContent
           tmpargument = 0
           PlayFullSound
-        Else                //They know nothing about this crypt quest
+        Else                // They know nothing about this crypt quest
           tmpargument = 7
           SendMessageNear
 
-      //Crypt Quest
+      // Crypt Quest
       tmpy = 2
       IfXIsEqualToY
         tmpargument = 1
         SendMessageNear
 
-      //Crypt for Developers
+      // Crypt for Developers
       tmpy = 3
       IfXIsEqualToY
         tmpargument = 3
@@ -55,7 +55,7 @@ IfBumped
         tmpargument = 5
         SendMessageNear
 
-      //Vladula crypt
+      // Vladula crypt
       tmpy = 4
       IfXIsEqualToY
         tmpargument = 6

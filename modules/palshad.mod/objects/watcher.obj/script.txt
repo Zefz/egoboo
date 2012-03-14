@@ -5,49 +5,50 @@ IfKilled
   PlaySound
   SpawnPoof
 
-  //Reduce size
-  tmpargument = 40			  
-  SetBumpSize				  
-  tmpargument = 35			  
-  SetBumpHeight				  			  
+  // Reduce size
+  tmpargument = 40
+  SetBumpSize
+  tmpargument = 35
+  SetBumpHeight
 
   // Drop money
   tmpargument = 65535
   DropMoney
 
-			  
-
 JoinEvilTeam
 
-//Ouch
-IfAttacked				// Counter attack
-  SetTargetToWhoeverAttacked		  //
-    IfTargetIsOnHatedTeam		    //
-      BecomeLeader			      //
-      tmpargument = 1			      // Enter combat mode
-      SetState				      //
+// Ouch
+IfAttacked                // Counter attack
+  SetTargetToWhoeverAttacked
+    IfTargetIsOnHatedTeam
+      BecomeLeader
+      tmpargument = 1                  // Enter combat mode
+      SetState
       SetTurnModeToWatchTarget
-    Else				    //
-      SetTargetToOldTarget		      //
-  tmpargument = rand & 1 + 1		  //
+    Else
+      SetTargetToOldTarget
+  tmpargument = rand & 1 + 1
   PlaySound
 
-IfTargetKilled				// Return to watch mode
-  tmpargument = 0			  //
-  SetState				  //
+// Return to watch mode
+IfTargetKilled
+  tmpargument = 0
+  SetState
 
-IfBumped				// Attack whoever it bumped
-  SetTargetToWhoeverBumped		  //
-  IfTargetIsOnHatedTeam			  // Make sure it's an enemy
+// Attack whoever it bumped
+IfBumped
+  SetTargetToWhoeverBumped
+  IfTargetIsOnHatedTeam              // Make sure it's an enemy
     DoNothing
-  Else					  // Scooch around friendly
-    tmpx = rand & 255 + targetx - 128	    //
-    tmpy = rand & 255 + targety - 128	    //
-    ClearWaypoints			    //
-    AddWaypoint				    //
-    SetTargetToOldTarget		    //
+  Else                      // Scooch around friendly
+    tmpx = rand & 255 + targetx - 128
+    tmpy = rand & 255 + targety - 128
+    ClearWaypoints
+    AddWaypoint
+    SetTargetToOldTarget
 
-IfTimeOut				// This is done every so often
+// This is done every so often
+IfTimeOut
   IfStateIs0
     tmpx = selfx
     tmpy = selfy
@@ -69,8 +70,11 @@ IfTimeOut				// This is done every so often
       tmpy = selfy
       tmpargument = 0
       SetState
-  ClearWaypoints			  //
-  AddWaypoint				  //
-  tmpargument = rand & 15 + 30		  // Wait a while and try again
-  SetTime				  //
-End					// Finished with this character
+  ClearWaypoints
+  AddWaypoint
+  tmpargument = rand & 15 + 30          // Wait a while and try again
+  SetTime
+
+// Finished with this character
+End
+

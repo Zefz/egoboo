@@ -3,18 +3,21 @@ IfAttacked
   SetTargetToWhoeverAttacked
   IfTargetIsAPlayer
     CallForHelp
-    tmpargument = TEAME       //Team EVIL
+    tmpargument = TEAME       // Team EVIL
     TargetJoinTeam
   tmpargument = rand & 1
   PlaySound
+
 IfKilled
   SetTargetToWhoeverAttacked
   CallForHelp
-  tmpargument = TEAME   //Team EVIL
+  tmpargument = TEAME   // Team EVIL
   TargetJoinTeam
-IfSomeoneIsStealing     //Someone is stealing from our shop! ><
-  CallForHelp           //Call the guards!
-  tmpargument = TEAME       //Team EVIL
+
+// Someone is stealing from our shop! ><
+IfSomeoneIsStealing
+  CallForHelp           // Call the guards!
+  tmpargument = TEAME       // Team EVIL
   TargetJoinTeam
 
 //------------------------------------------------------------------------------
@@ -70,8 +73,8 @@ IfSpawned
   SpawnExactParticle
 
   // Show the area
-  //tmpdistance = 255
-  //FlashPassage
+  // tmpdistance = 255
+  // FlashPassage
 
 //------------------------------------------------------------------------------
 // ZZ> Handle orders ( purchases )
@@ -125,8 +128,8 @@ IfTimeOut
       SetState
   tmpargument = rand & 31 + 15
   SetTime
-  
-  //Cast protect spell?
+
+  // Cast protect spell?
   tmpargument = 0
   GetXY
   IfXIsEqualToY
@@ -135,12 +138,12 @@ IfTimeOut
       tmpargument = 3
       SetState
 
-//Charge spells
+// Charge spells
 IfStateIs1
   tmpargument = 0
   IfContentIs
     tmpx = selfmana
-    tmpy = 256*3          //Only start charging if enough mana
+    tmpy = 256*3          // Only start charging if enough mana
     IfXIsMoreThanY
       tmpargument = 1
       SetContent
@@ -155,6 +158,7 @@ IfStateIs1
     Else
       tmpargument = 0
       SetContent
+
 IfStateIs3
   tmpargument = selfcontent + 1
   SetContent
@@ -174,7 +178,7 @@ IfStateIs3
 // ZZ> Handle death by sending a message and other stuff
 IfKilled
 
-  //Death sound
+  // Death sound
   tmpargument = 2
   PlaySound
   tmpargument = MESSAGEDEATH

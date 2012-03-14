@@ -1,4 +1,4 @@
-//This spawns the portal in the beginning and starts the music
+// This spawns the portal in the beginning and starts the music
 IfSpawned
   tmpx = selfx
   tmpy = selfy
@@ -13,24 +13,24 @@ IfSpawned
   tmpargument = 100
   SetTime
 
-  //Make pittraps work
+  // Make pittraps work
   tmpx = 8640
-  tmpy = 13888          //Coordinates on where to drop the player
+  tmpy = 13888          // Coordinates on where to drop the player
   tmpdistance = 1200
   PitsFall
 
-  //Ready the boss music
-  tmpargument = 36		//Boss music theme
+  // Ready the boss music
+  tmpargument = 36        // Boss music theme
   tmpdistance = 16
   SetMusicPassage
 
-  //This keeps track of the number of seals left
+  // This keeps track of the number of seals left
   tmpargument = 0
-  tmpx = 0          //Number destroyed
-  tmpy = 4          //Total number of seals in map
+  tmpx = 0          // Number destroyed
+  tmpy = 4          // Total number of seals in map
   SetXY
 
-//This happens when a deamon lord dies
+// This happens when a deamon lord dies
 IfOrdered
   tmpx = selforder
   tmpy = [LKIL]
@@ -44,7 +44,7 @@ IfTimeOut
   tmpargument = 1
   SetTargetToWhoeverIsInPassage
     IfTargetIsAPlayer
-      IfStateIs1			//Still not broken...
+      IfStateIs1            // Still not broken...
         tmpargument = [KEYL]
         CostTargetItemID
           tmpargument = 150
@@ -54,30 +54,30 @@ IfTimeOut
           tmpargument = 4
           PlayFullSound
 
-          //This keeps track of the number of crowns
+          // This keeps track of the number of crowns
           tmpargument = 0
           GetXY
           tmpx = tmpx + 1
           tmpy = 4
           SetXY
-          IfXIsEqualToY       //all done!
+          IfXIsEqualToY       // all done!
             tmpargument = 2
             SetState
         Else
-          tmpargument = 3   //Need more seals... blah blah
+          tmpargument = 3   // Need more seals... blah blah
           SendMessage
           tmpargument = 2
           PlayFullSound
           tmpargument = 350
           SetTime
 
-      IfStateIs2                        //Broken!
+      IfStateIs2                        // Broken!
         tmpargument = 4
         SendMessage
         tmpargument = 3
         PlayFullSound
 
-        //Row 1
+        // Row 1
         tmpx = 6650
         tmpy = 6560
         GetTileXY
@@ -99,7 +99,7 @@ IfTimeOut
         tmpargument = tmpargument + 4
         SetTileXY
 
-        //Row 2
+        // Row 2
         tmpx = 6650
         tmpy = 6460
         GetTileXY
@@ -121,7 +121,7 @@ IfTimeOut
         tmpargument = tmpargument + 4
         SetTileXY
 
-        //Row 3
+        // Row 3
         tmpx = 6650
         tmpy = 6360
         GetTileXY
@@ -143,7 +143,7 @@ IfTimeOut
         tmpargument = tmpargument + 4
         SetTileXY
 
-        //Row 4
+        // Row 4
         tmpx = 6650
         tmpy = 6260
         GetTileXY
@@ -165,14 +165,14 @@ IfTimeOut
         tmpargument = tmpargument + 4
         SetTileXY
 
-        //Dont forget to actually open the boss door =)
+        // Dont forget to actually open the boss door =)
         tmpargument = 34
         OpenPassage
-        
+
         tmpargument = 500
         SetTime
 
-      IfStateIs0			//First time introductions (check last)
+      IfStateIs0            // First time introductions (check last)
         tmpargument = 1
         PlayFullSound
         tmpargument = 0
@@ -186,7 +186,7 @@ IfTimeOut
         tmpargument = 800
         SetTime
 
-  //Open up for the deamon lord battle
+  // Open up for the deamon lord battle
   tmpargument = 6
   SetTargetToWhoeverIsInPassage
     IfTargetIsAMount
@@ -195,9 +195,9 @@ IfTimeOut
       tmpargument = 7
       OpenPassage
 
-  //This starts the Deamon Lord battle
+  // This starts the Deamon Lord battle
   tmpx = selfcontent
-  tmpy = 0                              //At least one alive
+  tmpy = 0                              // At least one alive
   IfXIsMoreThanY
     tmpargument = 8
     SetTargetToWhoeverIsInPassage
@@ -209,23 +209,25 @@ IfTimeOut
         tmpargument = 15
         tmpdistance = 0
         PlayMusic
-  //This ends the Deamon Lord battle
+  // This ends the Deamon Lord battle
   Else
-    tmpargument = 7	//Entrance
+    tmpargument = 7    // Entrance
     OpenPassage
-    tmpargument = 9	//First gate
+    tmpargument = 9    // First gate
     OpenPassage
-    tmpargument = 24	//Second gate
+    tmpargument = 24    // Second gate
     OpenPassage
     tmpargument = 18
     tmpdistance = 0
     PlayMusic
 
-  //This opens up the door to the magma yeti
+  // This opens up the door to the magma yeti
   tmpargument = 38
   SetTargetToWhoeverIsInPassage
     IfTargetIsAPlayer
       tmpargument = 37
       OpenPassage
 
-End					// All done
+// All done
+End
+

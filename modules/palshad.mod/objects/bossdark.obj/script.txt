@@ -4,7 +4,7 @@ IfSpawned
   SetTargetToSelf
   SetOwnerToTarget
   EnchantTarget  // Enchant self...
-  
+
   tmpargument = STATEGUARD
   SetState
 
@@ -65,26 +65,26 @@ IfBumped
 
 //------------------------------------------------------------------------------
 IfTimeOut
-  
-  //Spooky sounds
+
+  // Spooky sounds
   tmpx = rand & 255
   tmpy = 5
   IfXIsLessThanY
     tmpargument = rand % 3 + 3
     PlaySound
-      
+
   // Wait for the good guys to barge in...
   IfStateIsGuard
     tmpargument = 20
     SetTime
-    
+
     tmpargument = passage
     SetTargetToSelf
     SetTargetToWhoeverIsInPassage
       DoNothing
     Else
       SetTargetToWideEnemy
-      
+
     IfTargetIsOnHatedTeam
       tmpargument = rand & 15 + 50
       SetTime
@@ -101,7 +101,7 @@ IfTimeOut
       tmpy = selfspawny
       ClearWaypoints
       AddWaypoint
-    
+
   // Chop the enemy
   IfStateIsCombat
     tmpargument = rand & 31 + 50
@@ -118,14 +118,14 @@ IfTimeOut
       // Fall through to next...
       tmpargument = STATECHARGE
       SetState
-      
+
   // Rush the enemy
   IfStateIsCharge
     IfTargetIsOnHatedTeam
       DoNothing
     Else
       SetTargetToNearestEnemy
-  
+
     SetTurnModeToVelocity
     tmpx = targetdistance
     tmpy = 1400
@@ -134,7 +134,7 @@ IfTimeOut
       SetTargetToNearestEnemy
         DoNothing
       Else
-        tmpargument = STATEGUARD             //no enemies left
+        tmpargument = STATEGUARD             // no enemies left
         SetState
       tmpargument = 5
       SetTime
@@ -146,7 +146,7 @@ IfTimeOut
       tmpdistance = 200
       Compass
       SetOldTarget
-      SetTargetToNearestFriend                  //Dont flock
+      SetTargetToNearestFriend                  // Dont flock
         tmpdistance = 500 - targetdistance > 1
         tmpturn = targetturnto + 32768
         Compass

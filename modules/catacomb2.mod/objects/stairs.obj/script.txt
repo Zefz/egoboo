@@ -1,4 +1,4 @@
-//Display message
+// Display message
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsAPlayer
@@ -13,6 +13,6 @@ IfTimeOut
   SetState
   tmpargument = 150
   SetTime
-  
+
 // Finish up
 End

@@ -7,7 +7,7 @@ IfSpawned
     SpawnAttachedParticle
     SetTurnModeToSpin
   Else
-    tmpargument = 2		//Invisible
+    tmpargument = 2        // Invisible
     ChangeArmor
     tmpargument = 0
     SetAlpha
@@ -15,7 +15,7 @@ IfSpawned
 
 IfStateIs0
   IfTimeOut
-    tmpargument = rand % 20 + 50		//How often to spawn
+    tmpargument = rand % 20 + 50        // How often to spawn
     SetTime
     tmpdistance = 128*6
     SetTargetToDistantEnemy

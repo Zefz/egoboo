@@ -1,15 +1,15 @@
 IfGrabbed
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
 
 IfUsed
   IfStateIs0
     SetTargetToWhoeverIsHolding
     tmpargument = [TOUR]
     IfTargetHasID
-      tmpargument = 2           //special message for tourist
+      tmpargument = 2           // special message for tourist
     Else
       tmpargument = 1
     SetState
@@ -23,8 +23,11 @@ IfTimeOut
   tmpargument = 0
   SetState
 
-IfHitGround				// Make a sound
-  tmpargument = 0			  //
-  PlaySound				  //
+// Make a sound
+IfHitGround
+  tmpargument = 0
+  PlaySound
 
-End					// All done
+// All done
+End
+

@@ -1,16 +1,16 @@
-//Set correct messaging
+// Set correct messaging
 IfSpawned
   tmpx = selfspawnx
   tmpy = selfspawny
   ClearWaypoints
   AddWaypoint
-  
+
   tmpargument = 3
   SetContent
   tmpargument = 2
   SetState
 
-//Make the door appear visible
+// Make the door appear visible
 IfStateIs2
   IfTimeOut
     tmpargument = 25
@@ -20,14 +20,14 @@ IfStateIs2
       IfTargetCanSeeInvisible
         tmpx = selfspawnx
         tmpy = selfspawny + 128
-        tmpargument = 160         //- 30 = 130 is the number to revert
+        tmpargument = 160         // - 30 = 130 is the number to revert
         SetTileXY
         tmpargument = 0
         SetState
 
 Else
 
-  //Talk!
+  // Talk!
   IfBumped
     SetTargetToWhoeverBumped
     IfTargetIsAPlayer
@@ -36,13 +36,13 @@ Else
         IfTargetHasSkillID
           IfStateIs0
 
-            //Wait before talking again
+            // Wait before talking again
             tmpargument = 1
             SetState
             tmpargument = 150
             SetTime
 
-            //They want to enter!
+            // They want to enter!
             tmpargument = 10
             IfContentIs
               tmpx = targetlevel
@@ -55,41 +55,40 @@ Else
                 tmpargument = [AMAG]
                 tmpdistance = 0
                 AddTargetQuest
-                tmpargument = 5         //+1 later = 6
+                tmpargument = 5         // +1 later = 6
                 SetContent
               Else
-                tmpargument = 1          //They are too low level!
+                tmpargument = 1          // They are too low level!
                 SendMessage
                 tmpargument = 8
                 PlayFullSound
-                tmpargument = 3         //+1 later = 4
+                tmpargument = 3         // +1 later = 4
                 SetContent
             Else
               GetContent
               PlayFullSound
               SendMessage
 
-              //Find out if they want to enter
+              // Find out if they want to enter
               tmpargument = 5
               IfContentIs
-                tmpargument = 9       //+1 later = 10
+                tmpargument = 9       // +1 later = 10
                 SetContent
 
-              //Message 6 and 7 is actually one long message
+              // Message 6 and 7 is actually one long message
               tmpargument = 6
               IfContentIs
-                tmpargument = 5       //+1 later = 6
+                tmpargument = 5       // +1 later = 6
                 SetContent
                 tmpargument = 7
                 SendMessage
                 tmpargument = 230
-                SetTime               //Longer message = longer timer...
+                SetTime               // Longer message = longer timer...
             GetContent
             tmpargument = tmpargument + 1
             SetContent
 
-
-        //The bumper is not a wizard!
+        // The bumper is not a wizard!
         Else
           IfStateIs0
             tmpargument = 0
@@ -111,7 +110,7 @@ Else
           tmpargument = 150
           SetTime
 
-  //Enable talking again
+  // Enable talking again
   IfTimeOut
     tmpargument = 0
     SetState

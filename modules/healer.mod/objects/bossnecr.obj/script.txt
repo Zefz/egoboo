@@ -42,7 +42,7 @@ IfKilled
   // Mark this module as beaten, hidden modules may open up
   tmpargument = [BEAT]
   AddIDSZ
-  
+
   // Fix the end text
   ClearEndMessage
   tmpargument = 3
@@ -151,6 +151,7 @@ IfStateIs10
     tmpy = targety - selfy > 1 + selfy
     ClearWaypoints
     AddWaypoint
+
 IfStateIs11
   // Right hand
   IfTimeOut

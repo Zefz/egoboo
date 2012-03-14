@@ -1,10 +1,11 @@
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
   MakeAmmoKnown
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -17,13 +18,17 @@ IfCrushed
   GoPoof
   tmpargument = 6
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-IfHitGround				// Make a sound
+
+// Make it lie on floor
+IfDropped
+  KeepAction
+
+// Make a sound
+IfHitGround
   tmpargument = 0
   PlaySound
 
-//Go blank
+// Go blank
 IfInWater
   IfHeld
     DoNothing
@@ -37,14 +42,15 @@ IfInWater
       SendMessageNear
       MakeNameKnown      // To keep messages okay
 
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
   SetOwnerToTarget
-  IfTargetIsAPlayer			  //
+  IfTargetIsAPlayer
     GetContent
-    SendMessageNear			  //
+    SendMessageNear
 
-//Scroll effects
+// Scroll effects
 IfUsed
   tmpargument = 0
   IfContentIs
@@ -52,7 +58,7 @@ IfUsed
     tmpargument = 1
     PlaySound
 
-    //Spelly effects
+    // Spelly effects
     tmpx = selfx
     tmpy = selfy
     tmpdistance = selfz
@@ -70,10 +76,9 @@ IfUsed
       GiveExperienceToTarget
     MakeSimilarNamesKnown
 
-    //Enchant the target
+    // Enchant the target
     SetOwnerToTarget
     EnchantTarget
-
 
     CostAmmo
     IfAmmoOut
@@ -87,7 +92,7 @@ IfUsed
     tmpargument = 50
     SetReloadTime
 
-//On fire!
+// On fire!
 IfReaffirmed
   IfHeld
     DoNothing
@@ -103,4 +108,7 @@ IfReaffirmed
     GoPoof
     tmpargument = 4
     SendMessageNear
-End					// All done
+
+// All done
+End
+

@@ -1,21 +1,21 @@
-//Randomize the message on the stone
+// Randomize the message on the stone
 IfSpawned
   tmpargument = rand % 39
   SetContent
 
-//Reset message
+// Reset message
 IfTimeOut
   tmpargument = 0
   SetState
 
 //---------------------------------------------------------------------------------
-//Tell them what's written
+// Tell them what's written
 IfBumped
   SetTargetToWhoeverBumped
   IfStateIs0
     IfTargetIsAPlayer
       IfFacingTarget
-        tmpargument = 1		//Do not loop
+        tmpargument = 1        // Do not loop
         SetState
         tmpargument = 100
         SetTime

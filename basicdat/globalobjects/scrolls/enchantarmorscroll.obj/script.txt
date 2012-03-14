@@ -1,10 +1,11 @@
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
   MakeAmmoKnown
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -17,13 +18,17 @@ IfCrushed
   GoPoof
   tmpargument = 6
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-IfHitGround				// Make a sound
-  tmpargument = 0
-  PlaySound	
 
-//Go blank  
+// Make it lie on floor
+IfDropped
+  KeepAction
+
+// Make a sound
+IfHitGround
+  tmpargument = 0
+  PlaySound
+
+// Go blank
 IfInWater
   IfHeld
     DoNothing
@@ -36,15 +41,16 @@ IfInWater
       tmpargument = 5
       SendMessageNear
       MakeNameKnown      // To keep messages okay
-      
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
+
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
   SetOwnerToTarget
-  IfTargetIsAPlayer			  //
+  IfTargetIsAPlayer
     GetContent
-    SendMessageNear			  //
-    
-//Scroll effects
+    SendMessageNear
+
+// Scroll effects
 IfUsed
   tmpargument = 0
   IfContentIs
@@ -52,7 +58,7 @@ IfUsed
     tmpargument = 1
     PlaySound
 
-    //Spelly effects
+    // Spelly effects
     tmpx = selfx
     tmpy = selfy
     tmpdistance = 0
@@ -71,8 +77,7 @@ IfUsed
       GiveExperienceToTarget
     MakeSimilarNamesKnown
 
-
-    //Enchant the target
+    // Enchant the target
     SetOwnerToTarget
     EnchantTarget
     FlashTarget
@@ -85,7 +90,7 @@ IfUsed
 
     tmpargument = 8
     SendMessageNear
-   
+
     CostAmmo
     IfAmmoOut
       GoPoof
@@ -97,8 +102,8 @@ IfUsed
     SendMessageNear
     tmpargument = 50
     SetReloadTime
-    
-//On fire!
+
+// On fire!
 IfReaffirmed
   IfHeld
     DoNothing
@@ -114,11 +119,15 @@ IfReaffirmed
     GoPoof
     tmpargument = 4
     SendMessageNear
+
 IfNameIsKnown
   IfStateIs0
     tmpargument = 1
     ChangeArmor
     SetState
   Else
-    DoNothing 
-End					// All done
+    DoNothing
+
+// All done
+End
+

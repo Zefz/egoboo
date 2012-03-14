@@ -13,13 +13,13 @@ IfBumped
     tmpargument = LATCHJUMP
     PressLatchButton
   SetTargetToOldTarget
-  
+
 //------------------------------------------------------------------------------
 // ZZ> Handle death by sending a message and other stuff
 IfKilled
   tmpargument = 8
   PlaySound
-  
+
   tmpargument = 0
   IfTargetIsOnSameTeam
     tmpargument = 1
@@ -34,8 +34,8 @@ IfKilled
   // Make the character body
   tmpargument = 45
   SetBumpHeight
-  
-  //Become bad
+
+  // Become bad
   CallForHelp
   tmpargument = TEAME
   JoinTeam
@@ -45,7 +45,7 @@ IfCalledForHelp
   CallForHelp
   tmpargument = TEAME
   JoinTeam
-  
+
 //------------------------------------------------------------------------------
 // ZZ> Handle being attacked by blocking or countering or running away
 IfAttacked
@@ -54,16 +54,16 @@ IfAttacked
   tmpargument = TEAME
   JoinTeam
   IfTargetIsOnSameTeam
-    tmpargument = 9       //"Stupid!"
+    tmpargument = 9       // "Stupid!"
     PlaySound
     tmpargument = 2
     SendMessageNear
   Else
-    tmpargument = rand % 5 + 3  //Ouch!
+    tmpargument = rand % 5 + 3  // Ouch!
     PlaySound
 
 //------------------------------------------------------------------------------
-//Main AI
+// Main AI
 IfTimeOut
   IfStateIs0
     tmpargument = 20
@@ -76,7 +76,7 @@ IfTimeOut
       tmpy = selfspawny
       ClearWaypoints
       AddWaypoint
-  
+
   IfStateIs1
     tmpargument = rand & 7 + 20
     SetTime
@@ -85,8 +85,8 @@ IfTimeOut
       tmpy = targety
       ClearWaypoints
       AddWaypoint
-      
-      //Attack!
+
+      // Attack!
       IfFacingTarget
         tmpx = targetdistance
         tmpy = 200
@@ -99,9 +99,9 @@ IfTimeOut
     Else
       tmpargument = 0
       SetState
-      
+
 //------------------------------------------------------------------------------
-//dodge!
+// dodge!
 IfTargetIsAttacking
   tmpx = rand & 255
   tmpy = 10
@@ -115,13 +115,13 @@ IfTargetIsAttacking
     Compass
     ClearWaypoints
     AddWaypoint
-    
+
 //------------------------------------------------------------------------------
-//someone healed us
+// someone healed us
 IfHealed
   tmpargument = 3
   SendMessageNear
-  
+
 //------------------------------------------------------------------------------
 End
 //------------------------------------------------------------------------------

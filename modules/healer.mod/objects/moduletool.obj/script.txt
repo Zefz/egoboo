@@ -1,11 +1,12 @@
-//This object does some module updates
+// This object does some module updates
 
-//This starts the music
+// This starts the music
 IfSpawned
   tmpargument = 10
   tmpdistance = 0
   PlayMusic
 GoPoof
 
-End					// All done
+// All done
+End
 

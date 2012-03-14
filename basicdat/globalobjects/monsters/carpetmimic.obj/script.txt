@@ -1,13 +1,13 @@
 //----------------------------------------------------------------------------
-//Setup character
+// Setup character
 IfSpawned
   SetTargetToSelf
   EnchantTarget
   MakeCrushValid
   tmpargument = STATEGUARD
   SetState
-    
-  //Randomize carpet type
+
+  // Randomize carpet type
   tmpargument = 0
   IfContentIs
     tmpargument = rand % 4
@@ -16,10 +16,10 @@ IfSpawned
     SetContent
 
 //----------------------------------------------------------------------------
-//Engulf enemies
+// Engulf enemies
 IfStateIsGuard
   tmpdistance = 100
-  SetTargetToDistantEnemy           //Try to grab them!
+  SetTargetToDistantEnemy           // Try to grab them!
     tmpargument = ACTIONUA
     DoAction
     KeepAction
@@ -30,12 +30,13 @@ IfStateIsGuard
     tmpargument = 0
     PlaySound
   Else
-    tmpargument = ACTIONDA        //Just lie there
+    tmpargument = ACTIONDA        // Just lie there
     DoAction
+
 IfStateIsWander
   UnkeepAction
   tmpdistance = 100
-  SetTargetToDistantEnemy           //Try to grab them!
+  SetTargetToDistantEnemy           // Try to grab them!
     tmpargument = ACTIONUA
     DoAction
     KeepAction
@@ -45,9 +46,9 @@ IfStateIsWander
     SetTime
     tmpargument = 0
     PlaySound
-    
+
 //----------------------------------------------------------------------------
-//Main AI loop
+// Main AI loop
 IfTimeOut
 
   IfStateIsGuard
@@ -72,7 +73,7 @@ IfTimeOut
       tmpargument = STATEGUARD
       SetState
 
-  //Did we catch them?
+  // Did we catch them?
   IfStateIsCharge
     tmpargument = STATEWANDER
     SetTargetToRider
@@ -81,30 +82,31 @@ IfTimeOut
         SendMessageNear
         tmpargument = STATECOMBAT
       Else
-        DropWeapons           //oops... Drop friendlies
+        DropWeapons           // oops... Drop friendlies
     SetState
-      
-  //Engulfing a enemy
+
+  // Engulfing a enemy
   IfStateIsCombat
     UnkeepAction
-    SetTargetToRider      
+    SetTargetToRider
       tmpargument = rand & 1
       PlaySound
 
-      //Deal 1 damage every second
+      // Deal 1 damage every second
       tmpargument = 50
       SetTime
       tmpargument = 512
       DamageTarget
-    Else                                //They somehow escaped... teleport?
+    Else                                // They somehow escaped... teleport?
       tmpargument = STATEWANDER
       SetState
-      
+
 //----------------------------------------------------------------------------
-//Make it look like their struggeling
+// Make it look like their struggeling
 IfStateIsCombat
   tmpargument = ACTIONMJ
   DoAction
+
 IfTargetKilled
   SetTargetToNearbyEnemy
     tmpargument = STATEWANDER
@@ -113,7 +115,7 @@ IfTargetKilled
     tmpargument = STATEGUARD
     SetState
 //----------------------------------------------------------------------------
-//Ouch!
+// Ouch!
 IfAttacked
   IfStateIsGuard
     tmpargument = STATEWANDER
@@ -131,7 +133,7 @@ IfKilled
   tmpargument = 2
   PlaySound
   GoPoof
-  
+
   tmpx = selfx
   tmpy = selfy
   tmpdistance = selfz
@@ -154,5 +156,7 @@ IfCrushed
   GoPoof
   tmpargument = 1
   SendMessageNear
-    
-End					// All done
+
+// All done
+End
+

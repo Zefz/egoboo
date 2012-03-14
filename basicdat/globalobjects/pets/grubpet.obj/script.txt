@@ -7,9 +7,9 @@ IfSpawned
       SetOwnerToTarget
       JoinTargetTeam
       MakeNameKnown
-      
+
 //------------------------------------------------------------------------------
-//Say hello
+// Say hello
 IfGrabbed
   MakeCrushInvalid
   IfNameIsKnown
@@ -18,12 +18,12 @@ IfGrabbed
       SetOldTarget
       SetTargetToOwner
       IfTargetIsOldTarget
-        tmpargument = 5             //ello' boss
+        tmpargument = 5             // ello' boss
       Else
-        tmpargument = 6             //You're not the boss!
+        tmpargument = 6             // You're not the boss!
       SendMessageNear
   Else
-    SetTargetToWhoeverIsHolding     //New boss =)
+    SetTargetToWhoeverIsHolding     // New boss =)
     IfTargetIsAPlayer
       SetOwnerToTarget
       JoinTargetTeam
@@ -32,12 +32,13 @@ IfGrabbed
       SendMessageNear
       tmpargument = 4
       SendMessageNear
-      
+
 //------------------------------------------------------------------------------
 IfDropped
   SetTargetToSelf
   StopTargetMovement
   UnkeepAction
+
 IfUsed
   SetTargetToWhoeverIsHolding
   tmpargument = 25
@@ -72,7 +73,7 @@ IfUsed
     tmpdistance = targetexp
     tmpargument = 16
     SendMessageNear
-    
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -85,16 +86,19 @@ IfCrushed
   GoPoof
   tmpargument = 2
   SendMessageNear
-IfCleanedUp				// Respawn
-  IfTargetIsAlive			  // Make sure killer is away
-    tmpx = 1100				    //
-    tmpy = targetdistance		    //
-    IfXIsLessThanY			    //
-      RespawnCharacter			      //
-  Else					  // Killer is far away
-    RespawnCharacter			    //
 
-IfKilled				// This reduces the height of the char
+// Respawn
+IfCleanedUp
+  IfTargetIsAlive              // Make sure killer is away
+    tmpx = 1100
+    tmpy = targetdistance
+    IfXIsLessThanY
+      RespawnCharacter
+  Else                      // Killer is far away
+    RespawnCharacter
+
+// This reduces the height of the char
+IfKilled
   IfNameIsKnown
     SetOldTarget
     SetTargetToOwner
@@ -105,29 +109,32 @@ IfKilled				// This reduces the height of the char
   Else
     tmpargument = 1
     SendMessageNear
-  
-  tmpargument = 30			  // Dead height
-  SetBumpHeight				  //
-  tmpargument = 1			  // Sound
-  PlaySound				  //
-  
-IfAttacked				// Don't take kindly to attackers
-  SetTargetToWhoeverAttacked		  //
-    tmpargument = 0			    // Sound
-    PlaySound				    //
-    
-IfBumped				// Attack whoever it bumped
-  SetTargetToWhoeverBumped		  //
-  IfTargetIsOnHatedTeam			  // Make sure it's an enemy
-    tmpargument = ACTIONUA		    // Bite 'em
-    DoAction			    //
-  tmpx = rand & 1023 + targetx - 512      //
-  tmpy = rand & 1023 + targety - 512      //
-  ClearWaypoints			    //
-  AddWaypoint				    //
-  SetTargetToOldTarget		    //
-    
-IfTimeOut				// This is done every so often
+
+  tmpargument = 30              // Dead height
+  SetBumpHeight
+  tmpargument = 1              // Sound
+  PlaySound
+
+// Don't take kindly to attackers
+IfAttacked
+  SetTargetToWhoeverAttacked
+    tmpargument = 0                // Sound
+    PlaySound
+
+// Attack whoever it bumped
+IfBumped
+  SetTargetToWhoeverBumped
+  IfTargetIsOnHatedTeam              // Make sure it's an enemy
+    tmpargument = ACTIONUA            // Bite 'em
+    DoAction
+  tmpx = rand & 1023 + targetx - 512
+  tmpy = rand & 1023 + targety - 512
+  ClearWaypoints
+  AddWaypoint
+  SetTargetToOldTarget
+
+// This is done every so often
+IfTimeOut
   tmpargument = rand & 15 + 30
   SetTime
 
@@ -143,15 +150,18 @@ IfTimeOut				// This is done every so often
       SetTargetToNearbyEnemy
         tmpargument = 15
         SetTime
-        tmpx = targetx	    //
-        tmpy = targety	    //
+        tmpx = targetx
+        tmpy = targety
         tmpturn = targetturnto
         tmpdistance = 600
         Compass
-      Else       
+      Else
         // No enemies around, so follow owner
-        tmpx = rand & 1023 - 512 + ownerx   //
-        tmpy = rand & 1023 - 512 + ownery   //
-    ClearWaypoints			  //
-    AddWaypoint				  //
-End					// Finished with this character
+        tmpx = rand & 1023 - 512 + ownerx
+        tmpy = rand & 1023 - 512 + ownery
+    ClearWaypoints
+    AddWaypoint
+
+// Finished with this character
+End
+

@@ -1,18 +1,19 @@
-//This object is a tool controlled by setting its content value to a specified number.
-//(Set in spawn.txt). Object is module specified and must be modified to be used
-//elsewhere...
-//Content commands:
-//0 = drop items
-//1 = create ambush <---- Not finished
-//2 = show map
-//3 = Spawn random magical item
-//4 = Spawn random divine spell
+// This object is a tool controlled by setting its content value to a specified number.
+// (Set in spawn.txt). Object is module specified and must be modified to be used
+// elsewhere...
+// Content commands:
+// 0 = drop items
+// 1 = create ambush <---- Not finished
+// 2 = show map
+// 3 = Spawn random magical item
+// 4 = Spawn random divine spell
 
-//Module Setting: Bishopia Module
+// Module Setting: Bishopia Module
 
 //------------------------------------------------------------------------------------
-//Drop items held
+// Drop items held
 tmpargument = 0
+
 IfContentIs
   IfSpawned
     tmpargument = 80
@@ -22,8 +23,9 @@ IfContentIs
     GoPoof
 
 //------------------------------------------------------------------------------------
-//Display the map and play music
+// Display the map and play music
 tmpargument = 2
+
 IfContentIs
   IfSpawned
     ShowMap
@@ -31,13 +33,13 @@ IfContentIs
     tmpargument = 1
     tmpdistance = 0
     PlayMusic
-    
-  //Check the two exits for runners
+
+  // Check the two exits for runners
   IfTimeOut
     tmpargument = 35
     SetTime
-    
-    //Check if any outlaws have entered town
+
+    // Check if any outlaws have entered town
     tmpargument = 14
     tmpturn = [EVIL]
     tmpdistance = BLAHQUEST + BLAHFRIENDS
@@ -45,21 +47,21 @@ IfContentIs
       tmpargument = TEAME
       TargetJoinTeam
       CallForHelp
-    
-    //If tmpx == 0, then someone escaped!
+
+    // If tmpx == 0, then someone escaped!
     tmpx = 1
     tmpargument = passage
     tmpturn = [NONE]
     tmpdistance = BLAHPLAYERS + BLAHENEMIES
     SetTargetToBlahInPassage
-      tmpx = 0  
+      tmpx = 0
     Else
       tmpargument = passage + 1
       tmpturn = [NONE]
       tmpdistance = BLAHPLAYERS + BLAHENEMIES
       SetTargetToBlahInPassage
         tmpx = 0
-        
+
     tmpy = 0
     IfXIsEqualToY
       EnableExport
@@ -70,152 +72,157 @@ IfContentIs
       AddEndMessage
       tmpargument = 1
       AddEndMessage
-      
-      //Remember them for next time
+
+      // Remember them for next time
       tmpargument = [EVIL]
       tmpdistance = 0
       AddQuestAllPlayers
 
 //------------------------------------------------------------------------------------
-//Create some random magic stuff
+// Create some random magic stuff
 tmpargument = 3
+
 IfContentIs
-  tmpargument = rand % 13		  //Randomize drop
+  tmpargument = rand % 13          // Randomize drop
   SetState
 
   tmpx = selfx
   tmpy = selfy
   tmpdistance = 0
 
- //Mana Potion			//(Thrice for 3X chance)
+ // Mana Potion            // (Thrice for 3X chance)
   IfStateIs0
     tmpargument = 72
 
-  //Orbstorm wand
+  // Orbstorm wand
   IfStateIs1
     tmpargument = 117
 
-  //Fireballwand
+  // Fireballwand
   IfStateIs2
     tmpargument = 72
 
-  //Identify Scroll		//(Twice for 2X chance)
+  // Identify Scroll        // (Twice for 2X chance)
   IfStateIs3
     tmpargument = 88
 
- //Mana Potion			//(Thrice for 3X chance)
+ // Mana Potion            // (Thrice for 3X chance)
   IfStateIs4
     tmpargument = 72
 
-  //Identify Scroll		//(Twice for 2X chance)
+  // Identify Scroll        // (Twice for 2X chance)
   IfStateIs5
     tmpargument = 88
 
- //Mana Potion			//(Thrice for 3X chance)
+ // Mana Potion            // (Thrice for 3X chance)
   IfStateIs6
     tmpargument = 72
 
- //Iceball wand
+ // Iceball wand
   IfStateIs7
     tmpargument = 116
 
- //Lightning wand
+ // Lightning wand
   IfStateIs8
     tmpargument = 114
 
- //Missile wand
+ // Missile wand
   IfStateIs9
-    tmpargument = 121		//(Twice for 2X chance)
+    tmpargument = 121        // (Twice for 2X chance)
 
- //Missile wand
+ // Missile wand
   IfStateIs10
-    tmpargument = 121		//(Twice for 2X chance)
+    tmpargument = 121        // (Twice for 2X chance)
 
- //Levitation Shoes
+ // Levitation Shoes
   IfStateIs11
     tmpargument = 147
 
-  //Truesight Scroll
+  // Truesight Scroll
   IfStateIs12
     tmpargument = 140
 
   SpawnExactCharacterXYZ
 
-  //Do last
+  // Do last
   GoPoof
 
 //------------------------------------------------------------------------------------
-//Create some random divine shop stuff
+// Create some random divine shop stuff
 tmpargument = 4
+
 IfContentIs
-  tmpargument = rand % 14		  //Randomize drop
+  tmpargument = rand % 14          // Randomize drop
   SetState
 
   tmpx = selfx
   tmpy = selfy
   tmpdistance = 0
 
- //Ressurection Spell
+ // Ressurection Spell
   IfStateIs0
     tmpargument = 63
 
-  //Combat Bless
+  // Combat Bless
   IfStateIs1
     tmpargument = 115
 
-  //Resist Elements
+  // Resist Elements
   IfStateIs2
     tmpargument = 125
 
-  //Confusion
+  // Confusion
   IfStateIs3
     tmpargument = 119
 
-  //Divine Shield
+  // Divine Shield
   IfStateIs4
     tmpargument = 124
 
-  //Sanctify
+  // Sanctify
   IfStateIs5
     tmpargument = 126
 
-  //Holy Bolt
+  // Holy Bolt
   IfStateIs6
     tmpargument = 129
 
-  //Scroll of Rebirth		TWICE FOR X2 CHANCE
+  // Scroll of Rebirth        TWICE FOR X2 CHANCE
   IfStateIs7
     tmpargument = 105
 
-  //Scroll of Rebirth		TWICE FOR X2 CHANCE
+  // Scroll of Rebirth        TWICE FOR X2 CHANCE
   IfStateIs8
     tmpargument = 105
 
-  //Warhammer			TWICE FOR X2 CHANCE
+  // Warhammer            TWICE FOR X2 CHANCE
   IfStateIs9
     tmpargument = 95
 
-  //Warhammer			TWICE FOR X2 CHANCE
+  // Warhammer            TWICE FOR X2 CHANCE
   IfStateIs10
     tmpargument = 95
 
-  //Shield of the Crusader
+  // Shield of the Crusader
   IfStateIs11
     tmpargument = 134
 
-  //Truesight scroll
+  // Truesight scroll
   IfStateIs12
     tmpargument = 140
 
-  //Moonbeam
+  // Moonbeam
   IfStateIs13
     tmpargument = 155
 
   SpawnExactCharacterXYZ
 
-  //Do last
+  // Do last
   GoPoof
 
 //------------------------------------------------------------------------------------
-End					// All done
+
+// All done
+End
+
 //------------------------------------------------------------------------------------

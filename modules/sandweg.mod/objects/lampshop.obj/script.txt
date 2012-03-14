@@ -1,11 +1,11 @@
-//Show where you are on the map
+// Show where you are on the map
 tmpx = selfx
 tmpy = selfy
 tmpargument = YELLOW
 ShowBlipXY
 
 //------------------------------------------------------------------------------
-//Handle orders ( purchases )
+// Handle orders ( purchases )
 IfOrdered
   // Counter specifies transaction ( 0, 1, or 2 )
   // Order specifies price
@@ -28,79 +28,78 @@ IfOrdered
         tmpargument = tmpx + 5
         tmpx = selforder
         SendMessageNear
-        
+
 //------------------------------------------------------------------------------
 IfSpawned
   tmpx = rand % 100
   tmpy = 75
-  IfXIsMoreThanY              //A 75% chance that we are here
+  IfXIsMoreThanY              // A 75% chance that we are here
     SetTargetToSelf
     SetTargetToTargetRightHand
     PoofTarget
     GoPoof
   Else
-    //Make it a shop
+    // Make it a shop
     tmpargument = passage
     AddShopPassage
 
-    Sneak				//Dont run around
+    Sneak                // Dont run around
     tmpargument = STATEGUARD
     SetState
-    
-    //Spawn the shop goods
-    tmpargument = 44          //lamp
+
+    // Spawn the shop goods
+    tmpargument = 44          // lamp
     tmpx = selfx + 128
     tmpy = selfy + 100
     tmpdistance = selfz
     tmpturn = rand
     SpawnExactCharacterXYZ
-    
-    tmpargument = 49          //oil
+
+    tmpargument = 49          // oil
     tmpx = selfx + 64
     tmpy = selfy - 100
     tmpdistance = selfz
     tmpturn = rand
     SpawnExactCharacterXYZ
-    
+
     tmpx = rand & 123
     tmpy = 18
     IfXIsMoreThanY
-      tmpargument = 47          //normal torch
+      tmpargument = 47          // normal torch
     Else
-      tmpargument = 48          //15% chance for magic torch!
+      tmpargument = 48          // 15% chance for magic torch!
     tmpx = selfx + 64
     tmpy = selfy + 100
     tmpdistance = selfz
     tmpturn = 0
     SpawnExactCharacterXYZ
-    
-    tmpargument = 49          //oil
+
+    tmpargument = 49          // oil
     tmpx = selfx + 128
     tmpy = selfy - 100
     tmpdistance = selfz
     tmpturn = rand
     SpawnExactCharacterXYZ
-    
+
     tmpx = rand % 100
     tmpy = 40
     IfXIsLessThanY
-      DropItems           //40% chance for Light spell book
+      DropItems           // 40% chance for Light spell book
     Else
-      tmpargument = 44        //lamp
+      tmpargument = 44        // lamp
       tmpx = selfx + 64
       tmpy = selfy
       tmpdistance = selfz
       tmpturn = rand
       SpawnExactCharacterXYZ
 
-    tmpargument = 47         //normal torch
+    tmpargument = 47         // normal torch
     tmpx = selfx + 128
     tmpy = selfy
     tmpdistance = selfz
     tmpturn = rand
     SpawnExactCharacterXYZ
-  
-  
+
 //------------------------------------------------------------------------------
 IfHealed
   tmpargument = 1
@@ -113,16 +112,18 @@ IfAttacked
   SetTargetToWhoeverAttacked
   IfTargetIsAPlayer
     CallForHelp
-    tmpargument = TEAME     //Team Evil
+    tmpargument = TEAME     // Team Evil
     TargetJoinTeam
     tmpargument = STATECOMBAT
     SetState
   tmpargument = 5
   PlaySound
+
 IfCalledForHelp
   Walk
+
 IfKilled
-  CallForHelp			//Warn friends
+  CallForHelp            // Warn friends
   tmpargument = TEAME
   TargetJoinTeam
 
@@ -132,9 +133,9 @@ IfTimeOut
   tmpargument = 50
   SetTime
 
-  //WAIT AND TALK
+  // WAIT AND TALK
   IfStateIsGuard
-    SetTargetToNearbyEnemy		//Enemy near, go combat mode
+    SetTargetToNearbyEnemy        // Enemy near, go combat mode
       tmpargument = STATECOMBAT
       SetState
       CallForHelp
@@ -144,14 +145,14 @@ IfTimeOut
       ClearWaypoints
       AddWaypoint
 
-      //Reduce that counter
+      // Reduce that counter
       tmpx = selfcontent
       tmpy = 0
       IfXIsMoreThanY
         tmpargument = selfcontent - 1
         SetContent
-      
-      //Cry out to attract buyers
+
+      // Cry out to attract buyers
       tmpdistance = BLAHFRIENDS
       tmpargument = [HUMA]
       SetTargetToNearestBlahID
@@ -164,12 +165,12 @@ IfTimeOut
             tmpargument = rand % 3 + 2
             SendMessageNear
             PlaySound
-            tmpargument = 6   //Wait 6 seconds before doing again
+            tmpargument = 6   // Wait 6 seconds before doing again
             SetContent
         Else
           SetTurnModeToVelocity
-          
-  //Run away in panic
+
+  // Run away in panic
   IfStateIsCombat
     Run
     SetTargetToNearbyEnemy
@@ -181,18 +182,17 @@ IfTimeOut
     AddWaypoint
     tmpargument = 75
     SetTime
-    
-    //Return to shopkeeping mode if everything seems normal again
+
+    // Return to shopkeeping mode if everything seems normal again
     SetTargetToNearestEnemy
       tmpx = targetdistance
       tmpy = 128*16
       IfXIsMoreThanY
         tmpargument = STATEGUARD
-        SetState        
-    
+        SetState
 
 //------------------------------------------------------------------------------
-//What to do if bumped
+// What to do if bumped
 IfBumped
   IfStateIsGuard
     SetTargetToWhoeverBumped

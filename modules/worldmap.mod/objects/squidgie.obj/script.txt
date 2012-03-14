@@ -5,7 +5,6 @@ IfSpawned
   tmpargument = 1
   SetState
 
-
 IfKilled
   // Handle death
   tmpargument = 0
@@ -22,8 +21,6 @@ IfKilled
   tmpdistance = rand & 4095 + 10000
   PlaySound
 
-
-
 IfAttacked
   // Make noise
   SetTargetToWhoeverAttacked
@@ -31,16 +28,14 @@ IfAttacked
   tmpdistance = rand & 4095 + 10000
   PlaySound
 
-
 // Swim around up to the surface
 GetWaterLevel
 tmpx = selfz * 10
 tmpy = tmpargument - 250
+
 IfXIsLessThanY
   tmpargument = tmpy - tmpx
   AccelerateUp
-
-
 
 IfBumped
   SetTargetToWhoeverBumped
@@ -66,15 +61,12 @@ IfBumped
   AddWaypoint
   SetTargetToOldTarget
 
-
-
 // Find enemies
 IfTimeOut
   tmpargument = rand & 15 + 10
   SetTime
   tmpargument = 0
   SetState
-
 
   SetTargetToNearestEnemy
     SetTurnModeToWatchTarget
@@ -158,8 +150,6 @@ IfTimeOut
     tmpy = rand & 511 - 256 + selfspawny
   ClearWaypoints
   AddWaypoint
-
-
 
 // All done
 End

@@ -1,22 +1,22 @@
-//Jump when the target is higher than self
+// Jump when the target is higher than self
 IfHeld
   DoNothing
 Else
   tmpx = selfz + 100
   tmpy = targetz
-  IfXIsLessThanY			//Make sure he is a lot higher than self
+  IfXIsLessThanY            // Make sure he is a lot higher than self
     tmpx = 200
     tmpy = targetaltitude
-    IfYIsLessThanX			//Make sure he isnt jumping or flying
+    IfYIsLessThanX            // Make sure he isnt jumping or flying
       tmpargument = LATCHJUMP
-      PressLatchButton			//Jump!
+      PressLatchButton            // Jump!
 
-//Sound when hit ground
+// Sound when hit ground
 IfHitGround
   tmpargument = 2
   PlaySound
-  
-//This makes poison stronger with each level up
+
+// This makes poison stronger with each level up
 IfScoredAHit
   tmpargument = 0       // Cost owner 0 mana per second
   tmpdistance = 0        // Give owner 0 life per second
@@ -61,10 +61,12 @@ IfGrabbed
     DropItems
     tmpargument = 16
     SendMessageNear
+
 IfDropped
   SetTargetToSelf
   StopTargetMovement
   UnkeepAction
+
 IfUsed
   SetTargetToWhoeverIsHolding
   tmpargument = 25
@@ -99,6 +101,7 @@ IfUsed
     tmpdistance = targetexp
     tmpargument = 15
     SendMessageNear
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -111,15 +114,19 @@ IfCrushed
   GoPoof
   tmpargument = 2
   SendMessageNear
-IfCleanedUp				// Respawn
-  IfTargetIsAlive			  // Make sure killer is away
-    tmpx = 1100				    //
-    tmpy = targetdistance		    //
-    IfXIsLessThanY			    //
-      RespawnCharacter			      //
-  Else					  // Killer is far away
-    RespawnCharacter			    //
-IfKilled				// This reduces the height of the char
+
+// Respawn
+IfCleanedUp
+  IfTargetIsAlive              // Make sure killer is away
+    tmpx = 1100
+    tmpy = targetdistance
+    IfXIsLessThanY
+      RespawnCharacter
+  Else                      // Killer is far away
+    RespawnCharacter
+
+// This reduces the height of the char
+IfKilled
   IfNameIsKnown
     SetOldTarget
     SetTargetToOwner
@@ -130,23 +137,26 @@ IfKilled				// This reduces the height of the char
   Else
     tmpargument = 1
     SendMessageNear
-  tmpargument = 30			  // Dead height
+  tmpargument = 30              // Dead height
   SetBumpHeight
-  tmpargument = 5			  // Death Sound
+  tmpargument = 5              // Death Sound
   PlaySound
 
-IfAttacked				// Don't take kindly to attackers
-  SetTargetToWhoeverAttacked		  //
-    tmpargument = 4			    // Ouch Sound
+// Don't take kindly to attackers
+IfAttacked
+  SetTargetToWhoeverAttacked
+    tmpargument = 4                // Ouch Sound
     PlaySound
 
-IfBumped				// Scooch around
+// Scooch around
+IfBumped
   tmpx = rand & 1023 + targetx - 512
   tmpy = rand & 1023 + targety - 512
   ClearWaypoints
   AddWaypoint
 
-IfTimeOut				// This is done every so often
+// This is done every so often
+IfTimeOut
   // Do croaking
   GetContent
   tmpx = rand % 100
@@ -184,18 +194,20 @@ IfTimeOut				// This is done every so often
           IfFacingTarget
             // Attack the enemy...
             DropItems
-            tmpargument = ACTIONUA	//Bite
+            tmpargument = ACTIONUA    // Bite
             DoAction
         tmpx = targetx
         tmpy = targety
         tmpturn = targetturnto
         tmpdistance = 800
         Compass
-      Else       
+      Else
         // No enemies around, so follow owner
         tmpx = ownerx
         tmpy = ownery
-    ClearWaypoints			  //
-    AddWaypoint				  //
-    
-End					// Finished with this character
+    ClearWaypoints
+    AddWaypoint
+
+// Finished with this character
+End
+

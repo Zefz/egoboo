@@ -1,12 +1,12 @@
-//The different states:
-//0 = Bored
-//1 = Follow master
+// The different states:
+// 0 = Bored
+// 1 = Follow master
 //-------------------------------------------------------------------------------
-IfSpawned				// Item
+IfSpawned                // Item
   MakeNameKnown
   MakeCrushValid
   KeepAction
-  IfNameIsKnown			//It has a owner from the start
+  IfNameIsKnown            // It has a owner from the start
     SetTargetToWhoeverIsHolding
     tmpargument = [GNOM]
     IfTargetHasID
@@ -25,8 +25,9 @@ IfCrushed
   SendMessageNear
 
 //-------------------------------------------------------------------------------
-//Spawns smoke puffs when in booster mode
+// Spawns smoke puffs when in booster mode
 tmpargument = [POWR]
+
 IfContentIs
   tmpx = rand % 4
   tmpy = 0
@@ -36,20 +37,20 @@ IfContentIs
   tmpy = ownery
   ClearWaypoints
   AddWaypoint
-  
+
 //-------------------------------------------------------------------------------
-//Show stats
+// Show stats
 IfUsed
   tmpargument = 2
   PlaySound
   tmpargument = 75
   SetReloadTime
-  
-  //Name
+
+  // Name
   tmpargument = 5
   SendMessageNear
-  
-  //Display level
+
+  // Display level
   tmpx = selflevel
   tmpy = 1
   IfXIsMoreThanY
@@ -58,7 +59,7 @@ IfUsed
     tmpargument = 6 + selflevel
   SendMessageNear
 
-  //Stats with life  
+  // Stats with life
   tmpx = targetlife > 9
   tmpy = 2
   IfXIsMoreThanY
@@ -74,53 +75,53 @@ IfUsed
   tmpdistance = targetexp
   tmpargument = 14
   SendMessageNear
-  
-  //Special abilities
+
+  // Special abilities
   tmpx = 1
   tmpy = selflevel
-  IfXIsLessThanY        //Level 3 or higher gives boost
+  IfXIsLessThanY        // Level 3 or higher gives boost
     tmpdistance = 1
   Else
     tmpdistance = 0
   tmpx = 0
-  IfXIsMoreThanY        //Level 2 or higher gives shock
+  IfXIsMoreThanY        // Level 2 or higher gives shock
     tmpx = 1
-  tmpy = 1              //Level 1 or higher gives alarm
+  tmpy = 1              // Level 1 or higher gives alarm
   tmpargument = 15
   SendMessageNear
 
 //-------------------------------------------------------------------------------
-//This function makes Jimju cheer when idle
-IfTimeOut				// Wait a bit
-  
-  //Reset speed and timer
+// This function makes Jimju cheer when idle
+IfTimeOut                // Wait a bit
+
+  // Reset speed and timer
   tmpargument = [POWR]
   IfContentIs
     Run
     tmpargument = 0
     SetContent
   tmpargument = rand & 63 + 10
-  SetTime				  
+  SetTime
 
-  //Dont run AI loop if held
+  // Dont run AI loop if held
   IfHeld
     DoNothing
   Else
-  
-    //Tic tac sounds
+
+    // Tic tac sounds
     tmpx = rand & 255
     tmpy = 200
     IfXIsMoreThanY
       tmpargument = 2
       PlaySound
-    
-    //Initiate warnings
+
+    // Initiate warnings
     IfNameIsKnown
-      tmpdistance = selflevel*192 + 896 //7 tiles +1.5 tiles per level
+      tmpdistance = selflevel*192 + 896 // 7 tiles +1.5 tiles per level
       SetTargetToDistantEnemy
         tmpargument = 255
         FlashVariable
-        //Light effects
+        // Light effects
         tmpargument = 4
         tmpx = 0
         tmpy = 0
@@ -129,85 +130,85 @@ IfTimeOut				// Wait a bit
         tmpargument = 0
         IfContentIs
           tmpargument = 2
-          SendMessageNear			//Warn the player
+          SendMessageNear            // Warn the player
           tmpargument = 1
           SetContent
-          
-          //Flash warning
+
+          // Flash warning
           tmpargument = 2
-          SetBlueShift		
+          SetBlueShift
           SetGreenShift
-          
-          //Alarm sound
+
+          // Alarm sound
           tmpargument = 3
           PlaySound
-          
+
       Else
         tmpargument = 0
         SetContent
-        SetBlueShift			//Stop warning
+        SetBlueShift            // Stop warning
         SetGreenShift
 
     // State 0 ( Bored )
     SetTargetToOwner
-    IfStateIs0				  
+    IfStateIs0
       tmpargument = ACTIONMC
       DoAction
-      tmpx = selfx			//Walk in a circle
+      tmpx = selfx            // Walk in a circle
       tmpy = selfy
       tmpturn = selfturn + 8192
       tmpdistance = 200
       Compass
       ClearWaypoints
       AddWaypoint
-      
-      //Follow owner
+
+      // Follow owner
       tmpx = ownerdistance
       tmpy = 128*5
       IfXIsLessThanY
         tmpargument = 1
         SetState
-      
+
     // State 1 ( Follow )
     IfStateIs1
       tmpx = 128*12
       tmpy = ownerdistance
-      IfXIsLessThanY			    // Become bored if owner is away
+      IfXIsLessThanY                // Become bored if owner is away
         tmpargument = 0
         SetState
         tmpx = selfx
         tmpy = selfy
-        ClearWaypoints			      // Dont move
+        ClearWaypoints                  // Dont move
         AddWaypoint
-      Else				    // Follow the owner
+      Else                    // Follow the owner
         tmpx = selflevel
         tmpy = 1
-        IfXIsMoreThanY          //Enable booster abillity at level 3
+        IfXIsMoreThanY          // Enable booster abillity at level 3
           tmpx = 128*5
           IfXIsLessThanY
             tmpargument = 300
             SetSpeedPercent
-            tmpargument = 150     //Do this for 3 seconds
+            tmpargument = 150     // Do this for 3 seconds
             SetTime
-            tmpargument = [POWR]  //Code for extra speed
+            tmpargument = [POWR]  // Code for extra speed
             SetContent
             tmpargument = 1
             PlaySound
             tmpx = ownerx
             tmpy = ownery
           Else
-            tmpx = rand & 255 - 128 + ownerx	      
-            tmpy = rand & 255 - 128 + ownery	      
+            tmpx = rand & 255 - 128 + ownerx
+            tmpy = rand & 255 - 128 + ownery
         Else
-          tmpx = rand & 255 - 128 + ownerx	      
-          tmpy = rand & 255 - 128 + ownery	      
-        ClearWaypoints			      
-        AddWaypoint	      
+          tmpx = rand & 255 - 128 + ownerx
+          tmpy = rand & 255 - 128 + ownery
+        ClearWaypoints
+        AddWaypoint
 
-    //Shock enemies
+    // Shock enemies
     tmpx = selflevel
     tmpy = 0
-    IfXIsMoreThanY          //Enable shock abillity at level 2
+    IfXIsMoreThanY          // Enable shock abillity at level 2
       tmpargument = 1
       IfContentIs
         SetTargetToNearbyEnemy
@@ -227,10 +228,10 @@ IfTimeOut				// Wait a bit
               tmpdistance = SPAWNORIGIN
               tmpargument = 0
               SpawnAttachedParticle
-              tmpargument = 5			//Recharge
+              tmpargument = 5            // Recharge
               SetContent
- 
-  //Start recharging
+
+  // Start recharging
   tmpargument = [POWR]
   IfContentIs
     DoNothing
@@ -241,7 +242,7 @@ IfTimeOut				// Wait a bit
       tmpargument = selfcontent -1
       SetContent
 
-  //This doesnt work for some reason... (Zap when in water)
+  // This doesnt work for some reason... (Zap when in water)
   IfOverWater
     SetTargetToSelf
     SpawnPoof
@@ -249,65 +250,66 @@ IfTimeOut				// Wait a bit
     tmpdistance = DAMAGEZAP
     DamageTarget
 
-
 //-------------------------------------------------------------------------------
-//What to do if picked up...
-IfGrabbed				// Stop cheering
+// What to do if picked up...
+IfGrabbed                // Stop cheering
   SetTargetToWhoeverIsHolding
     tmpargument = 0
     SetContent
-    SetBlueShift			//Stop warning
-    SetGreenShift  
+    SetBlueShift            // Stop warning
+    SetGreenShift
     Run
   tmpargument = [GNOM]
   IfTargetHasID
-    IfTargetIsOwner			  // Say hi to old owner
+    IfTargetIsOwner              // Say hi to old owner
       tmpargument = 1
       SendMessageNear
-    Else					  // Say hi to new owner
+    Else                      // Say hi to new owner
       tmpargument = 0
       SendMessageNear
       SetOwnerToTarget
       MakeNameKnown
       JoinTargetTeam
   Else
-    tmpargument = 3			    //Doesn't know what it is
-    SendMessageNear			    //
-  tmpargument = 1			  // Set that state
+    tmpargument = 3                // Doesn't know what it is
+    SendMessageNear
+  tmpargument = 1              // Set that state
   SetState
-  UnkeepAction				  // Make it animate
+  UnkeepAction                  // Make it animate
 
-  //Ready electric charge
+  // Ready electric charge
   tmpargument = 2
   IfContentIs
     tmpargument = 1
     SetContent
 
 //-------------------------------------------------------------------------------
-//Follow master
-IfDropped				// Stop cheering
-  tmpargument = 1			  // Set that state
-  SetState				  //
+// Follow master
+IfDropped                // Stop cheering
+  tmpargument = 1              // Set that state
+  SetState
 
 //-------------------------------------------------------------------------------
-//Death
+// Death
 IfKilled
   tmpargument = 4
   SendMessageNear
   tmpargument = 5
   PlaySound
-  
-  //Cannot be ressurected!
+
+  // Cannot be ressurected!
   JoinNullTeam
 
 //-------------------------------------------------------------------------------
-//Ouchies
+// Ouchies
 IfAttacked
   tmpargument = 4
   PlaySound
 
-
 //-------------------------------------------------------------------------------
-End					// Finished with this character
+
+// Finished with this character
+End
+
 //-------------------------------------------------------------------------------
 

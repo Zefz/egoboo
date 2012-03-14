@@ -1,5 +1,5 @@
 // Box o' Gonnepowder
-//  by Pteromys of Melon Island... http://melonisland.net
+//  by Pteromys of Melon Island... http:// melonisland.net
 //  based mostly on the bear trap and the bomb
 // Guide to object states:
 //  0 slowly burning          3 drying up
@@ -18,16 +18,17 @@ IfSpawned
   SetState
   KeepAction
   MakeCrushValid
-  
-  //Tech users know what this is
+
+  // Tech users know what this is
   SetTargetToWhoeverIsHolding
     IfTargetIsAPlayer
       tmpargument = [TECH]
       IfTargetHasSkillID
         MakeNameKnown
 
-IfInWater				// Upon entering water...
-  IfHeld				// Do nothing if it enters water when it's held
+// Upon entering water...
+IfInWater
+  IfHeld                // Do nothing if it enters water when it's held
     GetContent
   Else
     tmpx = 0
@@ -38,37 +39,38 @@ IfInWater				// Upon entering water...
       tmpx = 1
     IfStateIs3
       tmpx = 1
-    IfXIsEqualToY			// If lit, dry, or drying
-      tmpargument = 4			//  Get soaked
+    IfXIsEqualToY            // If lit, dry, or drying
+      tmpargument = 4            //  Get soaked
       SetState
-      tmpargument = 4			// Number of times it must be hit with fire before drying
+      tmpargument = 4            // Number of times it must be hit with fire before drying
       SetContent
       tmpargument = 6
       SendMessageNear
 
-IfReaffirmed				// If touched by fire...
-  IfStateIs2				// If I'm just sitting around
+// If touched by fire...
+IfReaffirmed
+  IfStateIs2                // If I'm just sitting around
     IfTimeOut
-      tmpargument = 6			//  burn slowly
+      tmpargument = 6            //  burn slowly
       tmpdistance = 0
       SpawnAttachedParticle
       tmpargument = 0
       SetState
       tmpargument = 400
       SetTime
-  IfStateIs3				// If I'm drying up
-    IfHeld				// Don't do anything if I hit a flame while I'm held...
-      GetContent //nop			//  at this point, I'm considered invulnerable
+  IfStateIs3                // If I'm drying up
+    IfHeld                // Don't do anything if I hit a flame while I'm held...
+      GetContent // nop            //  at this point, I'm considered invulnerable
     Else
       IfTimeOut
         GetContent
-        tmpx = tmpargument		// Save this for later
+        tmpx = tmpargument        // Save this for later
         tmpargument = tmpargument - 1
         SetContent
-        tmpargument = 50		// A little delay before I can be ignited
+        tmpargument = 50        // A little delay before I can be ignited
         SetTime
         tmpy = 0
-        IfXIsEqualToY			// Now test to see if I've been through enough fire to dry up
+        IfXIsEqualToY            // Now test to see if I've been through enough fire to dry up
           tmpargument = 2
           SetState
           tmpargument = 7
@@ -77,6 +79,7 @@ IfReaffirmed				// If touched by fire...
 // Don't attack explosives... it's not safe
 tmpx = selflife
 tmpy = 25500
+
 IfXIsLessThanY
   tmpx = 1
   tmpy = 1
@@ -87,25 +90,25 @@ IfXIsLessThanY
   IfXIsEqualToY
     tmpargument = 25600 - selflife
     HealSelf
-  Else					// If it's dry (may be lit)
+  Else                    // If it's dry (may be lit)
     tmpx = selfx
     tmpy = selfy
     tmpdistance = selfz
     tmpargument = 0
-    SpawnExactParticle			// Start off the explosion by spawning a particle
-    tmpargument = 5			// Set state to post-explosion
+    SpawnExactParticle            // Start off the explosion by spawning a particle
+    tmpargument = 5            // Set state to post-explosion
     SetState
-    tmpargument = ACTIONKA		// Display a "POW" sign
+    tmpargument = ACTIONKA        // Display a "POW" sign
     DoActionOverride
     KeepAction
-    NotAnItem				// Don't let people pick up the "POW" sign!
-    tmpargument = 0			// How long to display the "POW"
-    SetTime				//  set that to something like 50 if you want to see it
+    NotAnItem                // Don't let people pick up the "POW" sign!
+    tmpargument = 0            // How long to display the "POW"
+    SetTime                //  set that to something like 50 if you want to see it
 
 IfUsed
   tmpargument = 50
   SetReloadTime
-  tmpargument = 0			// Use only if it's dry
+  tmpargument = 0            // Use only if it's dry
   IfContentIs
     SetTargetToWhoeverIsHolding
     IfTargetIsMounted
@@ -136,7 +139,8 @@ IfUsed
     tmpargument = 8
     SendMessageNear
 
-IfCrushed				// Not a good idea to leave one of these in a doorway
+// Not a good idea to leave one of these in a doorway
+IfCrushed
   tmpx = selfx
   tmpy = selfy
   tmpdistance = selfz
@@ -149,7 +153,9 @@ IfCrushed				// Not a good idea to leave one of these in a doorway
 IfTakenOut
   tmpargument = 3
   SendMessageNear
-IfDropped				// Make it lie on floor
+
+// Make it lie on floor
+IfDropped
   KeepAction
   IfStateIs1
     tmpargument = 0
@@ -161,11 +167,11 @@ IfDropped				// Make it lie on floor
       SetState
 
 IfGrabbed
-  tmpargument = 25600 - selflife	// Cool down
+  tmpargument = 25600 - selflife    // Cool down
   HealSelf
   DisaffirmCharacter
   SetTargetToWhoeverIsHolding
-  IfStateIs0				// Is it on fire?
+  IfStateIs0                // Is it on fire?
     tmpx = 0
     tmpy = 1
     tmpargument = [TECH]
@@ -174,18 +180,18 @@ IfGrabbed
     tmpargument = [DISA]
     IfTargetHasSkillID
       tmpx = 1
-    IfXIsEqualToY			// If expert in either technology or disarming traps...
+    IfXIsEqualToY            // If expert in either technology or disarming traps...
       tmpargument = 1
       SendMessageNear
-      tmpargument = 1			  // ...put out the flame.
+      tmpargument = 1              // ...put out the flame.
       SetState
       MakeNameKnown
-    Else				// If not, inadvertently detonate:
+    Else                // If not, inadvertently detonate:
       IfTargetIsAPlayer
         tmpargument = 5
         SendMessageNear
       DetachFromHolder
-      SetTargetToSelf			// Call explosion by dropping life below threshold
+      SetTargetToSelf            // Call explosion by dropping life below threshold
       tmpargument = 512
       DamageTarget
   Else
@@ -204,16 +210,19 @@ IfGrabbed
       SetContent
 
 IfTimeOut
-  IfStateIs0				// If I've been burning for a while
+  IfStateIs0                // If I've been burning for a while
     SetTargetToSelf
     tmpargument = 512
-    DamageTarget			// Call explosion by dropping life below threshold
-  IfStateIs5				// If I've been showing "POW" for long enough...
+    DamageTarget            // Call explosion by dropping life below threshold
+  IfStateIs5                // If I've been showing "POW" for long enough...
     GoPoof
 
-IfHitGround				// Become neutral so that I don't get attacked
+// Become neutral so that I don't get attacked
+IfHitGround
   JoinNullTeam
   tmpargument = 2
   PlaySound
 
-End					// Finished
+// Finished
+End
+

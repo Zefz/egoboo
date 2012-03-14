@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------
-//Haha! Player was killed
+// Haha! Player was killed
 IfTargetIsAPlayer
   tmpargument = 0
   GetXY
@@ -19,14 +19,14 @@ IfTargetIsAPlayer
     SetState
 
 //------------------------------------------------------------------------------
-//Put on some eyes
+// Put on some eyes
 IfSpawned
   tmpargument = 6
   tmpdistance = 9
   SpawnAttachedParticle
   tmpdistance = 10
   SpawnAttachedParticle
-  
+
   tmpargument = STATEWANDER
   SetState
 
@@ -59,8 +59,8 @@ IfKilled
   // Make the character body
   tmpargument = 45
   SetBumpHeight
-  
-  //Spawn the treasure reward
+
+  // Spawn the treasure reward
   tmpargument = 84
   tmpx = selfx
   tmpy = selfy
@@ -75,27 +75,27 @@ IfAttacked
   PlaySound
 
 //------------------------------------------------------------------------------
-//Main AI loop
+// Main AI loop
 IfTimeOut
-  CleanUp     //Make ghouls ressurect
+  CleanUp     // Make ghouls ressurect
   SetTurnModeToVelocity
   tmpargument = 20
   SetTime
-  
-  //Be a coward
+
+  // Be a coward
   tmpx = rand & 255
   tmpy = 225
   IfXIsMoreThanY
     tmpargument = STATERETREAT
     SetState
-  
+
   IfStateIsCombat
     IfFacingTarget
       tmpx = targetdistance
       tmpy = 128*8
       IfXIsLessThanY
         tmpy = 128*3
-        IfXIsMoreThanY            //Use far range spells from distance
+        IfXIsMoreThanY            // Use far range spells from distance
           tmpargument = 0
           SetContent
           tmpargument = STATECHARGE
@@ -104,7 +104,7 @@ IfTimeOut
     tmpy = targety
     ClearWaypoints
     AddWaypoint
-    
+
   IfStateIsCharge
     SetTurnModeToWatchTarget
     tmpx = targetx
@@ -113,7 +113,7 @@ IfTimeOut
     tmpdistance = -600
     ClearWaypoints
     AddWaypoint
-    
+
   IfStateIsWander
     // Go after enemies
     SetTargetToWideEnemy
@@ -129,9 +129,9 @@ IfTimeOut
       tmpy = rand & 511 - 256 + selfspawny
     ClearWaypoints
     AddWaypoint
-    
+
   IfStateIsParry
-    //Halfway through a teleport
+    // Halfway through a teleport
     tmpargument = rand & 15 + 35
     SetTime
     tmpargument = 7
@@ -155,13 +155,13 @@ IfTimeOut
     ClearWaypoints
     AddWaypoint
 
-    //Cost some mana
+    // Cost some mana
     SetOldTarget
     SetTargetToSelf
     tmpargument = 256
     CostTargetMana
     SetTargetToOldTarget
-    
+
   IfStateIsRetreat
     tmpargument = 100
     SetTime
@@ -172,14 +172,14 @@ IfTimeOut
     Compass
     ClearWaypoints
     AddWaypoint
-    
+
     tmpx = selfmana
     tmpy = 256*3
     IfXIsMoreThanY
       tmpargument = STATEWANDER
-      SetState      
-      
-      //Want to start a teleport
+      SetState
+
+      // Want to start a teleport
       tmpy = 256*5
       IfXIsMoreThanY
         tmpargument = ACTIONMJ
@@ -194,15 +194,15 @@ IfTimeOut
           // Try again in a bit...
           tmpargument = 5
           SetTime
-      
-  //Run away if at low mana
+
+  // Run away if at low mana
   tmpx = selfmana
   tmpy = 300
   IfXIsLessThanY
     tmpargument = STATERETREAT
     SetState
-    
-//Charging a spell
+
+// Charging a spell
 IfStateIsCharge
   tmpx = selfcontent
   tmpy = 128*10
@@ -214,14 +214,14 @@ IfStateIsCharge
   Else
     tmpargument = STATECOMBAT
     SetState
-    
+
 IfStateIsCombat
   tmpx = targetdistance
   tmpy = 128*3
   IfXIsLessThanY
-    tmpargument = LATCHRIGHT      //Frost blast if close
+    tmpargument = LATCHRIGHT      // Frost blast if close
     PressLatchButton
-    
+
 //------------------------------------------------------------------------------
 End
 //------------------------------------------------------------------------------

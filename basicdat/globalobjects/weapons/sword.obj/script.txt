@@ -1,8 +1,8 @@
-//This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+// This function makes an item fall to the floor when spawned
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
 
 IfCrushed
@@ -18,31 +18,41 @@ IfCrushed
   tmpargument = 1
   SendMessageNear
 
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-IfHitGround				// Make a sound
-  tmpargument = 1			  //
-  PlaySound				  //
+// Make it lie on floor
+IfDropped
+  KeepAction
 
-IfTakenOut				// Make a sound
-  tmpargument = 2			  //
-  PlaySound				  //
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 2			  //
-    SendMessageNear			  //
+// Make a sound
+IfHitGround
+  tmpargument = 1
+  PlaySound
 
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
+// Make a sound
+IfTakenOut
+  tmpargument = 2
+  PlaySound
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 2
+    SendMessageNear
 
-//Is it kursed?
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
+
+// Is it kursed?
 IfNotDropped
   tmpargument = 3
   SendMessageNear
+
+// No longer needed, this is handled by the sourcecode now...
 //IfNotPutAway
-//  tmpargument = 4         //No longer needed, this is handled by the sourcecode now...
+//  tmpargument = 4
 //  SendMessageNear
-End					// All done
+
+// All done
+End
+

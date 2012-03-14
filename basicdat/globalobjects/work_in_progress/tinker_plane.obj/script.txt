@@ -1,6 +1,7 @@
 // BB> The aeroplane script
 
-IfSpawned				// General stuff
+// General stuff
+IfSpawned
   MakeAmmoKnown
   MakeNameKnown
   ClearWaypoints
@@ -26,16 +27,18 @@ IfDismounted
   SetContent
 
 tmpargument = 1
+
 IfContentIs
   tmpargument = LATCHJUMP
   PressLatchButton
-      
-IfUsed					// Set number of shells to drop
+
+// Set number of shells to drop
+IfUsed
   tmpargument = 8
   SetContent
   tmpargument = 0
   SetTime
-  
+
   // Play the machine gun sound
   IfAmmoOut
     tmpargument = 0
@@ -48,26 +51,26 @@ IfUsed					// Set number of shells to drop
     tmpargument = 0
     PlaySoundLooped
     tmpargument = 1
-    SetState 
+    SetState
 
-IfTimeOut    
+IfTimeOut
 
   // Firing state
-  IfStateIs1  
-    
+  IfStateIs1
+
     // Down the count
     tmpargument = 0
     GetContent
     tmpargument = tmpargument - 1
     SetContent
-    
+
     // Check ammo
     IfAmmoOut
       tmpargument = 0
       StopSound
       tmpargument = 2
       SetState
-    
+
     // Drop a shell
     Else
       tmpx = selfx
@@ -79,7 +82,7 @@ IfTimeOut
     // Do again in 9 frames
     tmpargument = 9
     SetTime
-    
+
     // Stop sounds
     tmpargument = 0
     IfContentIs
@@ -90,26 +93,26 @@ IfTimeOut
       PlaySound
 
   // Whirring state
-  IfStateIs2 
+  IfStateIs2
 
     // Down the count
     tmpargument = selfcontent - 1
     SetContent
-    
+
     // Do again in 9 frames
     tmpargument = 9
     SetTime
-    
+
     // Stop sounds
     tmpargument = 0
     IfContentIs
       SetState
       tmpargument = 3
       StopSound
-      
+
       // Do the hum out
       tmpargument = 4
       PlaySound
 
 // All done
-End					
+End

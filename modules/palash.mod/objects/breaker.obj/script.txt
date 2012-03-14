@@ -26,4 +26,7 @@ IfTimeOut
       SpawnExactParticle
       tmpargument = 10
       SetContent
-End					// All done
+
+// All done
+End
+

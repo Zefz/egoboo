@@ -3,37 +3,36 @@ IfSpawned
   tmpargument = STATEGUARD
   SetState
   KeepAction
-  
+
 //-------------------------------------------------------------------------------------------
 IfOrdered
   tmpx = selforder
   tmpy = [CHES]
   IfXIsEqualToY
-  
-    //Activate combat AI
+
+    // Activate combat AI
     tmpargument = STATECOMBAT
     SetState
     UnkeepAction
-    
-    //Allow death
+
+    // Allow death
     JoinGoodTeam
     tmpargument = 1
     ChangeArmor
     SetTargetToSelf
     EnchantTarget
-    
-    
-  //Stop if the game is over
+
+  // Stop if the game is over
   tmpx = selforder
   tmpy = [DEAD]
   IfXIsEqualToY
     SetTargetToSelf
     KillTarget
-    
+
 //-------------------------------------------------------------------------------------------
-IfKilled				// This reduces the height of the char
+IfKilled                // This reduces the height of the char
   tmpargument = 6
-  PlaySound				//Death sound
+  PlaySound                // Death sound
 
   // Last words...
   IfTargetIsSelf
@@ -42,24 +41,23 @@ IfKilled				// This reduces the height of the char
     tmpargument = rand & 1 + 1
     IfTargetIsOnSameTeam
       tmpargument = 0
-    SendMessageNear	
+    SendMessageNear
 
 //-------------------------------------------------------------------------------------------
-IfAttacked				// Attacked
-  SetTargetToWhoeverAttacked		  //
-    IfTargetIsAlive			    //
+IfAttacked                // Attacked
+  SetTargetToWhoeverAttacked
+    IfTargetIsAlive
       IfTargetIsOnSameTeam
         SetTargetToOldTarget
-    Else				    //Attacker died already
-      SetTargetToOldTarget		      //
+    Else                    // Attacker died already
+      SetTargetToOldTarget
 
-  //Ouch sound
+  // Ouch sound
   tmpargument = tmpdistance & 1 + 4
   PlaySound
 
-
 //-------------------------------------------------------------------------------------------
-IfTargetKilled				// Return to wander mode
+IfTargetKilled                // Return to wander mode
   SetTargetToNearbyEnemy
     DoNothing
   Else
@@ -67,37 +65,37 @@ IfTargetKilled				// Return to wander mode
     SetState
 
 //-------------------------------------------------------------------------------------------
-IfTimeOut				// This is done every so often
+IfTimeOut                // This is done every so often
 
   IfStateIsGuard
     tmpx = selfx
-    tmpy = selfy 
+    tmpy = selfy
     ClearWaypoints
     AddWaypoint
     tmpargument = rand % 20 + 50
     SetTime
-    
+
   IfStateIsCombat
     SetTurnModeToWatchTarget
     tmpargument = rand % 20
     SetTime
     IfTargetIsOnHatedTeam
       IfFacingTarget
-        tmpx = targetdistance		    // Close enough to attack?
-        tmpy = 200				    //
-        IfXIsLessThanY			    //
-          tmpargument = LATCHRIGHT		      // Right Attack == 2
+        tmpx = targetdistance            // Close enough to attack?
+        tmpy = 200
+        IfXIsLessThanY
+          tmpargument = LATCHRIGHT              // Right Attack == 2
           PressLatchButton
-          
-      tmpx = targetx			    // Move towards enemy
+
+      tmpx = targetx                // Move towards enemy
       tmpy = targety
       ClearWaypoints
       AddWaypoint
     Else
       tmpargument = STATERETREAT
       SetState
-      
-    //Draw weapon and shield
+
+    // Draw weapon and shield
     IfHoldingMeleeWeapon
       IfHoldingShield
         DoNothing
@@ -107,23 +105,23 @@ IfTimeOut				// This is done every so often
     Else
       tmpargument = LATCHPACKRIGHT
       PressLatchButton
-    
+
   IfStateIsRetreat
     SetTurnModeToVelocity
     tmpx = selfspawnx
-    tmpy = selfspawny 
+    tmpy = selfspawny
     ClearWaypoints
     AddWaypoint
     tmpargument = rand % 20 + 50
     SetTime
-    
-    //Engage enemy
+
+    // Engage enemy
     SetTargetToWideEnemy
       tmpargument = STATECOMBAT
       SetState
-      
+
 //-------------------------------------------------------------------------------------------
-//Attack bumpers
+// Attack bumpers
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsOnSameTeam
@@ -133,12 +131,14 @@ IfBumped
     IfStateIsNot
       tmpargument = STATECOMBAT
       SetState
-      
-  //Jump over bodies
+
+  // Jump over bodies
   IfTargetIsAlive
     DoNothing
   Else
     tmpargument = LATCHJUMP
     PressLatchButton
-    
-End					// Finished with this character
+
+// Finished with this character
+End
+

@@ -1,4 +1,4 @@
-//Circle around the statue... thats it
+// Circle around the statue... thats it
 IfTimeOut
   tmpx = selfspawnx
   tmpy = selfspawny

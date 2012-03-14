@@ -1,4 +1,4 @@
-//Become a destroyable seal
+// Become a destroyable seal
 IfOrdered
   tmpx = selforder
   tmpy = [VICT]
@@ -8,25 +8,25 @@ IfOrdered
     ChangeTargetClass
 
 //---------------------------------------------------------------------------
-//Don't let em come too close
+// Don't let em come too close
 IfTimeOut
   tmpargument = 10
   SetTime
-  
+
   tmpdistance = 128*3
   SetTargetToDistantEnemy
     tmpx = targetdistance
     tmpy = 128*3
     IfXIsLessThanY
-      //Throw the target at a speed of 75
+      // Throw the target at a speed of 75
       tmpx = 0
       tmpy = 0
-      tmpturn = 65535      //Direction
-      tmpdistance = 65        //Speed
+      tmpturn = 65535      // Direction
+      tmpdistance = 65        // Speed
       Compass
       AccelerateTarget
 
-      //Also deal 3-7 damage
+      // Also deal 3-7 damage
       tmpargument = DAMAGECRUSH
       SetDamageType
       tmpargument = rand & 1023 + 768
@@ -36,7 +36,7 @@ IfTimeOut
       PlayFullSound
       SendMessage
 
-  //Spelly effects
+  // Spelly effects
   tmpargument = 0
   tmpdistance = selfz
   tmpx = selfx

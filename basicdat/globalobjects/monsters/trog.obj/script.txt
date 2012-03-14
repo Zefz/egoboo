@@ -1,16 +1,16 @@
 //-------------------------------------------------------------------------
-//Begin in proper mode
+// Begin in proper mode
 IfSpawned
   tmpargument = STATEFOLLOW
   SetState
-  
+
 //-------------------------------------------------------------------------
-//Respawn
+// Respawn
 IfCleanedUp
   RespawnCharacter
 
 //-------------------------------------------------------------------------
-//Handle the death of this character
+// Handle the death of this character
 IfKilled
   tmpargument = 0
   SendMessageNear
@@ -18,69 +18,69 @@ IfKilled
   SetBumpSize
   tmpargument = 45
   SetBumpHeight
-  tmpargument = selfmoney			  // Drop money
+  tmpargument = selfmoney              // Drop money
   DropMoney
   DropKeys
   tmpargument = 2
   PlaySound
 
 //-------------------------------------------------------------------------
-IfAttacked				// Counter attack
+IfAttacked                // Counter attack
   SetTargetToWhoeverAttacked
     IfTargetIsOnHatedTeam
       BecomeLeader
-      tmpargument = STATECOMBAT			      // Enter combat mode
+      tmpargument = STATECOMBAT                  // Enter combat mode
       SetState
     Else
       SetTargetToOldTarget
   tmpargument = rand & 1
   PlaySound
-  
+
 //-------------------------------------------------------------------------
-//Return to follow mode
+// Return to follow mode
 IfTargetKilled
   tmpargument = STATEFOLLOW
   SetState
-  
+
 //-------------------------------------------------------------------------
-IfBumped				              // Attack whoever it bumped
+IfBumped                              // Attack whoever it bumped
   SetTargetToWhoeverBumped
-  IfTargetIsOnHatedTeam			  // Make sure it's an enemy
+  IfTargetIsOnHatedTeam              // Make sure it's an enemy
     IfFacingTarget
       IfHoldingMeleeWeapon                    // Got Weapon?
         PressLatchButton
-  Else					  // Scooch around friendly
+  Else                      // Scooch around friendly
     tmpx = rand & 255 + targetx - 128
     tmpy = rand & 255 + targety - 128
     ClearWaypoints
     AddWaypoint
     SetTargetToOldTarget
-    
+
 //-------------------------------------------------------------------------
-//Main AI loop
-IfTimeOut				// This is done every so often
-  SetTargetToNearbyEnemy		  // Look for enemies
-    tmpargument = STATECOMBAT			    // Enter combat mode
+// Main AI loop
+IfTimeOut                // This is done every so often
+  SetTargetToNearbyEnemy          // Look for enemies
+    tmpargument = STATECOMBAT                // Enter combat mode
     SetState
     BecomeLeader
-    
+
   // Play a random grunt?
   tmpx = rand & 255
   tmpy = 25
   IfXIsLessThanY
     tmpargument = 3
     PlaySound
-    
+
   IfStateIsFollow
     tmpx = rand & 1023 - 512 + leaderx
     tmpy = rand & 1023 - 512 + leadery
-  
+
   IfStateIsCombat
-    tmpx = targetdistance		    // Too far?
+    tmpx = targetdistance            // Too far?
     tmpy = 2000
     IfXIsMoreThanY
       tmpargument = STATEFOLLOW
-      SetState				      // Revert to follow mode
+      SetState                      // Revert to follow mode
       tmpx = selfx
       tmpy = selfy
     Else
@@ -91,10 +91,10 @@ IfTimeOut				// This is done every so often
         tmpy = targety
         tmpturn = targetturnto + 32768
         tmpdistance = 800
-        Compass         
+        Compass
       Else
         tmpy = 0                      // Unarmed...
-        IfHoldingMeleeWeapon		      // Got Weapon?
+        IfHoldingMeleeWeapon              // Got Weapon?
           tmpy = 350
         Else
           IfHoldingRangedWeapon
@@ -124,9 +124,12 @@ IfTimeOut				// This is done every so often
           Compass
   ClearWaypoints
   AddWaypoint
-  tmpargument = rand & 15 + 10		  // Wait a while and try again
+  tmpargument = rand & 15 + 10          // Wait a while and try again
   SetTime
-  
+
 //-------------------------------------------------------------------------
-End					// Finished with this character
+
+// Finished with this character
+End
+
 //-------------------------------------------------------------------------

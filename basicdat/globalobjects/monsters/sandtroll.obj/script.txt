@@ -1,16 +1,16 @@
 //------------------------------------------------------------------------------
-//Backstab deals extra damage
+// Backstab deals extra damage
 IfBackstabbed
   SetTargetToWhoeverAttacked
   GetDamageType
-  tmpdistance = tmpargument       //Same damage type as the stab
-  tmpargument = targetdex         //+1 damage per dex
+  tmpdistance = tmpargument       // Same damage type as the stab
+  tmpargument = targetdex         // +1 damage per dex
   TargetDamageSelf
   tmpargument = 6
   SendMessageNear
 
 //------------------------------------------------------------------------------
-//Handle normal state
+// Handle normal state
 IfStateIs0
   IfAtLastWaypoint
     tmpx = rand % 512 + selfspawnx - 256
@@ -37,7 +37,7 @@ IfStateIs0
       tmpx = rand & 511 - 256 + selfx
       tmpy = rand & 511 - 256 + selfy
       tmpdistance = 100
-      tmpturn = targetturnto + 32768        //targeturnfrom
+      tmpturn = targetturnto + 32768        // targeturnfrom
       Compass
       ClearWaypoints
       AddWaypoint
@@ -91,12 +91,12 @@ IfKilled
   SpawnPoof
 
 //------------------------------------------------------------------------------
-//For helper AIs
+// For helper AIs
 IfLeaderKilled
   BecomeLeader
 
 //------------------------------------------------------------------------------
-//Handle being attacked by blocking or countering or running away
+// Handle being attacked by blocking or countering or running away
 IfAttacked
   // Turn to stone
   IfStateIs0
@@ -110,7 +110,7 @@ IfAttacked
       BlackTarget
       SetTargetToOldTarget
 
-      //Tell the players what to do
+      // Tell the players what to do
       tmpargument = 7
       SendMessageNear
 
@@ -166,7 +166,7 @@ IfAttacked
       SpawnExactParticle
 
 //------------------------------------------------------------------------------
-//Handle stone state
+// Handle stone state
 IfStateIs1
   tmpx = selflife
   tmpy = 5120

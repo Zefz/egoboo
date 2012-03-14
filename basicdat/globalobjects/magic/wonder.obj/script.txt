@@ -1,15 +1,15 @@
-//tell them what they found
+// tell them what they found
 IfGrabbed
   SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer
     tmpargument = 0
     SendMessageNear
-    
-//Clank!
+
+// Clank!
 IfHitGround
   tmpargument = 0
   PlaySound
-  
+
 // Remove the charge
 IfTakenOut
   tmpargument = 0
@@ -24,11 +24,11 @@ IfUsed
   SetTargetToWhoeverIsHolding
   GetContent
   tmpx = tmpargument
-  tmpy = 5120			//Max charge
+  tmpy = 5120            // Max charge
   IfXIsLessThanY
     tmpy = targetmanaflow*2
     IfXIsLessThanY
-      tmpx = 7			//Cast speed
+      tmpx = 7            // Cast speed
       tmpargument = tmpx
       CostTargetMana
         GetContent
@@ -39,7 +39,7 @@ IfUsed
 Else
   GetContent
   tmpx = tmpargument
-  tmpy = 5119						//Minimum needed charge
+  tmpy = 5119                        // Minimum needed charge
   IfXIsMoreThanY
     // Make the holder cast it
     SetTargetToWhoeverIsHolding
@@ -51,12 +51,12 @@ Else
     SendMessageNear
     tmpargument = 6
     PlayFullSound
-    
-    tmpturn = targetwis > 8     //+1 every wisdom
+
+    tmpturn = targetwis > 8     // +1 every wisdom
     tmpx = rand % 100 + tmpturn
-    tmpy = 40           //40% badstuff -1% per wisdom
-    
-    //GOODSTUFF
+    tmpy = 40           // 40% badstuff -1% per wisdom
+
+    // GOODSTUFF
     tmpargument = 5
     tmpdistance = SPAWNORIGIN
     SpawnParticle
@@ -64,17 +64,17 @@ Else
     SpawnParticle
     SpawnParticle
     SpawnParticle
-    IfXIsMoreThanY              
-      tmpargument = 3 //rand % 4
+    IfXIsMoreThanY
+      tmpargument = 3 // rand % 4
       SetState
-      IfStateIs0                    //1 - Rejuvenate
+      IfStateIs0                    // 1 - Rejuvenate
         tmpargument = 13
         SendMessage
         tmpargument = 9999
         HealTarget
         PumpTarget
-        UnkurseTargetInventory    
-      IfStateIs1                    //2 - Summon money
+        UnkurseTargetInventory
+      IfStateIs1                    // 2 - Summon money
         tmpargument = 14
         SendMessage
         tmpargument = 7
@@ -101,7 +101,7 @@ Else
         SpawnExactParticle
         SpawnExactParticle
         SpawnExactParticle
-      IfStateIs2                    //3 - Raise one random stat
+      IfStateIs2                    // 3 - Raise one random stat
         tmpargument = 7
         PlayFullSound
         tmpargument = rand % 6
@@ -126,12 +126,12 @@ Else
           GiveIntelligenceToTarget
           tmpargument = 20
         SendMessage
-      IfStateIs3                    //4 - Immortal
+      IfStateIs3                    // 4 - Immortal
         SetOwnerToTarget
         EnchantTarget
         tmpargument = 21
         SendMessage
-      IfStateIs4                    //5 - XP!
+      IfStateIs4                    // 5 - XP!
         tmpargument = 23
         SendMessage
         tmpargument = 500
@@ -139,9 +139,8 @@ Else
         GiveExperienceToTarget
         tmpargument = 5
         PlaySound
-        
-    
-    //BADSTUFF
+
+    // BADSTUFF
     Else
       tmpargument = 6
       tmpdistance = SPAWNORIGIN
@@ -149,36 +148,36 @@ Else
       SpawnParticle
       SpawnParticle
       SpawnParticle
-      SpawnParticle    
+      SpawnParticle
       tmpargument = rand % 5
       SetState
-      IfStateIs0                    //1 - Die
+      IfStateIs0                    // 1 - Die
         KillTarget
         tmpargument = 5
         SendMessage
-      IfStateIs1                    //2 - Nothing
+      IfStateIs1                    // 2 - Nothing
         tmpargument = 3
         SendMessageNear
         tmpargument = 2
         PlaySound
-      IfStateIs2                    //3 - Damage self
+      IfStateIs2                    // 3 - Damage self
         tmpargument = 12
         SendMessageNear
         tmpargument = 1024
         DamageTarget
-      IfStateIs3                    //4 - Summon enemy
+      IfStateIs3                    // 4 - Summon enemy
         SetTargetToNearestEnemy
           tmpx = selfx
           tmpy = selfy
           TeleportTarget
           tmpargument = 4
           SendMessage
-        Else                //no enemies found
+        Else                // no enemies found
           tmpargument = 3
           SendMessageNear
           tmpargument = 2
           PlaySound
-      IfStateIs4                    //5 - Lose 1 random stat
+      IfStateIs4                    // 5 - Lose 1 random stat
         tmpargument = rand % 6
         SetState
         tmpargument = 0 - 256
@@ -200,10 +199,10 @@ Else
         IfStateIs5
           GiveIntelligenceToTarget
           tmpargument = 11
-        SendMessage    
+        SendMessage
       tmpargument = 1
       PlaySound
-      
+
     tmpargument = 150
     SetReloadTime
 
@@ -214,39 +213,40 @@ Else
       tmpargument = 2
       SendMessageNear
       PlaySound
-	  
+
   // Reset the charge counter
   tmpargument = 0
   SetContent
-  
+
 // Put the little mana ball on the
 // character's hand
 GetContent
 tmpx = tmpargument
 tmpy = 0
+
 IfXIsMoreThanY
   tmpturn = tmpargument * 10 + 5800
   tmpdistance = SPAWNLAST
   tmpargument = 1
   SpawnAttachedSizedParticle
-  
-  GetContent                                        //Phase 1
+
+  GetContent                                        // Phase 1
   tmpx = tmpargument
   tmpy = 1119
   IfXIsMoreThanY
-    //And spawn particles around the target
+    // And spawn particles around the target
     SetTargetToWhoeverIsHolding
     tmpx = targetx
     tmpy = targety
     tmpdistance = targetz
     tmpargument = 2
     SpawnExactParticle
-    
-  GetContent                                        //Phase 2
+
+  GetContent                                        // Phase 2
   tmpx = tmpargument
   tmpy = 3119
   IfXIsMoreThanY
-    //And spawn particles around the target
+    // And spawn particles around the target
     SetTargetToWhoeverIsHolding
     tmpx = targetx
     tmpy = targety
@@ -254,11 +254,11 @@ IfXIsMoreThanY
     tmpargument = 3
     SpawnExactParticle
 
-  GetContent                                        //Phase 3
+  GetContent                                        // Phase 3
   tmpx = tmpargument
   tmpy = 5119
   IfXIsMoreThanY
-    //And spawn particles around the target
+    // And spawn particles around the target
     SetTargetToWhoeverIsHolding
     tmpx = targetx
     tmpy = targety
@@ -281,6 +281,5 @@ IfTimeOut
       IfXIsMoreThanY
         tmpargument = 9
         PlayFullSound
-
 
 End

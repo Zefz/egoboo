@@ -4,7 +4,7 @@ IfBumped
     DoNothing
   Else
     tmpargument = [KEYI]
-    IfTargetHasItemID			//brought back the idol
+    IfTargetHasItemID            // brought back the idol
       CostTargetItemID
       EnableExport
       BeatModule
@@ -17,8 +17,8 @@ IfBumped
       SetState
       tmpargument = 1
       SendMessageNear
-      
-      //End text
+
+      // End text
       ClearEndMessage
       tmpargument = 2
       AddEndMessage
@@ -30,7 +30,7 @@ IfBumped
       AddEndMessage
       tmpargument = 6
       AddEndMessage
-      
+
     IfStateIs0
       tmpargument = 2
       PlaySound
@@ -50,7 +50,7 @@ IfBumped
       tmpargument = 100
       SetTime
 
-//Return to greeting mode
+// Return to greeting mode
 IfTimeOut
   IfStateIs1
     tmpargument = 0
@@ -70,7 +70,7 @@ IfAttacked
       IfTargetIsOnHatedTeam
         DoNothing
       Else
-        JoinGoodTeam    
+        JoinGoodTeam
 
 IfTimeOut
   tmpargument = 10

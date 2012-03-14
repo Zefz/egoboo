@@ -1,10 +1,11 @@
-//Begin as unactivated
+// Begin as unactivated
 IfSpawned
   tmpargument = [STAR]
   SetState
 
-//Do new game updates
+// Do new game updates
 tmpargument = [STAR]
+
 IfStateIsNot
   IfTimeOut
     tmpargument = 75
@@ -17,23 +18,23 @@ IfStateIsNot
       tmpx = rand % 4 + 1
       tmpy = 0
       SetXY
-      
+
       tmpdistance = [CHIM]
       tmpargument = tmpx
       OrderSpecialID
-      
+
       tmpargument = selfcontent + 1
       SetContent
-      
-      //We are done for this game
+
+      // We are done for this game
       tmpx = selfstate
       tmpy = selfcontent
       IfXIsEqualToY
         tmpargument = 0
         SetState
-        
-    //This allows truesight characters to see the next solution
-    Else    
+
+    // This allows truesight characters to see the next solution
+    Else
       tmpdistance = 128*8
       SetTargetToDistantEnemy
         IfTargetCanSeeInvisible
@@ -51,64 +52,64 @@ IfStateIsNot
     IfXIsEqualToY
       tmpargument = selfstate + 1
       SetState
-      
-      //0 means we reached the last one
+
+      // 0 means we reached the last one
       GetXY
-      tmpy = 0         
+      tmpy = 0
       IfXIsEqualToY
-      
-        //Did we reach the final game?
-        tmpargument = 6 + difficulty          //Modify this to set the puzzle level limit! (limit=state+1)
+
+        // Did we reach the final game?
+        tmpargument = 6 + difficulty          // Modify this to set the puzzle level limit! (limit=state+1)
         IfStateIs
           SetTargetToOwner
           tmpargument = 120
           tmpdistance = EXPSECRET
           GiveExperienceToTarget
-          
-          //Open the next challenge
+
+          // Open the next challenge
           tmpargument = passage
           OpenPassage
-          
-          //Tell what happened (yay we did it)
+
+          // Tell what happened (yay we did it)
           tmpargument = 3
           PlayFullSound
           tmpargument = 1
           SendMessage
-          
-          //No longer needed
+
+          // No longer needed
           GoPoof
-          
+
         Else
-          //Nope, but success! The player won this level, go to next one
+          // Nope, but success! The player won this level, go to next one
           tmpargument = 1
           PlayFullSound
-          
-          //New game
+
+          // New game
           tmpargument = 0
           SetContent
-          
-          //One more chime next time
+
+          // One more chime next time
           tmpargument = selfstate + 1
           SetState
-          
-          //Let the player take a breath before going again
-          tmpargument = 150
-          SetTime  
 
-    //They did the wrong one!
+          // Let the player take a breath before going again
+          tmpargument = 150
+          SetTime
+
+    // They did the wrong one!
     Else
-      
-      //Notify that they did wrong
+
+      // Notify that they did wrong
       SetTargetToOwner
       tmpargument = 0
       PlayFullSound
       SendMessage
-      
-      //Reset game
+
+      // Reset game
       tmpargument = 0
       SetContent
-      
-      //Reset puzzle order
+
+      // Reset puzzle order
       tmpargument = 0
       tmpx = 0
       tmpy = 0
@@ -133,24 +134,24 @@ IfStateIsNot
       SetXY
       tmpargument = 10
       SetXY
-      
-      //Reset puzzle progression (just reducing it seems to cause bugs?!)
+
+      // Reset puzzle progression (just reducing it seems to cause bugs?!)
       tmpargument = 1
       SetState
-        
-      //Let the player take a breath before going again
+
+      // Let the player take a breath before going again
       tmpargument = 150
       SetTime
-      
-      //Spawn some punishment
+
+      // Spawn some punishment
       tmpargument = 0
       tmpx = targetx
       tmpy = targety
       tmpdistance = selfz
       SpawnExactParticle
-      
+
 Else
-  //Puzzle starts at level 1
+  // Puzzle starts at level 1
   IfTimeOut
     tmpargument = 25
     SetTime
@@ -160,5 +161,7 @@ Else
         tmpargument = 1
         SetState
         SetOwnerToTarget
-  
-End					// All done
+
+// All done
+End
+

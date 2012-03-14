@@ -1,12 +1,13 @@
-IfThrown				// Make it attack
+IfThrown                // Make it attack
   tmpargument = 2
   tmpdistance = 1
   SpawnAttachedParticle
-  
-IfHitGround				// Make a sound
+
+// Make a sound
+IfHitGround
   tmpargument = 1
   PlaySound
-  DisaffirmCharacter			  // Stop thrown attack
+  DisaffirmCharacter              // Stop thrown attack
 
 // This function makes an item fall to the floor when spawned
 IfSpawned
@@ -16,7 +17,7 @@ IfSpawned
   MakeCrushValid
   MakeAmmoKnown
 
-  //Allow module makers to specify stacks of knives here
+  // Allow module makers to specify stacks of knives here
   tmpx = selfcontent
   tmpy = 0
   IfXIsMoreThanY
@@ -38,18 +39,24 @@ IfCrushed
   GoPoof
   tmpargument = 1
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-  tmpargument = 3			  //
-  PlaySound				  //
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
+
+// Make it lie on floor
+IfDropped
+  KeepAction
+  tmpargument = 3
+  PlaySound
+
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
     SendMessageNear
+
 IfNotDropped
   tmpargument = 2
   SendMessageNear
+
 IfTakenOut
   tmpargument = 2
   PlaySound
@@ -57,4 +64,7 @@ IfTakenOut
   IfTargetIsAPlayer
     tmpargument = 4
     SendMessageNear
-End					// All done
+
+// All done
+End
+

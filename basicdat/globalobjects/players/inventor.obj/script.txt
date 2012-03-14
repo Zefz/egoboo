@@ -1,84 +1,86 @@
 
-//G'NOME
+// G'NOME
 //-------------------------------------------
-//Level       Abillity
-//1			Use Technological Items, Read G'nomish, Immune vs. Grog, Poison Resistance, Literate
-//2			n/a
-//3			n/a
-//4			Chemistry skill
-//5			n/a
-//6			n/a
-//7			Tech knowledge
-//8			n/a
-//9			n/a
-//10		Tech Mastery
-//11		n/a
-//12		n/a
-//13    n/a
-//14    n/a
-//15    n/a
-//16    n/a
-//17    n/a
-//18    n/a
-//19    n/a
-//20    Class Mastery
+// Level       Abillity
+// 1            Use Technological Items, Read G'nomish, Immune vs. Grog, Poison Resistance, Literate
+// 2            n/a
+// 3            n/a
+// 4            Chemistry skill
+// 5            n/a
+// 6            n/a
+// 7            Tech knowledge
+// 8            n/a
+// 9            n/a
+// 10        Tech Mastery
+// 11        n/a
+// 12        n/a
+// 13    n/a
+// 14    n/a
+// 15    n/a
+// 16    n/a
+// 17    n/a
+// 18    n/a
+// 19    n/a
+// 20    Class Mastery
 
 //-----------------------------------------------------------------------------
-//Reset
+// Reset
 IfSpawned
   tmpargument = 0
   SetState
   SetContent
-  
+
 //-----------------------------------------------------------------------------
 // Chemistry skill - does not identify magic objects
 tmpx = selflevel
 tmpy = 2
-IfXIsMoreThanY          //Need level 4
 
-  SetTargetToTargetLeftHand	//Check left hand first
+// Need level 4
+IfXIsMoreThanY
+
+  SetTargetToTargetLeftHand    // Check left hand first
     tmpargument = [FLAS]
     IfTargetHasID
-      IdentifyTarget		//And flasks
+      IdentifyTarget        // And flasks
 
-  SetTargetToTargetRightHand	//Repeat with other hand
+  SetTargetToTargetRightHand    // Repeat with other hand
     tmpargument = [FLAS]
     IfTargetHasID
-      IdentifyTarget		//And flasks
+      IdentifyTarget        // And flasks
 
-  
 //-----------------------------------------------------------------------------
 // Tech knowledge - does not identify magic objects
 tmpx = selflevel
 tmpy = 5
-IfXIsMoreThanY          //Need level 7
 
-  SetTargetToTargetLeftHand	//Check left hand first
+// Need level 7
+IfXIsMoreThanY
+
+  SetTargetToTargetLeftHand    // Check left hand first
     tmpargument = [TECH]
     IfTargetHasID
-      IdentifyTarget		// Identify all tech items
+      IdentifyTarget        // Identify all tech items
 
-  SetTargetToTargetRightHand	//Repeat with other hand
+  SetTargetToTargetRightHand    // Repeat with other hand
     tmpargument = [TECH]
     IfTargetHasID
-      IdentifyTarget		// Identify all tech items
+      IdentifyTarget        // Identify all tech items
 
-  
 //------------------------------------------------------------------------------
-//Invoke Class Mastery if enough xp gained
+// Invoke Class Mastery if enough xp gained
 SetTargetToSelf
 tmpx = selflevel
-tmpy = 18              //Need level 20
+tmpy = 18              // Need level 20
 IfXIsMoreThanY
 
   tmpargument = 0
   IfContentIs
     SetOwnerToTarget
-    EnchantTarget 	//Give the special bonus
+    EnchantTarget     // Give the special bonus
     tmpargument = 1
-    SetContent      //Dont repeat
+    SetContent      // Dont repeat
   Else
-    tmpargument = 2	//Spawn some fancy sparklies
+    tmpargument = 2    // Spawn some fancy sparklies
     tmpx = selfx
     tmpy = selfy
     tmpdistance = selfz
@@ -88,31 +90,31 @@ Else
 
   tmpargument = 1
   IfContentIs
-    UndoEnchant		//Remove if needed xp is lost
+    UndoEnchant        // Remove if needed xp is lost
 
     tmpargument = 0
-    SetContent      //Dont repeat
+    SetContent      // Dont repeat
 
 //-----------------------------------------------------------------------------
-IfKilled				// This reduces the height of the char
-  tmpargument = 2			  // Death sound
-  tmpdistance = rand & 2047 + 13000	  //
-  PlaySound				  //
+IfKilled                // This reduces the height of the char
+  tmpargument = 2              // Death sound
+  tmpdistance = rand & 2047 + 13000
+  PlaySound
   tmpargument = 3
   IfArmorIs
     tmpargument = MESSAGECOSTUME
   Else
-    tmpargument = MESSAGEDEATH		  // Last words...
-  IfTargetIsOnSameTeam			  // Fragged!
-    tmpargument = MESSAGEFRAG		    //
-    IfTargetIsSelf			    // No, just a damage tile
-      tmpargument = MESSAGEACCIDENT           //
-  SendMessage				  //
-  tmpargument = selflevel*selflevel*100		//The money loss formula
-  DropMoney				  //
+    tmpargument = MESSAGEDEATH          // Last words...
+  IfTargetIsOnSameTeam              // Fragged!
+    tmpargument = MESSAGEFRAG
+    IfTargetIsSelf                // No, just a damage tile
+      tmpargument = MESSAGEACCIDENT
+  SendMessage
+  tmpargument = selflevel*selflevel*100        // The money loss formula
+  DropMoney
   DropKeys
-  tmpargument = 45			  //
-  SetBumpHeight				  //
+  tmpargument = 45
+  SetBumpHeight
 
 //-----------------------------------------------------------------------------
 // ZZ> Yell at the player
@@ -139,17 +141,16 @@ IfTimeOut
     IfHoldingItemID
       tmpargument = 256
       HealSelf
-  tmpargument = 200     //every 4 seconds
+  tmpargument = 200     // every 4 seconds
   SetTime
 
-  //Ancient blud skill
+  // Ancient blud skill
   tmpx = selflevel
-  tmpy = 14            //Need level 16
+  tmpy = 14            // Need level 16
   IfXIsMoreThanY
-    tmpargument = 192   //regenerate 3/4 life point every 4 seconds
+    tmpargument = 192   // regenerate 3/4 life point every 4 seconds
     HealSelf
-  
-  
+
 //------------------------------------------------------------------------------
 // ZZ> Scream and shout
 IfUsed
@@ -191,7 +192,7 @@ IfKilled
   SendMessage
 
   // Drop goodies
-  tmpargument = 1+selflevel*selflevel*100		//The money loss formula
+  tmpargument = 1+selflevel*selflevel*100        // The money loss formula
   DropMoney
   DropKeys
 

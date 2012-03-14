@@ -4,7 +4,6 @@ IfHitGround
   tmpdistance = 17000
   PlaySound
 
-
 //-----------------------------------------------------------------------------
 // ZZ> Gong sound
 IfCleanedUp
@@ -12,14 +11,12 @@ IfCleanedUp
   tmpdistance = 8000
   PlayFullSound
 
-
 //------------------------------------------------------------------------------
 // ZZ> Scream and shout
 IfUsed
   tmpdistance = rand & 2047 + 12000
   tmpargument = 8
   PlaySound
-
 
 //------------------------------------------------------------------------------
 // ZZ> Handle being bored by cheering or sneezing
@@ -31,7 +28,6 @@ IfBored
   PlaySound
   tmpargument = ACTIONMC
   DoAction
-
 
 //------------------------------------------------------------------------------
 // ZZ> Handle death by sending a message and other stuff
@@ -59,12 +55,10 @@ IfKilled
   tmpargument = 45
   SetBumpHeight
 
-
 //------------------------------------------------------------------------------
 // ZZ> For helper AIs
 IfLeaderKilled
   BecomeLeader
-
 
 //------------------------------------------------------------------------------
 // ZZ> Handle being attacked by blocking or countering or running away
@@ -82,8 +76,6 @@ IfAttacked
     tmpdistance = rand & 2047 + 12000
     PlaySound
 
-
-
 //------------------------------------------------------------------------------
 // ZZ> Handle having too much in inventory
 IfTooMuchBaggage
@@ -94,7 +86,6 @@ IfTooMuchBaggage
   PlaySound
   tmpargument = 50
   SetReloadTime
-
 
 //------------------------------------------------------------------------------
 End

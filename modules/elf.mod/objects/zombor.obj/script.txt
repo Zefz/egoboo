@@ -1,23 +1,23 @@
 IfSpawned
   tmpargument = 2
-  PlaySound			        //I love brains!
+  PlaySound                    // I love brains!
   tmpargument = 2
   SendMessage
   JoinEvilTeam
 
 IfTimeOut
-  //Always target the player
+  // Always target the player
   tmpargument = [ELFF]
   tmpdistance = BLAHENEMIES + BLAHPLAYERS
   SetTargetToNearestBlahID
     DoNothing
   Else
     SetTargetToNearestEnemy
-  
+
   tmpx = targetdistance
   tmpy = 128*4
   IfXIsMoreThanY
-    tmpargument = 100			//Charge!
+    tmpargument = 100            // Charge!
     SetTime
     tmpturn = targetturnto
     tmpdistance = 1500
@@ -25,7 +25,7 @@ IfTimeOut
     tmpy = targety
     Run
   Else
-    tmpargument = 20			//Combat
+    tmpargument = 20            // Combat
     SetTime
     tmpdistance = 200
     tmpturn = targetturnto
@@ -36,24 +36,24 @@ IfTimeOut
   ClearWaypoints
   AddWaypoint
 
-  //Growl
+  // Growl
   tmpx = rand & 255
   tmpy = 0
   IfXIsEqualToY
-    tmpargument = 1	//braaains....
+    tmpargument = 1    // braaains....
     PlaySound
     tmpargument = 3
     SendMessageNear
 
-  //Attack
+  // Attack
   IfFacingTarget
     tmpx = targetdistance
     tmpy = 120
     IfXIsLessThanY
-      tmpargument = rand & 1 + LATCHLEFT	//Randomize hand
+      tmpargument = rand & 1 + LATCHLEFT    // Randomize hand
       PressLatchButton
 
-//We killed the player already
+// We killed the player already
 IfTargetKilled
   tmpargument = 4
   SendMessage
@@ -63,24 +63,24 @@ IfTargetKilled
   SpawnPoof
 
 //------------------------------------------------------------------------------
-//Attack sound
+// Attack sound
 IfUsed
   tmpargument = rand & 2 + 3
   PlaySound
 
-  //Slow attacks
+  // Slow attacks
   tmpargument = 15
   SetReloadTime
 
 //------------------------------------------------------------------------------
-//Victory! .... For the player :'-(
+// Victory! .... For the player :'-(
 IfKilled
   tmpargument = 4
   PlaySound
-  tmpargument = 0		//He dies
+  tmpargument = 0        // He dies
   SendMessage
 
-  //Unlock the module
+  // Unlock the module
   tmpargument = 1
   SendMessage
   tmpargument = [ZOMB]
@@ -90,13 +90,13 @@ IfKilled
   tmpargument = 45
   SetBumpHeight
 
-  //Award some bonus exp
+  // Award some bonus exp
   tmpargument = 100
   tmpdistance = EXPSECRET
   GiveExperienceToGoodTeam
 
 //------------------------------------------------------------------------------
-//Say ouch
+// Say ouch
 IfAttacked
   SetTargetToWhoeverAttacked
   IfTargetIsOnSameTeam

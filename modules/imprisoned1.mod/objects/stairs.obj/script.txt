@@ -1,4 +1,4 @@
-//Display message
+// Display message
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsAPlayer

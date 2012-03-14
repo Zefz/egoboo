@@ -1,27 +1,27 @@
-//NOTE: always 100% block rate
+// NOTE: always 100% block rate
 IfHeld
   IfHolderBlocked
     tmpargument = targetreloadtime + 40
     SetTargetReloadTime
 
-//Magical effect
+// Magical effect
 IfUsed
   SetTargetToWhoeverIsHolding
   SetOwnerToTarget
 
   IfStateIs0
-    EnchantTarget		//Give defence bonus
+    EnchantTarget        // Give defence bonus
     tmpargument = 1
     SetState
 
-  //Sparklies
+  // Sparklies
   tmpargument = 1
   tmpx = targetx
   tmpy = targety
   tmpdistance = targetz
   SpawnExactParticle
 Else
-  UndoEnchant		//Only if parrying
+  UndoEnchant        // Only if parrying
   tmpargument = 0
   SetState
 
@@ -31,11 +31,12 @@ Else
   EnchantTarget
 
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -48,14 +49,23 @@ IfCrushed
   GoPoof
   tmpargument = 1
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
-IfHitGround				// Make a sound
-  tmpargument = 0			  //
-  PlaySound				  //
-End					// All done
+
+// Make it lie on floor
+IfDropped
+  KeepAction
+
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
+
+// Make a sound
+IfHitGround
+  tmpargument = 0
+  PlaySound
+
+// All done
+End
+

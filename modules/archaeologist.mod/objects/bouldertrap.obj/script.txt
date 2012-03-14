@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-//Dont move while falling and set target point
+// Dont move while falling and set target point
 IfSpawned
   tmpargument = 5
   SetSpeedPercent
@@ -11,7 +11,7 @@ IfSpawned
   SetTime
 
 //------------------------------------------------------------------------------
-//Make it roll
+// Make it roll
 IfHitGround
   tmpargument = 0
   PlaySound
@@ -19,33 +19,34 @@ IfHitGround
   SetSpeedPercent
 
 //------------------------------------------------------------------------------
-//Get some extra speed when reaching the stairs
+// Get some extra speed when reaching the stairs
 IfTimeOut
   tmpargument = 95
   SetSpeedPercent
   tmpargument = 0
   IfContentIs
     tmpargument = 2
-    PlayFullSound		//Play the Indy tune xD
+    PlayFullSound        // Play the Indy tune xD
     tmpargument = 1
-    SetContent			//Dont repeat
+    SetContent            // Dont repeat
 
 //------------------------------------------------------------------------------
-//Reached the end!
+// Reached the end!
 tmpx = gotodistance
 tmpy = 200
+
 IfXIsLessThanY
   tmpargument = 1
   SetState
 
 //------------------------------------------------------------------------------
-//Crush folks
+// Crush folks
 IfStateIs0
   IfBumped
     SetTargetToWhoeverBumped
     KillTarget
     tmpargument = LATCHJUMP
-    PressLatchButton			//"bump" over them
+    PressLatchButton            // "bump" over them
 Else
   Stop
   tmpx = selfx
@@ -53,4 +54,6 @@ Else
   ClearWaypoints
   AddWaypoint
 
-End					// All done
+// All done
+End
+

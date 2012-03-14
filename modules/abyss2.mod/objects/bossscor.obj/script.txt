@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-//STATUE AI
+// STATUE AI
 IfSpawned
   tmpargument = 1
   ChangeArmor
@@ -15,11 +15,12 @@ IfSpawned
   AddWaypoint
 
 //------------------------------------------------------------------------------
-//BOSS BATTLE AI
+// BOSS BATTLE AI
 tmpargument = 1
+
 IfArmorIs
   IfOrdered
-    tmpx = [SCOR]           //Become alive?
+    tmpx = [SCOR]           // Become alive?
     tmpy = selforder
     IfXIsEqualToY
       tmpargument = 0
@@ -40,7 +41,6 @@ Else
     tmpargument = 20
     SetTime
 
-
   //------------------------------------------------------------------------------
   // ZZ> Handle death by sending a message and other stuff
   IfKilled
@@ -50,11 +50,9 @@ Else
       tmpargument = 1
     SendMessage
 
-
     // Make noises
     tmpargument = 1
     PlaySound
-
 
     // Make the character body
     tmpargument = 45
@@ -62,7 +60,7 @@ Else
     tmpargument = 30
     SetBumpSize
 
-    //Tell the dracolich we are dead
+    // Tell the dracolich we are dead
     tmpargument = [BDIE]
     IssueOrder
 
@@ -91,7 +89,6 @@ Else
               SpawnAttachedParticle
               tmpargument = 20
               SetReloadTime
-
 
             // Back up
             tmpx = selfx
@@ -173,13 +170,11 @@ Else
     ClearWaypoints
     AddWaypoint
 
-
   //------------------------------------------------------------------------------
   // ZZ> Handle being attacked by making a sound...  Drop claws...
   IfAttacked
     tmpargument = 0
     PlaySound
-
 
     GetDamageType
     tmpx = tmpargument
@@ -187,11 +182,10 @@ Else
     IfXIsEqualToY
       tmpx = rand & 255
       tmpy = 128
-      IfXIsMoreThanY          //50%
+      IfXIsMoreThanY          // 50%
         // Drop a claw
         tmpargument = tmpx > 2 & 1 + ACTIONMA
         DoActionOverride
-
 
   //------------------------------------------------------------------------------
   IfBumped
@@ -224,7 +218,6 @@ Else
       AddWaypoint
       tmpargument = 10
       SetTime
-
 
 //------------------------------------------------------------------------------
 End

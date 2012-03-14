@@ -57,7 +57,7 @@ IfTimeOut
           tmpargument = LATCHJUMP
           PressLatchButton
 
-          //This makes the clencher jump forward
+          // This makes the clencher jump forward
           tmpx = 0
           tmpy = 0
           tmpturn = targetturnto
@@ -67,8 +67,8 @@ IfTimeOut
           SetTargetToSelf
           AccelerateTarget
           SetTargetToOldTarget
-          
-          //Damage particle
+
+          // Damage particle
           tmpargument = 5
           tmpdistance = GRIPLEFT
           SpawnAttachedParticle

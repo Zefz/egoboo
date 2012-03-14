@@ -1,98 +1,98 @@
-//MONK abilities
-//Stunning fist
-//Unarmed attack damage
-//Flaming fist?                 TODO
-//Monk's Curse?                 TODO
-//Damage resistance
-//Deflect enemy missiles        TODO (parry unarmed)
-//Movement speed
-//EVIL resistance
-//Magic Resistance at level 10  TODO
+// MONK abilities
+// Stunning fist
+// Unarmed attack damage
+// Flaming fist?                 TODO
+// Monk's Curse?                 TODO
+// Damage resistance
+// Deflect enemy missiles        TODO (parry unarmed)
+// Movement speed
+// EVIL resistance
+// Magic Resistance at level 10  TODO
 
 //-----------------------------------------------------------------------------
-//Speed increases with level
+// Speed increases with level
 tmpargument = selflevel * 5 + 100
 SetSpeedPercent
 
 //-----------------------------------------------------------------------------
-//Unarmed damage depending on level
+// Unarmed damage depending on level
 IfUsed
 
-  //Level 15+ damage
+  // Level 15+ damage
   tmpx = selflevel
   tmpy = 14
   IfXIsEqualToY
     tmpargument = 0
-    
-  //Level 12 damage
+
+  // Level 12 damage
   Else
     tmpx = selflevel
     tmpy = 11
     IfXIsMoreThanY
       tmpargument = 1
-      
-  //Level 9 damage
+
+  // Level 9 damage
     Else
       tmpx = selflevel
       tmpy = 8
       IfXIsEqualToY
         tmpargument = 2
-        
-  //Level 6 damage
+
+  // Level 6 damage
       Else
         tmpx = selflevel
         tmpy = 5
         IfXIsEqualToY
           tmpargument = 3
-          
-  //Level 3 damage
+
+  // Level 3 damage
         Else
           tmpx = selflevel
           tmpy = 2
           IfXIsEqualToY
             tmpargument = 4
-          
-  //Level 1 damage
+
+  // Level 1 damage
           Else
             tmpargument = 5
 
 //-----------------------------------------------------------------------------
-//Stunning attack
+// Stunning attack
 IfUnarmed
   IfScoredAHit
     tmpx = selflevel
     tmpy = rand % 20
     IfXIsMoreThanY
       SetTargetToWhoeverAttacked
-      tmpargument = selflevel > 2 + 1       //1 second + 1 for every 4 levels
+      tmpargument = selflevel > 2 + 1       // 1 second + 1 for every 4 levels
       DazeTarget
       GrogTarget
-      
-      //Message             //TODO: sound effect!
+
+      // Message             // TODO: sound effect!
       tmpargument = 6
       tmpdistance = 3
       tmpturn = BLUE
       DrawBillboard
 
 //-----------------------------------------------------------------------------
-//Damage resistance by level
+// Damage resistance by level
 tmpargument = selflevel * 50
 SetDamageThreshold
 
 //-----------------------------------------------------------------------------
-//Gong sound
+// Gong sound
 IfCleanedUp
   tmpargument = 2
   PlayFullSound
 
 //------------------------------------------------------------------------------
-//Scream and shout
+// Scream and shout
 IfUsed
-  tmpargument = 10      //TODO add variation
+  tmpargument = 10      // TODO add variation
   PlaySound
 
 //------------------------------------------------------------------------------
-//Handle being bored by cheering or sneezing
+// Handle being bored by cheering or sneezing
 IfBored
   tmpargument = rand & 1 + 8
   PlaySound
@@ -101,7 +101,7 @@ IfBored
   DoAction
 
 //------------------------------------------------------------------------------
-//Handle death by sending a message and other stuff
+// Handle death by sending a message and other stuff
 IfKilled
   tmpargument = 6
   PlaySound
@@ -126,12 +126,12 @@ IfKilled
   SetBumpHeight
 
 //------------------------------------------------------------------------------
-//For helper AIs
+// For helper AIs
 IfLeaderKilled
   BecomeLeader
 
 //------------------------------------------------------------------------------
-//Handle being attacked by blocking or countering or running away
+// Handle being attacked by blocking or countering or running away
 IfAttacked
   // Pick either 0 or 7, Parry or Combat
   SetTargetToWhoeverAttacked
@@ -145,7 +145,7 @@ IfAttacked
     PlaySound
 
 //------------------------------------------------------------------------------
-//Handle having too much in inventory
+// Handle having too much in inventory
 IfTooMuchBaggage
   tmpargument = 1
   SendMessageNear

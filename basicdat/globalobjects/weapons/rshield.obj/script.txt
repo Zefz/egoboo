@@ -1,4 +1,4 @@
-//This function makes an item fall to the floor when spawned
+// This function makes an item fall to the floor when spawned
 IfSpawned
   tmpargument = ACTIONJB
   DoAction
@@ -17,33 +17,38 @@ IfCrushed
   GoPoof
   tmpargument = 1
   SendMessageNear
-  
-IfDropped				// Make it lie on floor
+
+// Make it lie on floor
+IfDropped
   KeepAction
 
-//Handle kursed shield stuff
+// Handle kursed shield stuff
 IfNotDropped
   tmpargument = 2
-  SendMessageNear  
+  SendMessageNear
+
+// No longer needed, this is handled by the sourcecode now...
 //IfNotPutAway
-//  tmpargument = 2         //No longer needed, this is handled by the sourcecode now...
+//  tmpargument = 2
 //  SendMessageNear
 
-IfGrabbed				// Tell them what they've won...
+// Tell them what they've won...
+IfGrabbed
   SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer
     tmpargument = 0
     SendMessageNear
 
-IfHitGround				// Make a sound
+// Make a sound
+IfHitGround
   tmpargument = 0
   PlaySound
 
-//A small chance the player will drop the shield (Its rusty)
+// A small chance the player will drop the shield (Its rusty)
 IfUsed
   SetTargetToWhoeverIsHolding
   IfKursed
-    DoNothing     //Ignore if shield is kursed
+    DoNothing     // Ignore if shield is kursed
   Else
     tmpx = rand % 500
     tmpy = 2
@@ -52,4 +57,6 @@ IfUsed
       tmpargument = 3
       SendMessageNear
 
-End					// All done
+// All done
+End
+

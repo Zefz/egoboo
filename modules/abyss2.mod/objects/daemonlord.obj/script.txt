@@ -1,12 +1,12 @@
-//The different states:
-//0: Wait for enemy
-//1: Get in position
-//2: Attack
-//3: Casting poison cloud
-//Content is the spell cast charge timer
+// The different states:
+// 0: Wait for enemy
+// 1: Get in position
+// 2: Attack
+// 3: Casting poison cloud
+// Content is the spell cast charge timer
 
 //------------------------------------------------------------------------------
-//Dont cling into other friends
+// Dont cling into other friends
 IfBumped
   SetTargetToWhoeverBumped
   IfTargetIsOnHatedTeam
@@ -22,46 +22,46 @@ IfBumped
   SetTargetToOldTarget
 
 //------------------------------------------------------------------------------
-//This manages the melee attack speed
+// This manages the melee attack speed
 IfUsed
   tmpargument = 40
   SetReloadTime
 
 //------------------------------------------------------------------------------
-//Backstab deals extra damage
+// Backstab deals extra damage
 IfBackstabbed
   SetTargetToWhoeverAttacked
   GetDamageType
-  tmpdistance = tmpargument       //Same damage type as the stab
-  tmpargument = targetdex         //+1 damage per dex
+  tmpdistance = tmpargument       // Same damage type as the stab
+  tmpargument = targetdex         // +1 damage per dex
   TargetDamageSelf
 
 //------------------------------------------------------------------------------
-//Leader AI
+// Leader AI
 IfSpawned
   BecomeLeader
 
 //------------------------------------------------------------------------------
-//Summoning AI (Tell the wings do the summoning part)
+// Summoning AI (Tell the wings do the summoning part)
 IfStateIs0
-  SetTargetToRider	//No need to summon, not in combat
+  SetTargetToRider    // No need to summon, not in combat
   tmpargument = [WAND]
   OrderTarget
   SetTargetToOldTarget
 Else
-  SetTargetToRider	//Tell them we are in battle
+  SetTargetToRider    // Tell them we are in battle
   tmpargument = [COMB]
   OrderTarget
   SetTargetToOldTarget
 
 //------------------------------------------------------------------------------
-//Nasty sounds
+// Nasty sounds
 IfBored
   tmpargument = 9
   PlaySound
 
 //------------------------------------------------------------------------------
-//Handle death by sending a message and other stuff
+// Handle death by sending a message and other stuff
 IfKilled
   // Spit out text
   tmpargument = 0
@@ -90,30 +90,30 @@ IfKilled
   tmpargument = 0
   SetFlyHeight
 
-  //Sound
+  // Sound
   tmpargument = 1
   PlaySound
 
-  //Keep track if both lords are dead for opening ut the exits
+  // Keep track if both lords are dead for opening ut the exits
   tmpargument = [LKIL]
   tmpdistance = [TOOL]
   OrderSpecialID
 
 //------------------------------------------------------------------------------
-//What to do if enemies are defeated
+// What to do if enemies are defeated
 IfTargetKilled
-  SetTargetToWideEnemy	//Goto next
+  SetTargetToWideEnemy    // Goto next
     tmpargument = 1
   Else
-    tmpargument = 18		//No enemies left
+    tmpargument = 18        // No enemies left
     tmpdistance = 0
     PlayMusic
     tmpargument = 0
 
-  SetState	//Do it
+  SetState    // Do it
 
 //------------------------------------------------------------------------------
-//What to do each round
+// What to do each round
 IfTimeOut
 
   // Wait for the good guys to barge in...
@@ -127,35 +127,35 @@ IfTimeOut
     tmpdistance = 128*8
     SetTargetToDistantEnemy
       tmpargument = 1
-      SetState				//Combat mode
+      SetState                // Combat mode
       tmpargument = rand & 1 + 10
-      PlayFullSound				//Growl
-      tmpargument = 3			//Tell the players what they have done
+      PlayFullSound                // Growl
+      tmpargument = 3            // Tell the players what they have done
       SendMessageNear
     Else
-      tmpargument = 40			//Nobody here, wait some more
+      tmpargument = 40            // Nobody here, wait some more
       SetTime
   Else
-    //Growl sometimes
+    // Growl sometimes
     tmpx = rand & 255
     tmpy = 250
     IfXIsMoreThanY
       tmpargument = rand & 7 + 9
       PlayFullSound
       tmpx = tmpargument
-      tmpy = 11			//Figure out if to play message
+      tmpy = 11            // Figure out if to play message
       IfXIsMoreThanY
         tmpargument = tmpargument - 7
         SendMessageNear
 
-  //Move towards enemy
+  // Move towards enemy
   IfStateIs1
     Run
     tmpargument = rand & 15 + 20
     SetTime
     tmpx = targetdistance
     tmpy = 290
-    IfXIsMoreThanY		//Move closer?
+    IfXIsMoreThanY        // Move closer?
       Run
       tmpx = targetx
       tmpy = targety
@@ -163,47 +163,47 @@ IfTimeOut
       AddWaypoint
       tmpargument = 40
       SetTime
-      IfFacingTarget		//Shall we cast a spell?
+      IfFacingTarget        // Shall we cast a spell?
         SetTargetToSelf
         tmpx = targetmana
         tmpy = 550
         SetTargetToOldTarget
-        IfXIsMoreThanY		//Only if enough mana
-          tmpx = rand & 100	//70% chance not to cast a spell this time
+        IfXIsMoreThanY        // Only if enough mana
+          tmpx = rand & 100    // 70% chance not to cast a spell this time
           tmpy = 92
-          IfXIsMoreThanY       	  //Cast a fireball spell (8% chance)
+          IfXIsMoreThanY             // Cast a fireball spell (8% chance)
             tmpargument = 1
             tmpx = selfx
             tmpy = selfy
             tmpdistance = selfz + 70
             SpawnExactParticle
-            tmpargument = ACTIONBC	//Cast Spell
+            tmpargument = ACTIONBC    // Cast Spell
             DoAction
-            tmpargument = 500	//Costs 2 points of mana
+            tmpargument = 500    // Costs 2 points of mana
             SetTargetToSelf
             CostTargetMana
             SetTargetToOldTarget
           Else
             tmpx = rand & 100
             tmpy = 97
-            IfXIsMoreThanY	//Cast Poison cloud spell (3% chance if last failed)
-              tmpargument = ACTIONCC	//Cast Spell
+            IfXIsMoreThanY    // Cast Poison cloud spell (3% chance if last failed)
+              tmpargument = ACTIONCC    // Cast Spell
               DoAction
               tmpx = 0
               tmpy = 0
               tmpdistance = GRIPRIGHT
               tmpargument = 5
               SpawnAttachedParticle
-              SetTargetToSelf		//Costs 3 points of mana
+              SetTargetToSelf        // Costs 3 points of mana
               tmpargument = 800
               CostTargetMana
               SetTargetToOldTarget
-              tmpargument =  3	//Set to cast poison cloud
+              tmpargument =  3    // Set to cast poison cloud
               SetState
-    Else			//Close enough - attack
+    Else            // Close enough - attack
       IfFacingTarget
         IfTargetIsDefending
-          tmpargument = ACTIONCC	//Cast Spell if he uses shield
+          tmpargument = ACTIONCC    // Cast Spell if he uses shield
           DoAction
           tmpx = 0
           tmpy = 0
@@ -211,16 +211,16 @@ IfTimeOut
           tmpargument = 5
           SpawnAttachedParticle
 
-          //Costs 3 points of mana
+          // Costs 3 points of mana
           SetTargetToSelf
           tmpargument = 800
           CostTargetMana
           SetTargetToOldTarget
 
-          tmpargument =  3	//Set to cast poison cloud
+          tmpargument =  3    // Set to cast poison cloud
           SetState
         Else
-          tmpargument = LATCHRIGHT	//Attack the enemy
+          tmpargument = LATCHRIGHT    // Attack the enemy
           PressLatchButton
       Else
         Walk
@@ -231,12 +231,12 @@ IfTimeOut
         tmpargument = 5
         SetTime
 
-  //Casting posion cloud
+  // Casting posion cloud
   IfStateIs3
     tmpargument = 10
     SetTime
 
-    //Always look at the enemy while casting spell
+    // Always look at the enemy while casting spell
     tmpx = selfx
     tmpy = selfy
     tmpturn = targetturnto
@@ -245,13 +245,13 @@ IfTimeOut
     AddWaypoint
 
     GetContent
-    tmpargument = tmpargument +1	//Another round has passed
+    tmpargument = tmpargument +1    // Another round has passed
     SetContent
     tmpx = tmpargument
     tmpy = 15
-    IfXIsMoreThanY		//Finished casting poison cloud?
+    IfXIsMoreThanY        // Finished casting poison cloud?
       tmpargument = 0
-      SetContent		//Reset poison timer
+      SetContent        // Reset poison timer
       tmpdistance = 128*12
       SetTargetToDistantEnemy
         Run
@@ -260,16 +260,16 @@ IfTimeOut
         tmpturn = targetturnto
         tmpdistance = 250
         Compass
-        ClearWaypoints		//Charge enemy
+        ClearWaypoints        // Charge enemy
         AddWaypoint
         tmpargument = 1
         SetState
       Else
-        tmpargument = 0		//He died, lets wait again
+        tmpargument = 0        // He died, lets wait again
         SetState
 
 //------------------------------------------------------------------------------
-//Spawn fire around daemon (Fiery shield)
+// Spawn fire around daemon (Fiery shield)
 tmpx = selfx
 tmpy = selfy
 tmpdistance = selfz
@@ -280,36 +280,37 @@ SpawnExactParticle
 // ZZ> Handle being attacked by blocking or countering or running away
 IfAttacked
 
-  //Handle being damaged by weakness
-  IfHitVulnerable  	 		//Silver
+  // Handle being damaged by weakness
+  IfHitVulnerable               // Silver
     SetTargetToSelf
-    tmpargument = rand & 511 + 256	//1-3
+    tmpargument = rand & 511 + 256    // 1-3
     tmpargument = 0 - tmpargument
     GiveLifeToTarget
   GetDamageType
   tmpx = tmpargument
   tmpy = DAMAGEHOLY
-  IfXIsEqualToY				//Holy
+  IfXIsEqualToY                // Holy
     SetTargetToSelf
-    tmpargument = rand & 511 + 256	//1-3
+    tmpargument = rand & 511 + 256    // 1-3
     tmpargument = 0 - tmpargument
     GiveLifeToTarget
 
   SetTargetToWhoeverAttacked
   IfTargetIsOnHatedTeam
     Run
-    tmpargument = 1		//Move toward enemy
+    tmpargument = 1        // Move toward enemy
     SetState
     tmpargument = rand & 3 + 2
     PlaySound
   Else
-    tmpargument = 3		//Friendly fire
+    tmpargument = 3        // Friendly fire
     PlaySound
     SetTargetToOldTarget
 
 //------------------------------------------------------------------------------
-//Last, check if our target is really a enemy (Just in case)
+// Last, check if our target is really a enemy (Just in case)
 tmpargument = 0
+
 IfStateIsNot
   IfTargetIsOnHatedTeam
     DoNothing
@@ -318,7 +319,7 @@ IfStateIsNot
     SetTargetToDistantEnemy
       DoNothing
     Else
-      tmpargument = 0     //No enemies left
+      tmpargument = 0     // No enemies left
       SetState
 
 //------------------------------------------------------------------------------

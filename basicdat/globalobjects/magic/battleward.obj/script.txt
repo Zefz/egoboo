@@ -8,6 +8,7 @@ IfSpawned
     JoinNullTeam
     MakeNameUnknown
     NotAnItem
+
 IfChanged
   // It's a spell in hand
   tmpargument = 0
@@ -98,8 +99,8 @@ IfStateIs0
           SparkleIcon
           tmpargument = 2
           SendMessageNear
-          
-          //Identify it
+
+          // Identify it
           IfNameIsKnown
             DoNothing
           Else

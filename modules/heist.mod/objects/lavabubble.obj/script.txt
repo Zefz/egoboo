@@ -1,4 +1,4 @@
-//This spawns some lava bubbles
+// This spawns some lava bubbles
 IfTimeOut
   tmpargument = rand % 50 + 75
   SetTime
@@ -11,5 +11,8 @@ IfTimeOut
   SpawnExactParticle
 
 //------------------------------------------------------------------------------------
-End					// All done
+
+// All done
+End
+
 //------------------------------------------------------------------------------------

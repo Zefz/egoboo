@@ -1,10 +1,10 @@
 //------------------------------------------------------------------------------
-//Backstab deals extra damage
+// Backstab deals extra damage
 IfBackstabbed
   SetTargetToWhoeverAttacked
   GetDamageType
-  tmpdistance = tmpargument       //Same damage type as the stab
-  tmpargument = targetdex         //+1 damage per dex
+  tmpdistance = tmpargument       // Same damage type as the stab
+  tmpargument = targetdex         // +1 damage per dex
   TargetDamageSelf
   tmpargument = 6
   SendMessageNear
@@ -116,7 +116,7 @@ IfAttacked
       BlackTarget
       SetTargetToOldTarget
 
-      //Tell the players what to do
+      // Tell the players what to do
       tmpargument = 7
       SendMessageNear
 

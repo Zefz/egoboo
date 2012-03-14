@@ -12,7 +12,7 @@ IfSpawned
   SpawnExactParticle
   tmpargument = 1
   SpawnExactParticle
-  
+
   tmpx = selfx
   tmpy = selfy
   tmpturn = tmpturn + 8192
@@ -23,7 +23,7 @@ IfSpawned
   SpawnExactParticle
   tmpargument = 1
   SpawnExactParticle
-  
+
   tmpx = selfx
   tmpy = selfy
   tmpturn = tmpturn + 8192
@@ -34,7 +34,7 @@ IfSpawned
   SpawnExactParticle
   tmpargument = 1
   SpawnExactParticle
-  
+
   tmpx = selfx
   tmpy = selfy
   tmpturn = tmpturn + 8192
@@ -45,7 +45,7 @@ IfSpawned
   SpawnExactParticle
   tmpargument = 1
   SpawnExactParticle
-  
+
   tmpx = selfx
   tmpy = selfy
   tmpturn = tmpturn + 8192
@@ -56,7 +56,7 @@ IfSpawned
   SpawnExactParticle
   tmpargument = 1
   SpawnExactParticle
-  
+
   tmpx = selfx
   tmpy = selfy
   tmpturn = tmpturn + 8192
@@ -67,7 +67,7 @@ IfSpawned
   SpawnExactParticle
   tmpargument = 1
   SpawnExactParticle
-  
+
   tmpx = selfx
   tmpy = selfy
   tmpturn = tmpturn + 8192
@@ -78,7 +78,7 @@ IfSpawned
   SpawnExactParticle
   tmpargument = 1
   SpawnExactParticle
-  
+
   tmpx = selfx
   tmpy = selfy
   tmpturn = tmpturn + 8192
@@ -89,7 +89,9 @@ IfSpawned
   SpawnExactParticle
   tmpargument = 1
   SpawnExactParticle
-  
+
   GoPoof
-  
-End					// All done
+
+// All done
+End
+

@@ -1,7 +1,9 @@
-//Magical sparklies
+// Magical sparklies
 tmpx = rand & 100
 tmpy = 50
-IfXIsMoreThanY		//Dont spawn too many
+
+// Dont spawn too many
+IfXIsMoreThanY
   tmpargument = 5
   tmpx = selfx
   tmpy = selfy
@@ -12,12 +14,13 @@ IfHeld
   SparkleIcon
 
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				//
-  MakeAmmoKnown				  //
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  MakeAmmoKnown
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   MakeCrushValid
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -30,22 +33,33 @@ IfCrushed
   GoPoof
   tmpargument = 1
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-IfHitGround				// Play the drop sound
-  tmpargument = 2			  //
-  PlaySound				  //
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
+
+// Make it lie on floor
+IfDropped
+  KeepAction
+
+// Play the drop sound
+IfHitGround
+  tmpargument = 2
+  PlaySound
+
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
+
 IfUsed
   tmpargument = 50
   SetReloadTime
+
 IfTimeOut
-  tmpargument = 250     //Every 5 seconds
+  tmpargument = 250     // Every 5 seconds
   SetTime
   IfHeld
     IncreaseAmmo
-End					// All done
+
+// All done
+End
+

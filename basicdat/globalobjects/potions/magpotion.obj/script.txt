@@ -68,14 +68,14 @@ IfUsed
     GiveIntelligenceToTarget
     GiveWisdomToTarget
 
-    //Remove any existing magic on the target
+    // Remove any existing magic on the target
     tmpargument = [DISP]
     DispelTargetEnchantID
-    
+
     // Enchant the target
     SetOwnerToTarget
     EnchantTarget
-    tmpargument = 8000    //Drain away the mana
+    tmpargument = 8000    // Drain away the mana
     CostTargetMana
 
     tmpargument = ACTIONMC

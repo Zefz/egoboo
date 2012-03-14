@@ -1,10 +1,10 @@
-//The different states
-//0: Watch mode
-//1: Combat mode
-//3: Backstabbed
+// The different states
+// 0: Watch mode
+// 1: Combat mode
+// 3: Backstabbed
 
 //---------------------------------------------------------------------------------
-//Unsummon ourselves if ordered to do so
+// Unsummon ourselves if ordered to do so
 IfOrdered
   tmpx = selforder
   tmpy = [UNDO]
@@ -13,11 +13,11 @@ IfOrdered
     KillTarget
 
 //---------------------------------------------------------------------------------
-//What to do if warned
+// What to do if warned
 IfCalledForHelp
   SetTargetToWideEnemy
     tmpargument = 3
-    IfStateIsNot		//Dont if backstabbed
+    IfStateIsNot        // Dont if backstabbed
       tmpargument = 1
       SetState
   Else
@@ -26,136 +26,137 @@ IfCalledForHelp
     SetState
 
 //---------------------------------------------------------------------------------
-//New round
+// New round
 IfTimeOut
   tmpargument = rand & 15 + 30
   SetTime
 
-  //WATCH MODE
+  // WATCH MODE
   IfStateIs0
     Sneak
-    SetTargetToWideEnemy		//Enemy nearby?
-      IfFacingTarget			//See the enemy
+    SetTargetToWideEnemy        // Enemy nearby?
+      IfFacingTarget            // See the enemy
         tmpx = targetz
         tmpy = 300
-        IfXIsLessThanY			//Target not flying or jumping out of sight?
-          tmpargument = 1		//Enter combat mode
+        IfXIsLessThanY            // Target not flying or jumping out of sight?
+          tmpargument = 1        // Enter combat mode
           SetState
-    
-    //Spin around when we are home
+
+    // Spin around when we are home
     tmpx = spawndistance
     tmpy = 100
     IfXIsLessThanY
       SetTurnModeToSpin
 
-    //Stay where we spawned
+    // Stay where we spawned
     tmpx = selfspawnx
     tmpy = selfspawny
-    
-  //COMBAT MODE
+
+  // COMBAT MODE
   IfStateIs1
     SetTurnModeToVelocity
     Run
-    SetTargetToWideEnemy		//Enemy nearby?
+    SetTargetToWideEnemy        // Enemy nearby?
       CallForHelp
-      
-      //shoot eye ray
+
+      // shoot eye ray
       IfFacingTarget
-        tmpargument = rand & 31 + 50	//Time between shots
+        tmpargument = rand & 31 + 50    // Time between shots
         SetTime
-        tmpargument = rand % 3 + 1	//Randomize ray
+        tmpargument = rand % 3 + 1    // Randomize ray
         tmpx = selfx
         tmpy = selfy
         tmpdistance = selfz + 50
         SpawnExactParticle
-//        tmpargument = 256		//1 ray costs 1 mana
+//        tmpargument = 256        // 1 ray costs 1 mana
 //        SetTargetToSelf
 //        CostTargetMana
-        
-        //Battlelust!
+
+        // Battlelust!
         tmpargument = 0
         SetContent
-        
-      //We cant see them... if this goes on for long, then we give up
+
+      // We cant see them... if this goes on for long, then we give up
       Else
         tmpargument = selfcontent + 1
         SetContent
-        
+
       tmpx = targetdistance
       tmpy = 400
       IfXIsLessThanY
         IfFacingTarget
           SetTurnModeToWatchTarget
           tmpx = targetx
-          tmpy = targety			//Move towards him or her
+          tmpy = targety            // Move towards him or her
           tmpdistance = -400
           tmpturn = targetturnto
           Compass
         Else
           tmpx = targetx
-          tmpy = targety			//Move towards him or her
+          tmpy = targety            // Move towards him or her
       Else
         tmpx = targetx
-        tmpy = targety			//Move towards him or her
+        tmpy = targety            // Move towards him or her
 
-
-    Else				//Enemy ran away
+    Else                // Enemy ran away
       tmpargument = 0
       SetState
       SetContent
       SetTurnModeToVelocity
-      
-    //We give up if the player outsmarts us
+
+    // We give up if the player outsmarts us
     tmpargument = 8
     IfContentIs
       tmpargument = 0
       SetState
       SetContent
       SetTurnModeToVelocity
-      
-  ClearWaypoints			  //
-  AddWaypoint				  //
+
+  ClearWaypoints
+  AddWaypoint
 
 //---------------------------------------------------------------------------------
-//Change skin depending on state
+// Change skin depending on state
 tmpargument = selfstate
 SetTargetToSelf
-IfTargetIsAlive		//and when killed
+
+// and when killed
+IfTargetIsAlive
   DoNothing
 Else
   tmpargument = 2
 SetTargetToOldTarget
-ChangeArmor		//Do it
+ChangeArmor        // Do it
 
 //---------------------------------------------------------------------------------
-//Return to watch mode
-IfStateIs1				//Only if already in combat
+// Return to watch mode
+IfStateIs1                // Only if already in combat
   IfTargetKilled
     SetTargetToNearestEnemy
       tmpargument = 1
-      SetState			//Combat
+      SetState            // Combat
     Else
-      tmpargument = 0			//Watch mode
+      tmpargument = 0            // Watch mode
       SetState
 
 //---------------------------------------------------------------------------------
-//How to react if bumped
-IfBumped				// Attack whoever it bumped
+// How to react if bumped
+IfBumped                // Attack whoever it bumped
   SetTargetToWhoeverBumped
-  IfTargetIsOnHatedTeam			  // Make sure it's an enemy
+  IfTargetIsOnHatedTeam              // Make sure it's an enemy
     tmpargument = 3
-    IfStateIsNot			  //Dont if backstabbed
-      tmpargument = 1			  //Enter combat mode
+    IfStateIsNot              // Dont if backstabbed
+      tmpargument = 1              // Enter combat mode
       SetState
-      CallForHelp		//Warn others (Only if not backstabbed)
-      tmpx = targetx		//Move away from melee
+      CallForHelp        // Warn others (Only if not backstabbed)
+      tmpx = targetx        // Move away from melee
       tmpy = targety
       tmpdistance = 400
       tmpturn = targetturnto + 36000
       Compass
       ClearWaypoints
       AddWaypoint
-  Else					    //Move out of the way of friendlies
+  Else                        // Move out of the way of friendlies
     tmpx = rand & 255 + targetx - 128
     tmpy = rand & 255 + targety - 128
     ClearWaypoints
@@ -165,45 +166,45 @@ IfBumped				// Attack whoever it bumped
 //---------------------------------------------------------------------------------
 IfBackstabbed
   SetTargetToSelf
-  KillTarget			//Yep, instant kill
+  KillTarget            // Yep, instant kill
   SetTargetToWhoeverAttacked
   tmpargument = 25
   tmpdistance = EXPMURDER
-  GiveExperienceToTarget		//Give some bonus xp
+  GiveExperienceToTarget        // Give some bonus xp
   tmpargument = 3
-  SetState			//Backstabs are undetected
-  SetContent			//For death message
+  SetState            // Backstabs are undetected
+  SetContent            // For death message
   tmpargument = 1
   SendMessageNear
 
-//How to react if attacked
+// How to react if attacked
 IfAttacked
   SetTargetToWhoeverAttacked
   IfTargetIsOnHatedTeam
-    tmpargument = 3			//Backstabbed?
+    tmpargument = 3            // Backstabbed?
     IfStateIsNot
-      tmpargument = 1			//Nope, enter combat mode
+      tmpargument = 1            // Nope, enter combat mode
       SetState
-      CallForHelp		//Warn others (Only if not backstabbed)
+      CallForHelp        // Warn others (Only if not backstabbed)
   Else
     SetTargetToOldTarget
 
-  tmpargument = rand % 3		  //Play damaged sound
+  tmpargument = rand % 3          // Play damaged sound
   PlaySound
 
 //---------------------------------------------------------------------------------
-//What to do if killed
+// What to do if killed
 IfKilled
-  //Messaging
-  tmpargument = 3	//Backstabbed?
+  // Messaging
+  tmpargument = 3    // Backstabbed?
   IfContentIs
     tmpargument = 1
   Else
-    tmpargument = 0	//Normal death
+    tmpargument = 0    // Normal death
 
   SendMessageNear
 
-  //Make the body
+  // Make the body
   tmpargument = 33
   SetBumpSize
   tmpargument = 50
@@ -212,16 +213,16 @@ IfKilled
   tmpargument = 7
   SetShadowSize
 
-  //Drop stash
+  // Drop stash
   tmpargument = selfmoney
   DropMoney
   DropKeys
 
-  //Death sound
+  // Death sound
   tmpargument = 1
   PlaySound
 
-  //Death stuff
+  // Death stuff
   tmpargument = 0
   SetFlyHeight
   tmpargument = 10
@@ -229,5 +230,8 @@ IfKilled
   KeepAction
 
 //---------------------------------------------------------------------------------
-End					// Finished with this character
+
+// Finished with this character
+End
+
 //---------------------------------------------------------------------------------

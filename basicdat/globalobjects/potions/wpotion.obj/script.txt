@@ -43,7 +43,7 @@ IfGrabbed
     tmpargument = 0
     SendMessageNear
 
-//Magic sparks
+// Magic sparks
 IfTimeOut
   tmpargument = 3
   tmpx = selfx
@@ -66,22 +66,22 @@ IfUsed
     CostAmmo
     tmpargument = 1
     PlaySound
-    
-    //Give 50 extra XP per level of the target
+
+    // Give 50 extra XP per level of the target
     tmpturn = targetlevel+1
-    tmpargument = tmpturn*50               //A nifty xp bonus
+    tmpargument = tmpturn*50               // A nifty xp bonus
     tmpdistance = EXPROLEPLAY
     GiveExperienceToTarget
-    tmpx = tmpargument            //Remember the amount of XP gained for message
-    
-    //The drawback
+    tmpx = tmpargument            // Remember the amount of XP gained for message
+
+    // The drawback
     tmpargument = 0 - 16
     GiveIntelligenceToTarget
-    
-    //Tell them what they got
+
+    // Tell them what they got
     tmpargument = 3
     SendMessageNear
-      
+
   IfAmmoOut
     GoPoof
 

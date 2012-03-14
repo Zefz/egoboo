@@ -1,11 +1,11 @@
-//This function makes an item fall to the floor when spawned
+// This function makes an item fall to the floor when spawned
 IfSpawned
   tmpargument = ACTIONJB
   DoAction
   KeepAction
   MakeCrushValid
-  
-  //Correct our ammo amount
+
+  // Correct our ammo amount
   MakeAmmoKnown
   tmpx = selfcontent
   tmpy = 0
@@ -13,7 +13,7 @@ IfSpawned
     GetContent
     SetTargetToSelf
     SetTargetAmmo
-  
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -26,18 +26,28 @@ IfCrushed
   GoPoof
   tmpargument = 1
   SendMessageNear
-IfDropped				// Make it lie on floor
-  KeepAction				  //
-IfHitGround				// Play the drop sound
-  tmpargument = 2			  //
-  PlaySound				  //
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
-  IfTargetIsAPlayer			  //
-    tmpargument = 0			  //
-    SendMessageNear			  //
+
+// Make it lie on floor
+IfDropped
+  KeepAction
+
+// Play the drop sound
+IfHitGround
+  tmpargument = 2
+  PlaySound
+
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
+  IfTargetIsAPlayer
+    tmpargument = 0
+    SendMessageNear
+
 IfUsed
   IfAmmoOut
     tmpargument = 3
     PlaySound
-End					// All done
+
+// All done
+End
+

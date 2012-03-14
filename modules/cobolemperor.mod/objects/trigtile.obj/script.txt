@@ -1,4 +1,4 @@
-//Prevents bumping when not in trigger mode
+// Prevents bumping when not in trigger mode
 IfSpawned
   IfStateIs0
     tmpargument = 0
@@ -175,4 +175,6 @@ IfStateIs3
       tmpargument = 8
       SetTime
 
-End					// Finished with this character
+// Finished with this character
+End
+

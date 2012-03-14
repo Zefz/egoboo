@@ -2,6 +2,7 @@
 // ZZ> Breath some fire
 tmpx = selfcontent
 tmpy = 0
+
 IfXIsMoreThanY
   SetTargetToSelf
   tmpargument = 20
@@ -15,12 +16,12 @@ IfXIsMoreThanY
     SpawnParticle
     tmpdistance = 256 - selfmana < 1
     tmpargument = 2
-    //PlaySoundVolume
+    // PlaySoundVolume
   Else
     tmpargument = 0
     SetContent
     tmpargument = 2
-    //StopSound
+    // StopSound
     Run
   SetTargetToOldTarget
 Else
@@ -34,8 +35,8 @@ Else
       PlaySound
       tmpargument = 2
       PlaySound
-      //tmpdistance = 0
-      //PlaySoundVolume
+      // tmpdistance = 0
+      // PlaySoundVolume
       Sneak
 
 //------------------------------------------------------------------------------
@@ -67,7 +68,7 @@ IfKilled
 
   // Stop fire
   tmpargument = 2
-  //StopSound
+  // StopSound
 
   tmpargument = 5
   PlaySound

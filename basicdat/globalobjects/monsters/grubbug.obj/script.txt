@@ -1,14 +1,15 @@
-//This is special for the grub mom
-IfCleanedUp				            // Respawn
+// This is special for the grub mom
+IfCleanedUp                            // Respawn
   tmpdistance = 128*15
   SetTargetToDistantEnemy
     DoNothing
-  Else			                  // Make sure killer is away
+  Else                              // Make sure killer is away
     RespawnCharacter
 
 // Make it able to be crushed
-IfSpawned				
+IfSpawned
   MakeCrushValid
+
 IfCrushed
   tmpx = selfx
   tmpy = selfy
@@ -21,30 +22,30 @@ IfCrushed
   GoPoof
   tmpargument = 1
   SendMessageNear
-  
+
 // This reduces the height of the char
 IfKilled
-  IfTargetIsOnHatedTeam			  // Final words
+  IfTargetIsOnHatedTeam              // Final words
     tmpargument = 0
     SendMessageNear
-  tmpargument = 30			  // Dead height
+  tmpargument = 30              // Dead height
   SetBumpHeight
-  tmpargument = 1			  // Sound
+  tmpargument = 1              // Sound
   PlaySound
-  
+
 // Don't take kindly to attackers
-IfAttacked				
+IfAttacked
   SetTargetToWhoeverAttacked
-    tmpargument = 0			    // Sound
+    tmpargument = 0                // Sound
     PlaySound
 
 // Attack whoever it bumped
 IfBumped
   SetTargetToWhoeverBumped
-  IfTargetIsOnHatedTeam			  // Make sure it's an enemy
-    tmpargument = LATCHLEFT		    // Bite 'em
+  IfTargetIsOnHatedTeam              // Make sure it's an enemy
+    tmpargument = LATCHLEFT            // Bite 'em
     PressLatchButton
-  Else					  // Scooch around friendly
+  Else                      // Scooch around friendly
     tmpx = rand & 1023 + targetx - 512
     tmpy = rand & 1023 + targety - 512
     ClearWaypoints
@@ -53,15 +54,17 @@ IfBumped
 
 // This is done every so often
 IfTimeOut
-  SetTargetToNearbyEnemy		  // Look for enemies
+  SetTargetToNearbyEnemy          // Look for enemies
     tmpx = rand & 511 - 256 + targetx
     tmpy = rand & 511 - 256 + targety
-  Else					  // Wander around home position
+  Else                      // Wander around home position
     tmpx = rand & 1023 - 512 + selfspawnx
     tmpy = rand & 1023 - 512 + selfspawny
   ClearWaypoints
   AddWaypoint
-  tmpargument = rand & 63 + 20		  // Wait a while and try again
+  tmpargument = rand & 63 + 20          // Wait a while and try again
   SetTime
-  
-End					// Finished with this character
+
+// Finished with this character
+End
+

@@ -1,8 +1,8 @@
 IfKilled
   IfTargetIsSelf
-    tmpargument = 2     //Sucide!
+    tmpargument = 2     // Sucide!
   Else
-    tmpargument = 0     //Slain
+    tmpargument = 0     // Slain
   SendMessageNear
   tmpargument = 40
   SetBumpHeight
@@ -39,8 +39,8 @@ IfTimeOut
         IfXIsMoreThanY
           tmpargument = LATCHJUMP
           PressLatchButton
-          
-          //This makes the tranch jump forward
+
+          // This makes the tranch jump forward
           tmpx = 0
           tmpy = 0
           tmpturn = targetturnto
@@ -50,8 +50,8 @@ IfTimeOut
           SetTargetToSelf
           AccelerateTarget
           SetTargetToOldTarget
-          
-          //Damage particle
+
+          // Damage particle
           tmpargument = 5
           tmpdistance = GRIPLEFT
           SpawnAttachedParticle
@@ -71,7 +71,7 @@ IfTimeOut
       tmpy = tmpy + targety + targety + targety > 2
     ClearWaypoints
     AddWaypoint
-    
+
   Else      // Move towards the shrine
     tmpx = 32*128
     tmpy = 30*128

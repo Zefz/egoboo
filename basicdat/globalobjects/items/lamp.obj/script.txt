@@ -7,14 +7,14 @@ IfSpawned
   MakeCrushValid
   tmpargument = 0
   IfContentIs
-    tmpargument = 0  			// Off
+    tmpargument = 0              // Off
     SetState
   Else
-    tmpargument = 1  			// On
+    tmpargument = 1              // On
     SetState
-    tmpargument = 0			    
-    tmpdistance = SPAWNLAST		  // Model vertex to attach to
-    SpawnAttachedParticle			  //
+    tmpargument = 0
+    tmpdistance = SPAWNLAST          // Model vertex to attach to
+    SpawnAttachedParticle
   tmpargument = 250
   SetTime
 
@@ -32,65 +32,69 @@ IfCrushed
   SendMessageNear
 
 IfDisaffirmed
-  tmpargument = 1			  //
-  PlaySound				  //
-  tmpargument = 0  			// Off
+  tmpargument = 1
+  PlaySound
+  tmpargument = 0              // Off
   SetState
 
 IfTakenOut
-  tmpargument = 0  			// Off
+  tmpargument = 0              // Off
   SetState
 
-IfDropped				// Make it lie on floor
-  KeepAction				  //
+// Make it lie on floor
+IfDropped
+  KeepAction
 
-IfHitGround				// Make a sound
-  tmpargument = 0			  //
-  PlaySound				  //
+// Make a sound
+IfHitGround
+  tmpargument = 0
+  PlaySound
 
-IfGrabbed				// Tell them what they've won...
-  SetTargetToWhoeverIsHolding		  //
+// Tell them what they've won...
+IfGrabbed
+  SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer
-    tmpargument = 0			  //
-    SendMessageNear			  //
+    tmpargument = 0
+    SendMessageNear
 
 IfUsed
   IfStateIs0
     IfAmmoOut
-      tmpargument = 2			  //
-      SendMessageNear			  //
+      tmpargument = 2
+      SendMessageNear
     Else
-      tmpargument = 1  			// On
+      tmpargument = 1              // On
       SetState
-      
+
       tmpargument = 0
-      tmpdistance = SPAWNORIGIN		  // Model vertex to attach to
+      tmpdistance = SPAWNORIGIN          // Model vertex to attach to
       SpawnAttachedParticle
-      
+
       tmpargument = 50  // one second
       SetReloadTime
-      
+
       tmpargument = 200
       SetTime
   Else
-    tmpargument = 0  			// Off
+    tmpargument = 0              // Off
     SetState
     DisaffirmCharacter
     tmpargument = 50  // one second
     SetReloadTime
 
-//Burn some oil every now and then
+// Burn some oil every now and then
 IfTimeOut
   IfStateIs1
     CostAmmo
     IfAmmoOut
-      tmpargument = 0  			// Off
+      tmpargument = 0              // Off
       SetState
       DisaffirmCharacter
-      tmpargument = 2			  //
-      SendMessageNear			  //
+      tmpargument = 2
+      SendMessageNear
     tmpargument = 250
     SetTime
 
-End					// All done
+// All done
+End
 

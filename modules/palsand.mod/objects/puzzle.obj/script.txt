@@ -154,4 +154,6 @@ IfTimeOut
                       tmpdistance = 11025
                       PlaySound
 
-End					// Finished with this character
+// Finished with this character
+End
+

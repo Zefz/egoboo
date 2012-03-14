@@ -41,14 +41,13 @@ IfGrabbed
   SetTargetToWhoeverIsHolding
   IfTargetIsAPlayer
 
-    //Tech folks know what it is
+    // Tech folks know what it is
     tmpargument = [TECH]
     IfTargetHasSkillID
       MakeNameKnown
 
     tmpargument = 0
     SendMessageNear
-
 
 // REfill the lamp
 IfUsed
@@ -74,25 +73,25 @@ IfUsed
     IfNameIsKnown
       tmpargument = 4
       SendMessageNear
-      tmpx = selfx	//Where to spawn the object
+      tmpx = selfx    // Where to spawn the object
       tmpy = selfy
       tmpturn = selfturn
-      tmpdistance = 0	//Velocity speed of the spawned object
-      SpawnCharacter	//Spawn a copy of the flask
+      tmpdistance = 0    // Velocity speed of the spawned object
+      SpawnCharacter    // Spawn a copy of the flask
         tmpargument = 1
         SetChildAmmo
         CostAmmo
     Else
       tmpargument = 5
       SendMessageNear
-      MakeSimilarNamesKnown		//Ugh he drank it...
+      MakeSimilarNamesKnown        // Ugh he drank it...
       CostAmmo
     tmpargument = 1
     PlaySound
     IfAmmoOut
       GoPoof
 
-//Explode when in contact with fire
+// Explode when in contact with fire
 IfReaffirmed
   tmpargument = 6
   SendMessageNear

@@ -63,14 +63,14 @@ Else
         tmpargument = 4
         SendMessageNear
       Else
-        SetOldTarget			//Remember the target
+        SetOldTarget            // Remember the target
         tmpdistance =  targetwis > 8
-        tmpx = rand & 31 + tmpdistance	//Check for wisdom
-        SetTargetToWhoeverIsHolding	//Check caster, not target
+        tmpx = rand & 31 + tmpdistance    // Check for wisdom
+        SetTargetToWhoeverIsHolding    // Check caster, not target
         tmpdistance = targetint > 8
-        tmpy = rand & 31 + tmpdistance	//Check for intelligence
-        SetTargetToOldTarget		//Now revert back to the target again
-        IfXIsLessThanY			//Check if it resisted or not
+        tmpy = rand & 31 + tmpdistance    // Check for intelligence
+        SetTargetToOldTarget        // Now revert back to the target again
+        IfXIsLessThanY            // Check if it resisted or not
           // Enchant that target
           EnchantTarget
             tmpargument = RED
@@ -83,7 +83,7 @@ Else
             tmpargument = 0
             SendMessageNear
         Else
-          tmpargument = 5		//The target resisted
+          tmpargument = 5        // The target resisted
           SendMessageNear
 
       // Play a sound

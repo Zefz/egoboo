@@ -1,8 +1,9 @@
 //------------------------------------------------------------------------------
-//Prepeare protection spell
+// Prepeare protection spell
 IfSpawned
   tmpargument = 2
   SetState
+
 IfStateIs2
   tmpargument = selfcontent + 1
   SetContent
@@ -10,13 +11,13 @@ IfStateIs2
   PressLatchButton
   tmpx = selfcontent
   tmpy = 50*5
-  IfXIsMoreThanY              //Charge for 5 seconds
+  IfXIsMoreThanY              // Charge for 5 seconds
     tmpargument = 0
     SetContent
     SetState
-    
+
 //------------------------------------------------------------------------------
-//Main AI
+// Main AI
 IfTimeOut
   IfStateIs0
     tmpargument = rand & 31 + 30
@@ -25,12 +26,12 @@ IfTimeOut
     tmpy = selfspawny
     ClearWaypoints
     AddWaypoint
-    
-    SetTargetToWideEnemy	//Enemy found, target him
-      tmpargument = 1 
+
+    SetTargetToWideEnemy    // Enemy found, target him
+      tmpargument = 1
       SetState
 
-  //Move towards enemy
+  // Move towards enemy
   IfStateIs1
     SetTargetToWideEnemy
       SetTurnModeToWatchTarget
@@ -43,8 +44,8 @@ IfTimeOut
       AddWaypoint
       tmpargument = rand & 7 + 25
       SetTime
-      
-      //Throw meteors
+
+      // Throw meteors
       tmpx = rand & 255
       tmpy = 50
       IfXIsLessThanY
@@ -59,18 +60,18 @@ IfTimeOut
     Else
       tmpargument = 0
       SetState
-      
+
 //-----------------------------------------------------------------------------
 IfHitGround
   tmpargument = 0
   PlaySound
-  
+
 //------------------------------------------------------------------------------
 IfCalledForHelp
   CallForHelp
   tmpargument = TEAME
   JoinTeam
-  
+
 //------------------------------------------------------------------------------
 // ZZ> Handle death by sending a message and other stuff
 IfKilled
@@ -91,7 +92,7 @@ IfKilled
   // Make the character body
   tmpargument = 45
   SetBumpHeight
-  
+
   CallForHelp
   tmpargument = TEAME
   JoinTeam
@@ -117,11 +118,10 @@ IfUsed
   PlaySound
 
 //------------------------------------------------------------------------------
-//Someone healed us
+// Someone healed us
 IfHealed
   tmpargument = 1
   SendMessageNear
-  
 
 //------------------------------------------------------------------------------
 End

@@ -57,26 +57,26 @@ IfUsed
   tmpargument = [WMAG] // If an Arcane magic user
   IfTargetHasSkillID
     tmpx = 1
-  
+
   tmpargument = [HMAG] // If a Divine magic user
   IfTargetHasSkillID
     tmpx = 1
-  
-  //Spellcasters gain mana
+
+  // Spellcasters gain mana
   tmpy = 1
   IfXIsEqualToY
     IfTargetHasNotFullMana
-      //Standard drinking stuff
+      // Standard drinking stuff
       tmpargument = ACTIONMC
       TargetDoAction
       tmpdistance = SPAWNORIGIN
       tmpargument = 1
       SpawnAttachedHolderParticle
-      
-      tmpargument = 40
-      SetReloadTime        
 
-      //Messages
+      tmpargument = 40
+      SetReloadTime
+
+      // Messages
       IfUsageIsKnown
         tmpargument = 3
         SendMessageNear
@@ -90,8 +90,8 @@ IfUsed
         tmpargument = 40
         tmpdistance = EXPDARE
         GiveExperienceToTarget
-      
-      //Normal potion
+
+      // Normal potion
       tmpargument = 0
       IfArmorIs
         // Decrease max mana a little
@@ -99,37 +99,36 @@ IfUsed
         GiveManaToTarget
 
         // Increase current mana
-        tmpargument = rand % 2047 + 2048	//Amount of mana gained
+        tmpargument = rand % 2047 + 2048    // Amount of mana gained
         PumpTarget
-        
-        //Do flashy effects      
+
+        // Do flashy effects
         tmpargument = 1
-        PlaySound      
-      
-      //Super potion
+        PlaySound
+
+      // Super potion
       tmpargument = 1
       IfArmorIs
 
         // Heal all damage
-        tmpargument = 256*50	//Amount of mana gained
+        tmpargument = 256*50    // Amount of mana gained
         PumpTarget
 
-        //Do flashy effects      
+        // Do flashy effects
         tmpargument = 2
         PlaySound
-        
-      
-      //Use a potion
+
+      // Use a potion
       CostAmmo
       IfAmmoOut
         GoPoof
 
     Else
-      tmpx = selfx	//Where to spawn the object
+      tmpx = selfx    // Where to spawn the object
       tmpy = selfy
       tmpturn = selfturn
-      tmpdistance = 0	//Velocity speed of the spawned object
-      SpawnCharacter	//Spawn a copy of the flask
+      tmpdistance = 0    // Velocity speed of the spawned object
+      SpawnCharacter    // Spawn a copy of the flask
         tmpargument = 40
         SetReloadTime
         CostAmmo
@@ -138,25 +137,25 @@ IfUsed
         tmpargument = 1
         SetChildAmmo
         IfNameIsKnown
-          SetChildState     //Remember that it is identified already
+          SetChildState     // Remember that it is identified already
   Else
     tmpargument = 6 // If you're not a magic user, it tastes nasty, for some reason.
     SendMessageNear // That's magic for you, I suppose...
     tmpargument = 7
     SendMessageNear
-    
-    //Bravery/foolishness is rewarded
+
+    // Bravery/foolishness is rewarded
     tmpargument = 40
     tmpdistance = EXPDARE
-    GiveExperienceToTarget  
+    GiveExperienceToTarget
 
-    //Standard drinking stuff
+    // Standard drinking stuff
     tmpargument = ACTIONMC
     TargetDoAction
     tmpdistance = SPAWNORIGIN
     tmpargument = 1
     SpawnAttachedHolderParticle
-    CostAmmo    
+    CostAmmo
     tmpargument = 1
     SpawnAttachedHolderParticle
     CostAmmo
@@ -167,10 +166,10 @@ IfUsed
     tmpargument = 40
     SetReloadTime
 
-
 //-------------------------------------------------------------------------------
-//Allow to become a super potion
+// Allow to become a super potion
 tmpargument = 0
+
 IfArmorIs
   IfOrdered
     tmpx = selforder
@@ -180,8 +179,8 @@ IfArmorIs
       ChangeArmor
       tmpargument = BLUE
       SparkleIcon
-      
-//This make super potions sparkle
+
+// This make super potions sparkle
 Else
   tmpx = rand & 2
   tmpy = 0
@@ -191,7 +190,7 @@ Else
     tmpy = rand % 50 - 25
     tmpdistance = rand & 31
     SpawnParticle
-  
+
 //-------------------------------------------------------------------------------
 // Finish up
 End

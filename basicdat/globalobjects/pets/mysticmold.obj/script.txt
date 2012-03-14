@@ -1,4 +1,4 @@
-//Spawned in hands/inventory of the owner
+// Spawned in hands/inventory of the owner
 IfSpawned
   SetTurnModeToSpin
   IfHeld
@@ -10,12 +10,12 @@ IfSpawned
       SetState
       JoinTargetTeam
 
-//Ouchie
+// Ouchie
 IfAttacked
   tmpargument = 2
   PlaySound
-      
-//Death
+
+// Death
 IfKilled
   tmpargument = 2
   PlaySound
@@ -23,28 +23,28 @@ IfKilled
   DropMoney
   tmpargument = 0
   SendMessage
-      
-//Someone took us
+
+// Someone took us
 IfGrabbed
 
   SetTargetToWhoeverIsHolding
   IfNameIsKnown
     SetOldTarget
     SetTargetToOwner
-    IfTargetIsOldTarget  //Say hello
+    IfTargetIsOldTarget  // Say hello
       tmpargument = selfmoney
       DropMoney
       tmpargument = 10
       SendMessageNear
-      IfSpawned             //Dont when just spawned
+      IfSpawned             // Dont when just spawned
         DoNothing
       Else
         tmpargument = 4
-        PlaySound             //squishy
+        PlaySound             // squishy
     Else
       tmpargument = 9
       SendMessageNear
-  Else                      //We got a new owner!   
+  Else                      // We got a new owner!
     SetOwnerToTarget
     tmpargument = 12
     SendMessageNear
@@ -52,26 +52,26 @@ IfGrabbed
     tmpargument = 1
     SetState
     JoinTargetTeam
-    
-//Let the player know what this is
+
+// Let the player know what this is
 IfTakenOut
   SetTargetToWhoeverIsHolding
     IfTargetIsAPlayer
       tmpargument = 11
       SendMessageNear
-          
-//Sparkle friendlies
+
+// Sparkle friendlies
 IfUsed
   SetTargetToWhoeverIsHolding
     tmpargument = 50
     SetTargetReloadTime
-  
-  //Show stats
+
+  // Show stats
   IfTargetIsAPlayer
     // Print =NAME=
     SetTargetToSelf
     tmpargument = 1
-    SendMessageNear      
+    SendMessageNear
 
     // Level
     tmpx = targetlevel+1
@@ -94,14 +94,12 @@ IfUsed
     tmpy = targetwis > 8
     tmpargument = 8
     SendMessageNear
-  
-      
+
 // ZZ> This controls the pet AI
 IfTimeOut
-  
+
   tmpargument = rand & 15 + 30
   SetTime
-  
 
   // Play the random sound
   tmpx = rand & 255
@@ -137,8 +135,8 @@ IfTimeOut
       Compass
       ClearWaypoints
       AddWaypoint
-      
-      //Attack!
+
+      // Attack!
       IfHeld
         DoNothing
       Else

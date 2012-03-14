@@ -1,11 +1,11 @@
-//Explode in magic
+// Explode in magic
 IfKilled
   tmpargument = 1
   SendMessageNear
   GoPoof
   SpawnPoof
-  
-//Catch on fire
+
+// Catch on fire
 IfAttacked
   GetDamageType
   tmpx = tmpargument
@@ -23,26 +23,25 @@ IfAttacked
     tmpdistance = rand % 50
     SpawnAttachedParticle
 
-  
-//Flying Mode
+// Flying Mode
 SetTargetToRider
   Run
-  tmpargument = ACTIONWA		  //
-  DoAction				  //
+  tmpargument = ACTIONWA
+  DoAction
 
-  //Set fly height. 
-  //50 + 10% per rider intelligence
+  // Set fly height.
+  // 50 + 10% per rider intelligence
   tmpargument = targetint > 8
   tmpargument = tmpargument*5
   tmpargument = tmpargument + 50
   SetFlyHeight
-  
-  //Set Speed
-  //20% + 2% per rider intelligence
+
+  // Set Speed
+  // 20% + 2% per rider intelligence
   tmpargument = targetint > 7
   tmpargument = tmpargument + 20
   SetSpeedPercent
-  
+
   tmpargument = 0
   tmpx = selfx
   tmpy = selfy
@@ -53,7 +52,7 @@ Else
   tmpargument = 0
   SetFlyHeight
 
-//Buckle the rider and stop flying
+// Buckle the rider and stop flying
 IfAttacked
   tmpargument = 0
   SetFlyHeight
@@ -61,17 +60,18 @@ IfAttacked
   SetTime
   tmpargument = 1
   SetState
-  tmpargument = ACTIONJB		  //
-  DoActionOverride				  //
-  KeepAction				  //
+  tmpargument = ACTIONJB
+  DoActionOverride
+  KeepAction
 
 // Make it lie on floor
-IfDropped				
-  KeepAction				  //
+IfDropped
+  KeepAction
   tmpargument = 50
   SetTime
   tmpargument = 1
   SetState
+
 IfGrabbed
   tmpargument = 0
   SetState
@@ -81,34 +81,40 @@ IfTimeOut
   IfStateIs1
     tmpargument = 10
     SetBumpHeight
-  Else    
+  Else
     tmpargument = 0
     SetBumpHeight
-  
+
 // ZZ> This function makes an item fall to the floor when spawned
-IfSpawned				//
-  tmpargument = ACTIONJB		  //
-  DoAction				  //
-  KeepAction				  //
+IfSpawned
+  tmpargument = ACTIONJB
+  DoAction
+  KeepAction
   IfHeld
     SetTargetToWhoeverIsHolding
     SetOwnerToTarget
- 
-IfHitGround				// Make a sound
-  tmpargument = 0		  //
-  PlaySound				  //
+
+// Make a sound
+IfHitGround
+  tmpargument = 0
+  PlaySound
+
 IfNotDropped
   tmpargument = 2
   SendMessageNear
+
 IfTakenOut
   SetTargetToWhoeverIsHolding
   SetOwnerToTarget
   IfTargetIsAPlayer
     tmpargument = 4
     SendMessageNear
-    
+
+// No longer needed, this is handled by the sourcecode now...
 //IfNotPutAway
-//  tmpargument = 3         //No longer needed, this is handled by the sourcecode now...
+//  tmpargument = 3
 //  SendMessageNear
 
-End					// All done
+// All done
+End
+

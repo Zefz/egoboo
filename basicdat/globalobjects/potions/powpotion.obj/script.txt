@@ -64,19 +64,19 @@ IfUsed
     GiveExperienceToTarget
 
   SetTargetToWhoeverIsHolding
-    SetOwnerToTarget		// Enchant the target
+    SetOwnerToTarget        // Enchant the target
     EnchantTarget
     tmpargument = ACTIONMC
     TargetDoAction
     tmpdistance = SPAWNORIGIN
     tmpargument = 1
     SpawnAttachedHolderParticle
-    
-    //Fill their new life
+
+    // Fill their new life
     tmpargument = 256*4
     HealTarget
 
-    //Decrease max stats
+    // Decrease max stats
     tmpargument = 0 - 11
     GiveDexterityToTarget
     GiveStrengthToTarget

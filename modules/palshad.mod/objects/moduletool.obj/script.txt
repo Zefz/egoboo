@@ -13,5 +13,7 @@ IfTimeOut
   CleanUp
   tmpargument = 50
   SetTime
-  
-End					// All done
+
+// All done
+End
+

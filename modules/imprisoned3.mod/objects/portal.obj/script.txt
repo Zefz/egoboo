@@ -1,29 +1,30 @@
 IfSpawned
   tmpargument = 0
   PlaySoundLooped
-    
+
   tmpargument = ACTIONMJ
   DoAction
   KeepAction
-  
-  //So that orders are properly issued
+
+  // So that orders are properly issued
   JoinNullTeam
-  
-  //Randomize portal color
+
+  // Randomize portal color
   tmpargument = rand % 4
   ChangeArmor
 
-//Set teleport cooldown
+// Set teleport cooldown
 IfOrdered
   tmpx = selforder
   tmpy = [TLPR]
   IfXIsEqualToY
     tmpargument = 150
     SetTime
-  
-//Teleport all players to the new area
+
+// Teleport all players to the new area
 tmpx = selfstate
 tmpy = 175
+
 IfXIsMoreThanY
   tmpargument = [NONE]
   tmpdistance = BLAHPLAYERS + BLAHENEMIES + BLAHFRIENDS
@@ -171,7 +172,7 @@ IfXIsMoreThanY
     tmpturn = rand
     TeleportTarget
   Else
-    tmpargument = 0     //No players left
+    tmpargument = 0     // No players left
     SetState
 
 IfBumped
@@ -181,7 +182,7 @@ IfBumped
       IfStateIs0
         tmpargument = 32
         IfContentIs
-          tmpargument = 1               //The start portal
+          tmpargument = 1               // The start portal
           SendMessageNear
           tmpargument = 100
           SetTime
@@ -193,24 +194,25 @@ IfBumped
           tmpargument = 175
           SetState
       Else
-        tmpargument = [TLPR]      //Set a cooldown for all teleports on the map
+        tmpargument = [TLPR]      // Set a cooldown for all teleports on the map
         IssueOrder
         tmpargument = 100
         SetTime
-        
-        //Teleporting state... teleport all players
+
+        // Teleporting state... teleport all players
         tmpargument = 200
         SetState
-        
-        //Make some noise!
+
+        // Make some noise!
         tmpargument = 1
         PlayFullSound
 
-//Secondary timer
+// Secondary timer
 tmpx = selfstate
 tmpy = 0
+
 IfXIsMoreThanY
   tmpargument = selfstate - 1
   SetState
-  
+
 End

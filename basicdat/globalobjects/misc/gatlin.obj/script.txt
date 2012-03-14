@@ -4,25 +4,31 @@ IfScoredAHit
     tmpargument = 30
     tmpdistance = EXPROLEPLAY
     GiveExperienceToTarget
-IfSpawned				// General stuff
+
+// General stuff
+IfSpawned
   SetTurnModeToWatch
   MakeAmmoKnown
   tmpx = selfx - 200
   tmpy = selfy
   ClearWaypoints
   AddWaypoint
-IfDismounted				// Turn it west
+
+// Turn it west
+IfDismounted
   tmpx = selfx - 200
   tmpy = selfy
   ClearWaypoints
   AddWaypoint
-  
-IfHealed				// Drop the rider
+
+// Drop the rider
+IfHealed
   SetTargetToRider
     DropWeapons
     tmpx = 15
     tmpy = 0
     AccelerateTarget
+
 IfAttacked
   SetTargetToRider
     DropWeapons
@@ -43,13 +49,14 @@ IfMounted
         SendMessageNear
         tmpargument = 5
         PlaySound
-        
-IfUsed					// Set number of shells to drop
+
+// Set number of shells to drop
+IfUsed
   tmpargument = 8
   SetContent
   tmpargument = 0
   SetTime
-  
+
   // Play the machine gun sound
   IfAmmoOut
     tmpargument = 0
@@ -63,24 +70,24 @@ IfUsed					// Set number of shells to drop
     PlaySoundLooped
     tmpargument = 1
     SetState
-    
+
 // Firing state
 IfStateIs1
   IfTimeOut
-    
+
     // Down the count
     tmpargument = 0
     GetContent
     tmpargument = tmpargument - 1
     SetContent
-    
+
     // Check ammo
     IfAmmoOut
       tmpargument = 0
       StopSound
       tmpargument = 2
       SetState
-    
+
     // Drop a shell
     Else
       tmpx = selfx
@@ -92,7 +99,7 @@ IfStateIs1
     // Do again in 9 frames
     tmpargument = 9
     SetTime
-    
+
     // Stop sounds
     tmpargument = 0
     IfContentIs
@@ -101,26 +108,29 @@ IfStateIs1
       // Do an echo
       tmpargument = 2
       PlaySound
-      
+
 // Whirring state
 IfStateIs2
   IfTimeOut
     // Down the count
     tmpargument = selfcontent - 1
     SetContent
-    
+
     // Do again in 9 frames
     tmpargument = 9
     SetTime
-    
+
     // Stop sounds
     tmpargument = 0
     IfContentIs
       SetState
       tmpargument = 3
       StopSound
-      
+
       // Do the hum out
       tmpargument = 4
       PlaySound
-End					// All done
+
+// All done
+End
+

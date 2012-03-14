@@ -14,8 +14,9 @@ IfBumped
 
 //------------------------------------------------------------------------------
 tmpargument = 0
+
 IfStateIsNot
-  Sneak				//33% speed
+  Sneak                // 33% speed
   GetContent
   tmpx = tmpargument
   tmpy = 0
@@ -68,14 +69,14 @@ IfTimeOut
       Else
         tmpargument = LATCHPACKLEFT
         PressLatchButton
-      tmpargument = 100		//Delay
+      tmpargument = 100        // Delay
       SetContent
 
     // Get in a fight
     tmpdistance = 128*6
     SetTargetToDistantEnemy
       // Charge!
-      Run					//100% speed
+      Run                    // 100% speed
       tmpx = targetx
       tmpy = targety
       tmpdistance = 300
@@ -100,7 +101,7 @@ IfTimeOut
       tmpx = targetdistance
       tmpy = 200
       IfXIsLessThanY
-        Walk					//66% speed
+        Walk                    // 66% speed
         tmpx = targetx
         tmpy = targety
         tmpturn = targetturnto + 32768
@@ -114,7 +115,7 @@ IfTimeOut
         tmpy = 600
         IfXIsLessThanY
           // Run after the player
-          Run					//100% speed
+          Run                    // 100% speed
           tmpx = targetx
           tmpy = targety
           tmpturn = targetturnto
@@ -126,7 +127,7 @@ IfTimeOut
           SetTime
         Else
           // Walk around...
-          Sneak					//66% speed
+          Sneak                    // 66% speed
           tmpx = selfx
           tmpy = selfy
           tmpturn = selfturn + 8192
@@ -139,7 +140,7 @@ IfTimeOut
   Else
     // How close is the player?
     tmpargument = [ROGU]
-    tmpdistance = 6 			// Friends and Enemies
+    tmpdistance = 6             // Friends and Enemies
     SetTargetToNearestBlahID
       tmpx = targetdistance
       tmpy = 400
@@ -148,7 +149,7 @@ IfTimeOut
         IfXIsLessThanY
           IfStateIs0
             // Talk to the player
-            tmpargument = 90 		// Delay
+            tmpargument = 90         // Delay
             SetContent
 
             tmpargument = 6
@@ -160,7 +161,7 @@ IfTimeOut
             tmpargument = 1
             SetState
           Else
-            Walk					//66% speed
+            Walk                    // 66% speed
             tmpx = selfspawnx
             tmpy = selfspawny
             tmpturn = targetturnto
@@ -172,7 +173,7 @@ IfTimeOut
             SetTime
         Else
           // Approach the player
-          Walk					//66% speed
+          Walk                    // 66% speed
           tmpx = selfspawnx
           tmpy = selfspawny
           tmpturn = targetturnto
@@ -184,7 +185,7 @@ IfTimeOut
           SetTime
       Else
         // Walk around in a circle
-        Sneak					//33% speed
+        Sneak                    // 33% speed
         tmpx = selfx
         tmpy = selfy
         tmpturn = selfturn + 8192
@@ -196,7 +197,7 @@ IfTimeOut
         SetTime
     Else
       // Walk around in a circle
-      Sneak					//33% speed
+      Sneak                    // 33% speed
       tmpx = selfx
       tmpy = selfy
       tmpturn = selfturn + 8192
