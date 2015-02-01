@@ -3686,7 +3686,7 @@ bool add_player( const CHR_REF character, const PLA_REF player, input_device_t *
 void let_all_characters_think()
 {
     /// @author ZZ
-    /// @details This function funst the ai scripts for all eligible objects
+    /// @details This function runs the ai scripts for all eligible objects
 
     static Uint32 last_update = ( Uint32 )( ~0 );
 
@@ -5106,14 +5106,14 @@ bool attach_GameObjecto_platform( GameObject * pchr, GameObject * pplat )
     if ( !ACTIVE_PCHR( pchr ) ) return false;
     if ( !ACTIVE_PCHR( pplat ) ) return false;
 
-    const std::shared_ptr<ObjectProfile> &profile = _profileSystem.getProfile( pchr->profile_ref );
+    const std::shared_ptr<ObjectProfile> &profile = pchr->getProfile();
 
     // check if they can be connected
     if ( !profile->canUsePlatforms() || ( 0 != pchr->flyheight ) ) return false;
     if ( !pplat->platform ) return false;
 
     // do the attachment
-    pchr->onwhichplatform_ref    = GET_INDEX_PCHR( pplat );
+    pchr->onwhichplatform_ref    = pplat->getCharacterID();
     pchr->onwhichplatform_update = update_wld;
     pchr->targetplatform_ref     = INVALID_CHR_REF;
 
@@ -5130,7 +5130,7 @@ bool attach_GameObjecto_platform( GameObject * pchr, GameObject * pplat )
     }
 
     // add the weight to the platform based on the new zlerp
-    pplat->holdingweight += pchr->phys.weight * ( 1.0f - pchr->enviro.zlerp );
+    pplat->holdingweight += pchr->phys.weight * (1.0f - pchr->enviro.zlerp);
 
     // update the character jumping
     pchr->jumpready = pchr->enviro.grounded;
@@ -5143,11 +5143,11 @@ bool attach_GameObjecto_platform( GameObject * pchr, GameObject * pplat )
     chr_getMatUp(pplat, platform_up);
 	platform_up.normalize();
 
-    pchr->enviro.traction = ABS( platform_up.z ) * ( 1.0f - pchr->enviro.zlerp ) + 0.25f * pchr->enviro.zlerp;
+    pchr->enviro.traction = std::abs(platform_up.z) * ( 1.0f - pchr->enviro.zlerp ) + 0.25f * pchr->enviro.zlerp;
 
     // tell the platform that we bumped into it
     // this is necessary for key buttons to work properly, for instance
-    ai_state_set_bumplast( &( pplat->ai ), GET_INDEX_PCHR( pchr ) );
+    ai_state_set_bumplast( &( pplat->ai ), pchr->getCharacterID() );
 
     return true;
 }
@@ -5171,7 +5171,7 @@ bool detach_character_from_platform( GameObject * pchr )
     // save some values
     old_platform_ref = pchr->onwhichplatform_ref;
     old_level        = pchr->enviro.level;
-    old_platform_ptr = NULL;
+    old_platform_ptr = nullptr;
     old_zlerp        = pchr->enviro.zlerp;
     if ( _gameObjects.exists( old_platform_ref ) )
     {
@@ -5185,9 +5185,9 @@ bool detach_character_from_platform( GameObject * pchr )
     pchr->targetplatform_level   = -1e32;
 
     // adjust the platform weight, if necessary
-    if ( NULL != old_platform_ptr )
+    if ( nullptr != old_platform_ptr )
     {
-        old_platform_ptr->holdingweight -= pchr->phys.weight * ( 1.0f - old_zlerp );
+        old_platform_ptr->holdingweight -= pchr->phys.weight * (1.0f - pchr->enviro.zlerp);
     }
 
     // update the character-platform properties

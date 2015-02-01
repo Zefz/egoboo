@@ -22,6 +22,7 @@
 #pragma once
 
 #include "game/egoboo_typedef.h"
+#include "game/PrtList.h"
 
 //--------------------------------------------------------------------------------------------
 // external structs
@@ -46,6 +47,9 @@ struct CoNode_t;
 /// hash_list_t
 struct CoNode_t
 {
+public:
+    CoNode_t();
+
     // the "colliding" objects
     CHR_REF chra;
     PRT_REF prta;
@@ -58,34 +62,73 @@ struct CoNode_t
     // some information about the estimated collision
     float    tmin, tmax;
     oct_bb_t cv;
+
+    bool operator == (const CoNode_t &pright) const
+    {
+        // don't compare the times
+        int itmp = ( int32_t )REF_TO_INT( this->chra ) - ( int32_t )REF_TO_INT( pright.chra );
+        if ( 0 != itmp ) return false;
+
+        itmp = ( int32_t )REF_TO_INT( this->prta ) - ( int32_t )REF_TO_INT( pright.prta );
+        if ( 0 != itmp ) return false;
+
+        itmp = ( int32_t )REF_TO_INT( this->chrb ) - ( int32_t )REF_TO_INT( pright.chrb );
+        if ( 0 != itmp ) return false;
+
+        itmp = ( int32_t )REF_TO_INT( this->prtb ) - ( int32_t )REF_TO_INT( pright.prtb );
+        if ( 0 != itmp ) return false;
+
+        itmp = ( int32_t )this->tileb - ( int32_t )pright.tileb;
+        if ( 0 != itmp ) return false;
+
+        return true;
+    }
 };
 
-CoNode_t * CoNode_ctor( CoNode_t * );
-Uint8      CoNode_generate_hash( CoNode_t * coll );
-int        CoNode_cmp( const void * pleft, const void * pright );
-
 //--------------------------------------------------------------------------------------------
+/**
+* Hash algorithm for collision nodes
+**/
 
-/// a useful re-typing of the CHashList_t, in case we need to add more variables or functionality later
-typedef hash_list_t CoHashList_t;
+#define MAKE_HASH(AA,BB)         CLIP_TO_08BITS( ((AA) * 0x0111 + 0x006E) + ((BB) * 0x0111 + 0x006E) )
 
-/// Insert a collision into a collision hash list if it does not exist yet.
-/// @param self the collision hash list
-/// @param collision the collision
-/// @param collisions the list of collisions
-/// @param hashNodes the list of hash nodes
-bool CoHashList_insert_unique(CoHashList_t *coHashList, CoNode_t *coNode, Ego::DynamicArray<CoNode_t> *coNodeAry, Ego::DynamicArray<hash_node_t> *hashNodeAry);
+struct CNodeHash {
+   size_t operator() (const CoNode_t &coll) const {
+        Uint32 AA, BB;
 
-CoHashList_t *CoHashList_getInstance(size_t capacity);
+        AA = ( Uint32 )( ~(( Uint32 )0 ) );
+        if ( coll.chra < MAX_CHR && coll.chra != INVALID_CHR_REF )
+        {
+            AA = REF_TO_INT( coll.chra );
+        }
+        else if ( _VALID_PRT_RANGE( coll.prta ) )
+        {
+            AA = REF_TO_INT( coll.prta );
+        }
 
-//--------------------------------------------------------------------------------------------
-extern int CoHashList_inserted;
+        BB = ( Uint32 )( ~(( Uint32 )0 ) );
+        if ( coll.chrb < MAX_CHR && coll.chrb != INVALID_CHR_REF )
+        {
+            BB = REF_TO_INT( coll.chrb );
+        }
+        else if ( _VALID_PRT_RANGE( coll.prtb ) )
+        {
+            BB = REF_TO_INT( coll.prtb );
+        }
+        else if ( MAP_FANOFF != coll.tileb )
+        {
+            BB = coll.tileb;
+        }
+
+        return MAKE_HASH( AA, BB );
+   }
+};
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 // global functions
 
-bool collision_system_begin();
+void collision_system_begin();
 void collision_system_end();
 
 void bump_all_objects();

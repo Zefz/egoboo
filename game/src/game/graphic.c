@@ -2858,23 +2858,29 @@ float draw_debug( float y )
         y = draw_string_raw( 0, y, "!!!DEBUG MODE-5!!!" );
         y = draw_string_raw( 0, y, "~~CAM %f %f %f", _cameraSystem.getMainCamera()->getPosition().x, _cameraSystem.getMainCamera()->getPosition().y, _cameraSystem.getMainCamera()->getPosition().z );
         ipla = ( PLA_REF )0;
-        ichr = PlaStack.lst[ipla].index;
-        y = draw_string_raw( 0, y, "~~PLA0DEF %4.2f %4.2f %4.2f %4.2f %4.2f %4.2f %4.2f %4.2f",
-                             _gameObjects.get(ichr)->damage_resistance[DAMAGE_SLASH],
-                             _gameObjects.get(ichr)->damage_resistance[DAMAGE_CRUSH],
-                             _gameObjects.get(ichr)->damage_resistance[DAMAGE_POKE ],
-                             _gameObjects.get(ichr)->damage_resistance[DAMAGE_HOLY ],
-                             _gameObjects.get(ichr)->damage_resistance[DAMAGE_EVIL ],
-                             _gameObjects.get(ichr)->damage_resistance[DAMAGE_FIRE ],
-                             _gameObjects.get(ichr)->damage_resistance[DAMAGE_ICE  ],
-                             _gameObjects.get(ichr)->damage_resistance[DAMAGE_ZAP  ] );
+        if(VALID_PLA(ipla))
+        {
+            ichr = PlaStack.lst[ipla].index;
+            y = draw_string_raw( 0, y, "~~PLA0DEF %4.2f %4.2f %4.2f %4.2f %4.2f %4.2f %4.2f %4.2f",
+                                 _gameObjects.get(ichr)->damage_resistance[DAMAGE_SLASH],
+                                 _gameObjects.get(ichr)->damage_resistance[DAMAGE_CRUSH],
+                                 _gameObjects.get(ichr)->damage_resistance[DAMAGE_POKE ],
+                                 _gameObjects.get(ichr)->damage_resistance[DAMAGE_HOLY ],
+                                 _gameObjects.get(ichr)->damage_resistance[DAMAGE_EVIL ],
+                                 _gameObjects.get(ichr)->damage_resistance[DAMAGE_FIRE ],
+                                 _gameObjects.get(ichr)->damage_resistance[DAMAGE_ICE  ],
+                                 _gameObjects.get(ichr)->damage_resistance[DAMAGE_ZAP  ] );
 
-        ichr = PlaStack.lst[ipla].index;
-        y = draw_string_raw( 0, y, "~~PLA0 %5.1f %5.1f", _gameObjects.get(ichr)->getPosX() / GRID_FSIZE, _gameObjects.get(ichr)->getPosY() / GRID_FSIZE );
+            ichr = PlaStack.lst[ipla].index;
+            y = draw_string_raw( 0, y, "~~PLA0 %5.1f %5.1f", _gameObjects.get(ichr)->getPosX() / GRID_FSIZE, _gameObjects.get(ichr)->getPosY() / GRID_FSIZE );            
+        }
 
         ipla = ( PLA_REF )1;
-        ichr = PlaStack.lst[ipla].index;
-        y = draw_string_raw( 0, y, "~~PLA1 %5.1f %5.1f", _gameObjects.get(ichr)->getPosY() / GRID_FSIZE, _gameObjects.get(ichr)->getPosY() / GRID_FSIZE );
+        if(VALID_PLA(ipla))
+        {
+            ichr = PlaStack.lst[ipla].index;
+            y = draw_string_raw( 0, y, "~~PLA1 %5.1f %5.1f", _gameObjects.get(ichr)->getPosY() / GRID_FSIZE, _gameObjects.get(ichr)->getPosY() / GRID_FSIZE );            
+        }
     }
 
     if ( SDL_KEYDOWN( keyb, SDLK_F6 ) )
@@ -6306,7 +6312,8 @@ gfx_rv gfx_make_renderlist( renderlist_t * prlist, std::shared_ptr<Camera> pcam 
 
     // get the tiles in the center of the view
     _renderlist_colst.clear();
-	getMeshBSP()->collide(&(pcam->getFrustum()), nullptr, &_renderlist_colst);
+	//getMeshBSP()->collide(&(pcam->getFrustum()), nullptr, &_renderlist_colst);
+    //TODO
 
     // transfer valid _renderlist_colst entries to the dolist
     if ( gfx_error == renderlist_t::add( prlist, &_renderlist_colst, pcam ) )
@@ -6365,7 +6372,8 @@ gfx_rv gfx_make_dolist( dolist_t * pdlist, std::shared_ptr<Camera> pcam )
 
     // collide the characters with the frustum
     _dolist_colst.clear();
-	getChrBSP()->collide(&(pcam->getFrustum()), chr_BSP_is_visible, &_dolist_colst);
+	//getChrBSP()->collide(&(pcam->getFrustum()), chr_BSP_is_visible, &_dolist_colst);
+    //TODO
 
     // transfer valid _dolist_colst entries to the dolist
     if ( gfx_error == dolist_t::add_colst( pdlist, &_dolist_colst ) )
@@ -6376,7 +6384,8 @@ gfx_rv gfx_make_dolist( dolist_t * pdlist, std::shared_ptr<Camera> pcam )
 
     // collide the particles with the frustum
     _dolist_colst.clear();
-	getPrtBSP()->collide(&(pcam->getFrustum()), prt_BSP_is_visible, &_dolist_colst);
+	//getPrtBSP()->collide(&(pcam->getFrustum()), prt_BSP_is_visible, &_dolist_colst);
+    //TODO
 
     // transfer valid _dolist_colst entries to the dolist
     if (gfx_error == dolist_t::add_colst(pdlist, &_dolist_colst))

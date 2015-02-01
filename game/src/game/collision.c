@@ -30,7 +30,6 @@
 #include "game/particle.h"
 #include "game/enchant.h"
 #include "game/physics.h"
-#include "game/PrtList.h"
 #include "game/EncList.h"
 
 #include "game/audio/AudioSystem.hpp"
@@ -50,31 +49,9 @@ typedef struct s_bumplist bumplist_t;
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
-#define MAKE_HASH(AA,BB)         CLIP_TO_08BITS( ((AA) * 0x0111 + 0x006E) + ((BB) * 0x0111 + 0x006E) )
-
 #define CHR_MAX_COLLISIONS       (MAX_CHR*8 + MAX_PRT)
 #define COLLISION_HASH_NODES     (CHR_MAX_COLLISIONS*2)
 #define COLLISION_LIST_SIZE      256
-
-/**
- * @brief
- *	Construct a collision hash list.
- * @param self
- *	the collision hash list
- * @param initialCapacity
- *	the initial capacity of the collision hash list
- * @return
- *	@a self on success, @a NULL on failure
- */
-static CoHashList_t *CoHashList_ctor(CoHashList_t *self, size_t initialCapacity);
-
-/**
- * @brief
- *	Destruct a collision hash list.
- * @param self
- *	the collision hash list
- */
-static void CoHashList_dtor(CoHashList_t *self);
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
@@ -150,10 +127,10 @@ struct s_bumplist
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
-static bool add_chr_chr_interaction(CoHashList_t *coHashList, const CHR_REF ichr_a, const CHR_REF ichr_b, Ego::DynamicArray<CoNode_t> *pcn_lst, Ego::DynamicArray<hash_node_t> *phn_lst);
-static bool add_chr_prt_interaction(CoHashList_t *coHashList, const CHR_REF ichr_a, const PRT_REF iprt_b, Ego::DynamicArray<CoNode_t> * pcn_lst, Ego::DynamicArray<hash_node_t> *phn_lst);
+//static bool add_chr_chr_interaction(CoHashList_t *coHashList, const CHR_REF ichr_a, const CHR_REF ichr_b, Ego::DynamicArray<CoNode_t> *pcn_lst, Ego::DynamicArray<hash_node_t> *phn_lst);
+//static bool add_chr_prt_interaction(CoHashList_t *coHashList, const CHR_REF ichr_a, const PRT_REF iprt_b, Ego::DynamicArray<CoNode_t> * pcn_lst, Ego::DynamicArray<hash_node_t> *phn_lst);
 
-static bool detect_chr_chr_interaction_valid( const CHR_REF ichr_a, const CHR_REF ichr_b );
+static bool detect_chr_chr_interaction_valid(const std::shared_ptr<GameObject> &chra, const std::shared_ptr<GameObject> &chrb);
 static bool detect_chr_prt_interaction_valid( const CHR_REF ichr_a, const PRT_REF iprt_b );
 
 //static bool detect_chr_chr_interaction( const CHR_REF ichr_a, const CHR_REF ichr_b );
@@ -162,12 +139,12 @@ static bool detect_chr_prt_interaction_valid( const CHR_REF ichr_a, const PRT_RE
 static bool do_chr_platform_detection( const CHR_REF ichr_a, const CHR_REF ichr_b );
 static bool do_prt_platform_detection( const CHR_REF ichr_a, const PRT_REF iprt_b );
 
-static bool fill_interaction_list(CoHashList_t *coHashList, Ego::DynamicArray<CoNode_t> *pcn_lst, Ego::DynamicArray<hash_node_t> *phn_lst );
+static bool fill_interaction_list();
 static bool fill_bumplists();
 
-static bool bump_all_platforms( Ego::DynamicArray<CoNode_t> *pcn_ary );
-static bool bump_all_mounts( Ego::DynamicArray<CoNode_t> *pcn_ary );
-static bool bump_all_collisions( Ego::DynamicArray<CoNode_t> *pcn_ary );
+static bool bump_all_platforms(std::vector<CoNode_t*> &collisionNodes);
+static bool bump_all_mounts(std::vector<CoNode_t*> &collisionNodes);
+static bool bump_all_collisions(std::vector<CoNode_t*> &collisionNodes);
 
 static bool bump_one_mount( const CHR_REF ichr_a, const CHR_REF ichr_b );
 static bool do_chr_platform_physics( GameObject * pitem, GameObject * pplat );
@@ -187,132 +164,53 @@ static bool do_prt_platform_physics( chr_prt_collsion_data_t * pdata );
 static bool do_chr_prt_collision_get_details( CoNode_t * d, chr_prt_collsion_data_t * pdata );
 static bool do_chr_chr_collision_pressure_normal(const GameObject *pchr_a, const GameObject *pchr_b, const float exponent, oct_vec_t *podepth, fvec3_t& nrm, float * tmin );
 
-static int CoNode_matches( CoNode_t * pleft, CoNode_t * pright );
-static int CoNode_cmp_unique( const void * vleft, const void * vright );
-
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
-
-static CoHashList_t *_CoHashList_ptr = NULL;
-static Ego::DynamicArray<hash_node_t> _hn_ary; ///< the available hash_node_t collision nodes for the CHashList_t
-static Ego::DynamicArray<CoNode_t> _co_ary;    ///< the available CoNode_t data pointed to by the hash_node_t nodes
-static Ego::DynamicArray<BSP_leaf_t *> _coll_leaf_lst;
-static Ego::DynamicArray<CoNode_t> _coll_node_lst;
-
-static bool _collision_hash_initialized = false;
-static bool _collision_system_initialized = false;
-
-int CoHashList_inserted = 0;
-
-//--------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------
-bool collision_system_begin()
-{
-    if ( !_collision_system_initialized )
-    {
-        if ( NULL == _co_ary.ctor( CHR_MAX_COLLISIONS ) ) goto collision_system_begin_fail;
-
-        if ( NULL == _hn_ary.ctor( COLLISION_HASH_NODES ) ) goto collision_system_begin_fail;
-
-        if ( NULL == _coll_leaf_lst.ctor( COLLISION_LIST_SIZE ) ) goto collision_system_begin_fail;
-
-        if ( NULL == _coll_node_lst.ctor( COLLISION_LIST_SIZE ) ) goto collision_system_begin_fail;
-
-        _collision_system_initialized = true;
-    }
-
-    return true;
-
-collision_system_begin_fail:
-
-	_co_ary.dtor();
-	_hn_ary.dtor();
-    _coll_leaf_lst.dtor();
-	_coll_node_lst.dtor();
-
-    _collision_system_initialized = false;
-
-    log_error( "Cannot initialize the collision system" );
-
-    return false;
-}
+static std::unordered_map<CoNode_t, CoNode_t, CNodeHash> _collisionMap;
+static std::vector<CoNode_t*> _coll_node_lst;
+static std::vector<BSP_leaf_t*> _coll_leaf_lst;
 
 //--------------------------------------------------------------------------------------------
 void collision_system_end()
 {
-    if (_collision_hash_initialized)
-    {
-        hash_list_destroy(_CoHashList_ptr);
-		_CoHashList_ptr = nullptr;
-        _collision_hash_initialized = false;
-    }
-    _CoHashList_ptr = nullptr;
+    _coll_leaf_lst.clear();
+    _coll_node_lst.clear();
+    _collisionMap.clear();
+}
 
-    if (_collision_system_initialized)
-    {
-		_co_ary.dtor();
-		_hn_ary.dtor();
-		_coll_leaf_lst.dtor();
-		_coll_node_lst.dtor();
-        _collision_system_initialized = false;
-    }
+//--------------------------------------------------------------------------------------------
+void collision_system_begin()
+{
+    // create a collision hash table that can keep track of 512
+    // binary collisions per frame
+    _collisionMap.reserve(512);
+    _coll_node_lst.reserve(COLLISION_LIST_SIZE);
+    _coll_leaf_lst.reserve(COLLISION_LIST_SIZE);
 }
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
-CoNode_t * CoNode_ctor( CoNode_t * n )
-{
-    if ( NULL == n ) return n;
-
-    // clear all data
-    BLANK_STRUCT_PTR( n )
+CoNode_t::CoNode_t() :
 
     // the "colliding" objects
-    n->chra = INVALID_CHR_REF;
-    n->prta = INVALID_PRT_REF;
+    chra(INVALID_CHR_REF),
+    prta(INVALID_PRT_REF),
+
 
     // the "collided with" objects
-    n->chrb  = INVALID_CHR_REF;
-    n->prtb  = INVALID_PRT_REF;
-    n->tileb = MAP_FANOFF;
+    chrb(INVALID_CHR_REF),
+    prtb(INVALID_PRT_REF),
+    tileb(MAP_FANOFF),
 
     // intialize the time
-    n->tmin = n->tmax = -1.0f;
+    tmin(-1.0f),
+    tmax(-1.0f),
 
-    return n;
-}
-
-//--------------------------------------------------------------------------------------------
-Uint8 CoNode_generate_hash( CoNode_t * coll )
+    cv()
 {
-    Uint32 AA, BB;
-
-    AA = ( Uint32 )( ~(( Uint32 )0 ) );
-    if ( VALID_CHR_RANGE( coll->chra ) )
-    {
-        AA = REF_TO_INT( coll->chra );
-    }
-    else if ( _VALID_PRT_RANGE( coll->prta ) )
-    {
-        AA = REF_TO_INT( coll->prta );
-    }
-
-    BB = ( Uint32 )( ~(( Uint32 )0 ) );
-    if ( VALID_CHR_RANGE( coll->chrb ) )
-    {
-        BB = REF_TO_INT( coll->chrb );
-    }
-    else if ( _VALID_PRT_RANGE( coll->prtb ) )
-    {
-        BB = REF_TO_INT( coll->prtb );
-    }
-    else if ( MAP_FANOFF != coll->tileb )
-    {
-        BB = coll->tileb;
-    }
-
-    return MAKE_HASH( AA, BB );
+    //ctor
 }
+
 
 //--------------------------------------------------------------------------------------------
 int CoNode_cmp( const void * vleft, const void * vright )
@@ -320,8 +218,8 @@ int CoNode_cmp( const void * vleft, const void * vright )
     int   itmp;
     float ftmp;
 
-    CoNode_t * pleft  = ( CoNode_t * )vleft;
-    CoNode_t * pright = ( CoNode_t * )vright;
+    const CoNode_t * pleft = (CoNode_t*)vleft; 
+    const CoNode_t * pright = (CoNode_t*)vright; 
 
     // sort by initial time first
     ftmp = pleft->tmin - pright->tmin;
@@ -333,169 +231,22 @@ int CoNode_cmp( const void * vleft, const void * vright )
     if ( ftmp <= 0.0f ) return -1;
     else if ( ftmp >= 0.0f ) return 1;
 
-    itmp = ( signed )REF_TO_INT( pleft->chra ) - ( signed )REF_TO_INT( pright->chra );
+    itmp = ( int32_t )REF_TO_INT( pleft->chra ) - ( int32_t )REF_TO_INT( pright->chra );
     if ( 0 != itmp ) return itmp;
 
-    itmp = ( signed )REF_TO_INT( pleft->prta ) - ( signed )REF_TO_INT( pright->prta );
+    itmp = ( int32_t )REF_TO_INT( pleft->prta ) - ( int32_t )REF_TO_INT( pright->prta );
     if ( 0 != itmp ) return itmp;
 
-    itmp = ( signed )REF_TO_INT( pleft->chrb ) - ( signed )REF_TO_INT( pright->chrb );
+    itmp = ( int32_t )REF_TO_INT( pleft->chrb ) - ( int32_t )REF_TO_INT( pright->chrb );
     if ( 0 != itmp ) return itmp;
 
-    itmp = ( signed )REF_TO_INT( pleft->prtb ) - ( signed )REF_TO_INT( pright->prtb );
+    itmp = ( int32_t )REF_TO_INT( pleft->prtb ) - ( int32_t )REF_TO_INT( pright->prtb );
     if ( 0 != itmp ) return itmp;
 
-    itmp = ( signed )pleft->tileb - ( signed )pright->tileb;
-    if ( 0 != itmp ) return itmp;
-
-    return 0;
-}
-
-//--------------------------------------------------------------------------------------------
-int CoNode_cmp_unique( const void * vleft, const void * vright )
-{
-    int   itmp;
-
-    CoNode_t * pleft  = ( CoNode_t * )vleft;
-    CoNode_t * pright = ( CoNode_t * )vright;
-
-    // don't compare the times
-
-    itmp = ( signed )REF_TO_INT( pleft->chra ) - ( signed )REF_TO_INT( pright->chra );
-    if ( 0 != itmp ) return itmp;
-
-    itmp = ( signed )REF_TO_INT( pleft->prta ) - ( signed )REF_TO_INT( pright->prta );
-    if ( 0 != itmp ) return itmp;
-
-    itmp = ( signed )REF_TO_INT( pleft->chrb ) - ( signed )REF_TO_INT( pright->chrb );
-    if ( 0 != itmp ) return itmp;
-
-    itmp = ( signed )REF_TO_INT( pleft->prtb ) - ( signed )REF_TO_INT( pright->prtb );
-    if ( 0 != itmp ) return itmp;
-
-    itmp = ( signed )pleft->tileb - ( signed )pright->tileb;
+    itmp = ( int32_t )pleft->tileb - ( int32_t )pright->tileb;
     if ( 0 != itmp ) return itmp;
 
     return 0;
-}
-
-//--------------------------------------------------------------------------------------------
-int CoNode_matches( CoNode_t * pleft, CoNode_t * pright )
-{
-    CoNode_t right_rev;
-
-    if ( 0 == CoNode_cmp_unique( pleft, pright ) ) return true;
-
-    // make a reversed version of pright
-    right_rev.tmin = pright->tmin;
-    right_rev.tmax = pright->tmax;
-    right_rev.chra = pright->chrb;
-    right_rev.prta = pright->prtb;
-    right_rev.chrb = pright->chra;
-    right_rev.prtb = pright->prta;
-    right_rev.tileb  = pright->tileb;
-
-    if ( 0 == CoNode_cmp_unique( pleft, &right_rev ) ) return true;
-
-    return false;
-}
-
-//--------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------
-static CoHashList_t *CoHashList_ctor(CoHashList_t *self, size_t initialCapacity)
-{
-    return hash_list_t::ctor(self,initialCapacity);
-}
-
-//--------------------------------------------------------------------------------------------
-static void CoHashList_dtor(CoHashList_t *self)
-{
-    return hash_list_t::dtor(self);
-}
-
-//--------------------------------------------------------------------------------------------
-CoHashList_t *CoHashList_getInstance(size_t initialCapacity)
-{
-    /// @author BB
-    /// @details allows access to a "private" CHashList singleton object. This will automatically
-    ///               initialze the _Colist_singleton and (almost) prevent anything from messing up
-    ///               the initialization.
-
-    // make sure that the collsion system was started
-    collision_system_begin();
-
-    // if the _CHashList_ptr doesn't exist, create it (and initialize it)
-    if (nullptr == _CoHashList_ptr)
-    {
-        _CoHashList_ptr = hash_list_create(initialCapacity);
-        _collision_hash_initialized = nullptr != _CoHashList_ptr;
-    }
-
-    // it the pointer exists, but it (somehow) not initialized, do the initialization
-    if (nullptr != _CoHashList_ptr && !_collision_hash_initialized)
-    {
-        _CoHashList_ptr = CoHashList_ctor(_CoHashList_ptr, initialCapacity);
-        _collision_hash_initialized = nullptr != _CoHashList_ptr;
-    }
-
-    return _collision_hash_initialized ? _CoHashList_ptr : NULL;
-}
-
-//--------------------------------------------------------------------------------------------
-bool CoHashList_insert_unique(CoHashList_t *coHashList, CoNode_t *data, Ego::DynamicArray<CoNode_t> *free_cdata, Ego::DynamicArray<hash_node_t> *free_hnodes)
-{
-	if (NULL == coHashList || NULL == data)
-	{
-		return false;
-	}
-    // Compute the hash for this collision.
-	Uint32 hash = CoNode_generate_hash(data);
-
-    bool found = false;
-	// Get the number of entries in this bucket.
-    size_t bucketSize = hash_list_get_count(coHashList,hash);
-    // If the bucket is not empty ...
-	if (bucketSize > 0)
-    {
-		// ... search the bucket for an entry for this collision.
-		hash_node_t *node = hash_list_get_node(coHashList, hash);
-        for (size_t bucketIndex = 0; bucketIndex < bucketSize; ++bucketIndex)
-        {
-            if (CoNode_matches((CoNode_t *)(node->data), data))
-            {
-                found = true;
-                break;
-            }
-			node = node->next;
-        }
-    }
-
-    // If no entry for this collision was found ...
-    if (!found)
-    {
-		// ... add it:
-        // Pick a free collision data ...
-        CoNode_t *cnode = free_cdata->pop_back();
-		// ... and store the data in that.
-		*cnode = *data;
-
-        // Generate a new hash node.
-		hash_node_t *tmp_hn = free_hnodes->pop_back();
-
-        // link the hash node to the free CoNode
-        tmp_hn->data = cnode;
-
-        // insert the node at the front of the collision list for this hash
-        hash_node_t *old_head = hash_list_get_node(coHashList, hash);
-        hash_node_t *new_head = hash_node_insert_before(old_head, tmp_hn);
-        hash_list_set_node(coHashList, hash, new_head);
-
-        // add 1 to the count at this hash
-        size_t old_count = hash_list_get_count(coHashList, hash);
-        hash_list_set_count(coHashList, hash, old_count + 1);
-    }
-
-    return TO_C_BOOL( !found );
 }
 
 //--------------------------------------------------------------------------------------------
@@ -643,37 +394,33 @@ void get_recoil_factors( float wta, float wtb, float * recoil_a, float * recoil_
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
-bool detect_chr_chr_interaction_valid( const CHR_REF ichr_a, const CHR_REF ichr_b )
+bool detect_chr_chr_interaction_valid(const std::shared_ptr<GameObject> &chra, const std::shared_ptr<GameObject> &chrb)
 {
-    GameObject *pchr_a, *pchr_b;
+    //Ensure both characters are valid
+    if(!chra || !chrb)
+    {
+        return false;
+    }
 
     // Don't interact with self
-    if ( ichr_a == ichr_b ) return false;
-
-    // Ignore invalid characters
-    if ( !_gameObjects.exists( ichr_a ) ) return false;
-    pchr_a = _gameObjects.get( ichr_a );
-
-    // Ignore invalid characters
-    if ( !_gameObjects.exists( ichr_b ) ) return false;
-    pchr_b = _gameObjects.get( ichr_b );
+    if ( chra == chrb ) return false;
 
     // "non-interacting" objects interact with platforms
-    if (( 0 == pchr_a->bump.size && !pchr_b->platform ) ||
-        ( 0 == pchr_b->bump.size && !pchr_a->platform ) )
+    if (( 0 == chra->bump.size && !chrb->platform ) ||
+        ( 0 == chrb->bump.size && !chra->platform ) )
     {
         return false;
     }
 
     // reject characters that are hidden
-    if ( pchr_a->is_hidden || pchr_b->is_hidden ) return false;
+    if ( chra->is_hidden || chrb->is_hidden ) return false;
 
     // don't interact with your mount, or your held items
-    if ( ichr_a == pchr_b->attachedto || ichr_b == pchr_a->attachedto ) return false;
+    if ( chra->getCharacterID() == chrb->attachedto || chrb->getCharacterID() == chra->attachedto ) return false;
 
     // handle the dismount exception
-    if ( pchr_a->dismount_timer > 0 && pchr_a->dismount_object == ichr_b ) return false;
-    if ( pchr_b->dismount_timer > 0 && pchr_b->dismount_object == ichr_a ) return false;
+    if ( chra->dismount_timer > 0 && chra->dismount_object == chrb->getCharacterID() ) return false;
+    if ( chrb->dismount_timer > 0 && chrb->dismount_object == chra->getCharacterID() ) return false;
 
     return true;
 }
@@ -707,6 +454,7 @@ bool detect_chr_prt_interaction_valid( const CHR_REF ichr_a, const PRT_REF iprt_
 }
 
 //--------------------------------------------------------------------------------------------
+#if 0
 bool add_chr_chr_interaction(CoHashList_t *pchlst, const CHR_REF ichr_a, const CHR_REF ichr_b, Ego::DynamicArray<CoNode_t> *pcn_lst, Ego::DynamicArray<hash_node_t> *phn_lst)
 {
     Uint32 hashval = 0;
@@ -770,8 +518,10 @@ bool add_chr_chr_interaction(CoHashList_t *pchlst, const CHR_REF ichr_a, const C
 
     return TO_C_BOOL( !found );
 }
+#endif
 
 //--------------------------------------------------------------------------------------------
+#if 0
 bool add_chr_prt_interaction(CoHashList_t *coHashList, const CHR_REF ichr_a, const PRT_REF iprt_b, Ego::DynamicArray<CoNode_t> *pcn_lst, Ego::DynamicArray<hash_node_t> *phn_lst)
 {
     bool found;
@@ -830,19 +580,18 @@ bool add_chr_prt_interaction(CoHashList_t *coHashList, const CHR_REF ichr_a, con
 
     return TO_C_BOOL( !found );
 }
+#endif
 
 //--------------------------------------------------------------------------------------------
-bool fill_interaction_list(CoHashList_t *coHashList, Ego::DynamicArray<CoNode_t> *cn_lst, Ego::DynamicArray<hash_node_t> *hn_lst)
+bool fill_interaction_list()
 {
     int              cnt;
     int              reaffirmation_count;
     int              reaffirmation_list[DAMAGE_COUNT];
     aabb_t           tmp_aabb;
 
-    if ( NULL == coHashList || NULL == cn_lst || NULL == hn_lst ) return false;
-
-    // renew the CoNode_t hash table.
-    hash_list_renew(coHashList);
+    //empty collision set
+    _collisionMap.clear();
 
     // initialize the reaffirmation counters
     reaffirmation_count = 0;
@@ -853,14 +602,12 @@ bool fill_interaction_list(CoHashList_t *coHashList, Ego::DynamicArray<CoNode_t>
 
     //---- find the character/particle interactions
 
-    // Find the character-character interactions. Use the ChrList.used_ref, for a change
-    CoHashList_inserted = 0;
     for(const std::shared_ptr<GameObject> &pchr_a : _gameObjects.iterator())
     {
         oct_bb_t   tmp_oct;
 
         // ignore in-accessible objects
-        if ( _gameObjects.exists( pchr_a->inwhich_inventory ) || pchr_a->is_hidden ) continue;
+        if ( pchr_a->inwhich_inventory != INVALID_CHR_REF || pchr_a->is_hidden ) continue;
 
         // keep track of how many objects use reaffirmation, and what kinds of reaffirmation
         if ( pchr_a->reaffirm_damagetype < DAMAGE_COUNT )
@@ -894,39 +641,34 @@ bool fill_interaction_list(CoHashList_t *coHashList, Ego::DynamicArray<CoNode_t>
             for (size_t j = 0; j < _coll_leaf_lst.size(); j++ )
             {
                 BSP_leaf_t * pleaf;
-                CoNode_t    tmp_codata;
-                bool      do_insert;
                 BIT_FIELD   test_platform;
 
-                pleaf = _coll_leaf_lst.ary[j];
+                pleaf = _coll_leaf_lst[j];
                 if ( NULL == pleaf ) continue;
-
-                do_insert = false;
 
                 if ( BSP_LEAF_CHR == pleaf->data_type )
                 {
                     // collided with a character
-                    CHR_REF ichr_b = ( CHR_REF )( pleaf->index );
+                    const std::shared_ptr<GameObject> &pchr_b = _gameObjects[pleaf->index];
 
                     // do some logic on this to determine whether the collision is valid
-                    if ( detect_chr_chr_interaction_valid( pchr_a->getCharacterID(), ichr_b ) )
+                    if (detect_chr_chr_interaction_valid(pchr_a, pchr_b))
                     {
-                        GameObject * pchr_b = _gameObjects.get( ichr_b );
+                        CoNode_t collisionNode;
 
-                        CoNode_ctor( &tmp_codata );
-
-                        // do a simple test, since I do not want to resolve the ObjectPRofile for these objects here
+                        // do a simple test, since I do not want to resolve the ObjectProfile for these objects here
                         test_platform = EMPTY_BIT_FIELD;
                         if ( pchr_a->platform && pchr_b->canuseplatforms ) SET_BIT( test_platform, PHYS_PLATFORM_OBJ1 );
                         if ( pchr_b->platform && pchr_a->canuseplatforms ) SET_BIT( test_platform, PHYS_PLATFORM_OBJ2 );
 
                         // detect a when the possible collision occurred
-                        if ( phys_intersect_oct_bb( &( pchr_a->chr_max_cv ), pchr_a->getPosition(), pchr_a->vel, &( pchr_b->chr_max_cv ), pchr_b->getPosition(), pchr_b->vel, test_platform, &( tmp_codata.cv ), &( tmp_codata.tmin ), &( tmp_codata.tmax ) ) )
+                        if ( phys_intersect_oct_bb( &(pchr_a->chr_max_cv), pchr_a->getPosition(), pchr_a->vel, &(pchr_b->chr_max_cv), pchr_b->getPosition(), pchr_b->vel, test_platform, &(collisionNode.cv), &(collisionNode.tmin), &(collisionNode.tmax) ) )
                         {
-                            tmp_codata.chra = pchr_a->getCharacterID();
-                            tmp_codata.chrb = ichr_b;
 
-                            do_insert = true;
+                            collisionNode.chra = pchr_a->getCharacterID();
+                            collisionNode.chrb = pchr_b->getCharacterID();
+
+                            _collisionMap[collisionNode] = collisionNode;
                         }
                     }
                 }
@@ -934,14 +676,6 @@ bool fill_interaction_list(CoHashList_t *coHashList, Ego::DynamicArray<CoNode_t>
                 {
                     // how did we get here?
                     log_warning( "fill_interaction_list() - found non-character in the character BSP\n" );
-                }
-
-                if ( do_insert )
-                {
-                    if (CoHashList_insert_unique(coHashList, &tmp_codata, cn_lst, hn_lst))
-                    {
-                        CoHashList_inserted++;
-                    }
                 }
             }
         }
@@ -953,14 +687,11 @@ bool fill_interaction_list(CoHashList_t *coHashList, Ego::DynamicArray<CoNode_t>
             for (size_t j = 0; j < _coll_leaf_lst.size(); j++ )
             {
                 BSP_leaf_t * pleaf;
-                CoNode_t    tmp_codata;
-                bool      do_insert;
                 BIT_FIELD   test_platform;
 
-                pleaf = _coll_leaf_lst.ary[j];
+                pleaf = _coll_leaf_lst[j];
                 if ( NULL == pleaf ) continue;
 
-                do_insert = false;
 
                 if ( BSP_LEAF_PRT == pleaf->data_type )
                 {
@@ -970,20 +701,20 @@ bool fill_interaction_list(CoHashList_t *coHashList, Ego::DynamicArray<CoNode_t>
                     // do some logic on this to determine whether the collision is valid
                     if ( detect_chr_prt_interaction_valid( pchr_a->getCharacterID(), iprt_b ) )
                     {
+                        CoNode_t collisionNode;
                         prt_t * pprt_b = PrtList_get_ptr( iprt_b );
-
-                        CoNode_ctor( &tmp_codata );
 
                         // do a simple test, since I do not want to resolve the ObjectProfile for these objects here
                         test_platform = pchr_a->platform ? PHYS_PLATFORM_OBJ1 : 0;
 
                         // detect a when the possible collision occurred
-                        if ( phys_intersect_oct_bb( &( pchr_a->chr_max_cv ), pchr_a->getPosition(), pchr_a->vel, &( pprt_b->prt_max_cv ), prt_get_pos_v_const( pprt_b ), pprt_b->vel, test_platform, &( tmp_codata.cv ), &( tmp_codata.tmin ), &( tmp_codata.tmax ) ) )
+                        if ( phys_intersect_oct_bb( &( pchr_a->chr_max_cv ), pchr_a->getPosition(), pchr_a->vel, &( pprt_b->prt_max_cv ), prt_get_pos_v_const( pprt_b ), pprt_b->vel, test_platform, &( collisionNode.cv ), &( collisionNode.tmin ), &( collisionNode.tmax ) ) )
                         {
-                            tmp_codata.chra = pchr_a->getCharacterID();
-                            tmp_codata.prtb = iprt_b;
 
-                            do_insert = true;
+                            collisionNode.chra = pchr_a->getCharacterID();
+                            collisionNode.prtb = iprt_b;
+
+                            _collisionMap[collisionNode] = collisionNode;
                         }
                     }
                 }
@@ -991,14 +722,6 @@ bool fill_interaction_list(CoHashList_t *coHashList, Ego::DynamicArray<CoNode_t>
                 {
                     // how did we get here?
                     log_warning( "fill_interaction_list() - found non-particle in the particle BSP\n" );
-                }
-
-                if ( do_insert )
-                {
-                    if (CoHashList_insert_unique(coHashList, &tmp_codata, cn_lst, hn_lst))
-                    {
-                        CoHashList_inserted++;
-                    }
                 }
             }
         }
@@ -1042,29 +765,23 @@ bool fill_interaction_list(CoHashList_t *coHashList, Ego::DynamicArray<CoNode_t>
         // and sort them by their initial times
         if (!_coll_leaf_lst.empty())
         {
-            CoNode_t     tmp_codata;
             BIT_FIELD    test_platform;
             CHR_REF      ichr_a = INVALID_CHR_REF;
             BSP_leaf_t * pleaf = NULL;
-            bool       do_insert = false;
 
             for (size_t j = 0; j < _coll_leaf_lst.size(); j++ )
             {
-                pleaf = _coll_leaf_lst.ary[j];
+                pleaf = _coll_leaf_lst[j];
                 if ( NULL == pleaf ) continue;
 
-                ichr_a = ( CHR_REF )( pleaf->index );
+                const std::shared_ptr<GameObject> &pchr_a = _gameObjects[pleaf->index];
 
-                do_insert = false;
-
-                if ( BSP_LEAF_CHR == pleaf->data_type && VALID_CHR_RANGE( ichr_a ) )
+                if ( BSP_LEAF_CHR == pleaf->data_type && pchr_a )
                 {
                     // collided with a character
                     bool loc_reaffirms     = can_reaffirm;
                     bool loc_needs_bump    = needs_bump;
                     bool interaction_valid = false;
-
-                    GameObject * pchr_a = _gameObjects.get( ichr_a );
 
                     // can this particle affect the character through reaffirmation
                     if ( loc_reaffirms )
@@ -1120,34 +837,27 @@ bool fill_interaction_list(CoHashList_t *coHashList, Ego::DynamicArray<CoNode_t>
                     // particle can interact with the object
                     if ( interaction_valid )
                     {
-                        CoNode_ctor( &tmp_codata );
+                        CoNode_t collisionNode;
 
                         // do a simple test, since I do not want to resolve the ObjectProfile for these objects here
                         test_platform = EMPTY_BIT_FIELD;
                         if ( pchr_a->platform && ( SPRITE_SOLID == bdl.prt_ptr->type ) ) SET_BIT( test_platform, PHYS_PLATFORM_OBJ1 );
 
                         // detect a when the possible collision occurred
-                        if (phys_intersect_oct_bb(&(pchr_a->chr_min_cv), pchr_a->getPosition(), pchr_a->vel, &(bdl.prt_ptr->prt_max_cv), prt_get_pos_v_const(bdl.prt_ptr), bdl.prt_ptr->vel, test_platform, &(tmp_codata.cv), &(tmp_codata.tmin), &(tmp_codata.tmax)))
+                        if (phys_intersect_oct_bb(&(pchr_a->chr_min_cv), pchr_a->getPosition(), pchr_a->vel, &(bdl.prt_ptr->prt_max_cv), prt_get_pos_v_const(bdl.prt_ptr), bdl.prt_ptr->vel, test_platform, &(collisionNode.cv), &(collisionNode.tmin), &(collisionNode.tmax)))
                         {
 
-                            tmp_codata.chra = ichr_a;
-                            tmp_codata.prtb = bdl.prt_ref;
+                            collisionNode.chra = ichr_a;
+                            collisionNode.prtb = bdl.prt_ref;
 
-                            do_insert = true;
+                            _collisionMap[collisionNode] = collisionNode;
                         }
                     }
                 }
                 else if ( BSP_LEAF_PRT == pleaf->data_type )
                 {
                     // this should never happen
-                }
-
-                if ( do_insert )
-                {
-                    if (CoHashList_insert_unique(coHashList, &tmp_codata, cn_lst, hn_lst))
-                    {
-                        CoHashList_inserted++;
-                    }
+                    log_warning( "fill_interaction_list() - found non-character in the character BSP\n" );
                 }
             }
         }
@@ -1439,62 +1149,38 @@ void bump_all_objects()
 {
     /// @author ZZ
     /// @details This function sets handles characters hitting other characters or particles
-    size_t        co_node_count;
-
-    // create a collision hash table that can keep track of 512
-    // binary collisions per frame
-    CoHashList_t *coHashList = CoHashList_getInstance(512);
-    if (NULL == coHashList)
-    {
-        log_error( "bump_all_objects() - cannot access the CoHashList_t singleton" );
-    }
-
-    // set up the collision node array
-    _co_ary.sz = _co_ary.cp;
-
-    // set up the hash node array
-    _hn_ary.sz = _hn_ary.cp;
 
     // fill up the BSP structures
     fill_bumplists();
 
     // use the BSP structures to detect possible binary interactions
-    fill_interaction_list( coHashList, &_co_ary, &_hn_ary );
+    fill_interaction_list();
 
     // convert the CHashList_t into a CoNode_ary_t and sort
-    co_node_count = hash_list_count_nodes(coHashList);
-
-    if ( co_node_count > 0 )
+    if ( !_collisionMap.empty() )
     {
-        hash_list_iterator_t it;
-
         _coll_node_lst.clear();
 
-		it.ctor();
-        hash_list_iterator_set_begin(&it, coHashList);
-        for (/* Nothing. */; !hash_list_iterator_done(&it, coHashList); hash_list_iterator_next(&it, coHashList))
+        for(auto &element : _collisionMap)
         {
-            CoNode_t *coNode = (CoNode_t *)hash_list_iterator_ptr(&it);
-            if (NULL == coNode) break;
-
-            _coll_node_lst.push_back(*coNode);
+            _coll_node_lst.push_back( &element.second );
         }
 
         if (_coll_node_lst.size() > 1)
         {
             // arrange the actual nodes by time order
-            qsort(_coll_node_lst.ary, _coll_node_lst.size(), sizeof(CoNode_t), CoNode_cmp);
+            qsort(_coll_node_lst.data(), _coll_node_lst.size(), sizeof(CoNode_t), CoNode_cmp);
         }
 
         // handle interaction with mounts
         // put this before platforms, otherwise pointing is just too hard
-        bump_all_mounts( &_coll_node_lst );
+        bump_all_mounts( _coll_node_lst );
 
         // handle interaction with platforms
-        bump_all_platforms( &_coll_node_lst );
+        bump_all_platforms( _coll_node_lst );
 
         // handle all the collisions
-        bump_all_collisions( &_coll_node_lst );
+        bump_all_collisions( _coll_node_lst );
     }
 
     // The following functions need to be called any time you actually change a charcter's position
@@ -1504,7 +1190,7 @@ void bump_all_objects()
 }
 
 //--------------------------------------------------------------------------------------------
-bool bump_all_platforms( Ego::DynamicArray<CoNode_t> *pcn_ary )
+bool bump_all_platforms(std::vector<CoNode_t*> &collisionNodes)
 {
     /// @author BB
     /// @details Detect all character and particle interactions with platforms, then attach them.
@@ -1515,12 +1201,10 @@ bool bump_all_platforms( Ego::DynamicArray<CoNode_t> *pcn_ary )
     /// @note the function move_one_character_get_environment() has already been called from within the
     ///  move_one_character() function, so the environment has already been determined this round
 
-	if ( NULL == pcn_ary ) return false;
-
     //---- Detect all platform attachments
-    for (size_t cnt = 0; cnt < pcn_ary->size(); cnt++ )
+    for (size_t cnt = 0; cnt < collisionNodes.size(); cnt++ )
     {
-		CoNode_t *d = pcn_ary->ary + cnt;
+		CoNode_t *d = collisionNodes[cnt];
 
         // only look at character-platform or particle-platform interactions interactions
         if ( INVALID_PRT_REF != d->prta && INVALID_PRT_REF != d->prtb ) continue;
@@ -1544,45 +1228,42 @@ bool bump_all_platforms( Ego::DynamicArray<CoNode_t> *pcn_ary )
     // Doing the attachments after detecting the best platform
     // prevents an object from attaching it to multiple platforms as it
     // is still trying to find the best one
-    for (size_t cnt = 0; cnt < pcn_ary->size(); cnt++ )
+    for (size_t cnt = 0; cnt < collisionNodes.size(); cnt++ )
     {
-		CoNode_t *d = pcn_ary->ary + cnt;
+		CoNode_t *d = collisionNodes[cnt];
+
+        const std::shared_ptr<GameObject> &chra = _gameObjects[d->chra];
+        const std::shared_ptr<GameObject> &chrb = _gameObjects[d->chrb];
 
         // only look at character-character interactions
-        //if ( INVALID_PRT_REF != d->prta && INVALID_PRT_REF != d->prtb ) continue;
-
-        if ( INVALID_CHR_REF != d->chra && INVALID_CHR_REF != d->chrb )
+        if ( chra && chrb )
         {
-            if ( _gameObjects.exists( d->chra ) && _gameObjects.exists( d->chrb ) )
+            if ( chra->targetplatform_ref == d->chrb )
             {
-                if ( _gameObjects.get(d->chra)->targetplatform_ref == d->chrb )
-                {
-                    attach_GameObjecto_platform( _gameObjects.get( d->chra ), _gameObjects.get( d->chrb ) );
-                }
-                else if ( _gameObjects.get(d->chrb)->targetplatform_ref == d->chra )
-                {
-                    attach_GameObjecto_platform( _gameObjects.get( d->chrb ), _gameObjects.get( d->chra ) );
-                }
-
+                attach_GameObjecto_platform(chra.get(), chrb.get());
+            }
+            else if ( chrb->targetplatform_ref == d->chra )
+            {
+                attach_GameObjecto_platform(chrb.get(), chra.get());
             }
         }
-        else if ( INVALID_CHR_REF != d->chra && INVALID_PRT_REF != d->prtb )
+        else if ( chra && INVALID_PRT_REF != d->prtb )
         {
-            if ( _gameObjects.exists( d->chra ) && _INGAME_PRT( d->prtb ) )
+            if ( _INGAME_PRT( d->prtb ) )
             {
                 if ( PrtList.lst[d->prtb].targetplatform_ref == d->chra )
                 {
-                    attach_prt_to_platform( PrtList_get_ptr( d->prtb ), _gameObjects.get( d->chra ) );
+                    attach_prt_to_platform(PrtList_get_ptr( d->prtb ), chra.get());
                 }
             }
         }
-        else if ( INVALID_CHR_REF != d->chrb && INVALID_PRT_REF != d->prta )
+        else if ( chrb && INVALID_PRT_REF != d->prta )
         {
-            if ( _gameObjects.exists( d->chrb ) && _INGAME_PRT( d->prta ) )
+            if ( _INGAME_PRT( d->prta ) )
             {
                 if ( PrtList.lst[d->prta].targetplatform_ref == d->chrb )
                 {
-                    attach_prt_to_platform( PrtList_get_ptr( d->prta ), _gameObjects.get( d->chrb ) );
+                    attach_prt_to_platform(PrtList_get_ptr( d->prta ), chrb.get());
                 }
             }
         }
@@ -1615,16 +1296,15 @@ bool bump_all_platforms( Ego::DynamicArray<CoNode_t> *pcn_ary )
 }
 
 //--------------------------------------------------------------------------------------------
-bool bump_all_mounts( Ego::DynamicArray<CoNode_t> *pcn_ary )
+bool bump_all_mounts(std::vector<CoNode_t*> &collisionNodes)
 {
     /// @author BB
     /// @details Detect all character interactions with mounts, then attach them.
-    if ( NULL == pcn_ary ) return false;
 
     // Do mounts
-    for (size_t cnt = 0; cnt < pcn_ary->size(); cnt++)
+    for (size_t cnt = 0; cnt < collisionNodes.size(); cnt++)
     {
-		CoNode_t *d = pcn_ary->ary + cnt;
+		CoNode_t *d = collisionNodes[cnt];
 
         // only look at character-character interactions
         if ( INVALID_CHR_REF == d->chra || INVALID_CHR_REF == d->chrb ) continue;
@@ -1636,7 +1316,7 @@ bool bump_all_mounts( Ego::DynamicArray<CoNode_t> *pcn_ary )
 }
 
 //--------------------------------------------------------------------------------------------
-bool bump_all_collisions( Ego::DynamicArray<CoNode_t> *pcn_ary )
+bool bump_all_collisions(std::vector<CoNode_t*> &collisionNodes)
 {
     /// @author BB
     /// @details Detect all character-character and character-particle collsions (with exclusions
@@ -1655,7 +1335,7 @@ bool bump_all_collisions( Ego::DynamicArray<CoNode_t> *pcn_ary )
     PRT_END_LOOP();
 
     // do all interactions
-    for (size_t cnt = 0; cnt < pcn_ary->size(); cnt++ )
+    for (size_t cnt = 0; cnt < collisionNodes.size(); cnt++ )
     {
         bool handled = false;
 
@@ -1663,12 +1343,12 @@ bool bump_all_collisions( Ego::DynamicArray<CoNode_t> *pcn_ary )
         // rearrange them without needing to change anything
         if ( !handled )
         {
-            handled = do_chr_chr_collision( pcn_ary->ary + cnt );
+            handled = do_chr_chr_collision( collisionNodes[cnt] );
         }
 
         if ( !handled )
         {
-            handled = do_chr_prt_collision( pcn_ary->ary + cnt );
+            handled = do_chr_prt_collision( collisionNodes[cnt] );
         }
     }
 

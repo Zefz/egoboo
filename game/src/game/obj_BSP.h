@@ -74,7 +74,7 @@ struct obj_BSP_t
 	 * @return
 	 *	return the number of collisions in @a collisions
 	 */
-	size_t collide(const aabb_t *aabb, BSP_leaf_test_t *test, Ego::DynamicArray<BSP_leaf_t *> *collisions) const;
+	size_t collide(const aabb_t *aabb, BSP_leaf_test_t *test, std::vector<BSP_leaf_t *> *collisions) const;
 
 	/**
 	 * @brief
@@ -82,7 +82,7 @@ struct obj_BSP_t
 	 * @return
 	 *	the number of collisions in @a collisions
 	 */
-	size_t collide(const egolib_frustum_t *frustum, BSP_leaf_test_t *test, Ego::DynamicArray<BSP_leaf_t *> *collisions) const;
+	size_t collide(const egolib_frustum_t *frustum, BSP_leaf_test_t *test, std::vector<BSP_leaf_t *> *collisions) const;
 
 };
 

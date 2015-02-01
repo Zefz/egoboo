@@ -295,14 +295,14 @@ bool chr_BSP_fill()
 	chr_BSP_root->count = 0;
 	for(const std::shared_ptr<GameObject> &pchr : _gameObjects.iterator())
 	{
+		// try to insert the character
+		chr_BSP_insert(pchr.get());
+
 		// reset a couple of things here
 		pchr->holdingweight = 0;
 		pchr->onwhichplatform_ref = INVALID_CHR_REF;
 		pchr->targetplatform_ref = INVALID_CHR_REF;
 		pchr->targetplatform_level = -1e32;
-
-		// try to insert the character
-		chr_BSP_insert(pchr.get());
 	}
 
 	return true;

@@ -176,8 +176,8 @@ public:
 	 */
 	void clear();
 
-	bool collide(const aabb_t *aabb, BSP_leaf_test_t *test, Ego::DynamicArray<BSP_leaf_t *>  *collisions) const;
-	bool collide(const egolib_frustum_t *frustum, BSP_leaf_test_t *test, Ego::DynamicArray<BSP_leaf_t *> *collisions) const;
+	bool collide(const aabb_t *aabb, BSP_leaf_test_t *test, std::vector<BSP_leaf_t*> *collisions) const;
+	bool collide(const egolib_frustum_t *frustum, BSP_leaf_test_t *test, std::vector<BSP_leaf_t *> *collisions) const;
 };
 
 //--------------------------------------------------------------------------------------------
@@ -203,8 +203,8 @@ public:
     bv_t bbox;
 
 	static bool clear_rec(BSP_branch_list_t * self);
-	bool collide(const egolib_frustum_t *frustum, BSP_leaf_test_t *test, Ego::DynamicArray<BSP_leaf_t *> *collisions) const;
-	bool collide(const aabb_t *aabb, BSP_leaf_test_t *test, Ego::DynamicArray<BSP_leaf_t *> *collisions) const;
+	bool collide(const egolib_frustum_t *frustum, BSP_leaf_test_t *test, std::vector<BSP_leaf_t*> *collisions) const;
+	bool collide(const aabb_t *aabb, BSP_leaf_test_t *test, std::vector<BSP_leaf_t*> *collisions) const;
 };
 
 //--------------------------------------------------------------------------------------------
@@ -291,7 +291,7 @@ public:
 	 * @param collisions
 	 *	a leave list to which the leaves are added to
 	 */
-	bool add_all_leaves(Ego::DynamicArray<BSP_leaf_t *> *collisions) const;
+	bool add_all_leaves(std::vector<BSP_leaf_t*> *collisions) const;
 	/**
 	 * @brief
 	 *	Add all leaves in this branch (filtered).
@@ -300,7 +300,7 @@ public:
 	 * @param collisions
 	 *	a leave list to which the leaves are added to (if they pass the test)
 	 */
-	bool add_all_leaves(BSP_leaf_test_t& test, Ego::DynamicArray<BSP_leaf_t *> *collisions) const;
+	bool add_all_leaves(BSP_leaf_test_t& test, std::vector<BSP_leaf_t*> *collisions) const;
 
 	/**
 	* @brief
@@ -315,11 +315,11 @@ public:
 	/// @author BB
 	/// @details Recursively search the BSP tree for collisions with the paabb
 	///      Return false if we need to break out of the recursive search for any reason.
-	static bool collide(const BSP_branch_t *self, const aabb_t *aabb, BSP_leaf_test_t *test, Ego::DynamicArray<BSP_leaf_t *> *collisions);
+	static bool collide(const BSP_branch_t *self, const aabb_t *aabb, BSP_leaf_test_t *test, std::vector<BSP_leaf_t*> *collisions);
 	/// @author BB
 	/// @details Recursively search the BSP tree for collisions with the paabb
 	///      Return false if we need to break out of the recursive search for any reason.
-	static bool collide(const BSP_branch_t *self, const egolib_frustum_t *frustum, BSP_leaf_test_t *test, Ego::DynamicArray<BSP_leaf_t *> *collisions);
+	static bool collide(const BSP_branch_t *self, const egolib_frustum_t *frustum, BSP_leaf_test_t *test, std::vector<BSP_leaf_t*> *collisions);
 
 };
 
@@ -354,9 +354,9 @@ bool BSP_branch_insert_leaf_list(BSP_branch_t * B, BSP_leaf_t * n);
 bool BSP_branch_insert_branch(BSP_branch_t * B, size_t index, BSP_branch_t * B2);
 int BSP_branch_insert_leaf_rec_1(BSP_tree_t * ptree, BSP_branch_t * pbranch, BSP_leaf_t * pleaf, int depth);
 
-bool BSP_branch_add_all_rec(const BSP_branch_t *self, BSP_leaf_test_t *test, Ego::DynamicArray<BSP_leaf_t *> *collisions);
-bool BSP_branch_add_all_unsorted(const BSP_branch_t *self, BSP_leaf_test_t *test, Ego::DynamicArray<BSP_leaf_t *> *collision);
-bool BSP_branch_add_all_children(const BSP_branch_t *self, BSP_leaf_test_t *test, Ego::DynamicArray<BSP_leaf_t *> *collisions);
+bool BSP_branch_add_all_rec(const BSP_branch_t *self, BSP_leaf_test_t *test, std::vector<BSP_leaf_t*> *collisions);
+bool BSP_branch_add_all_unsorted(const BSP_branch_t *self, BSP_leaf_test_t *test, std::vector<BSP_leaf_t*> *collisions);
+bool BSP_branch_add_all_children(const BSP_branch_t *self, BSP_leaf_test_t *test, std::vector<BSP_leaf_t*> *collisions);
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
@@ -459,7 +459,7 @@ public:
 	 * @return
 	 *	the new number of leaves in @a collisions
 	 */
-	size_t collide(const aabb_t *aabb, BSP_leaf_test_t *test, Ego::DynamicArray<BSP_leaf_t *> *collisions) const;
+	size_t collide(const aabb_t *aabb, BSP_leaf_test_t *test, std::vector<BSP_leaf_t*> *collisions) const;
 	
 	/**
 	 * @brief
@@ -473,7 +473,7 @@ public:
 	 * @return
 	 *	the new number of leaves in @a collisions
 	 */
-	size_t collide(const egolib_frustum_t *frustum, BSP_leaf_test_t *test, Ego::DynamicArray<BSP_leaf_t *> *collisions) const;
+	size_t collide(const egolib_frustum_t *frustum, BSP_leaf_test_t *test, std::vector<BSP_leaf_t*> *collisions) const;
 
 	/// Remove all leaves with no children.
 	/// Do a depth first recursive search for efficiency
