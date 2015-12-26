@@ -56,7 +56,7 @@ struct EnchantModifier
 class Enchantment : public std::enable_shared_from_this<Enchantment>
 {
 public:
-    Enchantment(const std::shared_ptr<eve_t> &enchantmentProfile, PRO_REF spawnerProfile, const std::shared_ptr<Object> &owner);
+    Enchantment(const std::shared_ptr<EnchantProfile> &enchantmentProfile, PRO_REF spawnerProfile, const std::shared_ptr<Object> &owner);
 
     ~Enchantment();
 
@@ -72,7 +72,7 @@ public:
     **/
     void update();
 
-    const std::shared_ptr<eve_t>& getProfile() const;
+    const std::shared_ptr<EnchantProfile>& getProfile() const;
 
     /**
     * @brief
@@ -132,7 +132,7 @@ public:
 private:
     bool _isTerminated;
 
-    std::shared_ptr<eve_t> _enchantProfile;
+    std::shared_ptr<EnchantProfile> _enchantProfile;
 
     PRO_REF _spawnerProfileID;        ///< The object  profile index that spawned this enchant
 
